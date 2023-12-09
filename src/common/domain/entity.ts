@@ -8,7 +8,7 @@ export class Entity<T extends ValueObject<T>> {
         this.id = id;
     }
 
-    public getId() {
+    get Id() {
         return this.id;
     }
 

@@ -1,6 +1,6 @@
 import { AggregateRoot } from "src/common/domain/aggregate-root";
 import { UserId } from './value-objects/user-id';
-import { UserName } from "./value-objects/user-name";
+import { UserName } from './value-objects/user-name';
 import { UserEmail } from "./value-objects/user-email";
 import { UserGender } from "./value-objects/user-gender";
 import { UserRole } from './value-objects/user-role';
@@ -74,9 +74,13 @@ export class User extends AggregateRoot<UserId>{
         }
     }
     protected ensureValidaState(): void {
-        if (!this.phone || !this.role || !this.getId || !this.name || !this.birthday || !this.email || !this.gender) {
+        if (!this.phone || !this.role || !this.Id || !this.name || !this.birthday || !this.email || !this.gender) {
             throw new InvalidUserException('User not valid');
         }
+    }
+
+    public updateUser(name?:UserName, birthday?:UserBirthday, email?:UserEmail, gender?:UserGender): void{
+        this.apply(UserUpdated.create(this.Id, name, birthday, email, gender))
     }
 
     static create(

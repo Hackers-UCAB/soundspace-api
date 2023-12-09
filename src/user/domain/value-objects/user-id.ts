@@ -7,12 +7,15 @@ export class UserId extends ValueObject<UserId>{
     private readonly id: string;
 
     constructor(id: string){
-        super()
-        if(id){
-            this.id = id;
-        }else{
-            throw new InvalidUserIdException(`El id ${id} no es valido.`);
+        let valid: boolean = true;
+        
+        if(!id) valid = false;
+
+        if(!valid){
+            throw new InvalidUserIdException(`Id '${id}' not valid`);
         }
+        super()
+        this.id=id       
     }
 
     equals(obj: UserId): boolean {

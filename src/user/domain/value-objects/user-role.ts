@@ -15,7 +15,7 @@ export class UserRole extends ValueObject<UserRole> {
         }
 
         if(!valid){
-            throw new InvalidUserGenderException(`El rol ${role} no es valido.`);
+            throw new InvalidUserGenderException(`role ${role} not valid.`);
         }
         super();
         this.role = role;
