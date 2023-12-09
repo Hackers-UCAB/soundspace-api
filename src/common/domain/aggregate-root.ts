@@ -18,6 +18,8 @@ export abstract class AggregateRoot<T extends ValueObject<T>> extends Entity<T> 
 
     protected abstract when(event: DomainEvent): void;
 
+    //convencion en DDD para verificar la validez de un objeto despues 
+    //de hacer una operacion
     protected abstract ensureValidaState(): void;
     
 }

@@ -1,39 +1,93 @@
 import { AggregateRoot } from "src/common/domain/aggregate-root";
-import { UserId } from "./value-objects/user-id";
+import { UserId } from './value-objects/user-id';
 import { UserName } from "./value-objects/user-name";
 import { UserEmail } from "./value-objects/user-email";
 import { UserGender } from "./value-objects/user-gender";
-import { UserRole } from "./value-objects/user-role";
-import { UserPhone } from "./value-objects/user-phone";
+import { UserRole } from './value-objects/user-role';
+import { UserPhone } from './value-objects/user-phone';
 import { UserBirthday } from './value-objects/user-birthday';
+import { UserCreated } from './events/user-created.event';
+import { InvalidUserException } from "./exceptions/invalid-user.exception";
+import { DomainEvent } from "src/common/domain/domain-event";
+import { UserGenderEnum } from "./value-objects/enum/user-gender.enum";
+import { UserUpdated } from "./events/user-updated.event";
 
 export class User extends AggregateRoot<UserId>{
+    private  name: UserName
+    private  birthday: UserBirthday
+    private  email: UserEmail
+    private  gender: UserGender
+    private  role: UserRole
+    private  phone: UserPhone
 
-    private  userName: UserName
-    private  userBirthday: UserBirthday
-    private  userEmail: UserEmail
-    private  userGender: UserGender
-    private  userRole: UserRole
-    private  userPhoneNumber: UserPhone
+    get Name(): UserName {
+        return this.name;
+    }
+    get Email(): UserEmail {
+        return this.email;
+    }
+    get Gender(): UserGender {
+        return this.gender;
+    }
+    get Role(): UserRole {
+        return this.role;
+    }
+    get Phone(): UserPhone {
+        return this.phone;
+    }
 
-    get UserName(): UserName {
-        return this.userName;
-    }
-    get UserEmail(): UserEmail {
-        return this.userEmail;
-    }
-    get UserGender(): UserGender {
-        return this.userGender;
-    }
-    get UserRole(): UserRole {
-        return this.userRole;
-    }
-    get UserPhoneNumber(): UserPhone {
-        return this.userPhoneNumber;
+    get Birthday(): UserBirthday {
+        return this.birthday;
     }
 
 
-    protected constructor{
-        
+    protected constructor(
+        userId: UserId,
+        userPhone: UserPhone,
+        userRole: UserRole,
+    ){
+        const userCreated = UserCreated.create(
+            userId,
+            userPhone,
+            userRole
+        )
+        super(userId, userCreated)
+    }
+
+    //Aqui tengo dudas porque estoy estoy seteando data null dentro de mi agregado
+    //ya que se crea sin todos los datos del agregado
+    protected when(event: DomainEvent): void {
+        if (event instanceof UserCreated) {
+            this.role = event.userRole
+            this.phone = event.userPhoneNumber
+            this.gender = UserGender.create(UserGenderEnum.Other)
+            this.name = UserName.create(' ')
+            this.birthday = UserBirthday.create(new Date())
+            this.email = UserEmail.create('')
+        }
+
+        if (event instanceof UserUpdated) {
+            this.name = event.name ? event.name: this.name
+            this.birthday = event.birthday ? event.birthday: this.birthday
+            this.email = event.email ? event.email: this.email
+            this.gender = event.gender ? event.gender: this.gender
+        }
+    }
+    protected ensureValidaState(): void {
+        if (!this.phone || !this.role || !this.getId || !this.name || !this.birthday || !this.email || !this.gender) {
+            throw new InvalidUserException('User not valid');
+        }
+    }
+
+    static create(
+        userId: UserId,
+        userRole: UserRole,
+        userPhone: UserPhone
+    ): User{
+        return new User(
+            userId,
+            userPhone,
+            userRole
+        )
     }
 }
