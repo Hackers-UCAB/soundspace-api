@@ -43,9 +43,10 @@ export class User extends AggregateRoot<UserId>{
 
     protected constructor(
         userId: UserId,
-        userPhone: UserPhone,
         userRole: UserRole,
+        userPhone?: UserPhone,
     ){
+        //TODO: Hay que ver lo de si se crea con telefono o sin 
         const userCreated = UserCreated.create(
             userId,
             userPhone,
@@ -60,7 +61,7 @@ export class User extends AggregateRoot<UserId>{
         if (event instanceof UserCreated) {
             this.role = event.userRole
             this.phone = event.userPhoneNumber
-            this.gender = UserGender.create(UserGenderEnum.Other)
+            this.gender = UserGender.create(UserGenderEnum.OTHER)
             this.name = UserName.create(' ')
             this.birthday = UserBirthday.create(new Date())
             this.email = UserEmail.create('')
@@ -86,12 +87,12 @@ export class User extends AggregateRoot<UserId>{
     static create(
         userId: UserId,
         userRole: UserRole,
-        userPhone: UserPhone
+        userPhone?: UserPhone
     ): User{
         return new User(
             userId,
-            userPhone,
-            userRole
+            userRole,
+            userPhone
         )
     }
 }
