@@ -16,8 +16,8 @@ export class GetUserApplicationService implements IApplicationService<GetUserApp
     constructor(private readonly userRepository: IUserRepository){}
 
     async execute(param: GetUserApplicationServiceDto): Promise<Result<User>> {
-        const user = await this.userRepository.findUserByPhone(UserPhone.create(param.phone));
-
-        return Result.success(user, 200);
+        //const user = await this.userRepository.findUserByPhone(UserPhone.create(param.phone));
+        const user = await this.userRepository.findAll();
+        return Result.success(user[0], 200);
     }
 }
