@@ -11,6 +11,7 @@ import {
 //   import { HistorialEdicion } from './historial_edicion.entity';
   import { ReproduccionCancion } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
+import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
   
   export enum genderOptions {
     Male = 'Male',
@@ -28,8 +29,8 @@ import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subs
     GUEST = 'GUEST',
   }
   
-  @Entity()
-  export class User {
+  @Entity('users')
+  export class OrmUserEntity {
     @PrimaryGeneratedColumn('uuid')
     codigo_usuario: string;
   
@@ -72,5 +73,29 @@ import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subs
 
     @OneToOne(() => Subscripcion, (subscripcion) => subscripcion.usuario)
     subscripcion: Subscripcion;
+
+
+    static create(
+      userId: string,
+      name: string,
+      email: string,
+      birthdate: Date,
+      gender: UserGenderEnum,
+      phoneNumber: string,
+      role: string,
+    ): OrmUserEntity {
+        const user = new OrmUserEntity();
+        user.codigo_usuario = userId;
+        user.nombre = name;
+        user.correo = email;
+        user.fecha_nac = birthdate;
+        user.genero = gender;
+        user.telefono = phoneNumber;
+        user.rol = role;
+        return user
+    }
+
   }
+    
+
   

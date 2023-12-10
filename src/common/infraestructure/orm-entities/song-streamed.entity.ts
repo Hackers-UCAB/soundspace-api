@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../../user/infraestructure/orm-entities/user.entity';
+import { OrmUserEntity } from '../../../user/infraestructure/orm-entities/user.entity';
 import { Cancion } from '../../../song/infraestructure/orm-entities/song.entity';
 
 //TODO: Cambiar el nombre del file
@@ -16,9 +16,9 @@ export class ReproduccionCancion {
   // @PrimaryColumn()
   // codigo_cancion: string;
 
-  @ManyToOne(() => User, user => user.reproduccionesCanciones)
+  @ManyToOne(() => OrmUserEntity, user => user.reproduccionesCanciones)
   // @JoinColumn({ name: 'codigo_usuario' })
-  usuario: User;
+  usuario: OrmUserEntity;
 
   @ManyToOne(() => Cancion, cancion => cancion.reproduccionesCanciones)
   // @JoinColumn({ name: 'codigo_cancion' })

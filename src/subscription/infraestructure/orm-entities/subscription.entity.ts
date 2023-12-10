@@ -1,4 +1,4 @@
-import { User } from "src/user/infraestructure/orm-entities/user.entity";
+import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum SubscriptionStatusEnum {
@@ -21,7 +21,7 @@ export class Subscripcion {
     @Column()
     status: string;
 
-    @OneToOne(() => User)
+    @OneToOne(() => OrmUserEntity)
     @JoinColumn()
-    usuario: User;
+    usuario: OrmUserEntity;
 }

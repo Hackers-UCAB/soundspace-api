@@ -6,7 +6,7 @@ import {
     JoinColumn,
     PrimaryGeneratedColumn,
   } from 'typeorm';
-  import { User } from '../../../user/infraestructure/orm-entities/user.entity';
+  import { OrmUserEntity } from '../../../user/infraestructure/orm-entities/user.entity';
   import { Playlist } from './playlist.entity';
   
   //TODO: Cambiar nombre del file
@@ -25,9 +25,9 @@ import {
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     fecha_reproduccion: Date;
   
-    @ManyToOne(() => User, (usuario) => usuario.reproducciones)
+    @ManyToOne(() => OrmUserEntity, (usuario) => usuario.reproducciones)
     // @JoinColumn({ name: 'usuarioId' })
-    usuario: User;
+    usuario: OrmUserEntity;
   
     @ManyToOne(() => Playlist, (playlist) => playlist.reproducciones)
     // @JoinColumn({ name: 'playlistId' })

@@ -1,17 +1,28 @@
 import { DataSource, Repository } from "typeorm";
-import { User } from "../orm-entities/user.entity";
+import { OrmUserEntity } from "../orm-entities/user.entity";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
+import { OrmUserMapper } from "../mapper/orm-user.mapper";
+import { User } from "src/user/domain/user";
 
-export class UserRepository extends Repository<User> implements IUserRepository{
+export class UserRepository extends Repository<OrmUserEntity> implements IUserRepository{
     
+    private readonly ormUsermapper: OrmUserMapper
     constructor(dataSource: DataSource){
-        super(User, dataSource.createEntityManager());
+        super(OrmUserEntity, dataSource.createEntityManager());
+        this.ormUsermapper = new OrmUserMapper();
     }
     
     async findAll() {
         const user = await this.find();
         
         return user;
+    }
+
+    async findUserByPhone(phone: string): Promise<User> {
+        const user = await this.findOne({
+            where: {telefono: phone},
+        });
+        return this.ormUsermapper.toDomain(user);
     }
     
 }
