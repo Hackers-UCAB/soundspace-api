@@ -16,10 +16,10 @@ export class SignUpApplicationService implements IApplicationService <AuthApplic
         
         const users = await this.userRepository.findAll();
 
-        console.log(users);
+        // console.log(users);
         
 
-        return await Result.success("Usuario registrado exitosamente", 201);
+        return Result.success("Usuario registrado exitosamente", 201);
     }
 
 }

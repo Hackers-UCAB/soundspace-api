@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from 't
 
 
 @Entity('publicidad')
-export class Publicidad {
+export class OrmPublicidadEntity {
   @PrimaryGeneratedColumn('uuid')
   codigo_publicidad: string;
 

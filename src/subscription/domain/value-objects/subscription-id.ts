@@ -8,8 +8,7 @@ export class SubscriptionId extends ValueObject<SubscriptionId>{
 
     constructor(id: string){
         let valid = true;
-        if(id) valid = false;
-
+        if(!id) valid = false;
         if(!valid) {
             throw new InvalidSubscriptionIdException(`Id '${id}' not valid`);
         }

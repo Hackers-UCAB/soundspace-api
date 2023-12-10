@@ -7,10 +7,10 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
   } from 'typeorm';
-  import { ReproduccionPlaylist } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
+  import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
 //   import { HistorialEdicion } from './historial_edicion.entity';
   import { ReproduccionCancion } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
-import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
+import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
   
   export enum genderOptions {
     Male = 'Male',
@@ -54,9 +54,9 @@ import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subs
     rol: string;
   
     @OneToMany(() =>
-      ReproduccionPlaylist,
+      OrmReproduccionPlaylistEntity,
       (reproduccion) => reproduccion.usuario)
-    reproducciones: ReproduccionPlaylist[];
+    reproducciones: OrmReproduccionPlaylistEntity[];
   
     // // @OneToMany(
     // //   () => HistorialEdicion,
@@ -70,7 +70,7 @@ import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subs
     )
     reproduccionesCanciones: ReproduccionCancion[];
 
-    @OneToOne(() => Subscripcion, (subscripcion) => subscripcion.usuario)
-    subscripcion: Subscripcion;
+    @OneToOne(() => OrmSubscripcionEntity, (subscripcion) => subscripcion.usuario)
+    subscripcion: OrmSubscripcionEntity;
   }
   

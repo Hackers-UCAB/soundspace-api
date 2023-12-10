@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
-import { Genero } from '../../../common/infraestructure/orm-entities/genre.entity';
+import { OrmGeneroEntity } from '../../../common/infraestructure/orm-entities/genre.entity';
 import { ReproduccionCancion } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { PlaylistCancion } from '../../../common/infraestructure/orm-entities/playlist-song.entity';
-import { Artista } from '../../../artist/infraestructure/orm-entities/artist.entity';
+import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 
 @Entity('cancion')
-export class Cancion {
+export class OrmCancionEntity {
 
   @PrimaryGeneratedColumn('uuid')
   codigo_cancion: string;
@@ -32,7 +32,7 @@ export class Cancion {
   @Column()
   referencia_imagen: string;
 
-  @ManyToMany(() => Genero, genero => genero.canciones)
+  @ManyToMany(() => OrmGeneroEntity, genero => genero.canciones)
   @JoinTable({
     name: 'cancion_genero',
     joinColumn: {
@@ -44,9 +44,9 @@ export class Cancion {
       referencedColumnName: 'codigo_genero'
     }
   })
-  generos: Genero[];
+  generos: OrmGeneroEntity[];
 
-  @ManyToMany(() => Artista, artista => artista.canciones)
+  @ManyToMany(() => OrmArtistaEntity, artista => artista.canciones)
   @JoinTable({
     name: 'cancion_artista',
     joinColumn: {
@@ -58,7 +58,7 @@ export class Cancion {
       referencedColumnName: 'codigo_artista'
     }
   })
-  artistas: Artista[];
+  artistas: OrmArtistaEntity[];
 
   @OneToMany(() => ReproduccionCancion, reproduccionCancion => reproduccionCancion.cancion)
   reproduccionesCanciones: ReproduccionCancion[];

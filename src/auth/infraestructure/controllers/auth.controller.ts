@@ -7,21 +7,33 @@ import {
 import { AuthInfraestructureDto } from '../dto/auth.infraestructure.dto';
 import { SignUpApplicationService } from 'src/auth/application/services/sign-up-service.application.service';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from '../jwt/jwt-payload.interface';
 
 @Controller('auth')
 export class AuthController {
 
   constructor(
+    @Inject(JwtService)
+    private readonly jwtService: JwtService,
+
     @Inject('DataSource')
     private readonly dataSource: DataSource
+
   ){}
+
+  private getJwtToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
+  }
 
   @Post()
   async signUp(@Body() authDto: AuthInfraestructureDto) {
     const service = new SignUpApplicationService(new UserRepository(this.dataSource));
+    const token = this.getJwtToken({id: '1'});
 
+    console.log(token);
+    
     return await service.execute(authDto);
   }
 }

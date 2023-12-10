@@ -1,14 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Artista } from '../../../artist/infraestructure/orm-entities/artist.entity';
+import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 
 @Entity('artistas_trending')
-export class ArtistasTrending {
+export class OrmArtistasTrendingEntity {
   @PrimaryGeneratedColumn('uuid')
   codigo_trending: string;
 
   @Column()
   fecha: Date;
 
-  @ManyToOne(() => Artista, artista => artista.trending)
-  artista: Artista;
+  @ManyToOne(() => OrmArtistaEntity, artista => artista.trending)
+  artista: OrmArtistaEntity;
 }

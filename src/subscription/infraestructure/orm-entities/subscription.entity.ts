@@ -8,7 +8,7 @@ export enum SubscriptionStatusEnum {
 }
 
 @Entity('subscripcion')
-export class Subscripcion {
+export class OrmSubscripcionEntity {
     @PrimaryGeneratedColumn('uuid')
     codigo_subscripcion: string;
 
@@ -21,7 +21,7 @@ export class Subscripcion {
     @Column()
     status: string;
 
-    @OneToOne(() => User)
-    @JoinColumn()
+    @OneToOne(() => User, (user)=> user.subscripcion)
+    @JoinColumn({ name: 'usuario' })
     usuario: User;
 }
