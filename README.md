@@ -11,7 +11,6 @@ Pasos para clonar el mejor back de todos los tiempo :O
 4. Llenar las variables de entorno 
 5. Correr
 ```yarn start:dev```
-6. Ejecutar seed (proximamente)
 ```
 localhost:3000/api/seed
 ```
