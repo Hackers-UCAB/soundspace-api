@@ -1,5 +1,5 @@
+  
 
-
-export interface IUserRepository {
+export interface IUserRepository{
     findAll(): any;
 }
