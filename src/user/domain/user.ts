@@ -45,12 +45,19 @@ export class User extends AggregateRoot<UserId>{
         userId: UserId,
         userRole: UserRole,
         userPhone?: UserPhone,
+        userName?: UserName,
+        userBirthday?: UserBirthday,
+        userEmail?: UserEmail,
+        userGender?: UserGender
     ){
-        //TODO: Hay que ver lo de si se crea con telefono o sin 
         const userCreated = UserCreated.create(
             userId,
             userPhone,
-            userRole
+            userRole,
+            userName,
+            userBirthday,
+            userEmail,
+            userGender
         )
         super(userId, userCreated)
     }
@@ -61,10 +68,10 @@ export class User extends AggregateRoot<UserId>{
         if (event instanceof UserCreated) {
             this.role = event.userRole
             this.phone = event.userPhoneNumber
-            this.gender = UserGender.create(UserGenderEnum.OTHER)
-            this.name = UserName.create(' ')
-            this.birthday = UserBirthday.create(new Date())
-            this.email = UserEmail.create('')
+            this.gender = event.userGender
+            this.name = event.userName
+            this.birthday = event.userBirthday
+            this.email = event.userEmail
         }
 
         if (event instanceof UserUpdated) {
@@ -84,15 +91,23 @@ export class User extends AggregateRoot<UserId>{
         this.apply(UserUpdated.create(this.Id, name, birthday, email, gender))
     }
 
-    static create(
+    static async create(
         userId: UserId,
         userRole: UserRole,
-        userPhone?: UserPhone
-    ): User{
+        userPhone?: UserPhone,
+        userName?: UserName,
+        userBirthday?: UserBirthday,
+        userEmail?: UserEmail,
+        userGender?: UserGender
+    ): Promise<User>{
         return new User(
             userId,
             userRole,
-            userPhone
+            userPhone,
+            userName,
+            userBirthday,
+            userEmail,
+            userGender
         )
     }
 }

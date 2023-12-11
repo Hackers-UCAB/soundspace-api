@@ -6,19 +6,16 @@ export class UserName extends ValueObject<UserName> {
 
     private constructor(name: string) {
         let valid: boolean = true;
-        //Se chequean solo caracteres alfabeticos
-        if(!/^[a-zA-Z ]+$/.test(name)){
-            valid = false;
-        }
+        if (!name) throw new InvalidUserNameException(`El nombre ${name} no existe`);
+
         //El nombre debe ser mayor a 3 y menor a 50
-        if ((name.length < 3) || (name.length > 50)) {
+        if ((name.length < 3) || (name.length > 50 )) {
             valid = false;
         }
 
         if(!valid){
             throw new InvalidUserNameException(`El nombre ${name} no es valido.`);
         }
-
         super();
         this.name = name;
     }

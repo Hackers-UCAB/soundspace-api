@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth/infraestructure/controllers/auth.controller';
 import { databaseProviders } from 'dbconfig';
 import { SubscriptionController } from './subscription/infraestructure/controllers/subscription.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { OrmUserMapper } from './user/infraestructure/mapper/orm-user.mapper';
 
 @Module({
   imports: [

@@ -1,15 +1,13 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Inject
-} from '@nestjs/common';
+import {Controller, Post, Body, Inject, Get} from "@nestjs/common";
 import { AuthInfraestructureDto } from '../dto/auth.infraestructure.dto';
 import { SignUpApplicationService } from 'src/auth/application/services/sign-up-service.application.service';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../jwt/jwt-payload.interface';
+import { LoginApplicationService } from "src/auth/application/services/log-in-service.application.service";
+import { OrmUserMapper } from "src/user/infraestructure/mapper/orm-user.mapper";
+import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
 
 @Controller('auth')
 export class AuthController {
@@ -19,8 +17,9 @@ export class AuthController {
     private readonly jwtService: JwtService,
 
     @Inject('DataSource')
-    private readonly dataSource: DataSource
-
+    private readonly dataSource: DataSource,
+    
+    //private readonly userMapper: OrmUserMapper 
   ){}
 
   private getJwtToken(payload: JwtPayload) {
@@ -35,5 +34,13 @@ export class AuthController {
     console.log(token);
     
     return await service.execute(authDto);
+  }
+
+  @Get()
+  async login(@Body() authDto: AuthInfraestructureDto): Promise<OrmUserEntity> {
+    const service = new LoginApplicationService(new UserRepository(this.dataSource));
+    const result = await service.execute(authDto);
+    return null;
+    //return this.userMapper.toPersistence(result.data);
   }
 }
