@@ -21,7 +21,6 @@ export class OrmUserMapper implements IMapper<User,OrmUserEntity>{
             domain.Email.Email,
             domain.Birthday.Birthday,
             domain.Gender.Gender,
-            domain.Phone.Phone,
             domain.Role.Role
         );
 
@@ -32,7 +31,6 @@ export class OrmUserMapper implements IMapper<User,OrmUserEntity>{
         const user = User.create(
             UserId.create(persistence.codigo_usuario),
             UserRole.create(UserRoleEnum[persistence.rol]),
-            UserPhone.create(persistence.telefono),
             UserName.create(persistence.nombre),
             UserBirthday.create(persistence.fecha_nac),
             UserEmail.create(persistence.correo),

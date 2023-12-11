@@ -8,11 +8,13 @@ import { SubscriptionCreatedDate } from "./value-objects/subscription-created-da
 import { SubscriptionUpdated } from "./events/subscription-updated-event";
 import { InvalidSubscriptionException } from "./exceptions/invalid-subscription.exception";
 import { SubscriptionStatus } from "./value-objects/subscription-status";
+import { SubscriptionValue } from "./value-objects/subscription-value";
 
 export class Subscription extends AggregateRoot<SubscriptionId>{
     private  status: SubscriptionStatus
     private  createdOn: SubscriptionCreatedDate
     private  until: SubscriptionEndDate
+    private  subscriptionValue: SubscriptionValue
     private  user: UserId
 
     get Status(): SubscriptionStatus {
@@ -27,6 +29,10 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
         return this.until
     }
 
+    get SubscriptionValue(): SubscriptionValue {
+        return this.subscriptionValue
+    }
+
     get User(): UserId {
         return this.user
     }
@@ -36,6 +42,7 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
         status: SubscriptionStatus,
         createdOn: SubscriptionCreatedDate,
         until: SubscriptionEndDate,
+        value: SubscriptionValue,
         user: UserId
     ){
         const subscriptionCreated = SubscriptionCreated.create(
@@ -43,6 +50,7 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
             status,
             createdOn,
             until,
+            value,
             user    
         )
         super(id, subscriptionCreated)
@@ -78,6 +86,7 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
         status: SubscriptionStatus,
         createdOn: SubscriptionCreatedDate,
         until: SubscriptionEndDate,
+        value: SubscriptionValue,
         user: UserId
     ): Subscription{
         return new Subscription(
@@ -85,6 +94,7 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
             status,
             createdOn,
             until,
+            value,
             user
         )
     }

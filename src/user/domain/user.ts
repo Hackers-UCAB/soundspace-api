@@ -18,7 +18,6 @@ export class User extends AggregateRoot<UserId>{
     private  email: UserEmail
     private  gender: UserGender
     private  role: UserRole
-    private  phone: UserPhone
 
     get Name(): UserName {
         return this.name;
@@ -32,9 +31,6 @@ export class User extends AggregateRoot<UserId>{
     get Role(): UserRole {
         return this.role;
     }
-    get Phone(): UserPhone {
-        return this.phone;
-    }
 
     get Birthday(): UserBirthday {
         return this.birthday;
@@ -44,7 +40,6 @@ export class User extends AggregateRoot<UserId>{
     protected constructor(
         userId: UserId,
         userRole: UserRole,
-        userPhone?: UserPhone,
         userName?: UserName,
         userBirthday?: UserBirthday,
         userEmail?: UserEmail,
@@ -52,7 +47,6 @@ export class User extends AggregateRoot<UserId>{
     ){
         const userCreated = UserCreated.create(
             userId,
-            userPhone,
             userRole,
             userName,
             userBirthday,
@@ -67,7 +61,6 @@ export class User extends AggregateRoot<UserId>{
     protected when(event: DomainEvent): void {
         if (event instanceof UserCreated) {
             this.role = event.userRole
-            this.phone = event.userPhoneNumber
             this.gender = event.userGender
             this.name = event.userName
             this.birthday = event.userBirthday
@@ -82,7 +75,7 @@ export class User extends AggregateRoot<UserId>{
         }
     }
     protected ensureValidaState(): void {
-        if (!this.phone || !this.role || !this.Id || !this.name || !this.birthday || !this.email || !this.gender) {
+        if (!this.role || !this.Id || !this.name || !this.birthday || !this.email || !this.gender) {
             throw new InvalidUserException('User not valid');
         }
     }
@@ -94,7 +87,6 @@ export class User extends AggregateRoot<UserId>{
     static async create(
         userId: UserId,
         userRole: UserRole,
-        userPhone?: UserPhone,
         userName?: UserName,
         userBirthday?: UserBirthday,
         userEmail?: UserEmail,
@@ -103,7 +95,6 @@ export class User extends AggregateRoot<UserId>{
         return new User(
             userId,
             userRole,
-            userPhone,
             userName,
             userBirthday,
             userEmail,

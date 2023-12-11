@@ -45,9 +45,6 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
   
     @Column({ nullable: true })
     genero?: string;
-    
-    @Column({ unique: true })
-    telefono: string;
 
     @Column('text', {
       default: 'GUEST'
@@ -80,7 +77,6 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
       email: string,
       birthdate: Date,
       gender: UserGenderEnum,
-      phoneNumber: string,
       role: string,
     ): OrmUserEntity {
         const user = new OrmUserEntity();
@@ -89,7 +85,6 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
         user.correo = email;
         user.fecha_nac = birthdate;
         user.genero = gender;
-        user.telefono = phoneNumber;
         user.rol = role;
         return user
     }

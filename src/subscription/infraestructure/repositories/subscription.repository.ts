@@ -30,4 +30,11 @@ export class SubscriptionRepository extends Repository<OrmSubscripcionEntity> im
         });
         return this.ormSubscriptionMapper.toDomain(subscription);
     }
+
+    async saveSubscription(subscription: Subscription): Promise<string> {
+        const ormSubscription = this.ormSubscriptionMapper.toPersistence(subscription);
+        console.log(ormSubscription);
+        
+        return 'null';
+    }
 }
