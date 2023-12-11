@@ -1,11 +1,11 @@
 import { DataSource, Repository } from "typeorm";
-import { User } from "../orm-entities/user.entity";
+import { OrmUserEntity } from "../orm-entities/user.entity";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
 
-export class UserRepository extends Repository<User> implements IUserRepository{
+export class UserRepository extends Repository<OrmUserEntity> implements IUserRepository{
     
     constructor(dataSource: DataSource){
-        super(User, dataSource.createEntityManager());
+        super(OrmUserEntity, dataSource.createEntityManager());
     }
     
     async findAll() {

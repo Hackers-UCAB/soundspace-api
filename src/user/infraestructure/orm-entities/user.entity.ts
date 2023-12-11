@@ -28,8 +28,8 @@ import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-enti
     GUEST = 'GUEST',
   }
   
-  @Entity()
-  export class User {
+  @Entity('user')
+  export class OrmUserEntity {
     @PrimaryGeneratedColumn('uuid')
     codigo_usuario: string;
   

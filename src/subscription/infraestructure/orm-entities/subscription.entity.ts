@@ -1,4 +1,4 @@
-import { User } from "src/user/infraestructure/orm-entities/user.entity";
+import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum SubscriptionStatusEnum {
@@ -18,10 +18,12 @@ export class OrmSubscripcionEntity {
     @Column()
     fecha_finalizacion: Date;
 
-    @Column()
+    @Column('text', {
+        default: SubscriptionStatusEnum.ACTIVE
+    })
     status: string;
 
-    @OneToOne(() => User, (user)=> user.subscripcion)
+    @OneToOne(() => OrmUserEntity, (user)=> user.subscripcion)
     @JoinColumn({ name: 'usuario' })
-    usuario: User;
+    usuario: OrmUserEntity;
 }
