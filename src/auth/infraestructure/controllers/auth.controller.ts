@@ -8,6 +8,10 @@ import { JwtPayload } from '../jwt/jwt-payload.interface';
 import { LoginApplicationService } from "src/auth/application/services/log-in-service.application.service";
 import { OrmUserMapper } from "src/user/infraestructure/mapper/orm-user.mapper";
 import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
+import { SignUpInfraestructureDto } from "../dto/sign-up.infraestructure.dto";
+import { SubscriptionRepository } from "src/subscription/infraestructure/repositories/subscription.repository";
+import { SubscriptionChanelRepository } from "src/subscription/infraestructure/repositories/subscription-chanel.repository";
+import { UuidGenerator } from "src/common/infraestructure/uuid-generator";
 
 @Controller('auth')
 export class AuthController {
@@ -26,14 +30,20 @@ export class AuthController {
     return this.jwtService.sign(payload);
   }
 
-  @Post()
-  async signUp(@Body() authDto: AuthInfraestructureDto) {
-    const service = new SignUpApplicationService(new UserRepository(this.dataSource));
-    const token = this.getJwtToken({id: '1'});
+  @Post('sign-up')
+  async signUp(@Body() signUpDto: SignUpInfraestructureDto) {
+    const service = new SignUpApplicationService(
+      new UserRepository(this.dataSource), 
+      new SubscriptionRepository(this.dataSource),
+      new SubscriptionChanelRepository(this.dataSource),
+      new UuidGenerator(),
+      );
 
-    console.log(token);
+    // const token = this.getJwtToken({id: '1'});
+
+    // console.log(token);
     
-    return await service.execute(authDto);
+    return await service.execute(signUpDto);
   }
 
   @Get()

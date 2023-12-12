@@ -1,5 +1,6 @@
 import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { OrmSubscriptionChanelEntity } from "./subscription-chanel.entity";
 
 export enum SubscriptionStatusEnum {
     ACTIVE = "ACTIVE",
@@ -29,6 +30,10 @@ export class OrmSubscripcionEntity {
     @OneToOne(() => OrmUserEntity, (user)=> user.subscripcion)
     @JoinColumn({ name: 'usuario' })
     usuario: OrmUserEntity;
+
+    @OneToOne(() => OrmSubscriptionChanelEntity, (canal)=> canal.subscripcion)
+    @JoinColumn({ name: 'canal' })
+    canal: OrmSubscriptionChanelEntity;
 
     static create(
         subscriptionId: string,
