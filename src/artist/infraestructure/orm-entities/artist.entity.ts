@@ -1,10 +1,10 @@
-import { ArtistasTrending } from "../../../common/infraestructure/orm-entities/artist-trending.entity";
-import { Cancion } from "../../../song/infraestructure/orm-entities/song.entity";
-import { PlaylistCreador } from "../../../common/infraestructure/orm-entities/playlist-creator.entity";
+import { OrmArtistasTrendingEntity } from "../../../common/infraestructure/orm-entities/artist-trending.entity";
+import { OrmCancionEntity } from "../../../song/infraestructure/orm-entities/song.entity";
+import { OrmPlaylistCreadorEntity } from "../../../common/infraestructure/orm-entities/playlist-creator.entity";
 import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('artista')
-export class Artista {
+export class OrmArtistaEntity {
   @PrimaryGeneratedColumn('uuid')
   codigo_artista: string;
 
@@ -14,12 +14,12 @@ export class Artista {
   @Column()
   referencia_imagen: string;
 
-  @ManyToMany(() => Cancion, cancion => cancion.artistas)
-  canciones: Cancion[];
+  @ManyToMany(() => OrmCancionEntity, cancion => cancion.artistas)
+  canciones: OrmCancionEntity[];
 
-  @OneToMany(() => PlaylistCreador, playlistCreador => playlistCreador.artista)
-  playlistCreadores: PlaylistCreador[];
+  @OneToMany(() => OrmPlaylistCreadorEntity, playlistCreador => playlistCreador.artista)
+  playlistCreadores: OrmPlaylistCreadorEntity[];
 
-  @OneToMany(() => ArtistasTrending, trending => trending.artista)
-  trending: ArtistasTrending[];
+  @OneToMany(() => OrmArtistasTrendingEntity, trending => trending.artista)
+  trending: OrmArtistasTrendingEntity[];
 }

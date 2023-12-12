@@ -1,9 +1,9 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { Playlist } from './playlist.entity';
-import { Cancion } from '../../../song/infraestructure/orm-entities/song.entity';
+import { OrmPlaylistEntity } from './playlist.entity';
+import { OrmCancionEntity } from '../../../song/infraestructure/orm-entities/song.entity';
 
 @Entity('playlist_cancion')
-export class PlaylistCancion {
+export class OrmPlaylistCancionEntity {
   // @PrimaryColumn()
   // playlistId: number;
 
@@ -13,11 +13,11 @@ export class PlaylistCancion {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   fecha_union: Date;
 
-  @ManyToOne(() => Playlist, playlist => playlist.canciones)
+  @ManyToOne(() => OrmPlaylistEntity, playlist => playlist.canciones)
   // @JoinColumn({ name: "playlistId" })
-  playlist: Playlist;
+  playlist: OrmPlaylistEntity;
 
-  @ManyToOne(() => Cancion, cancion => cancion.playlistCanciones)
+  @ManyToOne(() => OrmCancionEntity, cancion => cancion.playlistCanciones)
   // @JoinColumn({ name: "codigo_cancion" })
-  cancion: Cancion;
+  cancion: OrmCancionEntity;
 }

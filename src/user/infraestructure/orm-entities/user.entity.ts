@@ -1,16 +1,13 @@
 import {
-    BeforeInsert,
-    BeforeUpdate,
     Column,
     Entity,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
   } from 'typeorm';
-  import { ReproduccionPlaylist } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
-//   import { HistorialEdicion } from './historial_edicion.entity';
-  import { ReproduccionCancion } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
-import { Subscripcion } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
+import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
+import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
+import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
   
   export enum genderOptions {
@@ -29,7 +26,7 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
     GUEST = 'GUEST',
   }
   
-  @Entity('users')
+  @Entity('user')
   export class OrmUserEntity {
     @PrimaryGeneratedColumn('uuid')
     codigo_usuario: string;
@@ -55,9 +52,9 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
     rol: string;
   
     @OneToMany(() =>
-      ReproduccionPlaylist,
+      OrmReproduccionPlaylistEntity,
       (reproduccion) => reproduccion.usuario)
-    reproducciones: ReproduccionPlaylist[];
+    reproducciones: OrmReproduccionPlaylistEntity[];
   
     // // @OneToMany(
     // //   () => HistorialEdicion,
@@ -66,13 +63,13 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
     // // historialEdiciones: HistorialEdicion[];
   
     @OneToMany(
-      () => ReproduccionCancion,
+      () => OrmReproduccionCancionEntity,
       (reproduccionCancion) => reproduccionCancion.usuario,
     )
-    reproduccionesCanciones: ReproduccionCancion[];
+    reproduccionesCanciones: OrmReproduccionCancionEntity[];
 
-    @OneToOne(() => Subscripcion, (subscripcion) => subscripcion.usuario)
-    subscripcion: Subscripcion;
+    @OneToOne(() => OrmSubscripcionEntity, (subscripcion) => subscripcion.usuario)
+    subscripcion: OrmSubscripcionEntity;
 
 
     static create(

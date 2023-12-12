@@ -1,11 +1,11 @@
 import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { OrmUserEntity } from '../../../user/infraestructure/orm-entities/user.entity';
-import { Cancion } from '../../../song/infraestructure/orm-entities/song.entity';
+import { OrmCancionEntity } from '../../../song/infraestructure/orm-entities/song.entity';
 
 //TODO: Cambiar el nombre del file
 
 @Entity('reproduccion_cancion')
-export class ReproduccionCancion {
+export class OrmReproduccionCancionEntity {
 
   @PrimaryGeneratedColumn('uuid')
   codigo_reproduccion: string;
@@ -20,9 +20,9 @@ export class ReproduccionCancion {
   // @JoinColumn({ name: 'codigo_usuario' })
   usuario: OrmUserEntity;
 
-  @ManyToOne(() => Cancion, cancion => cancion.reproduccionesCanciones)
+  @ManyToOne(() => OrmCancionEntity, cancion => cancion.reproduccionesCanciones)
   // @JoinColumn({ name: 'codigo_cancion' })
-  cancion: Cancion;
+  cancion: OrmCancionEntity;
 
   @Column({ type: 'timestamp' })
   fecha_reproduccion: Date;

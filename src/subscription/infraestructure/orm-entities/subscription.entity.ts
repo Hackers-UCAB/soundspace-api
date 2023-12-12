@@ -8,7 +8,7 @@ export enum SubscriptionStatusEnum {
 }
 
 @Entity('subscripcion')
-export class Subscripcion {
+export class OrmSubscripcionEntity {
     @PrimaryGeneratedColumn('uuid')
     codigo_subscripcion: string;
 
