@@ -1,15 +1,12 @@
 import {
-    BeforeInsert,
-    BeforeUpdate,
     Column,
     Entity,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
   } from 'typeorm';
-  import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
-//   import { HistorialEdicion } from './historial_edicion.entity';
-  import { ReproduccionCancion } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
+import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
+import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
   
@@ -63,10 +60,10 @@ import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.e
     // // historialEdiciones: HistorialEdicion[];
   
     @OneToMany(
-      () => ReproduccionCancion,
+      () => OrmReproduccionCancionEntity,
       (reproduccionCancion) => reproduccionCancion.usuario,
     )
-    reproduccionesCanciones: ReproduccionCancion[];
+    reproduccionesCanciones: OrmReproduccionCancionEntity[];
 
     @OneToOne(() => OrmSubscripcionEntity, (subscripcion) => subscripcion.usuario)
     subscripcion: OrmSubscripcionEntity;

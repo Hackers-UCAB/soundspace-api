@@ -7,4 +7,5 @@ export interface ISubscriptionRepository{
     findAll(): any;
     findSubscriptionById(id: SubscriptionId): Promise<Subscription>
     saveSubscription(subscription: Subscription) : Promise<string>;
+    findSubscriptionByValue(value: string): Promise<Subscription>;
 }

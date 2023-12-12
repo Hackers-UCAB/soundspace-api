@@ -3,7 +3,7 @@ import { OrmPlaylistEntity } from './playlist.entity';
 import { OrmCancionEntity } from '../../../song/infraestructure/orm-entities/song.entity';
 
 @Entity('playlist_cancion')
-export class PlaylistCancion {
+export class OrmPlaylistCancionEntity {
   // @PrimaryColumn()
   // playlistId: number;
 

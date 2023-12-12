@@ -1,8 +1,8 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { OrmReproduccionPlaylistEntity } from './playlist-stream.entity';
-import { PlaylistCancion } from './playlist-song.entity';
-import { PlaylistCreador } from './playlist-creator.entity';
-import { OrmPlaylistTrendingTrending } from './playlist-trending.entity';
+import { OrmPlaylistCancionEntity } from './playlist-song.entity';
+import { OrmPlaylistCreadorEntity } from './playlist-creator.entity';
+import { OrmPlaylistTrendingEntity } from './playlist-trending.entity';
 
 @Entity('playlist')
 export class OrmPlaylistEntity {
@@ -21,12 +21,12 @@ export class OrmPlaylistEntity {
   @OneToMany(() => OrmReproduccionPlaylistEntity, reproduccion => reproduccion.playlist)
   reproducciones: OrmReproduccionPlaylistEntity[];
 
-  @OneToMany(() => PlaylistCancion, playlistCancion => playlistCancion.playlist)
-  canciones: PlaylistCancion[];
+  @OneToMany(() => OrmPlaylistCancionEntity, playlistCancion => playlistCancion.playlist)
+  canciones: OrmPlaylistCancionEntity[];
 
-  @OneToMany(() => PlaylistCreador, playlistCreador => playlistCreador.playlist)
-  creadores: PlaylistCreador[];
+  @OneToMany(() => OrmPlaylistCreadorEntity, playlistCreador => playlistCreador.playlist)
+  creadores: OrmPlaylistCreadorEntity[];
 
-  @OneToMany(() => OrmPlaylistTrendingTrending, trending => trending.playlist)
-  trending: OrmPlaylistTrendingTrending[];
+  @OneToMany(() => OrmPlaylistTrendingEntity, trending => trending.playlist)
+  trending: OrmPlaylistTrendingEntity[];
 }

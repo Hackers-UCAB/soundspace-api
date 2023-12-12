@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { OrmGeneroEntity } from '../../../common/infraestructure/orm-entities/genre.entity';
-import { ReproduccionCancion } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
-import { PlaylistCancion } from '../../../common/infraestructure/orm-entities/playlist-song.entity';
+import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
+import { OrmPlaylistCancionEntity } from '../../../common/infraestructure/orm-entities/playlist-song.entity';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 
 @Entity('cancion')
@@ -60,9 +60,9 @@ export class OrmCancionEntity {
   })
   artistas: OrmArtistaEntity[];
 
-  @OneToMany(() => ReproduccionCancion, reproduccionCancion => reproduccionCancion.cancion)
-  reproduccionesCanciones: ReproduccionCancion[];
+  @OneToMany(() => OrmReproduccionCancionEntity, reproduccionCancion => reproduccionCancion.cancion)
+  reproduccionesCanciones: OrmReproduccionCancionEntity[];
 
-  @OneToMany(() => PlaylistCancion, playlistCancion => playlistCancion.cancion)
-  playlistCanciones: PlaylistCancion[];
+  @OneToMany(() => OrmPlaylistCancionEntity, playlistCancion => playlistCancion.cancion)
+  playlistCanciones: OrmPlaylistCancionEntity[];
 }

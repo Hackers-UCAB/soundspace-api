@@ -37,4 +37,16 @@ export class SubscriptionRepository extends Repository<OrmSubscripcionEntity> im
         
         return 'null';
     }
+
+    async findSubscriptionByValue(value: string): Promise<Subscription> {
+        const subscription = await this.findOne({
+            where: {
+                value: value
+            },
+             relations: {
+                 usuario: true
+             }
+        })
+        return this.ormSubscriptionMapper.toDomain(subscription);
+    }
 }

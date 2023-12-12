@@ -5,7 +5,7 @@ import { OrmCancionEntity } from '../../../song/infraestructure/orm-entities/son
 //TODO: Cambiar el nombre del file
 
 @Entity('reproduccion_cancion')
-export class ReproduccionCancion {
+export class OrmReproduccionCancionEntity {
 
   @PrimaryGeneratedColumn('uuid')
   codigo_reproduccion: string;

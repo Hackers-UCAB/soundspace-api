@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToOne } from 'ty
 import { OrmPlaylistEntity } from './playlist.entity';
 
 @Entity('playlist_trending')
-export class OrmPlaylistTrendingTrending {
+export class OrmPlaylistTrendingEntity {
   @PrimaryGeneratedColumn('uuid')
   codigo_trending: string;
 

@@ -3,7 +3,7 @@ import { OrmPlaylistEntity } from './playlist.entity';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 
 @Entity('playlist_creador')
-export class PlaylistCreador {
+export class OrmPlaylistCreadorEntity {
   
   @PrimaryGeneratedColumn('uuid')
   codigo_playlist_creador: number;

@@ -1,21 +1,25 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { Result } from 'src/common/application/result-handler/result';
-import { UserPhone } from 'src/user/domain/value-objects/user-phone';
 import { AuthApplicationDto } from '../dto/auth.application.dto';
-import { OrmUserEntity } from 'src/user/infraestructure/orm-entities/user.entity';
 import { User } from 'src/user/domain/user';
+import { IJwtGenerator } from '../interface/jwt-generator.interface';
+import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 
 
-export class LoginApplicationService implements IApplicationService<AuthApplicationDto,User>{
+export class LoginApplicationService implements IApplicationService<AuthApplicationDto,string>{
 
-    constructor(private readonly userRepository: IUserRepository){
-        this.userRepository = userRepository;
+    private readonly subscriptionRepository: ISubscriptionRepository;
+    private readonly tokenGenerator: IJwtGenerator;
+    constructor(subscriptionRepository: ISubscriptionRepository, tokenGenerator: IJwtGenerator) {
+        this.subscriptionRepository = subscriptionRepository;
+        this.tokenGenerator = tokenGenerator;
     }
 
-    async execute(param: AuthApplicationDto): Promise<Result<User>> {
+    async execute(param: AuthApplicationDto): Promise<Result<string>> {
         
-        const user = await this.userRepository.findUserByPhone(param.phoneNumber);
-        return Result.success(user,200);
+        const sub = await this.subscriptionRepository.findSubscriptionByValue(param.phoneNumber);
+        const token = this.tokenGenerator.create({ id: (sub.User.Id).toString() });
+        return Result.success(token,200);
     }
 }
