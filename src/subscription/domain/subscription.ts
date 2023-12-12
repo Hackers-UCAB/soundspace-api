@@ -2,20 +2,22 @@ import { AggregateRoot } from "src/common/domain/aggregate-root";
 import { UserId } from "src/user/domain/value-objects/user-id";
 import { DomainEvent } from "src/common/domain/domain-event";
 import { SubscriptionId } from './value-objects/subscription-id';
-import { SubscriptionStatusEnum } from "./enums/subscription-status.enum";
 import { SubscriptionCreated } from "./events/subscription-created.event";
 import { SubscriptionEndDate } from "./value-objects/subscription-end-date";
 import { SubscriptionCreatedDate } from "./value-objects/subscription-created-date";
 import { SubscriptionUpdated } from "./events/subscription-updated-event";
 import { InvalidSubscriptionException } from "./exceptions/invalid-subscription.exception";
+import { SubscriptionStatus } from "./value-objects/subscription-status";
+import { SubscriptionValue } from "./value-objects/subscription-value";
 
 export class Subscription extends AggregateRoot<SubscriptionId>{
-    private  status: SubscriptionStatusEnum
+    private  status: SubscriptionStatus
     private  createdOn: SubscriptionCreatedDate
     private  until: SubscriptionEndDate
+    private  subscriptionValue: SubscriptionValue
     private  user: UserId
 
-    get Status(): SubscriptionStatusEnum {
+    get Status(): SubscriptionStatus {
         return this.status;
     }
 
@@ -27,15 +29,20 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
         return this.until
     }
 
+    get SubscriptionValue(): SubscriptionValue {
+        return this.subscriptionValue
+    }
+
     get User(): UserId {
         return this.user
     }
 
     protected constructor(
         id: SubscriptionId,
-        status: SubscriptionStatusEnum,
+        status: SubscriptionStatus,
         createdOn: SubscriptionCreatedDate,
         until: SubscriptionEndDate,
+        value: SubscriptionValue,
         user: UserId
     ){
         const subscriptionCreated = SubscriptionCreated.create(
@@ -43,6 +50,7 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
             status,
             createdOn,
             until,
+            value,
             user    
         )
         super(id, subscriptionCreated)
@@ -69,15 +77,16 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
         }
     }
 
-    public updateStatus(status: SubscriptionStatusEnum, createdOn?: SubscriptionCreatedDate, until?: SubscriptionEndDate): void {
+    public updateStatus(status: SubscriptionStatus, createdOn?: SubscriptionCreatedDate, until?: SubscriptionEndDate): void {
         this.apply(SubscriptionUpdated.create(this.Id, status, createdOn, until))
     }
 
     static create(
         id: SubscriptionId,
-        status: SubscriptionStatusEnum,
+        status: SubscriptionStatus,
         createdOn: SubscriptionCreatedDate,
         until: SubscriptionEndDate,
+        value: SubscriptionValue,
         user: UserId
     ): Subscription{
         return new Subscription(
@@ -85,6 +94,7 @@ export class Subscription extends AggregateRoot<SubscriptionId>{
             status,
             createdOn,
             until,
+            value,
             user
         )
     }

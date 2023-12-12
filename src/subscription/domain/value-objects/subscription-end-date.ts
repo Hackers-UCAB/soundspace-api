@@ -1,5 +1,4 @@
 import { ValueObject } from "src/common/domain/value-object";
-import { SubscriptionCreatedDate } from "./subscription-created-date";
 import { InvalidSubscriptionEndDate } from "../exceptions/invalid-subscription-end-date.exception";
 
 export class SubscriptionEndDate extends ValueObject<SubscriptionEndDate>{
@@ -27,7 +26,7 @@ export class SubscriptionEndDate extends ValueObject<SubscriptionEndDate>{
         return this.until
     }
 
-    static create(until: Date): SubscriptionCreatedDate {
-        return new SubscriptionCreatedDate(until);
+    static create(until: Date): SubscriptionEndDate {
+        return new SubscriptionEndDate(until);
     }
 }

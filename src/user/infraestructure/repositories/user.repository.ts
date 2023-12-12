@@ -19,10 +19,11 @@ export class UserRepository extends Repository<OrmUserEntity> implements IUserRe
     }
 
     async findUserByPhone(phone: string): Promise<User> {
-        const user = await this.findOne({
-            where: {telefono: phone},
-        });
-        return this.ormUsermapper.toDomain(user);
+        // const user = await this.findOne({
+        //     where: {telefono: phone},
+        // });
+        // return this.ormUsermapper.toDomain(user);
+        return null;
     }
     
 }

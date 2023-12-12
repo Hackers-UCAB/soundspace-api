@@ -19,9 +19,32 @@ export class OrmSubscripcionEntity {
     fecha_finalizacion: Date;
 
     @Column()
+    value: string
+
+    @Column('text', {
+        default: SubscriptionStatusEnum.ACTIVE
+    })
     status: string;
 
-    @OneToOne(() => OrmUserEntity)
-    @JoinColumn()
+    @OneToOne(() => OrmUserEntity, (user)=> user.subscripcion)
+    @JoinColumn({ name: 'usuario' })
     usuario: OrmUserEntity;
+
+    static create(
+        subscriptionId: string,
+        subscriptionStatus: string,
+        subscriptionCreatedDate: Date,
+        subscriptionEndDate: Date,
+        value: string
+        //user: OrmUserEntity
+    ): OrmSubscripcionEntity{
+        const subscription = new OrmSubscripcionEntity();
+        subscription.codigo_subscripcion = subscriptionId;
+        subscription.status = subscriptionStatus;
+        subscription.fecha_creacion = subscriptionCreatedDate;
+        subscription.fecha_finalizacion = subscriptionEndDate;
+        subscription.value = value
+        //subscription.usuario = user;
+        return subscription;
+    }
 }
