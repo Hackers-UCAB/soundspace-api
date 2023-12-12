@@ -742,7 +742,7 @@
 
 "@nestjs/jwt@^10.2.0":
   version "10.2.0"
-  resolved "http://23.22.253.223:4873/@nestjs%2fjwt/-/jwt-10.2.0.tgz#6aa35a04922d19c6426efced4671620f92e6dbd0"
+  resolved "https://registry.yarnpkg.com/@nestjs/jwt/-/jwt-10.2.0.tgz#6aa35a04922d19c6426efced4671620f92e6dbd0"
   integrity sha512-x8cG90SURkEiLOehNaN2aRlotxT0KZESUliOPKKnjWiyJOcWurkF3w345WOX0P4MgFzUjGoZ1Sy0aZnxeihT0g==
   dependencies:
     "@types/jsonwebtoken" "9.0.5"

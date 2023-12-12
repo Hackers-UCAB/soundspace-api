@@ -7,7 +7,7 @@ export class SignUpApplicationService implements IApplicationService <AuthApplic
     
     private readonly userRepository: IUserRepository;
 
-    constructor(repository: IUserRepository){
+    constructor(repository: IUserRepository) {
         this.userRepository = repository;
     }
 
@@ -15,10 +15,6 @@ export class SignUpApplicationService implements IApplicationService <AuthApplic
         console.log(param.phoneNumber);
         
         const users = await this.userRepository.findAll();
-
-        // console.log(users);
-        
-
         return Result.success("Usuario registrado exitosamente", 201);
     }
 
