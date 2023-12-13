@@ -18,35 +18,14 @@ export class FirebaseNotifier implements INotifier{
             },
             tokens: tokens,
         };
-
-        let totalResult: NotifierResult;
-        let result: [{
-            userToken: string;
-            messageSend: boolean;
-        }];
-
+        //TODO: Mejorar esto
         try {
             const response = await admin.messaging().sendEachForMulticast(payload);
-            response.responses.forEach((resp, index) => {
-                const userToken: string = tokens[index];
-                let messageSend: boolean;
-                if (resp.success){
-                    messageSend = true;
-                }
-                else{
-                    messageSend = false;
-                }
-                result.push({userToken: userToken, messageSend: messageSend});
-            });
             console.log(response.successCount + ' messages were sent successfully');
         } catch (error) {
-            //TODO: Arreglar esto
-            result.push({userToken: 'none', messageSend: false});
             console.log(error);
         }
 
-        totalResult.result = result;
-        // return totalResult;
     }
         
 }

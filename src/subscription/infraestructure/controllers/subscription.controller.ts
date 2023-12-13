@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Post } from '@nestjs/common';
 import { FindSubscriptionService } from 'src/subscription/application/services/find-subscription-service.application.service';
 import { DataSource } from 'typeorm';
 import { SubscriptionRepository } from '../repositories/subscription.repository';
@@ -19,16 +19,16 @@ export class SubscriptionController {
     @Inject('EventBus') private eventBus: IEventPublisher,  
   ) {}
 
-  @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const service = new ErrorHandlerApplicationServiceDecorator(
-      new FindSubscriptionService(new SubscriptionRepository(this.dataSource)),
-    );
+  // @Get(':id')
+  // async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  //   const service = new ErrorHandlerApplicationServiceDecorator(
+  //     new FindSubscriptionService(new SubscriptionRepository(this.dataSource)),
+  //   );
 
-    //new FindSubscriptionService(new SubscriptionRepository(this.dataSource));
+  //   //new FindSubscriptionService(new SubscriptionRepository(this.dataSource));
 
-    return await service.execute(id);
-  }
+  //   return await service.execute(id);
+  // }
 
   @Post()
   async createSubscription() {
@@ -40,15 +40,12 @@ export class SubscriptionController {
 
   @Get('check-subscriptions')
   async checkSubscriptionsEndDate() {
-  
     this.eventBus.publish([
       SubscriptionExpired.create(SubscriptionId.create('123'),
       UserId.create('123'),
       SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED))
     ]);
 
-    //si hacemos una fabrica para los app services, ni siquiera tenemos que inyectar al controller el repo, el datasource, ni el event bus
-    //serian menos dependencias en el controller
     // const service = new CheckSubscriptionsEndDateService(new SubscriptionRepository(this.dataSource), this.eventBus);
     // service.execute({date: new Date()}); //preguntar por el formato de la fecha
   }
