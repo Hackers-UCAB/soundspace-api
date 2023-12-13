@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth/infraestructure/controllers/auth.controller';
-import { databaseProviders } from 'dbconfig';
 import { SubscriptionController } from './subscription/infraestructure/controllers/subscription.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { OrmUserMapper } from './user/infraestructure/mapper/orm-user.mapper';
+import { providersManager } from 'providers-manager';
 
 @Module({
   imports: [
@@ -22,6 +21,6 @@ import { OrmUserMapper } from './user/infraestructure/mapper/orm-user.mapper';
     })
   ],
   controllers: [AuthController, SubscriptionController],
-  providers: [...databaseProviders],
+  providers: providersManager,
 })
 export class AppModule {}

@@ -18,15 +18,19 @@ import { ErrorHandlerApplicationServiceDecorator } from 'src/common/application/
 import { SubscriptionValidation } from 'src/subscription/infraestructure/validation/subscription-validation';
 import { AuthHeaderInfraestructureDto } from '../dto/auth-header.infraestructure.dto';
 import { SignUpApplicationDto } from 'src/auth/application/dto/sign-up.application.dto';
+import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    @Inject(JwtService)
+    @Inject(JwtService) 
     private readonly jwtService: JwtService,
 
     @Inject('DataSource')
     private readonly dataSource: DataSource,
+
+    @Inject('EventBus')
+    private readonly eventBus: IEventPublisher,
   ) {}
 
   @Post('sign-up')
@@ -38,7 +42,8 @@ export class AuthController {
         new SubscriptionChanelRepository(this.dataSource),
         new UuidGenerator(),
         new SubscriptionValidation(),
-        new JwtGenerator(this.jwtService)
+        new JwtGenerator(this.jwtService),
+        this.eventBus
       ),
     );
    

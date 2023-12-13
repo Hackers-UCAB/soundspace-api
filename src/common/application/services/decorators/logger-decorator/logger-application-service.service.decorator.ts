@@ -15,7 +15,7 @@ export class LoggerApplicationServiceDecorator<D, R> extends ApplicationServiceD
     }
 
     async execute(param: D): Promise<Result<R>> {
-        this.logger.exceute({
+        this.logger.execute({
             user: 'admin',
             ocurredOn: new Date(),
             operation: this.operation,
