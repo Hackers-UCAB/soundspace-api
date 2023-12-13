@@ -1,6 +1,8 @@
 import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrmSubscriptionChanelEntity } from "./subscription-chanel.entity";
+import { User } from "src/user/domain/user";
+import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
 
 export enum SubscriptionStatusEnum {
     ACTIVE = "ACTIVE",
@@ -19,7 +21,7 @@ export class OrmSubscripcionEntity {
     @Column()
     fecha_finalizacion: Date;
 
-    @Column()
+    @Column('text', {unique: true})
     value: string
 
     @Column('text', {
@@ -34,22 +36,23 @@ export class OrmSubscripcionEntity {
     @OneToOne(() => OrmSubscriptionChanelEntity, (canal)=> canal.subscripcion)
     @JoinColumn({ name: 'canal' })
     canal: OrmSubscriptionChanelEntity;
-
-    static create(
+    //TODO: Hacer que se relacione con el canal tambien
+    static async create(
         subscriptionId: string,
         subscriptionStatus: string,
         subscriptionCreatedDate: Date,
         subscriptionEndDate: Date,
-        value: string
-        //user: OrmUserEntity
-    ): OrmSubscripcionEntity{
+        value: string,
+        user: string,
+        userRepository: IUserRepository,
+    ): Promise<OrmSubscripcionEntity>{
         const subscription = new OrmSubscripcionEntity();
         subscription.codigo_subscripcion = subscriptionId;
         subscription.status = subscriptionStatus;
         subscription.fecha_creacion = subscriptionCreatedDate;
         subscription.fecha_finalizacion = subscriptionEndDate;
         subscription.value = value
-        //subscription.usuario = user;
+        subscription.usuario = await userRepository.findUserById(user)
         return subscription;
     }
 }

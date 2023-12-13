@@ -6,6 +6,7 @@ import { UserName } from "../value-objects/user-name";
 import { UserBirthday } from "../value-objects/user-birthday";
 import { UserEmail } from "../value-objects/user-email";
 import { UserGender } from "../value-objects/user-gender";
+import { UserToken } from "../value-objects/user-token";
 
 
 export class UserCreated extends DomainEvent{
@@ -13,6 +14,7 @@ export class UserCreated extends DomainEvent{
     protected constructor(
         public userId: UserId,
         public userRole: UserRole,
+        public userToken: UserToken,
         public userName?: UserName,
         public userBirthday?: UserBirthday,
         public userEmail?: UserEmail,
@@ -24,6 +26,7 @@ export class UserCreated extends DomainEvent{
     static create(
         userId: UserId,
         userRole: UserRole,
+        userToken: UserToken,
         userName?: UserName,
         userBirthday?: UserBirthday,
         userEmail?: UserEmail,
@@ -32,6 +35,7 @@ export class UserCreated extends DomainEvent{
         return new UserCreated(
             userId,
             userRole,
+            userToken,
             userName,
             userBirthday,
             userEmail,

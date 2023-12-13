@@ -5,6 +5,7 @@ import { AuthApplicationDto } from '../dto/auth.application.dto';
 import { User } from 'src/user/domain/user';
 import { IJwtGenerator } from '../interface/jwt-generator.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
+import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
 
 
 export class LoginApplicationService implements IApplicationService<AuthApplicationDto,string>{
@@ -18,7 +19,7 @@ export class LoginApplicationService implements IApplicationService<AuthApplicat
 
     async execute(param: AuthApplicationDto): Promise<Result<string>> {
         
-        const sub = await this.subscriptionRepository.findSubscriptionByValue(param.phoneNumber);
+        const sub = await this.subscriptionRepository.findSubscriptionByValue(SubscriptionValue.create(param.phoneNumber));
         const token = this.tokenGenerator.create({ id: (sub.User.Id).toString() });
         return Result.success(token,200);
     }

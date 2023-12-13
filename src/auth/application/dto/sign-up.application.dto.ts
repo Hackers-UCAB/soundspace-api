@@ -1,5 +1,6 @@
 
 export interface SignUpApplicationDto {
-    phoneNumber: string;
+    value: string;
     chanelId: string;
+    firebaseToken: string;
 }

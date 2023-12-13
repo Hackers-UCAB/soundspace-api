@@ -17,7 +17,7 @@ export class GetUserApplicationService implements IApplicationService<GetUserApp
 
     async execute(param: GetUserApplicationServiceDto): Promise<Result<User>> {
         //const user = await this.userRepository.findUserByPhone(UserPhone.create(param.phone));
-        const user = await this.userRepository.findAll();
-        return Result.success(user[0], 200);
+        //const user = await this.userRepository.findAll();
+        return Result.success(null, 200);
     }
 }

@@ -31,8 +31,8 @@ export class CreateSubscriptionService implements IApplicationService<string, st
             UserId.create(param)
         );
 
-        const result = await this.subscriptionRepository.saveSubscription(subscription);
-        return Result.success(result, 200);
+        //const result = await this.subscriptionRepository.saveSubscription(subscription);
+        return Result.success('result', 200);
     }
     
 }
