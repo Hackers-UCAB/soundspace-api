@@ -10,4 +10,5 @@ export interface ISubscriptionRepository{
     findSubscriptionById(id: SubscriptionId): Promise<Subscription>
     saveAggregate(subscription: Subscription) : Promise<Result<string>>;
     findSubscriptionByValue(value: SubscriptionValue): Promise<Subscription>;
+    findSubscriptionsByEndDate(endDate: Date): Promise<Result<Subscription[]>>;
 }
