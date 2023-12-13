@@ -27,20 +27,13 @@ export class AuthController {
 
     @Inject('DataSource')
     private readonly dataSource: DataSource,
+
+    @Inject('SignUpApplicationService')
+    private readonly signUpApplicationService: SignUpApplicationService,
   ) {}
 
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpInfraestructureDto, @Headers() headers: AuthHeaderInfraestructureDto) {
-    const service = new ErrorHandlerApplicationServiceDecorator(
-      new SignUpApplicationService(
-        new UserRepository(this.dataSource),
-        new SubscriptionRepository(this.dataSource),
-        new SubscriptionChanelRepository(this.dataSource),
-        new UuidGenerator(),
-        new SubscriptionValidation(),
-        new JwtGenerator(this.jwtService)
-      ),
-    );
    
     if(!headers.firebasetoken){
       return Result.fail(null,404,'No se ha proporcionado un token de firebase', new Error('No se ha proporcionado un token de firebase'));
@@ -49,7 +42,7 @@ export class AuthController {
       ... signUpDto,
       firebaseToken: headers.firebasetoken
     }
-    return await service.execute(dto);
+    return await this.signUpApplicationService.execute(dto);
   }
 
   @Get()
