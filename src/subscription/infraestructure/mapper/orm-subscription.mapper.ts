@@ -9,13 +9,22 @@ import { SubscriptionEndDate } from 'src/subscription/domain/value-objects/subsc
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { OrmUserEntity } from 'src/user/infraestructure/orm-entities/user.entity';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
+import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
+import { Inject } from '@nestjs/common';
+import { DataSource } from 'typeorm';
+import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 
 export class OrmSubscriptionMapper
   implements IMapper<Subscription, OrmSubscripcionEntity>
 {
+  //@Inject('DataSource')
+  private readonly dataSource: DataSource;
+  constructor(dataSource: DataSource) {
+    this.dataSource = dataSource;
+  }
   async toDomain(persistence: OrmSubscripcionEntity): Promise<Subscription> {
     if (persistence) {
-      const subscription: Subscription = Subscription.create(
+      const subscription: Subscription = await Subscription.create(
         SubscriptionId.create(persistence.codigo_subscripcion),
         SubscriptionStatus.create(SubscriptionStatusEnum[persistence.status]),
         SubscriptionCreatedDate.create(persistence.fecha_creacion),
@@ -31,18 +40,18 @@ export class OrmSubscriptionMapper
 
   async toPersistence(domain: Subscription): Promise<OrmSubscripcionEntity> {
     if (domain) {
-      const subscription = OrmSubscripcionEntity.create(
+      
+      const subscription = await OrmSubscripcionEntity.create(
         domain.Id.Id,
         domain.Status.Status,
         domain.CreatedOn.Date,
         domain.Until.Date,
         domain.SubscriptionValue.SubscriptionValue,
-        //domain.User.Id.Id
-        //OrmUserEntity.create(domain.User.Id.Id),
+        domain.User.Id,
+        new UserRepository(this.dataSource),
       );
       return subscription;
     }
-
     return null;
   }
 }

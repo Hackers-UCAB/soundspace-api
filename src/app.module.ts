@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth/infraestructure/controllers/auth.controller';
-import { databaseProviders } from 'dbconfig';
+import { databaseProviders } from 'src/common/infraestructure/providers/config/dbconfig';
 import { SubscriptionController } from './subscription/infraestructure/controllers/subscription.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { OrmUserMapper } from './user/infraestructure/mapper/orm-user.mapper';
+import { servicesProvidersManager } from './common/infraestructure/providers/services/services.provider';
+import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { OrmUserMapper } from './user/infraestructure/mapper/orm-user.mapper';
     })
   ],
   controllers: [AuthController, SubscriptionController],
-  providers: [...databaseProviders],
+  providers: [...databaseProviders, ...servicesProvidersManager,...providersManager],
 })
 export class AppModule {}
