@@ -7,5 +7,5 @@ export interface LoggerDto {
 }
 
 export interface ILogger {
-    exceute(log: LoggerDto): void
+    execute(log: LoggerDto): void
 }

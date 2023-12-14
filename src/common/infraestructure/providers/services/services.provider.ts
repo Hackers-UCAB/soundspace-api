@@ -9,6 +9,7 @@ import { SubscriptionValidation } from 'src/subscription/infraestructure/validat
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource } from 'typeorm';
 import { UuidGenerator } from '../../uuid-generator';
+import { EventBus } from '../../events/event-bus';
 
 export const servicesProvidersManager: Provider[] = [
 //   {
@@ -49,7 +50,7 @@ export const servicesProvidersManager: Provider[] = [
 //   },
   {
     provide: 'SignUpApplicationService',
-    useFactory: (jwtService: JwtService, dataSource: DataSource) => {
+    useFactory: (jwtService: JwtService, dataSource: DataSource, eventBus: EventBus ) => {
       return new ErrorHandlerApplicationServiceDecorator(
         new SignUpApplicationService(
           new UserRepository(dataSource),
@@ -58,9 +59,10 @@ export const servicesProvidersManager: Provider[] = [
           new UuidGenerator(),
           new SubscriptionValidation(),
           new JwtGenerator(jwtService),
+          eventBus
         ),
       );
     },
-    inject: [JwtService, 'DataSource'],
+    inject: [JwtService, 'DataSource', 'EventBus'],
   },
 ];

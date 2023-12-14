@@ -21,6 +21,7 @@ import { UserRole } from 'src/user/domain/value-objects/user-role';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
 import { IJwtGenerator } from '../interface/jwt-generator.interface';
 import { UserToken } from 'src/user/domain/value-objects/user-token';
+import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
 
 export class SignUpApplicationService
   implements IApplicationService<SignUpApplicationDto, string>
@@ -33,6 +34,8 @@ export class SignUpApplicationService
   private readonly subscriptionValidation: ISubscriptionValidation;
   private readonly tokenGenerator: IJwtGenerator;
 
+  private readonly eventPublisher: IEventPublisher;
+
   constructor(
     userRepository: IUserRepository,
     subscriptionRepository: ISubscriptionRepository,
@@ -40,6 +43,7 @@ export class SignUpApplicationService
     idGenerator: IIdGenerator<string>,
     subscriptionValidation: ISubscriptionValidation,
     tokenGenerator: IJwtGenerator,
+    eventPublisher: IEventPublisher,
   ) {
     this.idGenerator = idGenerator;
     this.subscriptionChanelRepository = subscriptionChanelRepository;
@@ -47,6 +51,7 @@ export class SignUpApplicationService
     this.userRepository = userRepository;
     this.subscriptionValidation = subscriptionValidation;
     this.tokenGenerator = tokenGenerator;
+    this.eventPublisher = eventPublisher;
   }
 
   async execute(param: SignUpApplicationDto): Promise<Result<string>> {
@@ -116,6 +121,8 @@ export class SignUpApplicationService
         new Error(subscriptionCreation.message),
       );
     }
+
+    this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
     return Result.success(this.tokenGenerator.create({ id: userId }), 201);
   }

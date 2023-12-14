@@ -4,8 +4,8 @@ import { AuthController } from './auth/infraestructure/controllers/auth.controll
 import { databaseProviders } from 'src/common/infraestructure/providers/config/dbconfig';
 import { SubscriptionController } from './subscription/infraestructure/controllers/subscription.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { OrmUserMapper } from './user/infraestructure/mapper/orm-user.mapper';
 import { servicesProvidersManager } from './common/infraestructure/providers/services/services.provider';
+import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 
 @Module({
   imports: [
@@ -23,6 +23,6 @@ import { servicesProvidersManager } from './common/infraestructure/providers/ser
     })
   ],
   controllers: [AuthController, SubscriptionController],
-  providers: [...databaseProviders, ...servicesProvidersManager],
+  providers: [...databaseProviders, ...servicesProvidersManager,...providersManager],
 })
 export class AppModule {}

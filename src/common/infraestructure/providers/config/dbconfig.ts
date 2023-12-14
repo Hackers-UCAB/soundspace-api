@@ -1,4 +1,5 @@
 
+import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
 
 export const databaseProviders = [
@@ -28,4 +29,11 @@ export const databaseProviders = [
       return dataSource;
     },
   },
+  {
+    provide: 'UserRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new UserRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  }
 ];

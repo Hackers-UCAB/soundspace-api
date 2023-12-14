@@ -22,4 +22,9 @@ export abstract class AggregateRoot<T extends ValueObject<T>> extends Entity<T> 
     //de hacer una operacion
     protected abstract ensureValidaState(): void;
     
+    public pullDomainEvents(): DomainEvent[] {
+        const events = this.events;
+        this.events = [];
+        return events;
+    }
 }

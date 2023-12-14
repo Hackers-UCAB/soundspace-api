@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, EntityNotFoundError, QueryFailedError, Repository } from 'typeorm';
 import { OrmSubscripcionEntity } from '../orm-entities/subscription.entity';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { Subscription } from 'src/subscription/domain/subscription';
@@ -70,4 +70,36 @@ export class SubscriptionRepository
     });
     return this.ormSubscriptionMapper.toDomain(subscription);
   }
+
+  //TODO: Revisar si hice esto bien
+  async findSubscriptionsByEndDate(endDate: Date): Promise<Result<Subscription[]>> {
+    try {
+        const subscriptions: OrmSubscripcionEntity[] = await this.find({
+            where: {
+                fecha_finalizacion: endDate
+            },
+            relations: {
+                usuario: true
+            }
+        });
+
+        const domainSubscriptions: Subscription[] = await Promise.all(subscriptions.map((subscription) => this.ormSubscriptionMapper.toDomain(subscription)));
+
+        return Result.success<Subscription[]>(domainSubscriptions, 200);
+    } catch (error) {
+        const errorHandled = this.handleError(error);
+        return Result.fail<Subscription[]>(null, 500, errorHandled.message, errorHandled);
+    }
+  }
+
+  //podria abstraerse en algun lugar si decidimos usarlo o algo por el estilo
+  handleError(error: any): Error {
+    if (error instanceof QueryFailedError){
+        return Error('Query failed');
+    } else if (error instanceof EntityNotFoundError) {
+        return Error('Entity not found');
+    } else {
+        return Error('Unknown error');
+    }
+}
 }

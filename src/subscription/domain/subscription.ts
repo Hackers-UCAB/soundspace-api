@@ -9,6 +9,8 @@ import { SubscriptionUpdated } from './events/subscription-updated-event';
 import { InvalidSubscriptionException } from './exceptions/invalid-subscription.exception';
 import { SubscriptionStatus } from './value-objects/subscription-status';
 import { SubscriptionValue } from './value-objects/subscription-value';
+import { SubscriptionExpired } from './events/subscription-expired.event';
+import { SubscriptionStatusEnum } from './enums/subscription-status.enum';
 
 export class Subscription extends AggregateRoot<SubscriptionId> {
   private status: SubscriptionStatus;
@@ -71,7 +73,12 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       this.createdOn = event.createdOn ? event.createdOn : this.createdOn;
       this.until = event.until ? event.until : this.until;
     }
+
+    if (event instanceof SubscriptionExpired){
+      this.status = event.status
   }
+  }
+
   protected ensureValidaState(): void {
     if (
       !this.status ||
@@ -92,6 +99,10 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
   ): void {
     this.apply(SubscriptionUpdated.create(this.Id, status, createdOn, until));
   }
+
+  public expireSubscription(){
+    this.apply(SubscriptionExpired.create(this.Id, this.user, SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED)));
+}
 
   static calculateEndDate(
     createdOn: SubscriptionCreatedDate,
