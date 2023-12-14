@@ -3,6 +3,7 @@ import { OrmUserEntity } from "../orm-entities/user.entity";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
 import { OrmUserMapper } from "../mapper/orm-user.mapper";
 import { User } from "src/user/domain/user";
+import { OrmSubscripcionEntity } from "src/subscription/infraestructure/orm-entities/subscription.entity";
 
 export class UserRepository extends Repository<OrmUserEntity> implements IUserRepository{
     
