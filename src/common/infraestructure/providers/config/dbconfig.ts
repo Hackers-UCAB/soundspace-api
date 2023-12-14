@@ -14,7 +14,11 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         entities: getMetadataArgsStorage().tables.map((table) => table.target),
-        // entities: ['dist/src/**/*.entity.js', 'dist/src/**/*.entity.enum.js'],
+         //entities: ['dist/src/**/*.entity.js', 'dist/src/**/*.entity.enum.js'],
+        //entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        ssl: {
+          rejectUnauthorized: false
+        },
         synchronize: true,
       });
 

@@ -2077,6 +2077,11 @@ caniuse-lite@^1.0.30001565:
   resolved "http://23.22.253.223:4873/caniuse-lite/-/caniuse-lite-1.0.30001566.tgz"
   integrity sha512-ggIhCsTxmITBAMmK8yZjEhCO5/47jKXPu6Dha/wuCS4JePVL+3uiDEBuhu2aIoT+bqTOR8L76Ip1ARL9xYsEJA==
 
+caseless@^0.12.0:
+  version "0.12.0"
+  resolved "http://23.22.253.223:4873/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
+  integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
+
 chalk@4.1.2, chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
   version "4.1.2"
   resolved "http://23.22.253.223:4873/chalk/-/chalk-4.1.2.tgz"
