@@ -59,16 +59,18 @@ export class SubscriptionRepository
 
   async findSubscriptionByValue(
     value: SubscriptionValue,
-  ): Promise<Subscription> {
-    const subscription = await this.findOne({
-      where: {
-        value: value.SubscriptionValue,
-      },
-      relations: {
-        usuario: true,
-      },
-    });
-    return this.ormSubscriptionMapper.toDomain(subscription);
+  ): Promise<Result<Subscription>> {
+      const subscription = await this.findOne({
+        where: {
+          value: value.SubscriptionValue,
+        },
+        relations: {
+          usuario: true,
+        },
+        
+      });
+      const domainSub = await this.ormSubscriptionMapper.toDomain(subscription);
+      return Result.success<Subscription>(domainSub,200);
   }
 
   //TODO: Revisar si hice esto bien

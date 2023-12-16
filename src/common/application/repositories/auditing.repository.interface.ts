@@ -8,5 +8,5 @@ export interface AuditingDto{
     data: any
 }
 export interface IAuditingRepository {
-    save(data: AuditingDto): Result<void>
+    saveAuditing(data: AuditingDto): Promise<Result<string>>
 }

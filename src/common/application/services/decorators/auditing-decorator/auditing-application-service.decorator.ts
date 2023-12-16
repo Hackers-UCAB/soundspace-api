@@ -6,6 +6,7 @@
 
 // export class AuditingCommandServiceDecorator<D,R> extends ApplicationServiceDecorator<D,R> {
 //     private readonly auditingRepository: IAuditingRepository;
+//     private readonly operation: string
 
 //     constructor(applicationService: IApplicationService<D, R>, auditingRepository: IAuditingRepository) {
 //         super(applicationService);
@@ -19,10 +20,10 @@
 //     }
 
 //     private Auditing(param: D): void {
-//         const entry: AuditEntry = {
+//         const entry =  {
 //             userId: this.userContext.currentUser.id,
 //             timeOfExecution: this.timeProvider.now,
-//             operation: command.constructor.name,
+//             operation: this.applicationService.
 //             data: JSON.stringify(command)
 //         };
 

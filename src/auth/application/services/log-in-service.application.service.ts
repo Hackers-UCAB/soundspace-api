@@ -20,7 +20,7 @@ export class LoginApplicationService implements IApplicationService<AuthApplicat
     async execute(param: AuthApplicationDto): Promise<Result<string>> {
         
         const sub = await this.subscriptionRepository.findSubscriptionByValue(SubscriptionValue.create(param.phoneNumber));
-        const token = this.tokenGenerator.create({ id: (sub.User.Id).toString() });
+        const token = this.tokenGenerator.create({ id: sub.Data.User.Id });
         return Result.success(token,200);
     }
 }

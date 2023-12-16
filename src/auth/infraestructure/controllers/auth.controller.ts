@@ -19,6 +19,9 @@ import { SubscriptionValidation } from 'src/subscription/infraestructure/validat
 import { AuthHeaderInfraestructureDto } from '../dto/auth-header.infraestructure.dto';
 import { SignUpApplicationDto } from 'src/auth/application/dto/sign-up.application.dto';
 import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
+import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
+import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
+import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
 
 @Controller('auth')
 export class AuthController {
@@ -50,10 +53,13 @@ export class AuthController {
 
   @Get()
   async login(@Body() authDto: AuthInfraestructureDto) {
-    const service = new LoginApplicationService(
-      new SubscriptionRepository(this.dataSource),
-      new JwtGenerator(this.jwtService),
-    );
+    const service = new LoggerApplicationServiceDecorator(
+      new LoginApplicationService(new SubscriptionRepository(this.dataSource),new JwtGenerator(this.jwtService)),
+      new LoggerImpl(),
+      new AuditingRepository(this.dataSource),
+      'Login'
+      )
+
     const result = await service.execute(authDto);
     return result;
   }
