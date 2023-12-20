@@ -10,44 +10,12 @@ import { UserRepository } from 'src/user/infraestructure/repositories/user.repos
 import { DataSource } from 'typeorm';
 import { UuidGenerator } from '../../uuid-generator';
 import { EventBus } from '../../events/event-bus';
+import { SignUpMovistarApplicationService } from 'src/auth/application/services/sign-up-movistar-service.application.service';
+import { MovistarSubscriptionValidation } from 'src/subscription/infraestructure/validation/movistar-subscription-validation';
+import { SignUpDigitelApplicationService } from 'src/auth/application/services/sign-up-digitel-service.application.service';
+import { DigitelSubscriptionValidation } from 'src/subscription/infraestructure/validation/digitel-subscription-validation';
 
 export const servicesProvidersManager: Provider[] = [
-//   {
-//     provide: 'IEventPublisher',
-//     useClass: EventBus,
-//   },
-//   {
-//     provide: 'INotifier',
-//     useClass: FirebaseNotifier,
-//   },
-//   {
-//     provide: 'ILogger',
-//     useClass: LoggerImpl,
-//   },
-//   {
-//     provide: 'EventBus',
-//     useFactory: (
-//       eventPublisher: IEventPublisher,
-//       notifier: INotifier,
-//       logger: ILogger,
-//     ) => {
-//       const eventBus = new EventPublisherLoggerDecorator(
-//         eventPublisher,
-//         logger,
-//       );
-
-//       //aqui subscribimos a todos los que escuchan los eventos
-//       eventBus.subscribe('SubscriptionExpired', [
-//         new NotifySubscriptionExpiredEvent(notifier),
-//       ]);
-//       eventBus.subscribe('SubscriptionCreated', [
-//         new NotifySubscriptionCreatedEvent(notifier),
-//       ]);
-
-//       return eventBus;
-//     },
-//     inject: ['IEventPublisher', 'INotifier', 'ILogger'],
-//   },
   {
     provide: 'SignUpApplicationService',
     useFactory: (jwtService: JwtService, dataSource: DataSource, eventBus: EventBus ) => {
@@ -58,6 +26,38 @@ export const servicesProvidersManager: Provider[] = [
           new SubscriptionChanelRepository(dataSource),
           new UuidGenerator(),
           new SubscriptionValidation(),
+          new JwtGenerator(jwtService),
+          eventBus
+        ),
+      );
+    },
+    inject: [JwtService, 'DataSource', 'EventBus'],
+  },
+  {
+    provide: 'MovistarSignUpApplicationService',
+    useFactory: (jwtService: JwtService, dataSource: DataSource, eventBus: EventBus ) => {
+      return new ErrorHandlerApplicationServiceDecorator(
+        new SignUpMovistarApplicationService(
+          new UserRepository(dataSource),
+          new SubscriptionRepository(dataSource),
+          new UuidGenerator(),
+          new MovistarSubscriptionValidation(),
+          new JwtGenerator(jwtService),
+          eventBus
+        ),
+      );
+    },
+    inject: [JwtService, 'DataSource', 'EventBus'],
+  },
+  {
+    provide: 'DigitelSignUpApplicationService',
+    useFactory: (jwtService: JwtService, dataSource: DataSource, eventBus: EventBus ) => {
+      return new ErrorHandlerApplicationServiceDecorator(
+        new SignUpDigitelApplicationService(
+          new UserRepository(dataSource),
+          new SubscriptionRepository(dataSource),
+          new UuidGenerator(),
+          new DigitelSubscriptionValidation(),
           new JwtGenerator(jwtService),
           eventBus
         ),

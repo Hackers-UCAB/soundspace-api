@@ -4,5 +4,6 @@ import { SubscriptionChanelId } from "../subscription-chanel/value-objects/subsc
 import { Result } from "src/common/application/result-handler/result";
 
 export interface ISubscriptionChanelRepository{
-    findSubscriptionChanelById(id : SubscriptionChanelId): Promise<Result<SubscriptionChanel>>
+    findSubscriptionChanelById(id : SubscriptionChanelId): Promise<Result<SubscriptionChanel>>;
+    findSubscriptionChanelEntityById(id: string): Promise<OrmSubscriptionChanelEntity>
 }

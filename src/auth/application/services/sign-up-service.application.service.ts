@@ -56,74 +56,74 @@ export class SignUpApplicationService
 
   async execute(param: SignUpApplicationDto): Promise<Result<string>> {
     
-    const chanel: Result<SubscriptionChanel> =
-      await this.subscriptionChanelRepository.findSubscriptionChanelById(
-        SubscriptionChanelId.create(param.chanelId),
-      );
+    // const chanel: Result<SubscriptionChanel> =
+    //   await this.subscriptionChanelRepository.findSubscriptionChanelById(
+    //     SubscriptionChanelId.create(param.chanelId),
+    //   );
         
-    if(!chanel.IsSuccess){
-      return Result.fail(null, chanel.StatusCode, chanel.message, chanel.Error);
-    }
+    // if(!chanel.IsSuccess){
+    //   return Result.fail(null, chanel.StatusCode, chanel.message, chanel.Error);
+    // }
     
-    const valid: Result<boolean> = await SubscriptionChanel.validateSubscription(
-      this.subscriptionValidation,
-      param.chanelId,
-      param.value,
-      chanel.Data.UrlValidation.Url,
-    );
+    // const valid: Result<boolean> = await SubscriptionChanel.validateSubscription(
+    //   this.subscriptionValidation,
+    //   param.chanelId,
+    //   param.value,
+    //   chanel.Data.UrlValidation.Url,
+    // );
 
-    if (!valid.IsSuccess) {
-      return Result.fail(
-        null,
-        valid.StatusCode,
-        valid.message,
-        new Error(valid.message),
-      );
-    }
-    const userId = this.idGenerator.generate();
+    // if (!valid.IsSuccess) {
+    //   return Result.fail(
+    //     null,
+    //     valid.StatusCode,
+    //     valid.message,
+    //     new Error(valid.message),
+    //   );
+    // }
+    // const userId = this.idGenerator.generate();
 
-    const newUser = await User.create(
-      UserId.create(userId),
-      UserRole.create(UserRoleEnum.USER),
-      UserToken.create(param.firebaseToken)
-    );
+    // const newUser = await User.create(
+    //   UserId.create(userId),
+    //   UserRole.create(UserRoleEnum.USER),
+    // );
 
-    //TODO: Analizar si lo de la fecha final debe ser un servicio de dominio
+    // //TODO: Analizar si lo de la fecha final debe ser un servicio de dominio
 
-    const createdOn = SubscriptionCreatedDate.create(new Date());
+  // const createdOn = SubscriptionCreatedDate.create(new Date());
 
-    const newSubscription = await Subscription.create(
-      SubscriptionId.create(this.idGenerator.generate()),
-      SubscriptionStatus.create(SubscriptionStatusEnum.ACTIVE),
-      createdOn,
-      Subscription.calculateEndDate(createdOn),
-      SubscriptionValue.create(param.value),
-      UserId.create(userId),
-    );
+    // const newSubscription = await Subscription.create(
+    //   SubscriptionId.create(this.idGenerator.generate()),
+    //   SubscriptionStatus.create(SubscriptionStatusEnum.ACTIVE),
+    //   createdOn,
+    //   Subscription.calculateEndDate(createdOn),
+    //   SubscriptionValue.create(param.value),
+    //   UserId.create(userId),
+    // );
     
-    const userCreation: Result<string> = await this.userRepository.saveAggregate(newUser);
-    if(!userCreation.IsSuccess){
-      return Result.fail(
-        null,
-        userCreation.StatusCode,
-        userCreation.message,
-        new Error(userCreation.message),
-      );
-    }
+    // const userCreation: Result<string> = await this.userRepository.saveAggregate(newUser, [param.firebaseToken]);
+    // if(!userCreation.IsSuccess){
+    //   return Result.fail(
+    //     null,
+    //     userCreation.StatusCode,
+    //     userCreation.message,
+    //     new Error(userCreation.message),
+    //   );
+    // }
 
-    const subscriptionCreation: Result<string> = await this.subscriptionRepository.saveAggregate(newSubscription);
-    if(!subscriptionCreation.IsSuccess){
-      const deleteUserCreation: Result<string> = await this.userRepository.deleteUserById(userId);
-      return Result.fail(
-        null,
-        subscriptionCreation.StatusCode,
-        subscriptionCreation.message,
-        new Error(subscriptionCreation.message),
-      );
-    }
+    // const subscriptionCreation: Result<string> = await this.subscriptionRepository.saveAggregate(newSubscription);
+    // if(!subscriptionCreation.IsSuccess){
+    //   const deleteUserCreation: Result<string> = await this.userRepository.deleteUserById(userId);
+    //   return Result.fail(
+    //     null,
+    //     subscriptionCreation.StatusCode,
+    //     subscriptionCreation.message,
+    //     new Error(subscriptionCreation.message),
+    //   );
+    // }
 
-    this.eventPublisher.publish(newSubscription.pullDomainEvents());
+    // this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
-    return Result.success(this.tokenGenerator.create({ id: userId }), 201);
+    // return Result.success(this.tokenGenerator.create({ id: userId }), 201);
+    return null;
   }
 }

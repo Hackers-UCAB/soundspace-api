@@ -6,9 +6,7 @@ export class SignUpInfraestructureDto {
   
   @IsString()
   @MinLength(10)
-  @MaxLength(12)
-  value: string;
+  @MaxLength(10)
+  phone: string;
 
-  @IsUUID()
-  chanelId: string;
 }

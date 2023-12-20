@@ -48,22 +48,17 @@ export class OrmUserEntity {
   })
   rol: string;
 
+
   @Column('text', {
-    default: '123456',
+    array: true,
   })
-  token: string;
+  tokens: string[];
 
   @OneToMany(
     () => OrmReproduccionPlaylistEntity,
     (reproduccion) => reproduccion.usuario,
   )
   reproducciones: OrmReproduccionPlaylistEntity[];
-
-  // // @OneToMany(
-  // //   () => HistorialEdicion,
-  // //   (historialEdicion) => historialEdicion.usuario,
-  // // )
-  // // historialEdiciones: HistorialEdicion[];
 
   @OneToMany(
     () => OrmReproduccionCancionEntity,
@@ -77,7 +72,6 @@ export class OrmUserEntity {
   static create(
     userId: string,
     role: string,
-    token: string,
     name?: string,
     email?: string,
     birthdate?: Date,
@@ -86,7 +80,6 @@ export class OrmUserEntity {
     const user = new OrmUserEntity();
     user.codigo_usuario = userId;
     user.rol = role;
-    user.token = token;
     // user.rol = role;
     // user.token = token;
     // user.genero = gender;

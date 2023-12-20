@@ -5,6 +5,7 @@ import { UserId } from "src/user/domain/value-objects/user-id";
 import { SubscriptionEndDate } from '../value-objects/subscription-end-date';
 import { SubscriptionStatus } from "../value-objects/subscription-status";
 import { SubscriptionValue } from "../value-objects/subscription-value";
+import { SubscriptionChanelId } from "../subscription-chanel/value-objects/subscription-chanel-id";
 
 
 export class SubscriptionCreated extends DomainEvent{
@@ -15,7 +16,8 @@ export class SubscriptionCreated extends DomainEvent{
         public createdOn: SubscriptionCreatedDate,
         public until: SubscriptionEndDate,
         public value: SubscriptionValue,
-        public user: UserId
+        public user: UserId,
+        public chanel: SubscriptionChanelId
     ){
         super()
     }
@@ -26,7 +28,8 @@ export class SubscriptionCreated extends DomainEvent{
         createdOn: SubscriptionCreatedDate,
         until: SubscriptionEndDate,
         value: SubscriptionValue,
-        user: UserId
+        user: UserId,
+        chanel: SubscriptionChanelId
     ): SubscriptionCreated{
         return new SubscriptionCreated(
             id,
@@ -34,7 +37,8 @@ export class SubscriptionCreated extends DomainEvent{
             createdOn,
             until,
             value,
-            user
+            user,
+            chanel
         )
     }
 }

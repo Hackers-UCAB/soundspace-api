@@ -32,6 +32,11 @@ export class OrmCancionEntity {
   @Column()
   referencia_imagen: string;
 
+  @Column({
+    default: false
+  })
+  trending: boolean;
+
   @ManyToMany(() => OrmGeneroEntity, genero => genero.canciones)
   @JoinTable({
     name: 'cancion_genero',

@@ -11,12 +11,12 @@ export class FirebaseNotifier implements INotifier{
         private readonly userRepository: IUserRepository
     ){}
     async notify(message: NotifierDto): Promise<void> {
-        const user = await this.userRepository.findUserById(message.userId.Id);
+        const user = await this.userRepository.findUserEntityById(message.userId.Id);
 
         if(!user){
             return;
         }
-        const tokens: string[] = [user.token];
+        const tokens: string[] = user.tokens;
         //buscar la lista de tokens del usuario que viene en message
         // const tokens = [
         //     'fyQuTbyiSryAdRORRX3t46:APA91bGtQHEOs0j6LVyIGSXnyZ8lQVMszrjjRWIq9b6mYZxx4d18UOwrCplmkYpF76j89L_Qf_YriIdTqQz8kum9_qzcyELFGNVh-mSuYND5Wl8l6KyMD96rKv7DUplULw1docyJ7rLG', 

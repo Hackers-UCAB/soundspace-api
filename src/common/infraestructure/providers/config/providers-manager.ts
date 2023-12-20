@@ -8,6 +8,8 @@ import { FirebaseNotifier } from "src/common/infraestructure/firebase-notificati
 import { LoggerImpl } from "src/common/infraestructure/logger/logger";
 import { NotifySubscriptionCreatedEvent } from "src/subscription/application/events/notify-subscription-created-event";
 import { NotifySubscriptionExpiredEvent } from "src/subscription/application/events/notify-subscription-expired-event";
+import { SubscriptionChanelRepository } from "src/subscription/infraestructure/repositories/subscription-chanel.repository";
+import { DataSource } from "typeorm";
 
 export const providersManager: Provider[] = [
     {
@@ -24,16 +26,16 @@ export const providersManager: Provider[] = [
     },
     {
         provide: 'EventBus',
-        useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger) => {
+        useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, dataSource: DataSource) => {
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
             //aqui subscribimos a todos los que escuchan los eventos
             eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier)]);
-            eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier)]);
+            eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
 
             return eventBus;
     },
-        inject: ['IEventPublisher', 'INotifier', 'ILogger'],
+        inject: ['IEventPublisher', 'INotifier', 'ILogger', 'DataSource'],
     },
     
 ]

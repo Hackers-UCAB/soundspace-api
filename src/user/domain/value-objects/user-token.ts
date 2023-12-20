@@ -3,28 +3,28 @@ import { InvalidUserTokenException } from "../exceptions/invalid-user-token.exce
 
 
 export class UserToken extends ValueObject<UserToken>{
-    private readonly token: string;
+    private readonly tokens: string[];
 
-    private constructor(token: string){
+    private constructor(tokens: string[]){
         let valid: boolean = true;
-        if(!token) valid = false;
+        if(!tokens) valid = false;
 
         if(!valid){
             throw new InvalidUserTokenException('Token not valid');
         }
         super();
-        this.token = token;
+        this.tokens = tokens;
     }
 
     get Token(){
-        return this.token;
+        return this.tokens;
     }
     
     equals(obj: UserToken): boolean {
-        return this.token === obj.token;
+        return this.tokens === obj.tokens;
     }
 
-    static create(token: string): UserToken {
-        return new UserToken(token);
+    static create(tokens: string[]): UserToken {
+        return new UserToken(tokens);
     }
 }

@@ -6,7 +6,8 @@ import { Result } from "src/common/application/result-handler/result";
   
 
 export interface IUserRepository{
-    saveAggregate(user: User): Promise<Result<string>>;
-    findUserById(id: string): Promise<OrmUserEntity>;
+    saveAggregate(user: User, tokens: string[]): Promise<Result<string>>;
+    findUserById(id: string): Promise<Result<User>>;
+    findUserEntityById(id: string): Promise<OrmUserEntity>;
     deleteUserById(id: string): Promise<Result<string>>;
 }

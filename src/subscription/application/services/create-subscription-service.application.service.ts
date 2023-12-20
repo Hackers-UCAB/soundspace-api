@@ -22,14 +22,14 @@ export class CreateSubscriptionService implements IApplicationService<string, st
     }
 
     async execute(param: string): Promise<Result<string>> {
-        const subscription = Subscription.create(
-            SubscriptionId.create(this.igGenerator.generate()),
-            SubscriptionStatus.create(SubscriptionStatusEnum.ACTIVE),
-            SubscriptionCreatedDate.create(new Date()),
-            SubscriptionEndDate.create(new Date()),
-            SubscriptionValue.create(param),
-            UserId.create(param)
-        );
+        // const subscription = Subscription.create(
+        //     SubscriptionId.create(this.igGenerator.generate()),
+        //     SubscriptionStatus.create(SubscriptionStatusEnum.ACTIVE),
+        //     SubscriptionCreatedDate.create(new Date()),
+        //     SubscriptionEndDate.create(new Date()),
+        //     SubscriptionValue.create(param),
+        //     UserId.create(param)
+        // );
 
         //const result = await this.subscriptionRepository.saveSubscription(subscription);
         return Result.success('result', 200);
