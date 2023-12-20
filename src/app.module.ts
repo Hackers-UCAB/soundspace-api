@@ -8,6 +8,7 @@ import { servicesProvidersManager } from './common/infraestructure/providers/ser
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { SongController } from './song/infraestructure/controllers/song.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { DataSource } from 'typeorm';
       }
     })
   ],
-  controllers: [AuthController, SubscriptionController],
+  controllers: [AuthController, SubscriptionController, SongController],
   providers: [...databaseProviders, ...servicesProvidersManager,...providersManager],
 })
 export class AppModule {}
