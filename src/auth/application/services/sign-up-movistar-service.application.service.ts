@@ -1,5 +1,5 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { SignUpApplicationDto } from '../dto/entrys/sign-up.application.dto';
+import { SignUpEntryApplicationDto } from '../dto/entrys/sign-up-entry.application.dto';
 import { Result } from 'src/common/application/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
@@ -21,7 +21,7 @@ import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chane
 import { SignUpResponseApplicationDto } from '../dto/responses/sign-up-response.application.dto';
 
 export class SignUpMovistarApplicationService
-  implements IApplicationService<SignUpApplicationDto, SignUpResponseApplicationDto>
+  implements IApplicationService<SignUpEntryApplicationDto, SignUpResponseApplicationDto>
 {
   private readonly userRepository: IUserRepository;
   private readonly subscriptionRepository: ISubscriptionRepository;
@@ -48,7 +48,7 @@ export class SignUpMovistarApplicationService
     this.eventPublisher = eventPublisher;
   }
 
-  async execute(param: SignUpApplicationDto): Promise<Result<SignUpResponseApplicationDto>> {
+  async execute(param: SignUpEntryApplicationDto): Promise<Result<SignUpResponseApplicationDto>> {
     //Se valida con el api externo
     const valid: Result<boolean> =
       await this.movistarSubscriptionValidation.validateSubscription(

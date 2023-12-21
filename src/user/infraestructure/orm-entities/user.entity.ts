@@ -52,6 +52,7 @@ export class OrmUserEntity {
 
   @Column('text', {
     array: true,
+    default: [],
   })
   tokens: string[];
 

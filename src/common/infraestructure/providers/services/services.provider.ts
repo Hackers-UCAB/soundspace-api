@@ -1,10 +1,6 @@
-import { Logger, Provider } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { JwtGenerator } from 'src/auth/infraestructure/jwt-generator';
-import { ErrorHandlerApplicationServiceDecorator } from 'src/common/application/services/decorators/error-handler-decorator/error-handler-application-service.decorator';
-import { SubscriptionChanelRepository } from 'src/subscription/infraestructure/repositories/subscription-chanel.repository';
+import { Provider } from '@nestjs/common';
+
 import { SubscriptionRepository } from 'src/subscription/infraestructure/repositories/subscription.repository';
-import { SubscriptionValidation } from 'src/subscription/infraestructure/validation/subscription-validation';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource } from 'typeorm';
 import { UuidGenerator } from '../../uuid-generator';
@@ -17,20 +13,21 @@ import { LoggerApplicationServiceDecorator } from 'src/common/application/servic
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoginApplicationService } from 'src/auth/application/services/log-in-service.application.service';
 import { AuditingRepository } from '../../repositories/auditing.repository';
-import { LoggerImpl } from '../../logger/logger';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { IJwtGenerator } from 'src/auth/application/interface/jwt-generator.interface';
+import { LoginGuestApplicationService } from 'src/auth/application/services/log-in-guest-service.application.service';
+import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 
 export const servicesProvidersManager: Provider[] = [
   {
     provide: 'MovistarSignUpApplicationService',
-    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, eventBus: EventBus, logger: ILogger ) => {
+    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, eventBus: EventBus, logger: ILogger, uuidGenerator: IIdGenerator<string> ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new SignUpMovistarApplicationService(
             new UserRepository(dataSource),
             new SubscriptionRepository(dataSource),
-            new UuidGenerator(),
+            uuidGenerator,
             new MovistarSubscriptionValidation(),
             jwtGenerator,
             eventBus
@@ -43,17 +40,17 @@ export const servicesProvidersManager: Provider[] = [
         'Movistar Sign-Up',
       );
     },
-    inject: [ 'IJwtGenerator', 'DataSource', 'EventBus', 'ILogger'],
+    inject: [ 'IJwtGenerator', 'DataSource', 'EventBus', 'ILogger', 'IUuidGenerator'],
   },
   {
     provide: 'DigitelSignUpApplicationService',
-    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, eventBus: EventBus, logger: ILogger ) => {
+    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, eventBus: EventBus, logger: ILogger, uuidGenerator: IIdGenerator<string> ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new SignUpDigitelApplicationService(
             new UserRepository(dataSource),
             new SubscriptionRepository(dataSource),
-            new UuidGenerator(),
+            uuidGenerator,
             new DigitelSubscriptionValidation(),
             jwtGenerator,
             eventBus
@@ -66,10 +63,10 @@ export const servicesProvidersManager: Provider[] = [
         'Digitel Sign-Up',
       );
     },
-    inject: ['IJwtGenerator','DataSource', 'EventBus', 'ILogger'],
+    inject: ['IJwtGenerator','DataSource', 'EventBus', 'ILogger', 'IUuidGenerator'],
   },
   {
-    provide: 'LoginApplicationService',
+    provide: 'LogInApplicationService',
     useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, logger: ILogger ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
@@ -87,5 +84,25 @@ export const servicesProvidersManager: Provider[] = [
       )
     },
     inject: ['IJwtGenerator', 'DataSource', 'ILogger'],
+  },
+  {
+    provide: 'LogInGuestApplicationService',
+    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, logger: ILogger, uuidGenerator: IIdGenerator<string> ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new LoginGuestApplicationService(
+            new UserRepository(dataSource),
+            jwtGenerator,
+            uuidGenerator,
+          ),
+          new AuditingRepository(dataSource),
+          'Log-In Guest',
+          logger,
+        ),
+        logger,
+        'Log-In Guest',
+      )
+    },
+    inject: ['IJwtGenerator', 'DataSource', 'ILogger', 'IUuidGenerator'],
   }
 ];

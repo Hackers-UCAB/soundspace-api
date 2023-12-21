@@ -12,6 +12,7 @@ import { NotifySubscriptionCreatedEvent } from "src/subscription/application/eve
 import { NotifySubscriptionExpiredEvent } from "src/subscription/application/events/notify-subscription-expired-event";
 import { SubscriptionChanelRepository } from "src/subscription/infraestructure/repositories/subscription-chanel.repository";
 import { DataSource } from "typeorm";
+import { UuidGenerator } from "../../uuid-generator";
 
 export const providersManager: Provider[] = [
     {
@@ -30,6 +31,10 @@ export const providersManager: Provider[] = [
         provide: 'IJwtGenerator',
         useFactory: (jwtService: JwtService) => new JwtGenerator(jwtService),
         inject: [JwtService],
+    },
+    {
+        provide: 'IUuidGenerator',
+        useFactory: () => new UuidGenerator(),
     },
     {
         provide: 'EventBus',
