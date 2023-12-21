@@ -3,7 +3,7 @@ import { Result } from 'src/common/application/result-handler/result';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { IHttp } from '../interfaces/http.interface';
 import { StreamableFile } from '@nestjs/common';
-import { ServiceResponse } from 'src/common/application/services/service-response';
+import { ServiceResponse } from 'src/common/application/services/response/service-response';
 
 export class FindSongUrlServiceDto implements ServiceResponse {
     userId: string;

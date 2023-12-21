@@ -1,7 +1,7 @@
 import { Result } from "src/common/application/result-handler/result";
 import { IApplicationService } from "../../interfaces/application-service.interface";
 import { ApplicationServiceDecorator } from "../application-service.decorator";
-import { ServiceResponse } from "../../service-response";
+import { ServiceResponse } from "../../response/service-response";
 
 
 export class ErrorHandlerApplicationServiceDecorator<D, R extends ServiceResponse> extends ApplicationServiceDecorator<D, R> {

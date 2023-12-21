@@ -3,6 +3,8 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { OrmSubscriptionChanelEntity } from "./subscription-chanel.entity";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
 import { ISubscriptionChanelRepository } from "src/subscription/domain/repositories/subscription-chanel.repository.interface";
+import { UserRepository } from "src/user/infraestructure/repositories/user.repository";
+import { SubscriptionChanelRepository } from "../repositories/subscription-chanel.repository";
 
 export enum SubscriptionStatusEnum {
     ACTIVE = "ACTIVE",
@@ -33,12 +35,7 @@ export class OrmSubscripcionEntity {
     @JoinColumn({ name: 'usuario' })
     usuario: OrmUserEntity;
 
-    // @OneToOne(() => OrmSubscriptionChanelEntity, (canal)=> canal.subscripcion)
-    // @JoinColumn({ name: 'canal' })
-    // canal: OrmSubscriptionChanelEntity;
-
     @ManyToOne(() => OrmSubscriptionChanelEntity, (canal)=> canal.subscripciones)
-    //@JoinColumn({ name: 'canal' })
     canal: OrmSubscriptionChanelEntity;
 
     static async create(
@@ -48,9 +45,9 @@ export class OrmSubscripcionEntity {
         subscriptionEndDate: Date,
         value: string,
         user: string,
-        userRepository: IUserRepository,
+        userRepository: UserRepository,
         chanel: string,
-        chanelRepository: ISubscriptionChanelRepository
+        chanelRepository: SubscriptionChanelRepository
     ): Promise<OrmSubscripcionEntity>{
         const subscription = new OrmSubscripcionEntity();
         subscription.codigo_subscripcion = subscriptionId;

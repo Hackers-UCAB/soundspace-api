@@ -1,5 +1,5 @@
 import { Result } from "../../result-handler/result";
-import { ServiceResponse } from "../service-response";
+import { ServiceResponse } from "../response/service-response";
 
 
 export interface IApplicationService<D, R extends ServiceResponse> {

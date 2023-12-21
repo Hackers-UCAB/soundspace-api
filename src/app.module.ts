@@ -25,6 +25,6 @@ import { SongController } from './song/infraestructure/controllers/song.controll
     })
   ],
   controllers: [AuthController, SubscriptionController, SongController],
-  providers: [...databaseProviders, ...servicesProvidersManager,...providersManager],
+  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager],
 })
 export class AppModule {}

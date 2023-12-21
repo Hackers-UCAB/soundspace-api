@@ -1,5 +1,5 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
-import { AuthApplicationDto } from 'src/auth/application/dto/auth.application.dto';
+import { AuthApplicationDto } from 'src/auth/application/dto/entrys/auth.application.dto';
 
 export class AuthInfraestructureDto  {
   

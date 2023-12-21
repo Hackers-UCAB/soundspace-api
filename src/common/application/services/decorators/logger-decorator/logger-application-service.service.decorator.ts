@@ -4,7 +4,7 @@ import { IApplicationService } from '../../interfaces/application-service.interf
 import { Result } from 'src/common/application/result-handler/result';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { LoggerDto } from 'src/common/application/dto/logger.dto';
-import { ServiceResponse } from '../../service-response';
+import { ServiceResponse } from '../../response/service-response';
 
 export class LoggerApplicationServiceDecorator<
   D,
@@ -37,16 +37,9 @@ export class LoggerApplicationServiceDecorator<
       log.user = decorateResult.Data.userId;
       this.logger.logSuccess(log);
     } else {
-      log.user = 'admin';
+      log.user = 'Unkown';
       this.logger.logError(log);
     }
-    // this.auditing.saveAuditing({
-    //     user: 'admin',
-    //     ocurredOn: new Date(),
-    //     operation: this.operation,
-    //     data:  `Data: {${JSON.stringify(param)}}`
-    // })
-
     return decorateResult;
   }
 }

@@ -4,6 +4,7 @@ import { IUserRepository } from 'src/user/domain/repositories/user.repository.in
 import { OrmUserMapper } from '../mapper/orm-user.mapper';
 import { User } from 'src/user/domain/user';
 import { Result } from 'src/common/application/result-handler/result';
+import { UserId } from 'src/user/domain/value-objects/user-id';
 
 export class UserRepository
   extends Repository<OrmUserEntity>
@@ -14,7 +15,6 @@ export class UserRepository
     super(OrmUserEntity, dataSource.createEntityManager());
     this.ormUsermapper = new OrmUserMapper();
   }
-
   async saveAggregate(user: User, tokens: string[]): Promise<Result<string>> {
     let error: any;
     try {
@@ -37,7 +37,7 @@ export class UserRepository
     }
   }
 
-  async findUserById(id: string): Promise<Result<User>> {
+  async findUserById(id: UserId): Promise<Result<User>> {
     return null;
   }
 
@@ -54,11 +54,11 @@ export class UserRepository
     }
   }
 
-  async deleteUserById(id: string): Promise<Result<string>> {
+  async deleteUserById(id: UserId): Promise<Result<string>> {
     let error: any;
     try {
       await this.delete({
-        codigo_usuario: id,
+        codigo_usuario: id.Id,
       });
     } catch (err) {
       error = err;
@@ -73,6 +73,49 @@ export class UserRepository
         );
       }
       return Result.success('Usario eliminado de forma exitosa', 200);
+    }
+  }
+
+  async updateTokens(id: UserId, token: string): Promise<Result<string>> {
+    let error: any;
+    let user: OrmUserEntity;
+    try {
+      user = await this.findOne({
+        where: {
+          codigo_usuario: id.Id,
+        },
+      });
+
+      if (!user) {
+        throw new Error('Usuario no encontrado');
+      }
+
+      if (!user.tokens.includes(token)) {
+        user.tokens.push(token);
+        await this.save(user);
+      }
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error && !user) {
+        return Result.fail(
+          null,
+          404,
+          error.message || 'Usuario no encontrado',
+          error,
+        );
+      }
+
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success('Token actualizado de forma exitosa', 200);
     }
   }
 }

@@ -5,7 +5,7 @@ import { Result } from 'src/common/application/result-handler/result';
 import { AuditingDto } from 'src/common/application/dto/auditing.dto';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { LoggerDto } from 'src/common/application/dto/logger.dto';
-import { ServiceResponse } from '../../service-response';
+import { ServiceResponse } from '../../response/service-response';
 
 export class AuditingCommandServiceDecorator<
   D,
@@ -35,6 +35,7 @@ export class AuditingCommandServiceDecorator<
     if (decorateResult.IsSuccess) {
       this.user = decorateResult.Data.userId;
     } else {
+      this.user = 'Unkown';
       succes = false;
     }
 
@@ -45,7 +46,7 @@ export class AuditingCommandServiceDecorator<
 
   private async Auditing(param: D, succes: boolean): Promise<void> {
     const entry: AuditingDto = {
-      user: this.user ? this.user : 'Admin',
+      user: this.user,
       ocurredOn: new Date(),
       operation: this.operation,
       data: JSON.stringify(param),
@@ -56,7 +57,7 @@ export class AuditingCommandServiceDecorator<
 
     if (!auditingResult.IsSuccess) {
       const log: LoggerDto = {
-        user: 'admin',
+        user: 'Admin',
         ocurredOn: new Date(),
         operation: 'Saving auditing',
         data: `Data: {${JSON.stringify(param)}}`,

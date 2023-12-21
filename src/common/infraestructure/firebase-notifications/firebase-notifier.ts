@@ -1,14 +1,13 @@
 import { INotifier, NotifierDto, NotifierResult } from "src/common/application/notifications-handler/notifier.interface";
 import * as admin from 'firebase-admin';
 import { Inject, Injectable } from "@nestjs/common";
-import e from "express";
-import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
+import { UserRepository } from "src/user/infraestructure/repositories/user.repository";
 
 @Injectable()
 export class FirebaseNotifier implements INotifier{
     constructor(
         @Inject('UserRepository')
-        private readonly userRepository: IUserRepository
+        private readonly userRepository: UserRepository
     ){}
     async notify(message: NotifierDto): Promise<void> {
         const user = await this.userRepository.findUserEntityById(message.userId.Id);

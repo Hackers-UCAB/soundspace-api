@@ -1,5 +1,5 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { SignUpApplicationDto } from '../dto/sign-up.application.dto';
+import { SignUpApplicationDto } from '../dto/entrys/sign-up.application.dto';
 import { Result } from 'src/common/application/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
@@ -103,7 +103,7 @@ export class SignUpMovistarApplicationService
 
     if (!subscriptionSaving.IsSuccess) {
       const deleteUserCreation: Result<string> =
-        await this.userRepository.deleteUserById(userId);
+        await this.userRepository.deleteUserById(newUser.Id);
       return Result.fail(
         null,
         subscriptionSaving.StatusCode,
@@ -116,5 +116,6 @@ export class SignUpMovistarApplicationService
       userId,
       token: this.tokenGenerator.create({ id: userId }),
     };
+    return Result.success(response, 201);
   }
 }
