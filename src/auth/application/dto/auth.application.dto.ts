@@ -1,4 +1,5 @@
 
 export interface AuthApplicationDto {
-    phoneNumber: string;
+    phone: string;
+    token: string;
 }

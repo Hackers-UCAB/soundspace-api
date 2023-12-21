@@ -9,6 +9,7 @@ import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/o
 import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
+import { OrmAuditingEntity } from 'src/common/infraestructure/orm-entities/auditing.entity';
 
 export enum genderOptions {
   Male = 'Male',

@@ -4,6 +4,7 @@
 .env
 /postgres
 docker-compose.yml
+/src/cancioncita
 # Logs
 logs
 *.log

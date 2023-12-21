@@ -9,6 +9,6 @@ export interface ISubscriptionRepository{
     findAll(): any;
     findSubscriptionById(id: SubscriptionId): Promise<Subscription>
     saveAggregate(subscription: Subscription) : Promise<Result<string>>;
-    findSubscriptionByValue(value: SubscriptionValue): Promise<Subscription>;
+    findSubscriptionByValue(value: SubscriptionValue): Promise<Result<Subscription>>;
     findSubscriptionsByEndDate(endDate: Date): Promise<Result<Subscription[]>>;
 }

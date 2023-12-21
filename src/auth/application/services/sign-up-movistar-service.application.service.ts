@@ -18,9 +18,10 @@ import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscri
 import { SubscriptionStatusEnum } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
 import { Subscription } from 'src/subscription/domain/subscription';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
+import { SignUpResponseApplicationDto } from '../dto/responses/sign-up-response.application.dto';
 
 export class SignUpMovistarApplicationService
-  implements IApplicationService<SignUpApplicationDto, string>
+  implements IApplicationService<SignUpApplicationDto, SignUpResponseApplicationDto>
 {
   private readonly userRepository: IUserRepository;
   private readonly subscriptionRepository: ISubscriptionRepository;
@@ -47,7 +48,7 @@ export class SignUpMovistarApplicationService
     this.eventPublisher = eventPublisher;
   }
 
-  async execute(param: SignUpApplicationDto): Promise<Result<string>> {
+  async execute(param: SignUpApplicationDto): Promise<Result<SignUpResponseApplicationDto>> {
     //Se valida con el api externo
     const valid: Result<boolean> =
       await this.movistarSubscriptionValidation.validateSubscription(
@@ -111,7 +112,9 @@ export class SignUpMovistarApplicationService
       );
     }
     this.eventPublisher.publish(newSubscription.pullDomainEvents());
-
-    return Result.success(this.tokenGenerator.create({ id: userId }), 201);
+    const response: SignUpResponseApplicationDto = {
+      userId,
+      token: this.tokenGenerator.create({ id: userId }),
+    };
   }
 }

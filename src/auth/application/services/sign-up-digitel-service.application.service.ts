@@ -18,9 +18,11 @@ import { SubscriptionStatusEnum } from 'src/subscription/infraestructure/orm-ent
 import { Subscription } from 'src/subscription/domain/subscription';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { IDigitelSubscriptionValidation } from 'src/subscription/domain/validation/digitel-subscription-validation.interface';
+import { SignUpResponseApplicationDto } from '../dto/responses/sign-up-response.application.dto';
 
 export class SignUpDigitelApplicationService
-  implements IApplicationService<SignUpApplicationDto, string>
+  implements
+    IApplicationService<SignUpApplicationDto, SignUpResponseApplicationDto>
 {
   private readonly userRepository: IUserRepository;
   private readonly subscriptionRepository: ISubscriptionRepository;
@@ -47,7 +49,9 @@ export class SignUpDigitelApplicationService
     this.eventPublisher = eventPublisher;
   }
 
-  async execute(param: SignUpApplicationDto): Promise<Result<string>> {
+  async execute(
+    param: SignUpApplicationDto,
+  ): Promise<Result<SignUpResponseApplicationDto>> {
     //Se valida con el api externo
     const valid: Result<boolean> =
       await this.digitelSubscriptionValidation.validateSubscription(
@@ -71,7 +75,7 @@ export class SignUpDigitelApplicationService
     );
 
     const createdOn = SubscriptionCreatedDate.create(new Date());
-    
+
     //Se crea la subscripcion
     const newSubscription = await Subscription.create(
       SubscriptionId.create(this.idGenerator.generate()),
@@ -82,7 +86,7 @@ export class SignUpDigitelApplicationService
       UserId.create(userId),
       SubscriptionChanelId.create(process.env.MOVISTAR_SUBSCRIPTION_ID),
     );
-      
+
     //Guardar al usuario
     const userSaving: Result<string> = await this.userRepository.saveAggregate(
       newUser,
@@ -112,6 +116,10 @@ export class SignUpDigitelApplicationService
     }
     this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
-    return Result.success(this.tokenGenerator.create({ id: userId }), 201);
+    const response: SignUpResponseApplicationDto = {
+      userId: userId,
+      token: this.tokenGenerator.create({ id: userId }),
+    };
+    return Result.success(response, 201);
   }
 }

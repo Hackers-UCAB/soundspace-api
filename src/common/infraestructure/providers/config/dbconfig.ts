@@ -20,6 +20,7 @@ export const databaseProviders = [
         //   rejectUnauthorized: false
         // },
         synchronize: true,
+        
       });
 
       try {

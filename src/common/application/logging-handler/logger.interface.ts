@@ -1,11 +1,7 @@
-
-export interface LoggerDto {
-    user: string;
-    ocurredOn: Date;
-    operation: string; //Es el nombre del servicio de aplicación
-    data: any
-}
+import { LoggerDto } from "../dto/logger.dto";
 
 export interface ILogger {
     execute(log: LoggerDto): void
+    logError(log: LoggerDto): void
+    logSuccess(log: LoggerDto): void
 }

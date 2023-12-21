@@ -1,8 +1,9 @@
 import { Result } from "../../result-handler/result";
 import { IApplicationService } from "../interfaces/application-service.interface";
+import { ServiceResponse } from "../service-response";
 
 
-export abstract class ApplicationServiceDecorator<D, R> implements IApplicationService<D, R> {
+export abstract class ApplicationServiceDecorator<D, R extends ServiceResponse> implements IApplicationService<D, R> {
     protected readonly applicationService: IApplicationService<D, R>;
     
     constructor(applicationService: IApplicationService<D, R>) {
