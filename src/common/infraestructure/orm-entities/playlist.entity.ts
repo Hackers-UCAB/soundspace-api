@@ -1,5 +1,4 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { OrmReproduccionPlaylistEntity } from './playlist-stream.entity';
 import { OrmPlaylistCancionEntity } from './playlist-song.entity';
 import { OrmPlaylistCreadorEntity } from './playlist-creator.entity';
 
@@ -21,9 +20,6 @@ export class OrmPlaylistEntity {
     default: false
   })
   trending: boolean;
-
-  @OneToMany(() => OrmReproduccionPlaylistEntity, reproduccion => reproduccion.playlist)
-  reproducciones: OrmReproduccionPlaylistEntity[];
 
   @OneToMany(() => OrmPlaylistCancionEntity, playlistCancion => playlistCancion.playlist)
   canciones: OrmPlaylistCancionEntity[];

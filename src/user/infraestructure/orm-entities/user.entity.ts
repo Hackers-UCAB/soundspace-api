@@ -5,11 +5,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
-import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
-import { OrmAuditingEntity } from 'src/common/infraestructure/orm-entities/auditing.entity';
 
 export enum genderOptions {
   Male = 'Male',
@@ -55,18 +52,6 @@ export class OrmUserEntity {
     default: [],
   })
   tokens: string[];
-
-  @OneToMany(
-    () => OrmReproduccionPlaylistEntity,
-    (reproduccion) => reproduccion.usuario,
-  )
-  reproducciones: OrmReproduccionPlaylistEntity[];
-
-  @OneToMany(
-    () => OrmReproduccionCancionEntity,
-    (reproduccionCancion) => reproduccionCancion.usuario,
-  )
-  reproduccionesCanciones: OrmReproduccionCancionEntity[];
 
   @OneToOne(() => OrmSubscripcionEntity, (subscripcion) => subscripcion.usuario)
   subscripcion: OrmSubscripcionEntity;

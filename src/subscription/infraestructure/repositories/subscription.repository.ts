@@ -79,6 +79,8 @@ export class SubscriptionRepository
       });      
       response = await this.ormSubscriptionMapper.toDomain(subscription);
     } catch (err) {
+      console.log(err);
+      
       error = err;
     } finally {
       if (error) {

@@ -32,7 +32,7 @@ export class LoginApplicationService
     if (!subscription.IsSuccess) {
       return Result.fail(
         null,
-        500,
+        subscription.statusCode || 500,
         subscription.message || 'Ha ocurrido un error inesperado, hable con un administrador',
         subscription.error || new Error('Ha ocurrido un error inesperado, hable con un administrador')
       );
