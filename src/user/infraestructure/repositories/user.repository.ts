@@ -38,7 +38,38 @@ export class UserRepository
   }
 
   async findUserById(id: UserId): Promise<Result<User>> {
-    return null;
+    let response: User;
+    let error: any;
+    try {
+      const user = await this.findOne({
+        where: {
+          codigo_usuario: id.Id,
+        },
+      });
+     
+      response = await this.ormUsermapper.toDomain(user);
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado creando el usuario, hable con el administrador',
+          error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe el usuario',
+          new Error('No existe el usuario'),
+        );
+      }
+      return Result.success(response, 200);
+    }
   }
 
   async findUserEntityById(id: string): Promise<OrmUserEntity> {
