@@ -26,6 +26,6 @@ import { SongWsModule } from './song-ws/song-ws.module';
   ],
   
   controllers: [AuthController, SubscriptionController, SongController],
-  providers: [...databaseProviders, ...servicesProvidersManager,...providersManager],
+  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager],
 })
 export class AppModule {}

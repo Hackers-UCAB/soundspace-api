@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { OrmGeneroEntity } from '../../../common/infraestructure/orm-entities/genre.entity';
-import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { OrmPlaylistCancionEntity } from '../../../common/infraestructure/orm-entities/playlist-song.entity';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 
@@ -32,6 +31,11 @@ export class OrmCancionEntity {
   @Column()
   referencia_imagen: string;
 
+  @Column({
+    default: false
+  })
+  trending: boolean;
+
   @ManyToMany(() => OrmGeneroEntity, genero => genero.canciones)
   @JoinTable({
     name: 'cancion_genero',
@@ -59,9 +63,6 @@ export class OrmCancionEntity {
     }
   })
   artistas: OrmArtistaEntity[];
-
-  @OneToMany(() => OrmReproduccionCancionEntity, reproduccionCancion => reproduccionCancion.cancion)
-  reproduccionesCanciones: OrmReproduccionCancionEntity[];
 
   @OneToMany(() => OrmPlaylistCancionEntity, playlistCancion => playlistCancion.cancion)
   playlistCanciones: OrmPlaylistCancionEntity[];

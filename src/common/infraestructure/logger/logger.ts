@@ -1,8 +1,16 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { ILogger, LoggerDto } from "src/common/application/logging-handler/logger.interface";
+import { LoggerDto } from "src/common/application/dto/logger.dto";
+import { ILogger} from "src/common/application/logging-handler/logger.interface";
 
 @Injectable()
 export class LoggerImpl implements ILogger{
+    logError(log: LoggerDto): void {
+        Logger.error(`Error when user: ${log.user} executed ${log.operation} whit data: ${log.data}`);
+    }
+    logSuccess(log: LoggerDto): void {
+        Logger.log(`Success when user: ${log.user} executed ${log.operation} whit data: ${log.data}`);
+    }
+    
     //TODO: Arreglar esto
     execute(log: LoggerDto): void {
         Logger.error(

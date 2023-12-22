@@ -14,7 +14,6 @@ export class UserCreated extends DomainEvent{
     protected constructor(
         public userId: UserId,
         public userRole: UserRole,
-        public userToken: UserToken,
         public userName?: UserName,
         public userBirthday?: UserBirthday,
         public userEmail?: UserEmail,
@@ -26,7 +25,6 @@ export class UserCreated extends DomainEvent{
     static create(
         userId: UserId,
         userRole: UserRole,
-        userToken: UserToken,
         userName?: UserName,
         userBirthday?: UserBirthday,
         userEmail?: UserEmail,
@@ -35,7 +33,6 @@ export class UserCreated extends DomainEvent{
         return new UserCreated(
             userId,
             userRole,
-            userToken,
             userName,
             userBirthday,
             userEmail,

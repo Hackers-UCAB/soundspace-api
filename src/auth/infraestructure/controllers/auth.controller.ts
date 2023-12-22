@@ -1,66 +1,161 @@
 import { Controller, Post, Body, Inject, Get, Headers } from '@nestjs/common';
-import { AuthInfraestructureDto } from '../dto/auth.infraestructure.dto';
-import { SignUpApplicationService } from 'src/auth/application/services/sign-up-service.application.service';
-import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from '../jwt-payload.interface';
-import { LoginApplicationService } from 'src/auth/application/services/log-in-service.application.service';
-import { OrmUserMapper } from 'src/user/infraestructure/mapper/orm-user.mapper';
-import { OrmUserEntity } from 'src/user/infraestructure/orm-entities/user.entity';
-import { SignUpInfraestructureDto } from '../dto/sign-up.infraestructure.dto';
-import { SubscriptionRepository } from 'src/subscription/infraestructure/repositories/subscription.repository';
-import { SubscriptionChanelRepository } from 'src/subscription/infraestructure/repositories/subscription-chanel.repository';
-import { UuidGenerator } from 'src/common/infraestructure/uuid-generator';
-import { JwtGenerator } from '../jwt-generator';
+import { SignUpEntryInfraestructureDto } from '../dto/entrys/sign-up-entry.infraestructure.dto';
 import { Result } from 'src/common/application/result-handler/result';
-import { ErrorHandlerApplicationServiceDecorator } from 'src/common/application/services/decorators/error-handler-decorator/error-handler-application-service.decorator';
-import { SubscriptionValidation } from 'src/subscription/infraestructure/validation/subscription-validation';
-import { AuthHeaderInfraestructureDto } from '../dto/auth-header.infraestructure.dto';
-import { SignUpApplicationDto } from 'src/auth/application/dto/sign-up.application.dto';
-import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
-import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
-import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
-import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
+import { AuthHeaderInfraestructureDto } from '../dto/entrys/auth-header.infraestructure.dto';
+import { SignUpEntryApplicationDto } from 'src/auth/application/dto/entrys/sign-up-entry.application.dto';
+import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
+import { LogInEntryInfraestructureDto } from '../dto/entrys/log-in-entry.infraestructure.dto';
+import { LogInEntryApplicationDto } from 'src/auth/application/dto/entrys/log-in-entry.application.dto';
+import { SignUpResponseApplicationDto } from 'src/auth/application/dto/responses/sign-up-response.application.dto';
+import { LogInResponseApplicationDto } from 'src/auth/application/dto/responses/log-in-response.application.dto';
+import { SignUpResponseInfraestructureDto } from '../dto/responses/sign-up-response.infraestructure.dto';
+import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
+import { LogInResponseInfraestructureDto } from '../dto/responses/log-in-response.infraestructure.dto';
+import { EmptyDto } from 'src/common/application/dto/empty.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    @Inject(JwtService) 
-    private readonly jwtService: JwtService,
-
     @Inject('DataSource')
     private readonly dataSource: DataSource,
 
-    @Inject('SignUpApplicationService')
-    private readonly signUpApplicationService: SignUpApplicationService,
-    @Inject('EventBus')
-    private readonly eventBus: IEventPublisher,
+    @Inject('MovistarSignUpApplicationService')
+    private readonly signUpMovistarApplicationService: IApplicationService<
+      SignUpEntryApplicationDto,
+      SignUpResponseApplicationDto
+    >,
+
+    @Inject('DigitelSignUpApplicationService')
+    private readonly signUpDigitelApplicationService: IApplicationService<
+      SignUpEntryApplicationDto,
+      SignUpResponseApplicationDto
+    >,
+
+    @Inject('LogInApplicationService')
+    private readonly loginApplicationService: IApplicationService<
+      LogInEntryApplicationDto,
+      LogInResponseApplicationDto
+    >,
+
+    @Inject('LogInGuestApplicationService')
+    private readonly logInGuestApplicationService: IApplicationService<
+      EmptyDto,
+      LogInResponseApplicationDto
+    >,
   ) {}
 
-  @Post('sign-up')
-  async signUp(@Body() signUpDto: SignUpInfraestructureDto, @Headers() headers: AuthHeaderInfraestructureDto) {
-   
-    if(!headers.firebasetoken){
-      return Result.fail(null,404,'No se ha proporcionado un token de firebase', new Error('No se ha proporcionado un token de firebase'));
+  @Post('sign-up/movistar')
+  async signUpMovistar(
+    @Body() signUpDto: SignUpEntryInfraestructureDto,
+    @Headers() headers: AuthHeaderInfraestructureDto,
+  ) {
+    if (!headers.token) {
+      HttpResponseHandler.HandleException(
+        404,
+        'No se ha proporcionado un token de firebase',
+        new Error('No se ha proporcionado un token de firebase'),
+      );
     }
-    const dto:SignUpApplicationDto = {
-      ... signUpDto,
-      firebaseToken: headers.firebasetoken
+    const dto: SignUpEntryApplicationDto = {
+      ...signUpDto,
+      token: headers.token,
+    };
+    const serviceResult: Result<SignUpResponseApplicationDto> =
+      await this.signUpMovistarApplicationService.execute(dto);
+
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.StatusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
     }
-    return await this.signUpApplicationService.execute(dto);
+
+    const response: SignUpResponseInfraestructureDto = {
+      token: serviceResult.Data.token,
+    };
+    return HttpResponseHandler.Success(201, response);
   }
 
-  @Get()
-  async login(@Body() authDto: AuthInfraestructureDto) {
-    const service = new LoggerApplicationServiceDecorator(
-      new LoginApplicationService(new SubscriptionRepository(this.dataSource),new JwtGenerator(this.jwtService)),
-      new LoggerImpl(),
-      new AuditingRepository(this.dataSource),
-      'Login'
-      )
+  @Post('sign-up/digitel')
+  async signUpDigitel(
+    @Body() signUpDto: SignUpEntryInfraestructureDto,
+    @Headers() headers: AuthHeaderInfraestructureDto,
+  ) {
+    if (!headers.token) {
+      HttpResponseHandler.HandleException(
+        404,
+        'No se ha proporcionado un token de firebase',
+        new Error('No se ha proporcionado un token de firebase'),
+      );
+    }
+    const dto: SignUpEntryApplicationDto = {
+      ...signUpDto,
+      token: headers.token,
+    };
+    const serviceResult: Result<SignUpResponseApplicationDto> =
+      await this.signUpDigitelApplicationService.execute(dto);
 
-    const result = await service.execute(authDto);
-    return result;
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.StatusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
+    }
+    const response: SignUpResponseInfraestructureDto = {
+      token: serviceResult.Data.token,
+    };
+    return HttpResponseHandler.Success(201, response);
+  }
+
+  @Post('log-in')
+  async login(
+    @Body() logIn: LogInEntryInfraestructureDto,
+    @Headers() headers: AuthHeaderInfraestructureDto,
+  ) {
+    if (!headers.token) {
+      HttpResponseHandler.HandleException(
+        404,
+        'No se ha proporcionado un token de firebase',
+        new Error('No se ha proporcionado un token de firebase'),
+      );
+    }
+    const dto: LogInEntryApplicationDto = {
+      ...logIn,
+      token: headers.token,
+    };
+
+    const serviceResult: Result<LogInResponseApplicationDto> =
+      await this.loginApplicationService.execute(dto);
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.StatusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
+    }
+    const response: LogInResponseInfraestructureDto = {
+      token: serviceResult.Data.token,
+    };
+    return HttpResponseHandler.Success(200, response);
+  }
+
+  @Post('log-in/guest')
+  async loginGuest() {
+    const serviceResult: Result<LogInResponseApplicationDto> =
+      await this.logInGuestApplicationService.execute({});
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.StatusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
+    }
+    const response: LogInResponseInfraestructureDto = {
+      token: serviceResult.Data.token,
+    };
+    return HttpResponseHandler.Success(200, response);
   }
 }

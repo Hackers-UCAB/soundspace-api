@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
+import { UuidGenerator } from 'src/common/infraestructure/uuid-generator';
 import { FindSongUrlService } from 'src/song/application/services/find-song-url.application.service';
 import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
 import { SendSongThroughtChunksInfrastructureService } from 'src/song/infraestructure/services/send-song-throught-chunks.infrastructure.service';
@@ -32,10 +33,10 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('song')
   async handleSong( client: Socket, payload: string ) {
-    const service = new FindSongUrlService(new SongRepository(this.dataSource));
+    const service = new FindSongUrlService(new SongRepository(this.dataSource), new UuidGenerator());
     const url = await service.execute(payload);
     if (url.IsSuccess){
-      SendSongThroughtChunksInfrastructureService.sendSong(client, url.Data.Id);
+      SendSongThroughtChunksInfrastructureService.sendSong(client, url.Data.userId);
     }else{
       console.log(url.Error)
     }

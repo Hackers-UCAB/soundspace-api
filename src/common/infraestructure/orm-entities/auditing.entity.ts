@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { OrmUserEntity } from 'src/user/infraestructure/orm-entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity('auditing')
@@ -7,11 +8,18 @@ export class OrmAuditingEntity{
     auditing_id: string
 
     @Column()
-    time: Date
+    User: string;
+
+    @Column()
+    Success: boolean
+    
+    @Column()
+    Time: Date
 
     @Column()
     Operation: string
 
     @Column()
     Data: string
+
 }

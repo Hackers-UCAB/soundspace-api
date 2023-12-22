@@ -13,6 +13,8 @@ import { IUserRepository } from 'src/user/domain/repositories/user.repository.in
 import { Inject } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
+import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
+import { SubscriptionChanelRepository } from '../repositories/subscription-chanel.repository';
 
 export class OrmSubscriptionMapper
   implements IMapper<Subscription, OrmSubscripcionEntity>
@@ -31,6 +33,7 @@ export class OrmSubscriptionMapper
         SubscriptionEndDate.create(persistence.fecha_finalizacion),
         SubscriptionValue.create(persistence.value),
         UserId.create(persistence.usuario.codigo_usuario),
+        SubscriptionChanelId.create(persistence.canal.codigo_canal),
       );
 
       return subscription;
@@ -49,6 +52,8 @@ export class OrmSubscriptionMapper
         domain.SubscriptionValue.SubscriptionValue,
         domain.User.Id,
         new UserRepository(this.dataSource),
+        domain.Chanel.Id,
+        new SubscriptionChanelRepository(this.dataSource),
       );
       return subscription;
     }

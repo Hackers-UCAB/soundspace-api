@@ -5,8 +5,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrmReproduccionPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist-stream.entity';
-import { OrmReproduccionCancionEntity } from '../../../common/infraestructure/orm-entities/song-streamed.entity';
 import { OrmSubscripcionEntity } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
 
@@ -48,28 +46,12 @@ export class OrmUserEntity {
   })
   rol: string;
 
+
   @Column('text', {
-    default: '123456',
+    array: true,
+    default: [],
   })
-  token: string;
-
-  @OneToMany(
-    () => OrmReproduccionPlaylistEntity,
-    (reproduccion) => reproduccion.usuario,
-  )
-  reproducciones: OrmReproduccionPlaylistEntity[];
-
-  // // @OneToMany(
-  // //   () => HistorialEdicion,
-  // //   (historialEdicion) => historialEdicion.usuario,
-  // // )
-  // // historialEdiciones: HistorialEdicion[];
-
-  @OneToMany(
-    () => OrmReproduccionCancionEntity,
-    (reproduccionCancion) => reproduccionCancion.usuario,
-  )
-  reproduccionesCanciones: OrmReproduccionCancionEntity[];
+  tokens: string[];
 
   @OneToOne(() => OrmSubscripcionEntity, (subscripcion) => subscripcion.usuario)
   subscripcion: OrmSubscripcionEntity;
@@ -77,7 +59,6 @@ export class OrmUserEntity {
   static create(
     userId: string,
     role: string,
-    token: string,
     name?: string,
     email?: string,
     birthdate?: Date,
@@ -86,7 +67,6 @@ export class OrmUserEntity {
     const user = new OrmUserEntity();
     user.codigo_usuario = userId;
     user.rol = role;
-    user.token = token;
     // user.rol = role;
     // user.token = token;
     // user.genero = gender;

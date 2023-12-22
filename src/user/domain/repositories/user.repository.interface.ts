@@ -1,12 +1,12 @@
-import { UserPhone } from "../value-objects/user-phone";
 import { User } from '../user';
-import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
 import { Result } from "src/common/application/result-handler/result";
+import { UserId } from '../value-objects/user-id';
 
   
 
 export interface IUserRepository{
-    saveAggregate(user: User): Promise<Result<string>>;
-    findUserById(id: string): Promise<OrmUserEntity>;
-    deleteUserById(id: string): Promise<Result<string>>;
+    saveAggregate(user: User, tokens?: string[]): Promise<Result<string>>;
+    findUserById(id: UserId): Promise<Result<User>>;
+    deleteUserById(id: UserId): Promise<Result<string>>;
+    updateTokens(id: UserId, token: string): Promise<Result<string>>;
 }

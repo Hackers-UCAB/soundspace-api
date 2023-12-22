@@ -3,5 +3,5 @@ import { IsOptional, IsPositive, IsString, IsUUID, Min, MinLength } from "class-
 
 export class AuthHeaderInfraestructureDto {
     @IsString()
-    firebasetoken:string;
+    token:string;
 }

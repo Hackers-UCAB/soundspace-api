@@ -1,8 +1,10 @@
 import { OrmUserEntity } from "src/user/infraestructure/orm-entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrmSubscriptionChanelEntity } from "./subscription-chanel.entity";
-import { User } from "src/user/domain/user";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
+import { ISubscriptionChanelRepository } from "src/subscription/domain/repositories/subscription-chanel.repository.interface";
+import { UserRepository } from "src/user/infraestructure/repositories/user.repository";
+import { SubscriptionChanelRepository } from "../repositories/subscription-chanel.repository";
 
 export enum SubscriptionStatusEnum {
     ACTIVE = "ACTIVE",
@@ -33,10 +35,9 @@ export class OrmSubscripcionEntity {
     @JoinColumn({ name: 'usuario' })
     usuario: OrmUserEntity;
 
-    @OneToOne(() => OrmSubscriptionChanelEntity, (canal)=> canal.subscripcion)
-    @JoinColumn({ name: 'canal' })
+    @ManyToOne(() => OrmSubscriptionChanelEntity, (canal)=> canal.subscripciones)
     canal: OrmSubscriptionChanelEntity;
-    //TODO: Hacer que se relacione con el canal tambien
+
     static async create(
         subscriptionId: string,
         subscriptionStatus: string,
@@ -44,7 +45,9 @@ export class OrmSubscripcionEntity {
         subscriptionEndDate: Date,
         value: string,
         user: string,
-        userRepository: IUserRepository,
+        userRepository: UserRepository,
+        chanel: string,
+        chanelRepository: SubscriptionChanelRepository
     ): Promise<OrmSubscripcionEntity>{
         const subscription = new OrmSubscripcionEntity();
         subscription.codigo_subscripcion = subscriptionId;
@@ -52,7 +55,8 @@ export class OrmSubscripcionEntity {
         subscription.fecha_creacion = subscriptionCreatedDate;
         subscription.fecha_finalizacion = subscriptionEndDate;
         subscription.value = value
-        subscription.usuario = await userRepository.findUserById(user)
+        subscription.usuario = await userRepository.findUserEntityById(user) || null
+        subscription.canal = await chanelRepository.findSubscriptionChanelEntityById(chanel) || null
         return subscription;
     }
 }
