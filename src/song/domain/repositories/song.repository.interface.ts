@@ -7,5 +7,5 @@ import { SongUrl } from "../value-objects/song-url";
 
 export interface ISongRepository{
 
-    findSongUrlById(id: string): Promise<Result<SongUrl>>
+    findSongUrlById(id: string): Promise<Result<SongId>>
 }

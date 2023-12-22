@@ -1,23 +1,29 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { Result } from 'src/common/application/result-handler/result';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
-import { IHttp } from '../interfaces/http.interface';
-import { StreamableFile } from '@nestjs/common';
+import { SongUrl } from 'src/song/domain/value-objects/song-url';
+import { SongId } from 'src/song/domain/value-objects/song-id';
 
-export class FindSongUrlService implements IApplicationService<string , StreamableFile>{
+export class FindSongUrlService implements IApplicationService<string , SongId>{
 
     private readonly songRepository: ISongRepository;
-    private readonly httpRequest: IHttp;
-    constructor(songRepository: ISongRepository, httpRequest: IHttp) {
+    constructor(songRepository: ISongRepository) {
         this.songRepository = songRepository;
-        this.httpRequest = httpRequest;
     }
 
-    // TODO: Esto es una primera iteracion de la solucion, estoy devolviendo la cancion en formato de stream. Falta agregar el try catch por si hay error
-    async execute(param: string): Promise<Result<StreamableFile>> {
-        
-        const url = await this.songRepository.findSongUrlById(param);
-        const {data} = await this.httpRequest.get(url.Data.Path);
-        return Result.success(new StreamableFile(data),200);
+    async execute(param: string): Promise<Result<SongId>> {
+        try {
+            //! Aqui ver cual devuelve el result, el service o el repository
+            const url = await this.songRepository.findSongUrlById(param);
+            return url
+        } catch (error) {
+            return Result.fail(
+                null,
+                404,
+                'No se ha podido encontrar la cancion',
+                new Error('No se ha podido encontrar la cancion'),
+            );
+        }
     }
 }
+    

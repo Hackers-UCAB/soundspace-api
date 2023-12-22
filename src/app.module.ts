@@ -6,9 +6,8 @@ import { SubscriptionController } from './subscription/infraestructure/controlle
 import { JwtModule } from '@nestjs/jwt';
 import { servicesProvidersManager } from './common/infraestructure/providers/services/services.provider';
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { SongController } from './song/infraestructure/controllers/song.controller';
+import { SongWsModule } from './song-ws/song-ws.module';
 
 @Module({
   imports: [
@@ -22,8 +21,10 @@ import { SongController } from './song/infraestructure/controllers/song.controll
           signOptions: { expiresIn: '1d' },
         }
       }
-    })
+    }),
+    SongWsModule
   ],
+  
   controllers: [AuthController, SubscriptionController, SongController],
   providers: [...databaseProviders, ...servicesProvidersManager,...providersManager],
 })
