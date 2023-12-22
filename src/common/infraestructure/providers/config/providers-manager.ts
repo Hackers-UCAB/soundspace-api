@@ -1,6 +1,6 @@
 import { Provider } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { JwtGenerator } from "src/auth/infraestructure/jwt-generator";
+import { JwtGenerator } from "src/auth/infraestructure/jwt/jwt-generator";
 import { EventPublisherLoggerDecorator } from "src/common/application/events/decorators/logger-decorator/event-publisher-logger.decorator";
 import { IEventPublisher } from "src/common/application/events/event-publisher.interface";
 import { ILogger } from "src/common/application/logging-handler/logger.interface";
