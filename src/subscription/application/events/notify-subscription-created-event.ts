@@ -18,7 +18,6 @@ export class NotifySubscriptionCreatedEvent implements IEventSubscriber{
     async on(event: SubscriptionCreated): Promise<void> {
         const subcriptionChanel: Result<SubscriptionChanel> = await this.subscriptionChanelRepository.findSubscriptionChanelById(event.chanel);
         
-        //buscar al usuario en su repo para obtener el nombre
         const tittle = 'Bienvenido a SoundSpace';
         const body = subcriptionChanel.IsSuccess ? `Te has suscrito mediante el medio ${subcriptionChanel.data.Name.Name}, es hora de disfrutar la mejor música!` : 'Disfruta de la mejor musica'; //el mensaje se puede mejorar con el payload del evento
         const message = { 

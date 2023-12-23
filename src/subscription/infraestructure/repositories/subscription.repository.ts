@@ -76,7 +76,7 @@ export class SubscriptionRepository
           usuario: true,
           canal: true,
         },
-      });      
+      });
       response = await this.ormSubscriptionMapper.toDomain(subscription);
     } catch (err) {
       error = err;
@@ -93,35 +93,38 @@ export class SubscriptionRepository
     }
   }
 
-  //TODO: Revisar si hice esto bien
-  async findSubscriptionsByEndDate(
+  async findSubscriptionsExpiringOnDate(
     endDate: Date,
   ): Promise<Result<Subscription[]>> {
+    let response: Subscription[];
+    let error: any;
     try {
-      const subscriptions: OrmSubscripcionEntity[] = await this.find({
-        where: {
-          fecha_finalizacion: endDate,
-        },
-        relations: {
-          usuario: true,
-        },
-      });
+      const date = endDate.toISOString().split('T')[0];
+      const subscriptions: OrmSubscripcionEntity[] =
+        await this.createQueryBuilder('subscripcion')
+          .leftJoinAndSelect('subscripcion.usuario', 'usuario')
+          .leftJoinAndSelect('subscripcion.canal', 'canal')
+          .where(`DATE_TRUNC('day', fecha_finalizacion) = :date`, { date })
+          .getMany();
 
-      const domainSubscriptions: Subscription[] = await Promise.all(
-        subscriptions.map((subscription) =>
-          this.ormSubscriptionMapper.toDomain(subscription),
+      response = await Promise.all(
+        subscriptions.map(
+          async (subscription) =>
+            await this.ormSubscriptionMapper.toDomain(subscription),
         ),
       );
-
-      return Result.success<Subscription[]>(domainSubscriptions, 200);
-    } catch (error) {
-      const errorHandled = this.handleError(error);
-      return Result.fail<Subscription[]>(
-        null,
-        500,
-        errorHandled.message,
-        errorHandled,
-      );
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          'Error al buscar o mapear las subscripciones',
+          error,
+        );
+      }
+      return Result.success(response, 200);
     }
   }
 

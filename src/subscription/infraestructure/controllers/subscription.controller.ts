@@ -9,6 +9,13 @@ import { SubscriptionId } from 'src/subscription/domain/value-objects/subscripti
 import { SubscriptionStatus } from 'src/subscription/domain/value-objects/subscription-status';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { SubscriptionStatusEnum } from '../orm-entities/subscription.entity';
+import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
+import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { CheckSubscriptionsApplicationService } from 'src/subscription/application/services/check-subscriptions-service.application.service';
+import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
+import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
+import { ServiceResponse } from 'src/common/application/services/response/service-response';
+import { Result } from 'src/common/application/result-handler/result';
 
 @Controller('subscription')
 export class SubscriptionController {
@@ -18,14 +25,28 @@ export class SubscriptionController {
   ) {}
 
   @Get('check-subscriptions')
-  async checkSubscriptionsEndDate() {
-    this.eventBus.publish([
-      SubscriptionExpired.create(SubscriptionId.create('123'),
-      UserId.create('123'),
-      SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED))
-    ]);
+  async checkSubscriptions() {
+    const service = new LoggerApplicationServiceDecorator(
+      new AuditingCommandServiceDecorator(
+        new CheckSubscriptionsApplicationService(
+          new SubscriptionRepository(this.dataSource),
+          this.eventBus
+        ),
+        new AuditingRepository(this.dataSource),
+        'Check Subscriptions',
+        new LoggerImpl()
+      ),
+      new LoggerImpl(),
+      'Check Subscriptions',
+    )
 
-    // const service = new CheckSubscriptionsEndDateService(new SubscriptionRepository(this.dataSource), this.eventBus);
-    // service.execute({date: new Date()}); //preguntar por el formato de la fecha
-  }
+    const checkSubscriptionResult: Result<ServiceResponse> = await service.execute({});
+    
+    if (!checkSubscriptionResult.IsSuccess) {
+      return 'No funciono';
+    }
+
+    return 'funciono';
+  };
+
 }

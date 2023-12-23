@@ -42,7 +42,7 @@ export const providersManager: Provider[] = [
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
             //aqui subscribimos a todos los que escuchan los eventos
-            eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier)]);
+            eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
             eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
 
             return eventBus;

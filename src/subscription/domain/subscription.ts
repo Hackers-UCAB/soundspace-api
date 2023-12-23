@@ -111,7 +111,7 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
   }
 
   public expireSubscription(){
-    this.apply(SubscriptionExpired.create(this.Id, this.user, SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED)));
+    this.apply(SubscriptionExpired.create(this.Id, this.user, SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED), this.Chanel));
 }
 
   static calculateEndDate(
