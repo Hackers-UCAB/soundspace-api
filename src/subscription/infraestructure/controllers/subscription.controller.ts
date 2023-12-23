@@ -17,25 +17,6 @@ export class SubscriptionController {
     @Inject('EventBus') private eventBus: IEventPublisher,  
   ) {}
 
-  // @Get(':id')
-  // async findOne(@Param('id', ParseUUIDPipe) id: string) {
-  //   const service = new ErrorHandlerApplicationServiceDecorator(
-  //     new FindSubscriptionService(new SubscriptionRepository(this.dataSource)),
-  //   );
-
-  //   //new FindSubscriptionService(new SubscriptionRepository(this.dataSource));
-
-  //   return await service.execute(id);
-  // }
-
-  // @Post()
-  // async createSubscription() {
-  //   const service = new ErrorHandlerApplicationServiceDecorator(
-  //     new CreateSubscriptionService(new SubscriptionRepository(this.dataSource), new UuidGenerator()),
-  //   );
-  //   return await service.execute('1237');
-  // }
-
   @Get('check-subscriptions')
   async checkSubscriptionsEndDate() {
     this.eventBus.publish([

@@ -15,7 +15,7 @@ export class HttpResponseHandler {
       case 400:
         return this.BadRequest(msg, error);
       case 403:
-        return this.Forbidden(msg, error);
+        return this.Forbidden(msg, error)
       case 404:
         return this.NotFound(msg, error);
       case 500:
