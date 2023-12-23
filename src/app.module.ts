@@ -28,7 +28,6 @@ import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy'
         }
       }
     }),
-    // JwtStrategy, JwtModule, PassportModule
     SongWsModule
   ],
   controllers: [AuthController, SubscriptionController, SongController, UserController],

@@ -17,6 +17,10 @@ import { ILogger } from 'src/common/application/logging-handler/logger.interface
 import { IJwtGenerator } from 'src/auth/application/interface/jwt-generator.interface';
 import { LoginGuestApplicationService } from 'src/auth/application/services/log-in-guest-service.application.service';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
+import { PlaySongService } from 'src/song/application/services/play-song.application.service';
+import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
+import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.helper';
+import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -104,5 +108,26 @@ export const servicesProvidersManager: Provider[] = [
       )
     },
     inject: ['IJwtGenerator', 'DataSource', 'ILogger', 'IUuidGenerator'],
-  }
+  },
+  // {
+  //   provide: 'PlaySongApplicationService',
+  //   useFactory: (dataSource: DataSource, client: any, logger: ILogger) => {
+  //     return new LoggerApplicationServiceDecorator(
+  //       new AuditingCommandServiceDecorator(
+  //           new PlaySongService(
+  //           new SongRepository(dataSource), 
+  //           new UuidGenerator(), 
+  //           new AzureBlobHelper(), 
+  //           new SendSongHelper(), 
+  //           client),
+  //         new AuditingRepository(dataSource),
+  //         'PlaySongService',
+  //         logger
+  //       ),
+  //       logger,
+  //       'PlaySongService',
+  //     );
+  //   },
+  //   inject: ['DataSource', 'ILogger'],
+  // }
 ];
