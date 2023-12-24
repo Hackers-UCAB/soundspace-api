@@ -10,7 +10,13 @@ export class Playlist extends AggregateRoot<PlaylistId>{
 
     private name: PlaylistName;
     private cover: PlaylistCover;
+    get Name(): PlaylistName {
+        return this.name;
+    }
 
+    get Cover(): PlaylistCover {
+        return this.cover;
+    }
     protected constructor(
         id: PlaylistId,
         name: PlaylistName,
@@ -41,11 +47,16 @@ export class Playlist extends AggregateRoot<PlaylistId>{
         }
     }
 
-    static async create(
+    static create(
         id: PlaylistId,
         name: PlaylistName,
         cover: PlaylistCover
-    ): Promise<Playlist> {
-        return new Playlist(id, name, cover);
+    ): Playlist {
+        const playlist = new Playlist(
+            id,
+            name,
+            cover
+        );
+        return playlist;
     }
 }
