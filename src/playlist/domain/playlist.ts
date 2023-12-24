@@ -10,19 +10,16 @@ export class Playlist extends AggregateRoot<PlaylistId>{
 
     private name: PlaylistName;
     private cover: PlaylistCover;
-    private songs: PlaylistSong;
 
     protected constructor(
         id: PlaylistId,
         name: PlaylistName,
         cover: PlaylistCover,
-        songs: PlaylistSong,
     ) {
         const playlistCreated = PlaylistCreated.create(
             id,
             name,
             cover,
-            songs
         )
         super(id, playlistCreated);
         //Aqui deberia usar la funcion de pull ya que no deberia tener eventos de dominio, ya que solo es de consulta
@@ -32,15 +29,13 @@ export class Playlist extends AggregateRoot<PlaylistId>{
         if (event instanceof PlaylistCreated) {
             this.name = event.name;
             this.cover = event.cover;
-            this.songs = event.songs;
         }
     }
 
     protected ensureValidaState(): void {
         if (
             !this.name ||
-            !this.cover ||
-            !this.songs
+            !this.cover 
         ) {
             throw new InvalidPlaylistException("Playlist not valid");
         }
@@ -49,9 +44,8 @@ export class Playlist extends AggregateRoot<PlaylistId>{
     static async create(
         id: PlaylistId,
         name: PlaylistName,
-        cover: PlaylistCover,
-        songs: PlaylistSong,
+        cover: PlaylistCover
     ): Promise<Playlist> {
-        return new Playlist(id, name, cover, songs);
+        return new Playlist(id, name, cover);
     }
 }

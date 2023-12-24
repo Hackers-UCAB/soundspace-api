@@ -8,6 +8,7 @@ import { servicesProvidersManager } from './common/infraestructure/providers/ser
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 import { SongController } from './song/infraestructure/controllers/song.controller';
 import { SongWsModule } from './song-ws/song-ws.module';
+import { playlistController } from './playlist/infraestructure/controllers/playlist.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { SongWsModule } from './song-ws/song-ws.module';
     SongWsModule
   ],
   
-  controllers: [AuthController, SubscriptionController, SongController],
+    controllers: [AuthController, SubscriptionController, SongController, playlistController],
   providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager],
 })
 export class AppModule {}

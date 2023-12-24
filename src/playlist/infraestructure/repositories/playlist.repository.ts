@@ -4,18 +4,18 @@ import { IPlaylistRepository } from 'src/Playlist/domain/repositories/Playlist.r
 import { Playlist } from '../../domain/playlist';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
 import { PlaylistName } from '../../domain/value-objects/playlist-name';
-import { PlaylistIdEntryApplicationDto } from '../../application/dto/entrys/playlist-id-entry.application.dto';
+import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entrys/get-playlist-by-id-entry.application.dto';
 
 export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements IPlaylistRepository {
 
     constructor(dataSource: DataSource) {
         super(OrmPlaylistEntity, dataSource.createEntityManager());
     }
-    async findPlaylistById(PlaylistIdEntryDto: PlaylistIdEntryApplicationDto): Promise<Result<PlaylistName>> {
+    async findPlaylistById(PlaylistIdEntryApplicationDto: GetPlaylistByIdEntryApplicationDto): Promise<Result<PlaylistName>> {
         const Playlist = await this.findOne(
             {
                 where: {
-                    codigo_playlist: PlaylistIdEntryDto.PlaylistId
+                    codigo_playlist: PlaylistIdEntryApplicationDto.PlaylistId
                 },
                 select: ['nombre']
             });

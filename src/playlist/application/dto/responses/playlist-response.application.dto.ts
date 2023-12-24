@@ -9,7 +9,7 @@ export class SongResponseApplicationDtoDto {
         name: string;
     }[];
 }
-/*
+
 export class PlaylistResponseApplicationDto implements ServiceResponse {
     userId: string;
     id: string;
@@ -22,8 +22,10 @@ export class PlaylistResponseApplicationDto implements ServiceResponse {
     }[];
     songs: SongResponseApplicationDtoDto[];
 }
-*/
+
+/*
 export class PlaylistResponseApplicationDto implements ServiceResponse {
     userId: string;
     name: string;
 }
+*/

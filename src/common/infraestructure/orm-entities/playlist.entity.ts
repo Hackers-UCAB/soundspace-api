@@ -25,6 +25,20 @@ export class OrmPlaylistEntity {
   canciones: OrmPlaylistCancionEntity[];
 
   @OneToMany(() => OrmPlaylistCreadorEntity, playlistCreador => playlistCreador.playlist)
-  creadores: OrmPlaylistCreadorEntity[];
+    creadores: OrmPlaylistCreadorEntity[];
 
+
+    static create(
+        id: string,
+        name: string,
+        cover: string
+
+    ): OrmPlaylistEntity {
+        const Playlist = new OrmPlaylistEntity();
+        Playlist.codigo_playlist = id;
+        Playlist.nombre = name;
+        Playlist.referencia_imagen = cover;
+
+        return Playlist;
+    }
 }
