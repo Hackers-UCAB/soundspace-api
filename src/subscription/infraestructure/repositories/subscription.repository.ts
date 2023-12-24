@@ -24,8 +24,21 @@ export class SubscriptionRepository
     this.ormSubscriptionMapper = new OrmSubscriptionMapper(dataSource);
   }
 
-  findAll() {
-    throw new Error('Method not implemented.');
+  async findSubscriptionEntityById(id: string): Promise<OrmSubscripcionEntity> {
+    try {
+      const subscription = await this.findOne({
+        where: {
+          codigo_subscripcion: id,
+        },
+        relations: {
+          usuario: true,
+          canal: true,
+        },
+      });
+      return subscription;
+    } catch (error) {
+      return null;
+    }
   }
 
   async findSubscriptionById(id: SubscriptionId): Promise<Subscription> {
@@ -62,6 +75,35 @@ export class SubscriptionRepository
     }
   }
 
+  async updateAggregate(subscription: Subscription): Promise<Result<string>> {
+    let error: any;
+    try {
+      let ormSubscription = await this.findSubscriptionEntityById(subscription.Id.Id);
+      const subscriptionConverted = await this.ormSubscriptionMapper.toPersistence(subscription);
+      if ((ormSubscription) && (subscriptionConverted)) {
+        ormSubscription = {
+          ...ormSubscription,
+          ...subscriptionConverted,
+        };
+        await this.save(ormSubscription);
+      }else {
+        throw new Error('Error busando o actualizando la subscripción');
+      }
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado actualizando la subscripcion, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success('Subscripción actualizada de forma exitosa', 200);
+    }
+  }
   async findSubscriptionByValue(
     value: SubscriptionValue,
   ): Promise<Result<Subscription>> {
@@ -128,14 +170,4 @@ export class SubscriptionRepository
     }
   }
 
-  //podria abstraerse en algun lugar si decidimos usarlo o algo por el estilo
-  handleError(error: any): Error {
-    if (error instanceof QueryFailedError) {
-      return Error('Query failed');
-    } else if (error instanceof EntityNotFoundError) {
-      return Error('Entity not found');
-    } else {
-      return Error('Unknown error');
-    }
-  }
 }

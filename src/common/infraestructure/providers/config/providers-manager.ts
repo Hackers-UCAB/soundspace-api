@@ -8,11 +8,12 @@ import { INotifier } from "src/common/application/notifications-handler/notifier
 import { EventBus } from "src/common/infraestructure/events/event-bus";
 import { FirebaseNotifier } from "src/common/infraestructure/firebase-notifications/firebase-notifier";
 import { LoggerImpl } from "src/common/infraestructure/logger/logger";
-import { NotifySubscriptionCreatedEvent } from "src/subscription/application/events/notify-subscription-created-event";
-import { NotifySubscriptionExpiredEvent } from "src/subscription/application/events/notify-subscription-expired-event";
+import { NotifySubscriptionCreatedEvent } from "src/subscription/application/events/notify-subscription-created.event";
+import { NotifySubscriptionExpiredEvent } from "src/subscription/application/events/notify-subscription-expired.event";
 import { SubscriptionChanelRepository } from "src/subscription/infraestructure/repositories/subscription-chanel.repository";
 import { DataSource } from "typeorm";
 import { UuidGenerator } from "../../uuid-generator";
+import { NotifySubscriptionNearToExpiredEvent } from "src/subscription/application/events/notify-subscription-near-to-expired.event";
 
 export const providersManager: Provider[] = [
     {
@@ -44,6 +45,7 @@ export const providersManager: Provider[] = [
             //aqui subscribimos a todos los que escuchan los eventos
             eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
             eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
+            eventBus.subscribe('SubscriptionNearToExpired', [new NotifySubscriptionNearToExpiredEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
 
             return eventBus;
     },

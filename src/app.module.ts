@@ -10,6 +10,8 @@ import { providersManager } from 'src/common/infraestructure/providers/config/pr
 import { SongController } from './song/infraestructure/controllers/song.controller';
 import { UserController } from './user/infraestructure/controllers/user.controller';
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CheckSubscriptionsCronService } from './subscription/infraestructure/cron/subscriptions.cron';
 
 @Module({
   imports: [
@@ -27,10 +29,10 @@ import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy'
         }
       }
     }),
-    // JwtStrategy, JwtModule, PassportModule
+    ScheduleModule.forRoot(),
   ],
   controllers: [AuthController, SubscriptionController, SongController, UserController],
-  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule],
+  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule, CheckSubscriptionsCronService],
   exports: [],
 })
 export class AppModule {}

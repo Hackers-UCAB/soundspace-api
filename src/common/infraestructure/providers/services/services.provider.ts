@@ -17,6 +17,8 @@ import { ILogger } from 'src/common/application/logging-handler/logger.interface
 import { IJwtGenerator } from 'src/auth/application/interface/jwt-generator.interface';
 import { LoginGuestApplicationService } from 'src/auth/application/services/log-in-guest-service.application.service';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
+import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
+import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -104,5 +106,44 @@ export const servicesProvidersManager: Provider[] = [
       )
     },
     inject: ['IJwtGenerator', 'DataSource', 'ILogger', 'IUuidGenerator'],
+  },
+  {
+    provide: 'CheckExpiredSubscriptionsApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CheckExpiredSubscriptionsApplicationService(
+            new SubscriptionRepository(dataSource),
+            new UserRepository(dataSource),
+            eventBus
+          ),
+          new AuditingRepository(dataSource),
+          'Check Expired Subscriptions',
+          logger,
+        ),
+        logger,
+        'Check Expired Subscriptions',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+  },
+  {
+    provide: 'CheckCloseToExpireSubscriptionsApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CheckCloseToExpireSubscriptionsApplicationService(
+            new SubscriptionRepository(dataSource),
+            eventBus
+          ),
+          new AuditingRepository(dataSource),
+          'Check Close To Expire Subscriptions',
+          logger,
+        ),
+        logger,
+        'Check Close To Expire Subscriptions',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger', 'EventBus'],
   }
 ];
