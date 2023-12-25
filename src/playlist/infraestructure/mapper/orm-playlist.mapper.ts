@@ -1,19 +1,11 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-import { DataSource } from 'typeorm';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
 import { Playlist } from '../../domain/Playlist';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
 import { PlaylistName } from '../../domain/value-objects/playlist-name';
 import { PlaylistCover } from '../../domain/value-objects/playlist-cover';
 
-export class OrmPlaylistMapper
-    implements IMapper<Playlist, OrmPlaylistEntity>
-{
-    //@Inject('DataSource')
-    private readonly dataSource: DataSource;
-    constructor(dataSource: DataSource) {
-        this.dataSource = dataSource;
-    }
+export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
 
     async toDomain(persistence: OrmPlaylistEntity): Promise<Playlist> {
         if (persistence) {
@@ -27,7 +19,6 @@ export class OrmPlaylistMapper
         }
         return null;
     }
-
     
     async toPersistence(domain: Playlist): Promise<OrmPlaylistEntity> {
         if (domain) {

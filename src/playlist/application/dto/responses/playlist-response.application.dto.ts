@@ -14,6 +14,15 @@ export class PlaylistResponseApplicationDto implements ServiceResponse {
     userId: string;
     id: string;
     name: string;
+    cover: string;
+    duration: string;
+}
+
+/*
+export class PlaylistResponseApplicationDto implements ServiceResponse {
+    userId: string;
+    id: string;
+    name: string;
     duration: string;
     im: Buffer;
     creators?: {
@@ -22,7 +31,7 @@ export class PlaylistResponseApplicationDto implements ServiceResponse {
     }[];
     songs: SongResponseApplicationDtoDto[];
 }
-
+*/
 /*
 export class PlaylistResponseApplicationDto implements ServiceResponse {
     userId: string;

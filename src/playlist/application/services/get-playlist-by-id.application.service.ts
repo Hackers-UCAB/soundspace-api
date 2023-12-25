@@ -13,9 +13,9 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
     }
 
     async execute(PlaylistIdEntryApplicationDto: GetPlaylistByIdEntryApplicationDto): Promise<Result<PlaylistResponseApplicationDto>> {
+        const playlistResponse = await this.PlaylistRepository.findPlaylistById(PlaylistIdEntryApplicationDto);
 
-        const PlaylistResponseApplicationDto = await this.PlaylistRepository.findPlaylistById(PlaylistIdEntryApplicationDto);
-
-        return Result.success(PlaylistResponseApplicationDto, 200);
+        return Result.success(playlistResponse.data, 200);
     }
+
 }
