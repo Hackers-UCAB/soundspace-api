@@ -22,6 +22,7 @@ import { UserRole } from 'src/user/domain/value-objects/user-role';
 import { UpdateUserInfoResponseApplicationDto } from 'src/user/application/dto/responses/update-user-info-response.application.dto';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
 import { User } from 'src/user/domain/user';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -42,12 +43,12 @@ export class UserController {
   //Prueba para lo del token
   @Get('test')
   @Auth(UserRoleEnum.USER)
-  //@UseGuards(AuthGuard())
-  // async getAll(@GetUser() user: User) {
-  //     console.log(user);
+  @UseGuards(AuthGuard())
+  async getAll(@GetUser() user: User) {
+      console.log(user);
 
-  //     return `Si entro en esta monda con el user`;
-  // }
+      return `Si entro en esta monda con el user`;
+  }
 
   @Get()
   @Auth()
