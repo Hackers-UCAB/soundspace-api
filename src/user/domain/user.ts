@@ -11,6 +11,8 @@ import { InvalidUserException } from './exceptions/invalid-user.exception';
 import { DomainEvent } from 'src/common/domain/domain-event';
 import { UserGenderEnum } from './value-objects/enum/user-gender.enum';
 import { UserUpdated } from './events/user-updated.event';
+import { UserChangedToGuest } from './events/user-changed-to-guest.event';
+import { UserRoleEnum } from './value-objects/enum/user-role.enum';
 
 export class User extends AggregateRoot<UserId> {
   private name: UserName;
@@ -55,8 +57,6 @@ export class User extends AggregateRoot<UserId> {
     super(userId, userCreated);
   }
 
-  //Aqui tengo dudas porque estoy estoy seteando data null dentro de mi agregado
-  //ya que se crea sin todos los datos del agregado
   protected when(event: DomainEvent): void {
     if (event instanceof UserCreated) {
       this.role = event.userRole;
@@ -72,14 +72,21 @@ export class User extends AggregateRoot<UserId> {
       this.email = event.email ? event.email : this.email;
       this.gender = event.gender ? event.gender : this.gender;
     }
+
+    if (event instanceof UserChangedToGuest) {
+      this.role = event.userRole;
+    }
   }
   protected ensureValidaState(): void {
-    // if (!this.role || !this.Id || !this.name || !this.birthday || !this.email || !this.gender) {
-    //     throw new InvalidUserException('User not valid');
-    // }
     if (!this.role || !this.Id) {
       throw new InvalidUserException('User not valid');
     }
+  }
+
+  public changedToGuest(): void {
+    this.apply(
+      UserChangedToGuest.create(this.Id, UserRole.create(UserRoleEnum.GUEST)),
+    );
   }
 
   public updateUser(

@@ -21,7 +21,11 @@ import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chane
 import { SignUpResponseApplicationDto } from '../dto/responses/sign-up-response.application.dto';
 
 export class SignUpMovistarApplicationService
-  implements IApplicationService<SignUpEntryApplicationDto, SignUpResponseApplicationDto>
+  implements
+    IApplicationService<
+      SignUpEntryApplicationDto,
+      SignUpResponseApplicationDto
+    >
 {
   private readonly userRepository: IUserRepository;
   private readonly subscriptionRepository: ISubscriptionRepository;
@@ -48,7 +52,9 @@ export class SignUpMovistarApplicationService
     this.eventPublisher = eventPublisher;
   }
 
-  async execute(param: SignUpEntryApplicationDto): Promise<Result<SignUpResponseApplicationDto>> {
+  async execute(
+    param: SignUpEntryApplicationDto,
+  ): Promise<Result<SignUpResponseApplicationDto>> {
     //Se valida con el api externo
     const valid: Result<boolean> =
       await this.movistarSubscriptionValidation.validateSubscription(
@@ -63,27 +69,39 @@ export class SignUpMovistarApplicationService
         new Error(valid.message),
       );
     }
+    let userId: string;
+    let newUser: User;
+    let newSubscription: Subscription;
+    //Se encapsulan las posibles excepciones de dominio
+    try {
+      userId = this.idGenerator.generate();
+      //Se crea el usuario
+      newUser = await User.create(
+        UserId.create(userId),
+        UserRole.create(UserRoleEnum.USER),
+      );
 
-    const userId = this.idGenerator.generate();
-    //Se crea el usuario
-    const newUser = await User.create(
-      UserId.create(userId),
-      UserRole.create(UserRoleEnum.USER),
-    );
+      const createdOn = SubscriptionCreatedDate.create(new Date());
 
-    const createdOn = SubscriptionCreatedDate.create(new Date());
-    
-    //Se crea la subscripcion
-    const newSubscription = await Subscription.create(
-      SubscriptionId.create(this.idGenerator.generate()),
-      SubscriptionStatus.create(SubscriptionStatusEnum.ACTIVE),
-      createdOn,
-      Subscription.calculateEndDate(createdOn),
-      SubscriptionValue.create(param.phone),
-      UserId.create(userId),
-      SubscriptionChanelId.create(process.env.MOVISTAR_SUBSCRIPTION_ID),
-    );
-      
+      //Se crea la subscripcion
+      newSubscription = await Subscription.create(
+        SubscriptionId.create(this.idGenerator.generate()),
+        SubscriptionStatus.create(SubscriptionStatusEnum.ACTIVE),
+        createdOn,
+        Subscription.calculateEndDate(createdOn),
+        SubscriptionValue.create(param.phone),
+        UserId.create(userId),
+        SubscriptionChanelId.create(process.env.MOVISTAR_SUBSCRIPTION_ID),
+      );
+    } catch (error: any) {
+      return Result.fail(
+        null,
+        error.statusCode || 500,
+        error.message || 'Ha ocurrido un error inesperado creando el usuario y/o la subscripción, hable con un administrador',
+        error,
+      );
+    }
+
     //Guardar al usuario
     const userSaving: Result<string> = await this.userRepository.saveAggregate(
       newUser,

@@ -21,6 +21,10 @@ import { PlaySongService } from 'src/song/application/services/play-song.applica
 import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
 import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.helper';
 import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
+import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
+import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
+import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
+import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -130,4 +134,79 @@ export const servicesProvidersManager: Provider[] = [
   //   },
   //   inject: ['DataSource', 'ILogger'],
   // }
+  {
+    provide: 'CheckExpiredSubscriptionsApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CheckExpiredSubscriptionsApplicationService(
+            new SubscriptionRepository(dataSource),
+            new UserRepository(dataSource),
+            eventBus
+          ),
+          new AuditingRepository(dataSource),
+          'Check Expired Subscriptions',
+          logger,
+        ),
+        logger,
+        'Check Expired Subscriptions',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+  },
+  {
+    provide: 'CheckCloseToExpireSubscriptionsApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CheckCloseToExpireSubscriptionsApplicationService(
+            new SubscriptionRepository(dataSource),
+            eventBus
+          ),
+          new AuditingRepository(dataSource),
+          'Check Close To Expire Subscriptions',
+          logger,
+        ),
+        logger,
+        'Check Close To Expire Subscriptions',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+  },
+  {
+    provide: 'GetUserInfoApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetUserInfoApplicationService(
+            new UserRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Get User Info',
+          logger,
+        ),
+        logger,
+        'Get User Info',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger'],
+  },
+  {
+    provide: 'UpdateUserInfoApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new UpdateUserInfoApplicationService(
+            new UserRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Update User Info',
+          logger,
+        ),
+        logger,
+        'Update User Info',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger'],
+  }
 ];

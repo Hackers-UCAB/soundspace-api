@@ -30,6 +30,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.3.0",
+    "@nestjs/schedule": "^4.0.0",
     "@nestjs/typeorm": "^10.0.1",
     "@nestjs/websockets": "^10.3.0",
     "@types/axios": "^0.14.0",

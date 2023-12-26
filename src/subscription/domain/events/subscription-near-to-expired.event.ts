@@ -4,27 +4,29 @@ import { UserId } from "src/user/domain/value-objects/user-id";
 import { SubscriptionStatus } from "../value-objects/subscription-status";
 import { SubscriptionChanelId } from "../subscription-chanel/value-objects/subscription-chanel-id";
 
-export class SubscriptionExpired extends DomainEvent{
-    protected constructor(
+
+
+export class SubscriptionNearToExpired extends DomainEvent {
+    constructor(
         public id: SubscriptionId,
-        public userId: UserId,
+        public user: UserId,
         public status: SubscriptionStatus,
         public chanel: SubscriptionChanelId
-    ){
-        super()
+    ) {
+        super();
     }
 
     static create(
         id: SubscriptionId,
-        userId: UserId,
+        user: UserId,
         status: SubscriptionStatus,
         chanel: SubscriptionChanelId
-    ): SubscriptionExpired{
-        return new SubscriptionExpired(
+    ): SubscriptionNearToExpired {
+        return new SubscriptionNearToExpired(
             id,
-            userId, 
+            user,
             status,
             chanel
-        )
+        );
     }
 }

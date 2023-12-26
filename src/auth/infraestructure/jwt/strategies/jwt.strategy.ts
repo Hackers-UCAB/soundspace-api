@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user: Result<User> = await this.userRepository.findUserById(UserId.create(id));
 
     if (!user.IsSuccess) {
-      HttpResponseHandler.HandleException(user.StatusCode, user.message, user.error);
+      HttpResponseHandler.HandleException(user.StatusCode, `Error buscando al usuario a traves del token, con mensaje: ${user.message}`, user.error);
     }
     return user.Data;
   }
