@@ -57,8 +57,6 @@ export class User extends AggregateRoot<UserId> {
     super(userId, userCreated);
   }
 
-  //Aqui tengo dudas porque estoy estoy seteando data null dentro de mi agregado
-  //ya que se crea sin todos los datos del agregado
   protected when(event: DomainEvent): void {
     if (event instanceof UserCreated) {
       this.role = event.userRole;
@@ -75,21 +73,20 @@ export class User extends AggregateRoot<UserId> {
       this.gender = event.gender ? event.gender : this.gender;
     }
 
-    if (event instanceof UserChangedToGuest){
+    if (event instanceof UserChangedToGuest) {
       this.role = event.userRole;
     }
   }
   protected ensureValidaState(): void {
-    // if (!this.role || !this.Id || !this.name || !this.birthday || !this.email || !this.gender) {
-    //     throw new InvalidUserException('User not valid');
-    // }
     if (!this.role || !this.Id) {
       throw new InvalidUserException('User not valid');
     }
   }
 
   public changedToGuest(): void {
-    this.apply(UserChangedToGuest.create(this.Id, UserRole.create(UserRoleEnum.GUEST)));
+    this.apply(
+      UserChangedToGuest.create(this.Id, UserRole.create(UserRoleEnum.GUEST)),
+    );
   }
 
   public updateUser(

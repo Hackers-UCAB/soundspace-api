@@ -19,6 +19,8 @@ import { LoginGuestApplicationService } from 'src/auth/application/services/log-
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
+import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
+import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -145,5 +147,41 @@ export const servicesProvidersManager: Provider[] = [
       )
     },
     inject: [ 'DataSource', 'ILogger', 'EventBus'],
+  },
+  {
+    provide: 'GetUserInfoApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetUserInfoApplicationService(
+            new UserRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Get User Info',
+          logger,
+        ),
+        logger,
+        'Get User Info',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger'],
+  },
+  {
+    provide: 'UpdateUserInfoApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new UpdateUserInfoApplicationService(
+            new UserRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Update User Info',
+          logger,
+        ),
+        logger,
+        'Update User Info',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger'],
   }
 ];
