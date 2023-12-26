@@ -20,6 +20,8 @@ import { UpdateUserInfoEntryInfraestructureDto } from '../dto/entrys/update-user
 import { UpdateUserInfoEntryApplicationDto } from 'src/user/application/dto/entrys/update-user-info-entry.application.dto';
 import { UserRole } from 'src/user/domain/value-objects/user-role';
 import { UpdateUserInfoResponseApplicationDto } from 'src/user/application/dto/responses/update-user-info-response.application.dto';
+import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
+import { User } from 'src/user/domain/user';
 
 @Controller('user')
 export class UserController {
@@ -36,15 +38,16 @@ export class UserController {
       UpdateUserInfoResponseApplicationDto
     >,
   ) {}
-  //Prueba para lo del token
-  // @Get()
-  // @Auth(UserRoleEnum.USER)
-  // //@UseGuards(AuthGuard())
-  // async getAll(@GetUser() user: User) {
-  //     console.log(user);
 
-  //     return `Si entro en esta monda con el user`;
-  // }
+  //Prueba para lo del token
+  @Get('test')
+  @Auth(UserRoleEnum.USER)
+  //@UseGuards(AuthGuard())
+  async getAll(@GetUser() user: User) {
+      console.log(user);
+
+      return `Si entro en esta monda con el user`;
+  }
 
   @Get()
   @Auth()
