@@ -41,14 +41,14 @@ export class UserController {
   ) {}
 
   //Prueba para lo del token
-  @Get('test')
-  @Auth(UserRoleEnum.USER)
-  @UseGuards(AuthGuard())
-  async getAll(@GetUser() user: User) {
-      console.log(user);
+  // @Get('test')
+  // @Auth(UserRoleEnum.USER)
+  // @UseGuards(AuthGuard())
+  // async getAll(@GetUser() user: User) {
+  //     console.log(user);
 
-      return `Si entro en esta monda con el user`;
-  }
+  //     return `Si entro en esta monda con el user`;
+  // }
 
   @Get()
   @Auth()
