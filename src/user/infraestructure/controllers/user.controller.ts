@@ -43,11 +43,11 @@ export class UserController {
   @Get('test')
   @Auth(UserRoleEnum.USER)
   //@UseGuards(AuthGuard())
-  async getAll(@GetUser() user: User) {
-      console.log(user);
+  // async getAll(@GetUser() user: User) {
+  //     console.log(user);
 
-      return `Si entro en esta monda con el user`;
-  }
+  //     return `Si entro en esta monda con el user`;
+  // }
 
   @Get()
   @Auth()
