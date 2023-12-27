@@ -10,6 +10,8 @@ export class Playlist extends AggregateRoot<PlaylistId>{
 
     private name: PlaylistName;
     private cover: PlaylistCover;
+    private playlistSongs: PlaylistSong;
+
     get Name(): PlaylistName {
         return this.name;
     }
@@ -17,15 +19,22 @@ export class Playlist extends AggregateRoot<PlaylistId>{
     get Cover(): PlaylistCover {
         return this.cover;
     }
+
+    get PlaylistSongs(): PlaylistSong {
+        return this.playlistSongs;
+    }
+
     protected constructor(
         id: PlaylistId,
         name: PlaylistName,
         cover: PlaylistCover,
+        playlistSongs: PlaylistSong
     ) {
         const playlistCreated = PlaylistCreated.create(
             id,
             name,
             cover,
+            playlistSongs,
         )
         super(id, playlistCreated);
         //Aqui deberia usar la funcion de pull ya que no deberia tener eventos de dominio, ya que solo es de consulta
@@ -35,13 +44,15 @@ export class Playlist extends AggregateRoot<PlaylistId>{
         if (event instanceof PlaylistCreated) {
             this.name = event.name;
             this.cover = event.cover;
+            this.playlistSongs = event.playlistSongs;
         }
     }
 
     protected ensureValidaState(): void {
         if (
             !this.name ||
-            !this.cover 
+            !this.cover ||
+            this.playlistSongs
         ) {
             throw new InvalidPlaylistException("Playlist not valid");
         }
@@ -50,12 +61,14 @@ export class Playlist extends AggregateRoot<PlaylistId>{
     static create(
         id: PlaylistId,
         name: PlaylistName,
-        cover: PlaylistCover
+        cover: PlaylistCover,
+        playlistSongs: PlaylistSong
     ): Playlist {
         const playlist = new Playlist(
             id,
             name,
-            cover
+            cover,
+            playlistSongs
         );
         return playlist;
     }

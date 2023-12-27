@@ -10,7 +10,7 @@ export class SongResponseApplicationDtoDto {
     }[];
 }
 
-export class PlaylistResponseApplicationDto implements ServiceResponse {
+export class GetPlaylistByIdResponseApplicationDto implements ServiceResponse {
     userId: string;
     id: string;
     name: string;

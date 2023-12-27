@@ -10,7 +10,8 @@ export class PlaylistCreated extends DomainEvent {
     protected constructor(
         public id: PlaylistId,
         public name: PlaylistName,
-        public cover: PlaylistCover
+        public cover: PlaylistCover,
+        public playlistSongs: PlaylistSong
     ) {
         super()
     }
@@ -18,9 +19,10 @@ export class PlaylistCreated extends DomainEvent {
     static create(
         id: PlaylistId,
         name: PlaylistName,
-        cover: PlaylistCover
+        cover: PlaylistCover,
+        playlistSongs: PlaylistSong
 
     ): PlaylistCreated {
-        return new PlaylistCreated(id, name, cover);
+        return new PlaylistCreated(id, name, cover, playlistSongs);
     }
 }

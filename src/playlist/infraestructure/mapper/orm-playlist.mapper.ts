@@ -4,20 +4,24 @@ import { Playlist } from '../../domain/Playlist';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
 import { PlaylistName } from '../../domain/value-objects/playlist-name';
 import { PlaylistCover } from '../../domain/value-objects/playlist-cover';
+import { PlaylistSong } from '../../domain/value-objects/playlist-songs';
+import { SongId } from '../../../song/domain/value-objects/song-id';
 
 export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
 
     async toDomain(persistence: OrmPlaylistEntity): Promise<Playlist> {
         if (persistence) {
-            const playlist: Playlist = await Playlist.create(
-                PlaylistId.create(persistence.codigo_playlist),
-                PlaylistName.create(persistence.nombre),
-                PlaylistCover.create(persistence.referencia_imagen),
-            );
+            const songsIds = persistence.canciones.map(song => SongId.create(song.cancion.codigo_cancion));
 
+            const playlist: Playlist = await Playlist.create(
+                new PlaylistId(persistence.codigo_playlist),
+                new PlaylistName(persistence.nombre),
+                new PlaylistCover(persistence.referencia_imagen),
+                new PlaylistSong(songsIds)
+            );
             return playlist;
         }
-        return null;
+        return null; //esto no deberia ser una excepcion?
     }
     
     async toPersistence(domain: Playlist): Promise<OrmPlaylistEntity> {
@@ -26,12 +30,11 @@ export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
             const playlist = OrmPlaylistEntity.create(
                 domain.Id.Id,
                 domain.Name.Name,
-                domain.Cover.Path
+                domain.Cover.Path,
             );
 
             return playlist;
         }
         return null;
     }
-    
 }
