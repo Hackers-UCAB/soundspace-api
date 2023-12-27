@@ -23,6 +23,12 @@ async function bootstrap() {
   });
   console.log('Iniciando el servidor en el puerto: ', process.env.PORT);
   
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Accept',
+  });
+
   await app.listen(process.env.PORT);
   
 }
