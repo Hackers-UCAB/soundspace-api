@@ -15,7 +15,7 @@ import { UserRepository } from 'src/user/infraestructure/repositories/user.repos
 import { DataSource } from 'typeorm';
 
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway( 3000 , { cors: true })
 export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
   
@@ -43,7 +43,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
     //!Aqui no esta como lo tienen en el resto porque me da problemas las dependencias, aqui ajuro necesito un modulo
     const service = new LoggerApplicationServiceDecorator(
-      new AuditingCommandServiceDecorator(
+        new AuditingCommandServiceDecorator(
           new PlaySongService(
           new SongRepository(this.dataSource), 
           new UuidGenerator(), 

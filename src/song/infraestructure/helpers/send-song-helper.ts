@@ -3,7 +3,7 @@ import { ISendSongHelper } from "src/song/application/interfaces/send-song-helpe
 
 export class SendSongHelper implements ISendSongHelper {
     
-    async sendSong( client: Socket, url: string, blob: any, size: number ) {
+    async sendSong( client: Socket, blob: any, size: number ) {
 
         let sequence = 1;
         const buffersize = size/20;

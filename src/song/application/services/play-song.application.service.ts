@@ -37,7 +37,7 @@ export class PlaySongService implements IApplicationService<string , responseSon
             
         const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion');
 
-        this.sendSongHelper.sendSong(this.client, url.Data.Id, blob, size);
+        this.sendSongHelper.sendSong(this.client, blob, size);
             
         //!Devuelvo cualquier cosa porque solo quiero probar que funcione el  envio de la cancion realmente
         const r: responseSong = {
