@@ -12,7 +12,7 @@ export interface responseSong{
     userId: string
 }
 
-export class PlaySongService implements IApplicationService<string , responseSong>{
+export class PlaySongService implements IApplicationService<{preview: boolean, songId: string, second: number} , responseSong>{
 
     private readonly songRepository: ISongRepository;
     private readonly idGen: IIdGenerator<string>;
@@ -27,17 +27,21 @@ export class PlaySongService implements IApplicationService<string , responseSon
         this.client = client
     }
 
-    async execute(param: string): Promise<Result<responseSong>> {
-        
-        const url = await this.songRepository.findSongUrlById(param);
+    async execute(param: {preview: boolean, songId: string, second: number}): Promise<Result<responseSong>> {
+        //!Aqui tengo el preview y el second actualmente para estar a la par de lo que tiene el otro grupo
+
+        const {preview , second, 
+            songId} = param
+
+        const url = await this.songRepository.findSongUrlById(songId);
 
         if (!url.IsSuccess) {
             return Result.fail(null, 500, url.message, new Error(url.message));
         }
             
-        const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion');
+        const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion', second);
 
-        this.sendSongHelper.sendSong(this.client, blob, size);
+        this.sendSongHelper.sendSong(this.client, blob, size, second);
             
         //!Devuelvo cualquier cosa porque solo quiero probar que funcione el  envio de la cancion realmente
         const r: responseSong = {

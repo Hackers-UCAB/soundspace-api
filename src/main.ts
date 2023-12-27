@@ -21,7 +21,7 @@ async function bootstrap() {
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     }),
   });
-  console.log('Iniciando el servidor en el puerto: ', process.env.PORT);
+  // console.log('Iniciando el servidor en el puerto: ', process.env.PORT);
   
   await app.listen(process.env.PORT);
   

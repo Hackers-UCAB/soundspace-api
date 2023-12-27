@@ -38,8 +38,8 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     
   }
 
-  @SubscribeMessage('song')
-  async handleSong( client: Socket, payload: string ) {
+  @SubscribeMessage('message-from-client')
+  async handleSong( client: Socket, payload: {preview: boolean, songId: string, second: number} ) {
   
     //!Aqui no esta como lo tienen en el resto porque me da problemas las dependencias, aqui ajuro necesito un modulo
     const service = new LoggerApplicationServiceDecorator(
