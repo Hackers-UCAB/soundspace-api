@@ -25,11 +25,19 @@ import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscript
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
 import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
 import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
+import { SecurityApplicationServiceDecorator } from 'src/common/application/services/decorators/security-decorator/security-application-service.service.decorator';
+import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
 
 export const servicesProvidersManager: Provider[] = [
   {
     provide: 'MovistarSignUpApplicationService',
-    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, eventBus: EventBus, logger: ILogger, uuidGenerator: IIdGenerator<string> ) => {
+    useFactory: (
+      jwtGenerator: IJwtGenerator,
+      dataSource: DataSource,
+      eventBus: EventBus,
+      logger: ILogger,
+      uuidGenerator: IIdGenerator<string>,
+    ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new SignUpMovistarApplicationService(
@@ -38,7 +46,7 @@ export const servicesProvidersManager: Provider[] = [
             uuidGenerator,
             new MovistarSubscriptionValidation(),
             jwtGenerator,
-            eventBus
+            eventBus,
           ),
           new AuditingRepository(dataSource),
           'Movistar Sign-Up',
@@ -48,11 +56,23 @@ export const servicesProvidersManager: Provider[] = [
         'Movistar Sign-Up',
       );
     },
-    inject: [ 'IJwtGenerator', 'DataSource', 'EventBus', 'ILogger', 'IUuidGenerator'],
+    inject: [
+      'IJwtGenerator',
+      'DataSource',
+      'EventBus',
+      'ILogger',
+      'IUuidGenerator',
+    ],
   },
   {
     provide: 'DigitelSignUpApplicationService',
-    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, eventBus: EventBus, logger: ILogger, uuidGenerator: IIdGenerator<string> ) => {
+    useFactory: (
+      jwtGenerator: IJwtGenerator,
+      dataSource: DataSource,
+      eventBus: EventBus,
+      logger: ILogger,
+      uuidGenerator: IIdGenerator<string>,
+    ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new SignUpDigitelApplicationService(
@@ -61,27 +81,37 @@ export const servicesProvidersManager: Provider[] = [
             uuidGenerator,
             new DigitelSubscriptionValidation(),
             jwtGenerator,
-            eventBus
+            eventBus,
           ),
           new AuditingRepository(dataSource),
           'Digitel Sign-Up',
-          logger
+          logger,
         ),
         logger,
         'Digitel Sign-Up',
       );
     },
-    inject: ['IJwtGenerator','DataSource', 'EventBus', 'ILogger', 'IUuidGenerator'],
+    inject: [
+      'IJwtGenerator',
+      'DataSource',
+      'EventBus',
+      'ILogger',
+      'IUuidGenerator',
+    ],
   },
   {
     provide: 'LogInApplicationService',
-    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, logger: ILogger ) => {
+    useFactory: (
+      jwtGenerator: IJwtGenerator,
+      dataSource: DataSource,
+      logger: ILogger,
+    ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new LoginApplicationService(
             new SubscriptionRepository(dataSource),
             new UserRepository(dataSource),
-            jwtGenerator
+            jwtGenerator,
           ),
           new AuditingRepository(dataSource),
           'Log-In',
@@ -89,13 +119,18 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Log-In',
-      )
+      );
     },
     inject: ['IJwtGenerator', 'DataSource', 'ILogger'],
   },
   {
     provide: 'LogInGuestApplicationService',
-    useFactory: (jwtGenerator: IJwtGenerator, dataSource: DataSource, logger: ILogger, uuidGenerator: IIdGenerator<string> ) => {
+    useFactory: (
+      jwtGenerator: IJwtGenerator,
+      dataSource: DataSource,
+      logger: ILogger,
+      uuidGenerator: IIdGenerator<string>,
+    ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new LoginGuestApplicationService(
@@ -109,7 +144,7 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Log-In Guest',
-      )
+      );
     },
     inject: ['IJwtGenerator', 'DataSource', 'ILogger', 'IUuidGenerator'],
   },
@@ -119,10 +154,10 @@ export const servicesProvidersManager: Provider[] = [
   //     return new LoggerApplicationServiceDecorator(
   //       new AuditingCommandServiceDecorator(
   //           new PlaySongService(
-  //           new SongRepository(dataSource), 
-  //           new UuidGenerator(), 
-  //           new AzureBlobHelper(), 
-  //           new SendSongHelper(), 
+  //           new SongRepository(dataSource),
+  //           new UuidGenerator(),
+  //           new AzureBlobHelper(),
+  //           new SendSongHelper(),
   //           client),
   //         new AuditingRepository(dataSource),
   //         'PlaySongService',
@@ -136,13 +171,17 @@ export const servicesProvidersManager: Provider[] = [
   // }
   {
     provide: 'CheckExpiredSubscriptionsApplicationService',
-    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+    useFactory: (
+      dataSource: DataSource,
+      logger: ILogger,
+      eventBus: EventBus,
+    ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new CheckExpiredSubscriptionsApplicationService(
             new SubscriptionRepository(dataSource),
             new UserRepository(dataSource),
-            eventBus
+            eventBus,
           ),
           new AuditingRepository(dataSource),
           'Check Expired Subscriptions',
@@ -150,18 +189,22 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Check Expired Subscriptions',
-      )
+      );
     },
-    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+    inject: ['DataSource', 'ILogger', 'EventBus'],
   },
   {
     provide: 'CheckCloseToExpireSubscriptionsApplicationService',
-    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+    useFactory: (
+      dataSource: DataSource,
+      logger: ILogger,
+      eventBus: EventBus,
+    ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new CheckCloseToExpireSubscriptionsApplicationService(
             new SubscriptionRepository(dataSource),
-            eventBus
+            eventBus,
           ),
           new AuditingRepository(dataSource),
           'Check Close To Expire Subscriptions',
@@ -169,17 +212,19 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Check Close To Expire Subscriptions',
-      )
+      );
     },
-    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+    inject: ['DataSource', 'ILogger', 'EventBus'],
   },
   {
     provide: 'GetUserInfoApplicationService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new GetUserInfoApplicationService(
+          new SecurityApplicationServiceDecorator(
+            new GetUserInfoApplicationService(new UserRepository(dataSource)),
             new UserRepository(dataSource),
+            [UserRoleEnum.USER],
           ),
           new AuditingRepository(dataSource),
           'Get User Info',
@@ -187,17 +232,21 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Get User Info',
-      )
+      );
     },
-    inject: [ 'DataSource', 'ILogger'],
+    inject: ['DataSource', 'ILogger'],
   },
   {
     provide: 'UpdateUserInfoApplicationService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new UpdateUserInfoApplicationService(
+          new SecurityApplicationServiceDecorator(
+            new UpdateUserInfoApplicationService(
+              new UserRepository(dataSource),
+            ),
             new UserRepository(dataSource),
+            [UserRoleEnum.USER],
           ),
           new AuditingRepository(dataSource),
           'Update User Info',
@@ -205,8 +254,8 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Update User Info',
-      )
+      );
     },
-    inject: [ 'DataSource', 'ILogger'],
-  }
+    inject: ['DataSource', 'ILogger'],
+  },
 ];
