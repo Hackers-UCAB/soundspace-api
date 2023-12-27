@@ -52,7 +52,7 @@ export class Playlist extends AggregateRoot<PlaylistId>{
         if (
             !this.name ||
             !this.cover ||
-            this.playlistSongs
+            !this.playlistSongs
         ) {
             throw new InvalidPlaylistException("Playlist not valid");
         }

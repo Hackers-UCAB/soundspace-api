@@ -28,8 +28,10 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
             return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, playlistResult.statusCode, playlistResult.message, playlistResult.error);
         }
 
+     
+        /*
         //buscamos todas las canciones relacionadas a ese playlist para crear el songResponseDto
-        for (const songId of playlistResult.data.PlaylistSongs.Songs) {
+        for (const songId of playlistResult.data.PlaylistSongs.Songs) {s
             const song = await this.songRepository.findSongById(songId);
             if (!song.IsSuccess) {
                 return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, song.statusCode, song.message, song.error);
@@ -38,7 +40,7 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
             //const artist = await this.artistRepository.findArtistBySongId(songId);
             console.log("songId: ", songId);
         }
-        
+        */
     }
 
 }

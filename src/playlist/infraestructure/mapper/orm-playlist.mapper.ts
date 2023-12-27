@@ -6,6 +6,7 @@ import { PlaylistName } from '../../domain/value-objects/playlist-name';
 import { PlaylistCover } from '../../domain/value-objects/playlist-cover';
 import { PlaylistSong } from '../../domain/value-objects/playlist-songs';
 import { SongId } from '../../../song/domain/value-objects/song-id';
+import { InvalidToDomainMapper } from '../exceptions/invalid-to-domaim-mapper.exception';
 
 export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
 
@@ -21,7 +22,7 @@ export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
             );
             return playlist;
         }
-        return null; //esto no deberia ser una excepcion?
+        throw InvalidToDomainMapper;
     }
     
     async toPersistence(domain: Playlist): Promise<OrmPlaylistEntity> {

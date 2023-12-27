@@ -66,15 +66,17 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             //realizamos el query, aqui el unico join es con la tabla de playlistCancion para obtener los ids de las canciones
             //no se hace con los creadores porque nuestra entity Playlist de dominio no tiene dicho atributo
             const playlist = await this.createQueryBuilder("playlist")
-                .select(["playlist.codigo_playlist", "playlist.nombre", "playlist.referencia_imagen", "playlist_cancion.cancionCodigoCancion"])
-                .innerJoin("playlist.canciones", "playlist_cancion")
+                .select(["playlist.codigo_playlist", "playlist.nombre", "playlist.referencia_imagen", "cancion.codigo_cancion"])
+                .innerJoinAndSelect("playlist.canciones", "playlistCancion")
+                .innerJoinAndSelect("playlistCancion.cancion", "cancion")
+                //.where("playlist.tipo = 'playlist'")
                 .where("playlist.codigo_playlist = :id", { id: id.Id })
                 .getOne();
-
+            /*
             console.log("playlist: ", playlist);
             console.log("nombre: ", playlist.nombre);
             console.log("canciones: ", playlist.canciones);
-
+            */
             //mapeamos el resultado
             response = await this.OrmPlaylistMapper.toDomain(playlist);
 
@@ -94,6 +96,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             return Result.success<Playlist>(response, 200);
         }
     }
+
     async findTopPlaylist(): Promise<Result<Playlist[]>> {
         throw new Error('Method not implemented.');
     }
