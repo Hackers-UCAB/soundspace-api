@@ -4,10 +4,11 @@ import { IApplicationService } from '../../interfaces/application-service.interf
 import { Result } from 'src/common/application/result-handler/result';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { LoggerDto } from 'src/common/application/dto/logger.dto';
-import { ServiceResponse } from '../../response/service-response';
+import { ServiceResponse } from '../../dto/response/service-response.dto';
+import { ServiceEntry } from '../../dto/entry/service-entry.dto';
 
 export class LoggerApplicationServiceDecorator<
-  D,
+  D extends ServiceEntry,
   R extends ServiceResponse,
 > extends ApplicationServiceDecorator<D, R> {
   private readonly logger: ILogger;
@@ -25,19 +26,19 @@ export class LoggerApplicationServiceDecorator<
 
   async execute(param: D): Promise<Result<R>> {
     const decorateResult: Result<R> = await super.execute(param);
-
+    const {userId, ...data} = param;
     const log: LoggerDto = {
-      user: '',
+      user: userId,
       ocurredOn: new Date(),
       operation: this.operation,
-      data: `Data: {${JSON.stringify(param)}}`,
+      data: `Data: {${JSON.stringify(data)}}`,
     };
 
     if (decorateResult.IsSuccess) {
-      log.user = decorateResult.Data.userId;
+      log.user = (log.user === 'Unkown' && decorateResult.Data?.userId) ? decorateResult.Data.userId : log.user;
       this.logger.logSuccess(log);
     } else {
-      log.user = 'Unkown';
+      // log.user = 'Unkown';
       this.logger.logError(log);
     }
     return decorateResult;

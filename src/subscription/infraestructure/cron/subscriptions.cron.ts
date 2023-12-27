@@ -2,33 +2,36 @@
 import { Inject } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { Result } from "src/common/application/result-handler/result";
-import { ServiceResponse } from "src/common/application/services/response/service-response";
+import { ServiceResponse } from "src/common/application/services/dto/response/service-response.dto";
 import { IApplicationService } from "src/common/application/services/interfaces/application-service.interface";
 import { EmptyDto } from "src/common/application/dto/empty.dto";
+import { ServiceEntry } from "src/common/application/services/dto/entry/service-entry.dto";
 
 
 export class CheckSubscriptionsCronService {
     constructor(
         @Inject('CheckExpiredSubscriptionsApplicationService')
-        private readonly checkExpiredSubscriptionsApplicationService: IApplicationService<EmptyDto, ServiceResponse>,
+        private readonly checkExpiredSubscriptionsApplicationService: IApplicationService<ServiceEntry, ServiceResponse>,
         @Inject('CheckCloseToExpireSubscriptionsApplicationService')
-        private readonly checkCloseToExpireSubscriptionsApplicationService: IApplicationService<EmptyDto, ServiceResponse>,
+        private readonly checkCloseToExpireSubscriptionsApplicationService: IApplicationService<ServiceEntry, ServiceResponse>,
         ) {}
     
     //   @Cron(CronExpression.EVERY_DAY_AT_8AM)
-      @Cron(CronExpression.EVERY_DAY_AT_8AM, {
+      @Cron('51 16 * * *', {
         name: 'check-subscriptions',
         timeZone: 'America/Caracas',
       })
       async handleCron(){
-        const checkExpiredSubscriptionResult: Result<ServiceResponse> = await this.checkExpiredSubscriptionsApplicationService.execute({});
+        const checkExpiredSubscriptionResult: Result<ServiceResponse> = await this.checkExpiredSubscriptionsApplicationService.execute({userId: 'Admin'});
         if (!checkExpiredSubscriptionResult.IsSuccess) {
-          setTimeout(() => this.checkExpiredSubscriptionsApplicationService.execute({}), 15 * 60 * 1000);
+          console.log(checkExpiredSubscriptionResult.message);
+          
+          setTimeout(() => this.checkExpiredSubscriptionsApplicationService.execute({userId: 'Admin'}), 15 * 60 * 1000);
         }
 
-        const checkCloseToExpireSubscriptionResult: Result<ServiceResponse> = await this.checkCloseToExpireSubscriptionsApplicationService.execute({});
+        const checkCloseToExpireSubscriptionResult: Result<ServiceResponse> = await this.checkCloseToExpireSubscriptionsApplicationService.execute({userId: 'Admin'});
         if (!checkCloseToExpireSubscriptionResult.IsSuccess) {
-          setTimeout(() => this.checkCloseToExpireSubscriptionsApplicationService.execute({}), 15 * 60 * 1000);
+          setTimeout(() => this.checkCloseToExpireSubscriptionsApplicationService.execute({userId: 'Admin'}), 15 * 60 * 1000);
         }
         
       }

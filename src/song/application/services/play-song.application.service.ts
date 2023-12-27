@@ -4,6 +4,7 @@ import { ISongRepository } from 'src/song/domain/repositories/song.repository.in
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 import { IBlobHelper } from '../interfaces/blob-helper.interface';
 import { ISendSongHelper } from '../interfaces/send-song-helper.iterface';
+import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
 
 
@@ -12,7 +13,7 @@ export interface responseSong{
     userId: string
 }
 
-export class PlaySongService implements IApplicationService<string , responseSong>{
+export class PlaySongService implements IApplicationService<ServiceEntry , responseSong>{
 
     private readonly songRepository: ISongRepository;
     private readonly idGen: IIdGenerator<string>;
@@ -27,24 +28,24 @@ export class PlaySongService implements IApplicationService<string , responseSon
         this.client = client
     }
 
-    async execute(param: string): Promise<Result<responseSong>> {
+    async execute(param: ServiceEntry): Promise<Result<responseSong>> {
         
-        const url = await this.songRepository.findSongUrlById(param);
+        // const url = await this.songRepository.findSongUrlById(param);
 
-        if (!url.IsSuccess) {
-            return Result.fail(null, 500, url.message, new Error(url.message));
-        }
+        // if (!url.IsSuccess) {
+        //     return Result.fail(null, 500, url.message, new Error(url.message));
+        // }
             
-        const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion');
+        // const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion');
 
-        this.sendSongHelper.sendSong(this.client, url.Data.Id, blob, size);
+        // this.sendSongHelper.sendSong(this.client, url.Data.Id, blob, size);
             
-        //!Devuelvo cualquier cosa porque solo quiero probar que funcione el  envio de la cancion realmente
-        const r: responseSong = {
-            userId: this.idGen.generate(),
-        }
+        // //!Devuelvo cualquier cosa porque solo quiero probar que funcione el  envio de la cancion realmente
+        // const r: responseSong = {
+        //     userId: this.idGen.generate(),
+        // }
 
-        return Result.success(r,200)
-        
+        // return Result.success(r,200)
+        return null;
     }
 }

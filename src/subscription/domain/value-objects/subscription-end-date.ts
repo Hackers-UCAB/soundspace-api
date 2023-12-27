@@ -7,8 +7,10 @@ export class SubscriptionEndDate extends ValueObject<SubscriptionEndDate>{
 
     constructor(until: Date){
         let valid = true;
-        const today = new Date();
-        if (!(until >= today)) valid = false;
+        const today = new Date().setHours(0, 0, 0, 0);
+        const untilDate = new Date(until).setHours(0, 0, 0, 0);
+        
+        if (!(untilDate >= today)) valid = false;
 
         if (!valid) {
             throw new InvalidSubscriptionEndDate(`Subscription end date ${until} not valid`);
@@ -17,7 +19,6 @@ export class SubscriptionEndDate extends ValueObject<SubscriptionEndDate>{
         this.until = until;
     }
 
-  
     equals(obj: SubscriptionEndDate): boolean {
         return this.until === obj.until;
     }

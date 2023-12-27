@@ -38,27 +38,27 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     
   }
 
-  @SubscribeMessage('song')
-  async handleSong( client: Socket, payload: string ) {
+  // @SubscribeMessage('song')
+  // async handleSong( client: Socket, payload: string ) {
   
-    //!Aqui no esta como lo tienen en el resto porque me da problemas las dependencias, aqui ajuro necesito un modulo
-    const service = new LoggerApplicationServiceDecorator(
-      new AuditingCommandServiceDecorator(
-          new PlaySongService(
-          new SongRepository(this.dataSource), 
-          new UuidGenerator(), 
-          new AzureBlobHelper(), 
-          new SendSongHelper(), 
-          client),
-        new AuditingRepository(this.dataSource),
-        'PlaySongService',
-        new LoggerImpl()
-      ),
-      new LoggerImpl(),
-      'PlaySongService',
-    );
+  //   //!Aqui no esta como lo tienen en el resto porque me da problemas las dependencias, aqui ajuro necesito un modulo
+  //   const service = new LoggerApplicationServiceDecorator(
+  //     new AuditingCommandServiceDecorator(
+  //         new PlaySongService(
+  //         new SongRepository(this.dataSource), 
+  //         new UuidGenerator(), 
+  //         new AzureBlobHelper(), 
+  //         new SendSongHelper(), 
+  //         client),
+  //       new AuditingRepository(this.dataSource),
+  //       'PlaySongService',
+  //       new LoggerImpl()
+  //     ),
+  //     new LoggerImpl(),
+  //     'PlaySongService',
+  //   );
 
-    await service.execute(payload);
-    return 'ok';
-  }
+  //   await service.execute(payload);
+  //   return 'ok';
+  // }
 }
