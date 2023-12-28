@@ -16,7 +16,7 @@ import { SongRepository } from 'src/song/infraestructure/repositories/song.repos
 import { DataSource } from 'typeorm';
 
 
-@WebSocketGateway( 3000 , { cors: true })
+@WebSocketGateway({ cors: true })
 export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
   

@@ -1,4 +1,5 @@
 import { BlockBlobClient, BlobServiceClient } from '@azure/storage-blob';
+import { createReadStream } from 'fs';
 
 
 export class AzureBlobHelper{

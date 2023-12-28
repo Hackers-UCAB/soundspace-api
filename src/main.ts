@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 async function bootstrap() {
-  //process.env.TZ = 'America/Caracas';
 
   const app = await NestFactory.create(AppModule);
 
