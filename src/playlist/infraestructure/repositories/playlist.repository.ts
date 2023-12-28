@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/application/result-handler/result';
-import { IPlaylistRepository } from 'src/Playlist/domain/repositories/Playlist.repository.interface';
+import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
 import { Playlist } from '../../domain/playlist';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
 import { OrmPlaylistMapper } from '../mapper/orm-playlist.mapper';
@@ -42,7 +42,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             .select('SUM(cancion.duracion)', 'duracion_total')
             .getRawOne();
 
-        //console.log('Duración total de las canciones en la playlist:', totalDuration.duracion_total);
+        //console.log('Duraciï¿½n total de las canciones en la playlist:', totalDuration.duracion_total);
         const playlistResponse: PlaylistResponseApplicationDto = {
             userId: "userId",
             id: playlistDomain.Id.Id,
