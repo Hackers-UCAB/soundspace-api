@@ -15,6 +15,20 @@ export class UserRepository
     super(OrmUserEntity, dataSource.createEntityManager());
     this.ormUsermapper = new OrmUserMapper();
   }
+
+  async findUserEntityById(id: string): Promise<OrmUserEntity> {
+    try {
+      const user = await this.findOne({
+        where: {
+          codigo_usuario: id,
+        },
+      });
+      return user;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async saveAggregate(user: User, tokens: string[]): Promise<Result<string>> {
     let error: any;
     try {
@@ -37,20 +51,68 @@ export class UserRepository
     }
   }
 
-  async findUserById(id: UserId): Promise<Result<User>> {
-    return null;
+  async updateAggregate(user: User): Promise<Result<string>> {
+    let error: any;
+    try {
+      let ormUser: OrmUserEntity = await this.findUserEntityById(user.Id.Id);
+      const userConverted = await this.ormUsermapper.toPersistence(user);
+      if ((ormUser) && (userConverted)) {
+        ormUser = {
+          ...ormUser,
+          ...userConverted,
+        };
+        await this.save(ormUser);
+      }else {
+        throw new Error('Error busando o actualizando el usuario');
+      }
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado actualizando el usuario, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success('Usario actualizado de forma exitosa', 200);
+    }
   }
 
-  async findUserEntityById(id: string): Promise<OrmUserEntity> {
+  async findUserById(id: UserId): Promise<Result<User>> {
+    let response: User;
+    let error: any;
     try {
       const user = await this.findOne({
         where: {
-          codigo_usuario: id,
+          codigo_usuario: id.Id,
         },
       });
-      return user;
-    } catch (error) {
-      return null;
+
+      response = await this.ormUsermapper.toDomain(user);
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado creando el usuario, hable con el administrador',
+          error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe el usuario',
+          new Error('No existe el usuario'),
+        );
+      }
+      return Result.success(response, 200);
     }
   }
 

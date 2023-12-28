@@ -4,6 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 async function bootstrap() {
+  //process.env.TZ = 'America/Caracas';
+
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');
@@ -18,6 +20,13 @@ async function bootstrap() {
       privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     }),
+  });
+  console.log('Iniciando el servidor en el puerto: ', process.env.PORT);
+  
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Accept',
   });
 
   await app.listen(process.env.PORT);

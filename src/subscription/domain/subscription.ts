@@ -12,6 +12,7 @@ import { SubscriptionValue } from './value-objects/subscription-value';
 import { SubscriptionExpired } from './events/subscription-expired.event';
 import { SubscriptionStatusEnum } from './enums/subscription-status.enum';
 import { SubscriptionChanelId } from './subscription-chanel/value-objects/subscription-chanel-id';
+import { SubscriptionNearToExpired } from './events/subscription-near-to-expired.event';
 
 export class Subscription extends AggregateRoot<SubscriptionId> {
   private status: SubscriptionStatus;
@@ -52,9 +53,8 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
     until: SubscriptionEndDate,
     value: SubscriptionValue,
     user: UserId,
-    chanel: SubscriptionChanelId
+    chanel: SubscriptionChanelId,
   ) {
-  
     const subscriptionCreated = SubscriptionCreated.create(
       id,
       status,
@@ -62,7 +62,7 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       until,
       value,
       user,
-      chanel
+      chanel,
     );
     super(id, subscriptionCreated);
   }
@@ -74,7 +74,7 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       this.until = event.until;
       this.user = event.user;
       this.subscriptionValue = event.value;
-      this.chanel = event.chanel
+      this.chanel = event.chanel;
     }
 
     if (event instanceof SubscriptionUpdated) {
@@ -83,9 +83,13 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       this.until = event.until ? event.until : this.until;
     }
 
-    if (event instanceof SubscriptionExpired){
-      this.status = event.status
-  }
+    if (event instanceof SubscriptionExpired) {
+      this.status = event.status;
+    }
+
+    if (event instanceof SubscriptionNearToExpired) {
+      this.status = event.status;
+    }
   }
 
   protected ensureValidaState(): void {
@@ -94,8 +98,8 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       !this.createdOn ||
       !this.until ||
       !this.user ||
-      !this.Id  ||
-      !this.subscriptionValue || 
+      !this.Id ||
+      !this.subscriptionValue ||
       !this.chanel
     ) {
       throw new InvalidSubscriptionException('Subscription not valid');
@@ -110,9 +114,27 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
     this.apply(SubscriptionUpdated.create(this.Id, status, createdOn, until));
   }
 
-  public expireSubscription(){
-    this.apply(SubscriptionExpired.create(this.Id, this.user, SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED)));
-}
+  public expireSubscription() {
+    this.apply(
+      SubscriptionExpired.create(
+        this.Id,
+        this.user,
+        SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED),
+        this.Chanel,
+      ),
+    );
+  }
+
+  public nearToExpireSubscription() {
+    this.apply(
+      SubscriptionNearToExpired.create(
+        this.Id,
+        this.user,
+        SubscriptionStatus.create(SubscriptionStatusEnum.NEAR_EXPIRATION),
+        this.Chanel,
+      ),
+    );
+  }
 
   static calculateEndDate(
     createdOn: SubscriptionCreatedDate,
@@ -129,7 +151,7 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
     until: SubscriptionEndDate,
     value: SubscriptionValue,
     user: UserId,
-    chanel: SubscriptionChanelId
+    chanel: SubscriptionChanelId,
   ): Promise<Subscription> {
     return new Subscription(id, status, createdOn, until, value, user, chanel);
   }

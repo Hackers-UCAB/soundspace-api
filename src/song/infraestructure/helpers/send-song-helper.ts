@@ -1,20 +1,20 @@
 import { Socket } from "socket.io";
-import { getFile } from "../helpers/get-blob-file.helper";
+import { ISendSongHelper } from "src/song/application/interfaces/send-song-helper.iterface";
 
-export class SendSongThroughtChunksInfrastructureService {
+export class SendSongHelper implements ISendSongHelper {
     
-    static async sendSong( client: Socket, url: string ) {
-        const {blob, size} = await getFile(url+'.mp3', process.env.SONGS_CONTAINER);
+    async sendSong( client: Socket, url: string, blob: any, size: number ) {
+
         let sequence = 1;
         const buffersize = size/20;
         let buffer = Buffer.alloc(0)
         blob.on('data', (chunk) => {
             buffer = Buffer.concat([buffer,chunk]);
-    
+
             if (buffer.length >= buffersize){
                 client.emit('chunk', {
-                  secuencia: sequence ,
-                  chunk: buffer
+                    secuencia: sequence ,
+                    chunk: buffer
                 } );
                 sequence = sequence + 1
                 buffer = Buffer.alloc(0)
@@ -23,9 +23,10 @@ export class SendSongThroughtChunksInfrastructureService {
 
         blob.on('end', () => {
             client.emit('chunk', {
-              secuencia: sequence ,
-              chunk: buffer
+                secuencia: sequence ,
+                chunk: buffer
             } );
-          })
+            })
     }
 }
+    
