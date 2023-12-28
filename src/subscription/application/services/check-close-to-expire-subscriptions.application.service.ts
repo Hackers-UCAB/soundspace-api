@@ -2,12 +2,13 @@ import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
 import { Result } from 'src/common/application/result-handler/result';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { ServiceResponse } from 'src/common/application/services/response/service-response';
+import { ServiceResponse } from 'src/common/application/services/dto/response/service-response.dto';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { Subscription } from 'src/subscription/domain/subscription';
+import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
 export class CheckCloseToExpireSubscriptionsApplicationService
-  implements IApplicationService<EmptyDto, ServiceResponse>
+  implements IApplicationService<ServiceEntry, ServiceResponse>
 {
   private readonly subscriptionRepository: ISubscriptionRepository;
   private readonly eventPublisher: IEventPublisher;
@@ -41,7 +42,7 @@ export class CheckCloseToExpireSubscriptionsApplicationService
         subscription.nearToExpireSubscription();
 
         const subscriptionUpdating: Result<string> =
-          await this.subscriptionRepository.updateAggregate(subscription);
+          await this.subscriptionRepository.saveAggregate(subscription);
 
         if (subscriptionUpdating.IsSuccess) {
           this.eventPublisher.publish([subscription.pullDomainEvents().at(-1)]);

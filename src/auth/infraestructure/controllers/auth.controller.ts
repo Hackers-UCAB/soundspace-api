@@ -13,6 +13,7 @@ import { SignUpResponseInfraestructureDto } from '../dto/responses/sign-up-respo
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
 import { LogInResponseInfraestructureDto } from '../dto/responses/log-in-response.infraestructure.dto';
 import { EmptyDto } from 'src/common/application/dto/empty.dto';
+import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +41,7 @@ export class AuthController {
 
     @Inject('LogInGuestApplicationService')
     private readonly logInGuestApplicationService: IApplicationService<
-      EmptyDto,
+      ServiceEntry,
       LogInResponseApplicationDto
     >,
   ) {}
@@ -57,9 +58,11 @@ export class AuthController {
         new Error('No se ha proporcionado un token de firebase'),
       );
     }
+    //Se pone que el usuario que esta realizando esta accion es Unkown porque en este punto no se sabe quien es
     const dto: SignUpEntryApplicationDto = {
       ...signUpDto,
       token: headers.token,
+      userId: 'Unkown',
     };
     const serviceResult: Result<SignUpResponseApplicationDto> =
       await this.signUpMovistarApplicationService.execute(dto);
@@ -90,9 +93,11 @@ export class AuthController {
         new Error('No se ha proporcionado un token de firebase'),
       );
     }
+    //Se pone que el usuario que esta realizando esta accion es Unkown porque en este punto no se sabe quien es
     const dto: SignUpEntryApplicationDto = {
       ...signUpDto,
       token: headers.token,
+      userId: 'Unkown',
     };
     const serviceResult: Result<SignUpResponseApplicationDto> =
       await this.signUpDigitelApplicationService.execute(dto);
@@ -122,9 +127,11 @@ export class AuthController {
         new Error('No se ha proporcionado un token de firebase'),
       );
     }
+    //Se pone que el usuario que esta realizando esta accion es Unkown porque en este punto no se sabe quien es
     const dto: LogInEntryApplicationDto = {
       ...logIn,
       token: headers.token,
+      userId: 'Unkown',
     };
 
     const serviceResult: Result<LogInResponseApplicationDto> =
@@ -144,8 +151,9 @@ export class AuthController {
 
   @Post('log-in/guest')
   async loginGuest() {
+    //Se pone que el usuario que esta realizando esta accion es Unkown porque en este punto no se sabe quien es
     const serviceResult: Result<LogInResponseApplicationDto> =
-      await this.logInGuestApplicationService.execute({});
+      await this.logInGuestApplicationService.execute({ userId: 'Unkown' });
     if (!serviceResult.IsSuccess) {
       HttpResponseHandler.HandleException(
         serviceResult.StatusCode,

@@ -75,35 +75,6 @@ export class SubscriptionRepository
     }
   }
 
-  async updateAggregate(subscription: Subscription): Promise<Result<string>> {
-    let error: any;
-    try {
-      let ormSubscription = await this.findSubscriptionEntityById(subscription.Id.Id);
-      const subscriptionConverted = await this.ormSubscriptionMapper.toPersistence(subscription);
-      if ((ormSubscription) && (subscriptionConverted)) {
-        ormSubscription = {
-          ...ormSubscription,
-          ...subscriptionConverted,
-        };
-        await this.save(ormSubscription);
-      }else {
-        throw new Error('Error busando o actualizando la subscripción');
-      }
-    } catch (err) {
-      error = err;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-            'Ha ocurrido un error inesperado actualizando la subscripcion, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success('Subscripción actualizada de forma exitosa', 200);
-    }
-  }
   async findSubscriptionByValue(
     value: SubscriptionValue,
   ): Promise<Result<Subscription>> {
@@ -148,7 +119,7 @@ export class SubscriptionRepository
           .leftJoinAndSelect('subscripcion.canal', 'canal')
           .where(`DATE_TRUNC('day', fecha_finalizacion) = :date`, { date })
           .getMany();
-
+      
       response = await Promise.all(
         subscriptions.map(
           async (subscription) =>

@@ -1,8 +1,9 @@
 import { Result } from "../../result-handler/result";
-import { ServiceResponse } from "../response/service-response";
+import { ServiceEntry } from "../dto/entry/service-entry.dto";
+import { ServiceResponse } from "../dto/response/service-response.dto";
 
 
-export interface IApplicationService<D, R extends ServiceResponse> {
+export interface IApplicationService<D extends ServiceEntry, R extends ServiceResponse> {
     //get name(): string;
 
     execute(param: D): Promise<Result<R>>;
