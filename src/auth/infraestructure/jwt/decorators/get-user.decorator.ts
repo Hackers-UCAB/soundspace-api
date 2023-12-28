@@ -13,6 +13,10 @@ export const GetUser = createParamDecorator(
                 new Error('No se ha encontrado el usuario (request)'),
             );
         }
-        return request.user;
+        const user = request.user;
+
+        if (!data) return user;
+
+        return user[data];
     }
 )

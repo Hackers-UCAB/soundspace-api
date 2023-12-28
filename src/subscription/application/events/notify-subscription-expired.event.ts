@@ -24,7 +24,7 @@ export class NotifySubscriptionExpiredEvent implements IEventSubscriber{
             tittle: tittle,
             body: body  
         };
-        console.log(message);
+        //console.log(message);
         
         await this.notifier.notify(message);
     }

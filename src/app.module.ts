@@ -8,9 +8,12 @@ import { SubscriptionController } from './subscription/infraestructure/controlle
 import { servicesProvidersManager } from './common/infraestructure/providers/services/services.provider';
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 import { SongController } from './song/infraestructure/controllers/song.controller';
+import { SongWsModule } from './song-ws/song-ws.module';
+import { playlistController } from './playlist/infraestructure/controllers/playlist.controller';
 import { UserController } from './user/infraestructure/controllers/user.controller';
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
-import { AlbumModule } from './album/album.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CheckSubscriptionsCronService } from './subscription/infraestructure/cron/subscriptions.cron';
 
 @Module({
   imports: [
@@ -28,12 +31,11 @@ import { AlbumModule } from './album/album.module';
         }
       }
     }),
-
-    AlbumModule,
-    // JwtStrategy, JwtModule, PassportModule
+    SongWsModule,
+    ScheduleModule.forRoot(),
   ],
-  controllers: [AuthController, SubscriptionController, SongController, UserController],
-  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule],
+  controllers: [AuthController, SubscriptionController, SongController, UserController,playlistController],
+  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule, CheckSubscriptionsCronService],
   exports: [],
 })
 export class AppModule {}

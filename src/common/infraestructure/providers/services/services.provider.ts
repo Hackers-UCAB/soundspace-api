@@ -17,6 +17,16 @@ import { ILogger } from 'src/common/application/logging-handler/logger.interface
 import { IJwtGenerator } from 'src/auth/application/interface/jwt-generator.interface';
 import { LoginGuestApplicationService } from 'src/auth/application/services/log-in-guest-service.application.service';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
+import { PlaySongService } from 'src/song/application/services/play-song.application.service';
+import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
+import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.helper';
+import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
+import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
+import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
+import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
+import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
+import { GetPlaylistByIdService } from '../../../../playlist/application/services/get-playlist-by-id.application.service';
+import { PlaylistRepository } from '../../../../playlist/infraestructure/repositories/playlist.repository';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -104,5 +114,120 @@ export const servicesProvidersManager: Provider[] = [
       )
     },
     inject: ['IJwtGenerator', 'DataSource', 'ILogger', 'IUuidGenerator'],
-  }
+  },
+  // {
+  //   provide: 'PlaySongApplicationService',
+  //   useFactory: (dataSource: DataSource, client: any, logger: ILogger) => {
+  //     return new LoggerApplicationServiceDecorator(
+  //       new AuditingCommandServiceDecorator(
+  //           new PlaySongService(
+  //           new SongRepository(dataSource), 
+  //           new UuidGenerator(), 
+  //           new AzureBlobHelper(), 
+  //           new SendSongHelper(), 
+  //           client),
+  //         new AuditingRepository(dataSource),
+  //         'PlaySongService',
+  //         logger
+  //       ),
+  //       logger,
+  //       'PlaySongService',
+  //     );
+  //   },
+  //   inject: ['DataSource', 'ILogger'],
+  // }
+  {
+    provide: 'CheckExpiredSubscriptionsApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CheckExpiredSubscriptionsApplicationService(
+            new SubscriptionRepository(dataSource),
+            new UserRepository(dataSource),
+            eventBus
+          ),
+          new AuditingRepository(dataSource),
+          'Check Expired Subscriptions',
+          logger,
+        ),
+        logger,
+        'Check Expired Subscriptions',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+  },
+  {
+    provide: 'CheckCloseToExpireSubscriptionsApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger, eventBus: EventBus ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CheckCloseToExpireSubscriptionsApplicationService(
+            new SubscriptionRepository(dataSource),
+            eventBus
+          ),
+          new AuditingRepository(dataSource),
+          'Check Close To Expire Subscriptions',
+          logger,
+        ),
+        logger,
+        'Check Close To Expire Subscriptions',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger', 'EventBus'],
+  },
+  {
+    provide: 'GetUserInfoApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetUserInfoApplicationService(
+            new UserRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Get User Info',
+          logger,
+        ),
+        logger,
+        'Get User Info',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger'],
+  },
+  {
+    provide: 'UpdateUserInfoApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new UpdateUserInfoApplicationService(
+            new UserRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Update User Info',
+          logger,
+        ),
+        logger,
+        'Update User Info',
+      )
+    },
+    inject: [ 'DataSource', 'ILogger'],
+    },
+
+    {
+        provide: 'GetPlaylistByIdService',
+        useFactory: (dataSource: DataSource, logger: ILogger) => {
+            return new LoggerApplicationServiceDecorator(
+                new AuditingCommandServiceDecorator(
+                    new GetPlaylistByIdService(
+                        new PlaylistRepository(dataSource),
+                    ),
+                    new AuditingRepository(dataSource),
+                    'GetPlaylistByIdService',
+                    logger,
+                ),
+                logger,
+                'GetPlaylistByIdService',
+            )
+        },
+        inject: ['DataSource', 'ILogger'],
+    },
 ];
