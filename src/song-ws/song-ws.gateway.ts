@@ -1,17 +1,18 @@
 import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
+import { Result } from 'src/common/application/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
-import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
 import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
 import { UuidGenerator } from 'src/common/infraestructure/uuid-generator';
-import { PlaySongService, responseSong } from 'src/song/application/services/play-song.application.service';
+import { PlaySongEntryApplicationDto } from 'src/song/application/dto/entrys/play-song.entry.application.dto';
+import { PlaySongResponseApplicationDto } from 'src/song/application/dto/responses/play-song.response.application.dto';
+import { PlaySongService} from 'src/song/application/services/play-song.application.service';
 import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.helper';
 import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
 import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
-import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource } from 'typeorm';
 
 
@@ -39,10 +40,19 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('message-from-client')
-  async handleSong( client: Socket, payload: {preview: boolean, songId: string, second: number} ) {
-  
-    //!Aqui no esta como lo tienen en el resto porque me da problemas las dependencias, aqui ajuro necesito un modulo
-    const service = new LoggerApplicationServiceDecorator(
+  async handleSong( 
+    client: Socket,
+    payload: {preview: boolean, songId: string, second: number} 
+    ) 
+    {
+      const gen = new UuidGenerator()
+      const dto: PlaySongEntryApplicationDto = {
+        ...payload,
+        userId: gen.generate()
+      }
+
+    const service = 
+    new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new PlaySongService(
           new SongRepository(this.dataSource), 
@@ -57,8 +67,9 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       new LoggerImpl(),
       'PlaySongService',
     );
-
-    await service.execute(payload);
-    return 'ok';
+    
+    //Aqui es un poco diferente porque donde devuelvo realmente es con los emits
+    const serviceResult: Result<PlaySongResponseApplicationDto> = await service.execute(dto);
+    return "ok"      
   }
 }

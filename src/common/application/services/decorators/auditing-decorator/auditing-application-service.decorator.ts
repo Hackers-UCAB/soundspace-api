@@ -5,10 +5,11 @@ import { Result } from 'src/common/application/result-handler/result';
 import { AuditingDto } from 'src/common/application/dto/auditing.dto';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { LoggerDto } from 'src/common/application/dto/logger.dto';
-import { ServiceResponse } from '../../response/service-response';
+import { ServiceResponse } from '../../dto/response/service-response.dto';
+import { ServiceEntry } from '../../dto/entry/service-entry.dto';
 
 export class AuditingCommandServiceDecorator<
-  D,
+  D extends ServiceEntry,
   R extends ServiceResponse,
 > extends ApplicationServiceDecorator<D, R> {
   private readonly auditingRepository: IAuditingRepository;
@@ -30,12 +31,12 @@ export class AuditingCommandServiceDecorator<
 
   async execute(param: D): Promise<Result<R>> {
     let succes: boolean = true;
+    this.user = param.userId;
     const decorateResult: Result<R> = await super.execute(param);
 
     if (decorateResult.IsSuccess) {
-      this.user = decorateResult.Data.userId;
+      this.user = (this.user === 'Unkown' && decorateResult.Data?.userId) ? decorateResult.Data.userId : this.user;;
     } else {
-      this.user = 'Unkown';
       succes = false;
     }
 
@@ -45,16 +46,17 @@ export class AuditingCommandServiceDecorator<
   }
 
   private async Auditing(param: D, succes: boolean): Promise<void> {
+    const {userId, ...data} = param;
     const entry: AuditingDto = {
       user: this.user,
       ocurredOn: new Date(),
       operation: this.operation,
-      data: JSON.stringify(param),
+      data: JSON.stringify(data),
       success: succes,
     };
 
     const auditingResult = await this.auditingRepository.saveAuditing(entry);
-
+    //TODO: Aca no se pues. Osea de alguna forma deberiamos saber si los requerimientos no funcionales estan fallando
     if (!auditingResult.IsSuccess) {
       const log: LoggerDto = {
         user: 'Admin',

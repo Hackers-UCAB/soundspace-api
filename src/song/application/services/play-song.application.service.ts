@@ -4,15 +4,10 @@ import { ISongRepository } from 'src/song/domain/repositories/song.repository.in
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 import { IBlobHelper } from '../interfaces/blob-helper.interface';
 import { ISendSongHelper } from '../interfaces/send-song-helper.iterface';
+import { PlaySongEntryApplicationDto } from '../dto/entrys/play-song.entry.application.dto';
+import { PlaySongResponseApplicationDto } from '../dto/responses/play-song.response.application.dto';
 
-
-
-//!Esto esta aqui por ahora porque tengo que devolver un usuario obligatoriamente, sino me da problemas por la clase abstracta
-export interface responseSong{
-    userId: string
-}
-
-export class PlaySongService implements IApplicationService<{preview: boolean, songId: string, second: number} , responseSong>{
+export class PlaySongService implements IApplicationService<PlaySongEntryApplicationDto, PlaySongResponseApplicationDto>{
 
     private readonly songRepository: ISongRepository;
     private readonly idGen: IIdGenerator<string>;
@@ -27,11 +22,9 @@ export class PlaySongService implements IApplicationService<{preview: boolean, s
         this.client = client
     }
 
-    async execute(param: {preview: boolean, songId: string, second: number}): Promise<Result<responseSong>> {
-        //!Aqui tengo el preview y el second actualmente para estar a la par de lo que tiene el otro grupo
+    async execute(param: PlaySongEntryApplicationDto): Promise<Result<PlaySongResponseApplicationDto>> {
 
-        const {preview , second, 
-            songId} = param
+        const {preview , second, songId, userId} = param
 
         const url = await this.songRepository.findSongUrlById(songId);
 
@@ -42,13 +35,13 @@ export class PlaySongService implements IApplicationService<{preview: boolean, s
         const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion', second);
 
         this.sendSongHelper.sendSong(this.client, blob, size, second);
-            
-        //!Devuelvo cualquier cosa porque solo quiero probar que funcione el  envio de la cancion realmente
-        const r: responseSong = {
-            userId: this.idGen.generate(),
+        
+        const response: PlaySongResponseApplicationDto = {
+            userId: userId,
+            success: true
         }
 
-        return Result.success(r,200)
+        return Result.success(response,200)
         
     }
 }

@@ -9,6 +9,7 @@ import { UserBirthday } from 'src/user/domain/value-objects/user-birthday';
 import { UserEmail } from 'src/user/domain/value-objects/user-email';
 import { UserGender } from 'src/user/domain/value-objects/user-gender';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
+import { UserId } from 'src/user/domain/value-objects/user-id';
 
 export class UpdateUserInfoApplicationService
   implements
@@ -26,11 +27,15 @@ export class UpdateUserInfoApplicationService
   async execute(
     param: UpdateUserInfoEntryApplicationDto,
   ): Promise<Result<UpdateUserInfoResponseApplicationDto>> {
-    let newUser: User;
+    let updatedUser: User;
+    
     try {
-      newUser = await User.create(param.id, param.role);
-
-      newUser.updateUser(
+      const userResult: Result<User> = await this.userRepository.findUserById(UserId.create(param.userId));
+      if (!userResult.IsSuccess) {
+        return Result.fail(null, userResult.statusCode, userResult.message, userResult.error);
+      }
+      updatedUser = userResult.Data;
+      updatedUser.updateUser(
         param.name ? UserName.create(param.name) : null,
         param.birthdate ? UserBirthday.create(param.birthdate) : null,
         param.email ? UserEmail.create(param.email) : null,
@@ -41,7 +46,7 @@ export class UpdateUserInfoApplicationService
     }
 
     const savingUserResult: Result<string> =
-      await this.userRepository.saveAggregate(newUser);
+      await this.userRepository.saveAggregate(updatedUser);
 
     if (!savingUserResult.IsSuccess) {
       return Result.fail(
@@ -52,7 +57,7 @@ export class UpdateUserInfoApplicationService
       );
     }
     const response: UpdateUserInfoResponseApplicationDto = {
-      userId: param.id.Id,
+      userId: param.userId,
       success: true,
     };
     return Result.success(response, 200);
