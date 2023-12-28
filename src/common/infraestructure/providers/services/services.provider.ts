@@ -306,5 +306,23 @@ export const servicesProvidersManager: Provider[] = [
       );
     },
     inject: ['DataSource', 'ILogger'],
-  }
+    },
+    {
+        provide: 'GetPlaylistByIdService',
+        useFactory: (dataSource: DataSource, logger: ILogger) => {
+            return new LoggerApplicationServiceDecorator(
+                new AuditingCommandServiceDecorator(
+                    new GetPlaylistByIdService(
+                        new PlaylistRepository(dataSource),
+                    ),
+                    new AuditingRepository(dataSource),
+                    'GetPlaylistByIdService',
+                    logger,
+                ),
+                logger,
+                'GetPlaylistByIdService',
+            )
+        },
+        inject: ['DataSource', 'ILogger'],
+    },
 ];
