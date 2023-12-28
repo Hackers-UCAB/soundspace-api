@@ -25,6 +25,8 @@ import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscript
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
 import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
 import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
+import { GetPlaylistByIdService } from '../../../../playlist/application/services/get-playlist-by-id.application.service';
+import { PlaylistRepository } from '../../../../playlist/infraestructure/repositories/playlist.repository';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -208,5 +210,24 @@ export const servicesProvidersManager: Provider[] = [
       )
     },
     inject: [ 'DataSource', 'ILogger'],
-  }
+    },
+
+    {
+        provide: 'GetPlaylistByIdService',
+        useFactory: (dataSource: DataSource, logger: ILogger) => {
+            return new LoggerApplicationServiceDecorator(
+                new AuditingCommandServiceDecorator(
+                    new GetPlaylistByIdService(
+                        new PlaylistRepository(dataSource),
+                    ),
+                    new AuditingRepository(dataSource),
+                    'GetPlaylistByIdService',
+                    logger,
+                ),
+                logger,
+                'GetPlaylistByIdService',
+            )
+        },
+        inject: ['DataSource', 'ILogger'],
+    },
 ];

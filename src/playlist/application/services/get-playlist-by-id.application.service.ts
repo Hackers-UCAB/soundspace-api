@@ -27,17 +27,17 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
         if (!playlistResult.IsSuccess) {
             return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, playlistResult.statusCode, playlistResult.message, playlistResult.error);
         }
-
+        //return Result.success<GetPlaylistByIdResponseApplicationDto>(playlistResult.Data, playlistResult.statusCode);
      
         /*
         //buscamos todas las canciones relacionadas a ese playlist para crear el songResponseDto
-        for (const songId of playlistResult.data.PlaylistSongs.Songs) {s
+        for (const songId of playlistResult.data.PlaylistSongs.Songs) {
             const song = await this.songRepository.findSongById(songId);
             if (!song.IsSuccess) {
                 return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, song.statusCode, song.message, song.error);
             }
             //buscamos al artista de la cancion
-            //const artist = await this.artistRepository.findArtistBySongId(songId);
+            const artist = await this.artistRepository.findArtistBySongId(songId);
             console.log("songId: ", songId);
         }
         */
