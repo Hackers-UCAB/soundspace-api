@@ -1,4 +1,4 @@
-import { JwtPayload } from "src/auth/infraestructure/jwt-payload.interface"
+import { JwtPayload } from "src/auth/infraestructure/jwt/jwt-payload.interface"
 
 
 export interface IJwtGenerator {

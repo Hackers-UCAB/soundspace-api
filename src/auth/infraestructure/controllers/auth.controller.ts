@@ -51,8 +51,7 @@ export class AuthController {
     @Headers() headers: AuthHeaderInfraestructureDto,
   ) {
     if (!headers.token) {
-      return Result.fail(
-        null,
+      HttpResponseHandler.HandleException(
         404,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
@@ -85,8 +84,7 @@ export class AuthController {
     @Headers() headers: AuthHeaderInfraestructureDto,
   ) {
     if (!headers.token) {
-      return Result.fail(
-        null,
+      HttpResponseHandler.HandleException(
         404,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
@@ -118,8 +116,7 @@ export class AuthController {
     @Headers() headers: AuthHeaderInfraestructureDto,
   ) {
     if (!headers.token) {
-      return Result.fail(
-        null,
+      HttpResponseHandler.HandleException(
         404,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),

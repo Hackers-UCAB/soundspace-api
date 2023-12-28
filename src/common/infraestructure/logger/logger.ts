@@ -10,6 +10,7 @@ export class LoggerImpl implements ILogger{
     logSuccess(log: LoggerDto): void {
         Logger.log(`Success when user: ${log.user} executed ${log.operation} whit data: ${log.data}`);
     }
+    
     //TODO: Arreglar esto
     execute(log: LoggerDto): void {
         Logger.verbose(

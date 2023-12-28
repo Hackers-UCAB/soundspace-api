@@ -22,7 +22,7 @@ export class EventPublisherLoggerDecorator extends IEventPublisherDecorator {
 
         events.forEach(event => {
             const log = { 
-                user: 'System', 
+                user: 'Admin', 
                 ocurredOn: date,
                 operation: event.constructor.name, 
                 data: `data: ${JSON.stringify(event)}`, //esto se puede mejorar con lo de arriba
