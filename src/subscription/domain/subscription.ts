@@ -102,7 +102,7 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       !this.subscriptionValue ||
       !this.chanel
     ) {
-      throw new InvalidSubscriptionException('Subscription not valid');
+      throw new InvalidSubscriptionException('Subscripcion no valida');
     }
   }
 

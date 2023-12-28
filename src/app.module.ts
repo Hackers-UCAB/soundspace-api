@@ -13,6 +13,7 @@ import { UserController } from './user/infraestructure/controllers/user.controll
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CheckSubscriptionsCronService } from './subscription/infraestructure/cron/subscriptions.cron';
+import { PromotionController } from './promotions/infraestructure/controllers/promotion.controller';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { CheckSubscriptionsCronService } from './subscription/infraestructure/cr
     SongWsModule,
     ScheduleModule.forRoot(),
   ],
-  controllers: [AuthController, SubscriptionController, SongController, UserController],
+  controllers: [AuthController, SubscriptionController, SongController, UserController, PromotionController],
   providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule, CheckSubscriptionsCronService],
   exports: [],
 })
