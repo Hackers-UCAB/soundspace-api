@@ -10,6 +10,7 @@ import { providersManager } from 'src/common/infraestructure/providers/config/pr
 import { SongController } from './song/infraestructure/controllers/song.controller';
 import { UserController } from './user/infraestructure/controllers/user.controller';
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
+import { AlbumModule } from './album/album.module';
 
 @Module({
   imports: [
@@ -27,6 +28,8 @@ import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy'
         }
       }
     }),
+
+    AlbumModule,
     // JwtStrategy, JwtModule, PassportModule
   ],
   controllers: [AuthController, SubscriptionController, SongController, UserController],
