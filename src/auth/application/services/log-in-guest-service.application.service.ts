@@ -9,9 +9,10 @@ import { User } from 'src/user/domain/user';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { UserRole } from 'src/user/domain/value-objects/user-role';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
+import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
 export class LoginGuestApplicationService
-  implements IApplicationService<EmptyDto, LogInResponseApplicationDto>
+  implements IApplicationService<ServiceEntry, LogInResponseApplicationDto>
 {
   private readonly userRepository: IUserRepository;
   private readonly tokenGenerator: IJwtGenerator;

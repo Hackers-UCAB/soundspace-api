@@ -1,4 +1,4 @@
-import { ServiceResponse } from "src/common/application/services/response/service-response";
+import { ServiceResponse } from "src/common/application/services/dto/response/service-response.dto";
 
 
 export class UpdateUserInfoResponseApplicationDto implements ServiceResponse{

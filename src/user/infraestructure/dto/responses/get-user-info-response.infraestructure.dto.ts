@@ -3,5 +3,5 @@ export class GetUserInfoResponseInfraestructureDto {
   name?: string;
   email?: string;
   birthdate?: Date;
-  genre?: string;
+  gender?: string;
 }
