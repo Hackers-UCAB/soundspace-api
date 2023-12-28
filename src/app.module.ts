@@ -9,6 +9,7 @@ import { servicesProvidersManager } from './common/infraestructure/providers/ser
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 import { SongController } from './song/infraestructure/controllers/song.controller';
 import { SongWsModule } from './song-ws/song-ws.module';
+import { playlistController } from './playlist/infraestructure/controllers/playlist.controller';
 import { UserController } from './user/infraestructure/controllers/user.controller';
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -34,7 +35,7 @@ import { PromotionController } from './promotions/infraestructure/controllers/pr
     SongWsModule,
     ScheduleModule.forRoot(),
   ],
-  controllers: [AuthController, SubscriptionController, SongController, UserController, PromotionController],
+  controllers: [AuthController, SubscriptionController, SongController, UserController, PromotionController,playlistController],
   providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule, CheckSubscriptionsCronService],
   exports: [],
 })
