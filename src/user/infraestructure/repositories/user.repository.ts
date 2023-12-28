@@ -29,7 +29,7 @@ export class UserRepository
     }
   }
 
-  async saveAggregate(user: User, tokens: string[]): Promise<Result<string>> {
+  async saveAggregate(user: User, tokens?: string[]): Promise<Result<string>> {
     let error: any;
     try {
       const ormUser = await this.ormUsermapper.toPersistence(user);
@@ -48,36 +48,6 @@ export class UserRepository
         );
       }
       return Result.success('Usario registrado de forma exitosa', 200);
-    }
-  }
-
-  async updateAggregate(user: User): Promise<Result<string>> {
-    let error: any;
-    try {
-      let ormUser: OrmUserEntity = await this.findUserEntityById(user.Id.Id);
-      const userConverted = await this.ormUsermapper.toPersistence(user);
-      if ((ormUser) && (userConverted)) {
-        ormUser = {
-          ...ormUser,
-          ...userConverted,
-        };
-        await this.save(ormUser);
-      }else {
-        throw new Error('Error busando o actualizando el usuario');
-      }
-    } catch (err) {
-      error = err;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-            'Ha ocurrido un error inesperado actualizando el usuario, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success('Usario actualizado de forma exitosa', 200);
     }
   }
 
