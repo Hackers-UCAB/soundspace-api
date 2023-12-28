@@ -1,4 +1,4 @@
-import { ServiceResponse } from "../../../../common/application/services/response/service-response";
+import { ServiceResponse } from "../../../../common/application/services/dto/response/service-response.dto";
 
 export class SongResponseApplicationDtoDto {
     songId: string;
