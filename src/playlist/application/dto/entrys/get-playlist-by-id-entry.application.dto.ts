@@ -1,4 +1,6 @@
+import { ServiceEntry } from "../../../../common/application/services/dto/entry/service-entry.dto";
 
-export interface GetPlaylistByIdEntryApplicationDto {
+export class GetPlaylistByIdEntryApplicationDto implements ServiceEntry {
+    userId: string;
     PlaylistId: string;
 }
