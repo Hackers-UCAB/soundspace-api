@@ -1,42 +1,80 @@
-import { INotifier, NotifierDto, NotifierResult } from "src/common/application/notifications-handler/notifier.interface";
 import * as admin from 'firebase-admin';
 import { Inject, Injectable } from "@nestjs/common";
 import { UserRepository } from "src/user/infraestructure/repositories/user.repository";
+import { NotifierDto } from 'src/common/application/notifications-handler/dto/entry/notifier-entry.dto';
+import { NotifierResponse } from 'src/common/application/notifications-handler/dto/response/notifier-response.dto';
+import { INotifier } from 'src/common/application/notifications-handler/notifier.interface';
+import { Result } from 'src/common/application/result-handler/result';
 
 @Injectable()
 export class FirebaseNotifier implements INotifier{
+
     constructor(
         @Inject('UserRepository')
         private readonly userRepository: UserRepository
     ){}
-    async notify(message: NotifierDto): Promise<void> {
+
+    async notify(message: NotifierDto): Promise<Result<NotifierResponse>> {
         const user = await this.userRepository.findUserEntityById(message.userId.Id);
 
         if(!user){
             return;
         }
+
         const tokens: string[] = user.tokens;
-        //buscar la lista de tokens del usuario que viene en message
-        // const tokens = [
-        //     'fyQuTbyiSryAdRORRX3t46:APA91bGtQHEOs0j6LVyIGSXnyZ8lQVMszrjjRWIq9b6mYZxx4d18UOwrCplmkYpF76j89L_Qf_YriIdTqQz8kum9_qzcyELFGNVh-mSuYND5Wl8l6KyMD96rKv7DUplULw1docyJ7rLG', 
-        //     'cAorixZGTn2QcoWHgscMFK:APA91bF7A5vw_JPcQ2Paa6VOPwWrnDbeNDcHUE3005H0m8gqiZ4UC020GK3KObgW9wu?teAmHL_SinqWaGQRwxCemjMPZqvS4HSWYX952-Jam096wTMyRTdY_dUUToa2d40zJbZgaTC'];
 
         const payload = {
             notification: {
                 title: message.tittle,
-                body: message.body
+                body: message.body,
+                data: message.data,
             },
             tokens: tokens,
         };
-        //TODO: Mejorar esto
+        
+        let fail:boolean = false;
+        let notifierData: NotifierResponse;
+        let error: Error;
+
+        let successfulTokens: string[] = [];
+        let unsuccessfulTokens: string[] = [];
+
         try {
             const response = await admin.messaging().sendEachForMulticast(payload);
-            console.log(response.successCount + ' messages were sent successfully');
+            
+            response.responses.forEach((resp, idx) => {
+                if (resp.success) {
+                    successfulTokens.push(tokens[idx]);
+                } else {
+                    unsuccessfulTokens.push(tokens[idx]);
+                    fail = true;
+                }
+            });
+
+            console.log(response.successCount + ' messages were sent successfully'); //TODO: Tambien podria ir en la response honestly   
         } catch (error) {
-            console.log(error);
+            fail = true;
+            error = error;
         }
 
+        if (fail) {
+            return Result.fail<NotifierResponse>(
+                null,
+                500,
+                'Ha ocurrido un error inesperado enviando la notificacion, hable con el administrador',
+                new Error(error?.message || 'Ha ocurrido un error inesperado enviando la notificacion, hable con el administrador')
+            );
+        }
+        else {
+            return Result.success<NotifierResponse>(
+                {
+                    userId: user.codigo_usuario,
+                    payload: JSON.stringify(payload),
+                    successfulTokens: successfulTokens,
+                    unsuccessfulTokens: unsuccessfulTokens,
+                },
+                200
+            );
+        }
     }
-        
 }
-

@@ -3,6 +3,8 @@ import { IEventPublisher } from "../../event-publisher.interface";
 import { IEventPublisherDecorator } from "../event-publisher-decorator.interface";
 import { ILogger } from "src/common/application/logging-handler/logger.interface";
 import { Injectable } from "@nestjs/common";
+import { Result } from "src/common/application/result-handler/result";
+import { EventResponse } from "../../dto/response/event-response.dto";
 
 @Injectable()
 export class EventPublisherLoggerDecorator extends IEventPublisherDecorator {
@@ -14,21 +16,32 @@ export class EventPublisherLoggerDecorator extends IEventPublisherDecorator {
         this.logger = logger;
     }
 
-    publish(events: DomainEvent[]): void {
-        super.publish(events);
-        //aqui seria mas interesante que, en lugar de que publish regrese void, regrese un result con 
-        //los eventos que se pudieron publicar y los que no
+    async publish(events: DomainEvent[]): Promise<Result<EventResponse>[]> {
+        const eventResults = await super.publish(events);
+
         const date = new Date();
 
-        events.forEach(event => {
-            const log = { 
-                user: 'Admin', 
-                ocurredOn: date,
-                operation: event.constructor.name, 
-                data: `data: ${JSON.stringify(event)}`, //esto se puede mejorar con lo de arriba
-            };
-
-            this.logger.execute(log);
+        eventResults.forEach(eventResult => {
+            if (eventResult.IsSuccess){
+                const log = { 
+                    user: eventResult.Data.user, 
+                    ocurredOn: date,
+                    operation: eventResult.Data.operation, 
+                    data: eventResult.Data.data, 
+                };
+                this.logger.logSuccess(log);
+            }
+            else{
+                const log = { 
+                    user: 'unknown', //hay una forma de arreglar esto y es modificando el Result :)
+                    ocurredOn: date,
+                    operation: eventResult.constructor.name, 
+                    data: eventResult.message, 
+                };
+                this.logger.logError(log);
+            }
         });
+
+        return eventResults;
     }  
 }

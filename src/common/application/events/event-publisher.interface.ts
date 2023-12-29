@@ -1,5 +1,7 @@
 import { DomainEvent } from "src/common/domain/domain-event";
 import { IEventSubscriber } from "./event-subscriber.interface";
+import { Result } from "../result-handler/result";
+import { EventResponse } from "./dto/response/event-response.dto";
 
 //con injectable o module ref
 
@@ -10,7 +12,7 @@ export abstract class IEventPublisher {
         this.subscribers = new Map<string, IEventSubscriber[]>();
     }
 
-    abstract publish(events: DomainEvent[]): void;
+    abstract publish(events: DomainEvent[]): Promise<Result<EventResponse>[]>;
 
     subscribe(event: string, subscribers: IEventSubscriber[]): void{
         //validar si no esta suscrito

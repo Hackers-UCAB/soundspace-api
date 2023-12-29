@@ -1,18 +1,8 @@
 import { UserId } from "src/user/domain/value-objects/user-id";
-
-export interface NotifierDto {
-    userId: UserId;
-    tittle: string;
-    body: string;    //data: Map<string, any>; 
-}
-
-export interface NotifierResult {
-    result: [{
-        userToken: string;
-        messageSend: boolean;
-    }]
-}
+import { NotifierDto } from "./dto/entry/notifier-entry.dto";
+import { Result } from "../result-handler/result";
+import { NotifierResponse } from "./dto/response/notifier-response.dto";
 
 export interface INotifier {
-    notify(message: NotifierDto): Promise<void>;
+    notify(message: NotifierDto): Promise<Result<NotifierResponse>>;
 }
