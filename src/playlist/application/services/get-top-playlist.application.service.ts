@@ -4,11 +4,11 @@ import { IGetBufferImageInterface } from "../../../common/domain/interfaces/get-
 import { IPlaylistRepository } from "../../domain/repositories/playlist.repository.interface";
 import { PlaylistId } from "../../domain/value-objects/playlist-id";
 import { GetPlaylistByIdEntryApplicationDto } from "../dto/entrys/get-playlist-by-id-entry.application.dto";
-import { TopPlaylistServiceEntryDto } from "../dto/entrys/get-top-playlist-entry.application.dto";
+import { TopPlaylistEntryApplicationDto } from "../dto/entrys/get-top-playlist-entry.application.dto";
 import { GetPlaylistByIdResponseApplicationDto } from "../dto/responses/get-playlist-by-id-response.application.dto";
 import { GetTopPlaylistResponseApplicationDto } from "../dto/responses/get-top-playlist-response.application.dto";
 
-export class GetTopPlaylistService implements IApplicationService<TopPlaylistServiceEntryDto, GetTopPlaylistResponseApplicationDto>{
+export class GetTopPlaylistService implements IApplicationService<TopPlaylistEntryApplicationDto, GetTopPlaylistResponseApplicationDto>{
 
     private readonly PlaylistRepository: IPlaylistRepository;
     private readonly getBufferImage: IGetBufferImageInterface;
@@ -19,7 +19,7 @@ export class GetTopPlaylistService implements IApplicationService<TopPlaylistSer
         this.getBufferImage = getBufferImage;
     }
 
-    async execute(param: TopPlaylistServiceEntryDto): Promise<Result<GetTopPlaylistResponseApplicationDto>> {
+    async execute(param: TopPlaylistEntryApplicationDto): Promise<Result<GetTopPlaylistResponseApplicationDto>> {
         const playlistResult = await this.PlaylistRepository.findTopPlaylist();
         //console.log("playlistResult: ", playlistResult);
         if (!playlistResult.IsSuccess) {

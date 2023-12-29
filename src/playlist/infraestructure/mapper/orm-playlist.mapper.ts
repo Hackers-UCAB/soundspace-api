@@ -15,10 +15,10 @@ export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
             const songsIds = persistence.canciones.map(song => SongId.create(song.cancion.codigo_cancion));
 
             const playlist: Playlist = await Playlist.create(
-                new PlaylistId(persistence.codigo_playlist),
-                new PlaylistName(persistence.nombre),
-                new PlaylistCover(persistence.referencia_imagen),
-                new PlaylistSong(songsIds)
+                PlaylistId.create(persistence.codigo_playlist),
+                PlaylistName.create(persistence.nombre),
+                PlaylistCover.create(persistence.referencia_imagen),
+                PlaylistSong.create(songsIds)
             );
             return playlist;
         }

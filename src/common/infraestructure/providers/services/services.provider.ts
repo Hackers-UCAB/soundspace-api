@@ -33,6 +33,7 @@ import { PromotionRepository } from 'src/promotions/infraestructure/repositories
 import { GetRandomPromotionApplicationService } from 'src/promotions/application/services/get-random-promotion.application.service';
 import { AzureBufferImageHelper } from '../../azure/helpers/get-blob-image.helper';
 import { GetTopPlaylistService } from '../../../../playlist/application/services/get-top-playlist.application.service';
+import { OrmSongMapper } from '../../../../song/infraestructure/mapper/orm-song.mapper';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -315,6 +316,7 @@ export const servicesProvidersManager: Provider[] = [
                 new AuditingCommandServiceDecorator(
                     new GetPlaylistByIdService(
                         new PlaylistRepository(dataSource),
+                        new SongRepository(dataSource, new OrmSongMapper()),
                     ),
                     new AuditingRepository(dataSource),
                     'GetPlaylistByIdService',

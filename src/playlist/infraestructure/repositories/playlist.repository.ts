@@ -110,6 +110,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
                 .innerJoinAndSelect("playlist.canciones", "playlistCancion")
                 .innerJoinAndSelect("playlistCancion.cancion", "cancion")
                 .where("playlist.trending = :trending", { trending: true })
+                .where("playlist.tipo = 'playlist'")
                 .getMany();
             /*
             console.log("playlist: ", playlist);

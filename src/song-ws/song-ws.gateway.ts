@@ -14,6 +14,7 @@ import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.
 import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
 import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
 import { DataSource } from 'typeorm';
+import { OrmSongMapper } from '../song/infraestructure/mapper/orm-song.mapper';
 
 
 @WebSocketGateway({ cors: true })
@@ -23,8 +24,10 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     @Inject('DataSource')
     private readonly dataSource: DataSource,
+    @Inject('DataSource')
+    private readonly ormSongMapper: OrmSongMapper,
   ) {}
-  
+
   handleConnection( client: Socket ) {
     // console.log('Cliente conectado', client.id);
 
@@ -55,7 +58,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new PlaySongService(
-          new SongRepository(this.dataSource), 
+          new SongRepository(this.dataSource,this.ormSongMapper), 
           new UuidGenerator(), 
           new AzureBlobHelper(), 
           new SendSongHelper(), 

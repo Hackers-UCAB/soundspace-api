@@ -3,7 +3,7 @@ import { SongId } from "./value-objects/song-id";
 import { SongName } from "./value-objects/song-name";
 import { SongUrl } from "./value-objects/song-url";
 import { SongCover } from "./value-objects/song-cover";
-import { SongGenre } from "./value-objects/song-genre";
+import { SongGenres } from "./value-objects/song-genre";
 import { SongDuration } from "./value-objects/song-duration";
 import { SongPreviewUrl } from "./value-objects/song-preview-url";
 import { SongCreated } from "./events/song-created.event";
@@ -15,7 +15,7 @@ export class Song extends AggregateRoot<SongId>{
     private name: SongName;
     private url: SongUrl;
     private cover: SongCover;
-    private genre: SongGenre;
+    private genres: SongGenres;
     private duration: SongDuration;
     private previewUrl: SongPreviewUrl;
 
@@ -24,40 +24,64 @@ export class Song extends AggregateRoot<SongId>{
         name: SongName,
         url: SongUrl,
         cover: SongCover,
-        genre: SongGenre,
+        genres: SongGenres,
         duration: SongDuration,
         previewUrl: SongPreviewUrl
-    ){
+    ) {
         const songCreated = SongCreated.create(
             id,
             name,
             url,
             cover,
-            genre,
+            genres,
             duration,
             previewUrl
         )
-        super(id,songCreated);
+        super(id, songCreated);
         //Aqui deberia usar la funcion de pull ya que no deberia tener eventos de dominio, ya que solo es de consulta
     }
 
-    protected when(event: DomainEvent): void{
-        if (event instanceof SongCreated){
+    get Name(): SongName {
+        return this.name;
+    }
+
+    get Url(): SongUrl {
+        return this.url;
+    }
+
+    get Cover(): SongCover {
+        return this.cover;
+    }
+
+    get Genres(): SongGenres {
+        return this.genres;
+    }
+
+    get Duration(): SongDuration {
+        return this.duration;
+    }
+
+    get PreviewUrl(): SongPreviewUrl {
+        return this.previewUrl;
+    }
+
+    protected when(event: DomainEvent): void {
+        if (event instanceof SongCreated) {
             this.name = event.name;
             this.url = event.url;
             this.cover = event.cover;
-            this.genre = event.genre;
+            this.genres = event.genres;
             this.duration = event.duration;
-            this.previewUrl = event.previewUrl; 
+            this.previewUrl = event.previewUrl;
         }
     }
 
-    protected  ensureValidaState(): void {
+    protected ensureValidaState(): void {
         if (
             !this.name ||
             !this.url ||
             !this.cover ||
-            !this.genre ||
+            !this.genres ||
             !this.duration ||
             !this.previewUrl
         ) {
@@ -70,10 +94,10 @@ export class Song extends AggregateRoot<SongId>{
         name: SongName,
         url: SongUrl,
         cover: SongCover,
-        genre: SongGenre,
+        genre: SongGenres,
         duration: SongDuration,
         previewUrl: SongPreviewUrl
-    ):Promise<Song>{
+    ): Promise<Song> {
         return new Song(id, name, url, cover, genre, duration, previewUrl);
     }
 }
