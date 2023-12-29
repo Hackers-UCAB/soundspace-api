@@ -37,6 +37,8 @@ import { OrmSongMapper } from '../../../../song/infraestructure/mapper/orm-song.
 import { GetAlbumByIdService } from 'src/album/application/services/get-album-by-id.application.service';
 import { AlbumRepository } from 'src/album/infraestructure/repositories/album.repository';
 import { GetTopAlbumService } from 'src/album/application/services/get-top-album.application.service';
+import { GetArtistByIdService } from '../../../../artist/application/services/get-artist-by-id.application.service';
+import { ArtistRepository } from '../../../../artist/infraestructure/repositories/artist.repository';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -378,5 +380,22 @@ export const servicesProvidersManager: Provider[] = [
       );
     },
     inject: ['DataSource', 'ILogger'],
-  },
+    },
+    {
+        provide: 'GetArtistByIdService',
+        useFactory: (dataSource: DataSource, logger: ILogger) => {
+            return new LoggerApplicationServiceDecorator(
+                new AuditingCommandServiceDecorator(
+                    new GetArtistByIdService(new ArtistRepository(dataSource)),
+                    new AuditingRepository(dataSource),
+                    'GetArtistByIdService',
+                    logger,
+                ),
+                logger,
+                'GetArtistByIdService',
+            );
+        },
+        inject: ['DataSource', 'ILogger'],
+    },
+
 ];
