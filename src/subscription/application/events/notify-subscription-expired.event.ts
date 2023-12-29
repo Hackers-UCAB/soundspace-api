@@ -1,7 +1,6 @@
 import { EventResponse } from "src/common/application/events/dto/response/event-response.dto";
 import { IEventSubscriber } from "src/common/application/events/event-subscriber.interface";
 import { NotifierDto } from "src/common/application/notifications-handler/dto/entry/notifier-entry.dto";
-import { NotifierResponse } from "src/common/application/notifications-handler/dto/response/notifier-response.dto";
 import { INotifier } from "src/common/application/notifications-handler/notifier.interface";
 import { Result } from "src/common/application/result-handler/result";
 import { SubscriptionExpired } from "src/subscription/domain/events/subscription-expired.event";

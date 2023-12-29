@@ -1,4 +1,3 @@
-import { UserId } from "src/user/domain/value-objects/user-id";
 import { NotifierDto } from "./dto/entry/notifier-entry.dto";
 import { Result } from "../result-handler/result";
 import { NotifierResponse } from "./dto/response/notifier-response.dto";
