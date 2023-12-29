@@ -3,7 +3,7 @@ import { IApplicationService } from "../../../common/application/services/interf
 import { IPlaylistRepository } from "../../domain/repositories/playlist.repository.interface";
 import { PlaylistId } from "../../domain/value-objects/playlist-id";
 import { GetPlaylistByIdEntryApplicationDto } from "../dto/entrys/get-playlist-by-id-entry.application.dto";
-import { GetPlaylistByIdResponseApplicationDto } from "../dto/responses/playlist-response.application.dto";
+import { GetPlaylistByIdResponseApplicationDto } from "../dto/responses/get-playlist-by-id-response.application.dto";
 
 export class GetPlaylistByIdService implements IApplicationService<GetPlaylistByIdEntryApplicationDto, GetPlaylistByIdResponseApplicationDto>{
 
