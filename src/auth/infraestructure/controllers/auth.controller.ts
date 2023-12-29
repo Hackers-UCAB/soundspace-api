@@ -15,7 +15,7 @@ import { LogInResponseInfraestructureDto } from '../dto/responses/log-in-respons
 import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
-@Controller('auth')
+@Controller('')
 export class AuthController {
   constructor(
     @Inject('DataSource')

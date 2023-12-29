@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable } from 'typeorm';
 import { OrmPlaylistCancionEntity } from './playlist-song.entity';
 import { OrmPlaylistCreadorEntity } from './playlist-creator.entity';
+import { OrmGeneroEntity } from './genre.entity';
 
 @Entity('playlist')
 export class OrmPlaylistEntity {
@@ -41,4 +42,19 @@ export class OrmPlaylistEntity {
 
         return Playlist;
     }
+
+    @ManyToMany(() => OrmGeneroEntity, albums => albums.artistas)
+    @JoinTable({
+        name: 'playlist_genero',
+        joinColumn: {
+            name: 'codigo_playlist',
+            referencedColumnName: 'codigo_playlist'
+        },
+        inverseJoinColumn: {
+            name: 'codigo_genero',
+            referencedColumnName: 'codigo_genero'
+        }
+    })
+    generos: OrmGeneroEntity[];
+
 }
