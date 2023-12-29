@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 import { OrmCancionEntity } from '../../../song/infraestructure/orm-entities/song.entity';
 
 @Entity('genero')
@@ -11,5 +12,8 @@ export class OrmGeneroEntity {
   nombre_genero: string;
 
   @ManyToMany(() => OrmCancionEntity, cancion => cancion.generos)
-  canciones: OrmCancionEntity[];
+    canciones: OrmCancionEntity[];
+
+    @ManyToMany(() => OrmArtistaEntity, artista => artista.generos)
+    artistas: OrmArtistaEntity[];
 }
