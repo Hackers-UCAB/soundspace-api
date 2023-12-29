@@ -1,4 +1,4 @@
-import { Album } from '../Album';
+import { Album } from '../album';
 import { Result } from 'src/common/application/result-handler/result';
 import { AlbumId } from '../value-objects/album-id';
 

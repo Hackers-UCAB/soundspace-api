@@ -8,7 +8,7 @@ import { ArtistId } from "../value-objects/artist-id";
 
 export class ArtistCreated extends DomainEvent {
 
-    protected constructor(
+    /*protected constructor(
         public id: ArtistId,
         public name: ArtistName,
         public genre: ArtistGenre,
@@ -17,9 +17,17 @@ export class ArtistCreated extends DomainEvent {
         public songs: ArtistSongs
     ){
         super()
+    }*/
+
+    protected constructor(
+        public id: ArtistId,
+        public name: ArtistName,
+        public photo: ArtistPhoto
+    ){
+        super()
     }
 
-    static create(
+    /*static create(
         id: ArtistId,
         name: ArtistName,
         genre: ArtistGenre,
@@ -34,6 +42,18 @@ export class ArtistCreated extends DomainEvent {
             photo,
             albums,
             songs
+        )
+    }*/
+
+    static create(
+        id: ArtistId,
+        name: ArtistName,
+        photo: ArtistPhoto
+    ): ArtistCreated{
+        return new ArtistCreated(
+            id,
+            name,
+            photo
         )
     }
     

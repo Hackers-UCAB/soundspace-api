@@ -1,8 +1,6 @@
 import { ServiceResponse } from "src/common/application/services/dto/response/service-response.dto";
 
-// Hay que seguir trabajando esto...
-
-export class GetArtistByIdResponseApplicationDto implements ServiceResponse {
+/*export class GetArtistByIdResponseApplicationDto implements ServiceResponse {
     userId: string;
     id: string;
     name: string;
@@ -10,7 +8,7 @@ export class GetArtistByIdResponseApplicationDto implements ServiceResponse {
     image: string;
     albums: string;
     songs: string;
-}
+}*/
 
 export class AllArtistInfoDto implements ServiceResponse {
     userId: string;
@@ -31,14 +29,4 @@ export class AllArtistInfoDto implements ServiceResponse {
             name: string;
         } [];
     } [];
-};
-
-
-export class TrendingArtistsDto implements ServiceResponse {
-    userId: string;
-    artists: {
-        id: string;
-        name: string;
-        image: Buffer;
-    }[];
 }
