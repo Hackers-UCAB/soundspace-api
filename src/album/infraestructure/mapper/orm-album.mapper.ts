@@ -1,6 +1,6 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
-import { Album } from '../../domain/Album';
+import { Album } from '../../domain/album';
 import { AlbumId } from '../../domain/value-objects/album-id';
 import { AlbumName } from '../../domain/value-objects/album-name';
 import { AlbumCover } from '../../domain/value-objects/album-cover';

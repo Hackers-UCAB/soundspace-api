@@ -43,7 +43,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             .select('SUM(cancion.duracion)', 'duracion_total')
             .getRawOne();
 
-        //console.log('Duración total de las canciones en la playlist:', totalDuration.duracion_total);
+        //console.log('Duraciï¿½n total de las canciones en la playlist:', totalDuration.duracion_total);
         const playlistResponse: PlaylistResponseApplicationDto = {
             userId: "userId",
             id: playlistDomain.Id.Id,

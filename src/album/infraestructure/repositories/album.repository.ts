@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/application/result-handler/result';
-import { IAlbumRepository } from 'src/Album/domain/repositories/Album.repository.interface';
+import { IAlbumRepository } from 'src/album/domain/repositories/album.repository.interface';
 import { Album } from '../../domain/album';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
 import { OrmAlbumMapper } from '../mapper/orm-album.mapper';
