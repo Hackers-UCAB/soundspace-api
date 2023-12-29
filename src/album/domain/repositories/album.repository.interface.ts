@@ -4,5 +4,5 @@ import { AlbumId } from '../value-objects/album-id';
 
 export interface IAlbumRepository {
   findAlbumById(albumId: AlbumId): Promise<Result<Album>>;
-  findTopAlbumlist(): Promise<Result<Album[]>>;
+  findTopAlbum(): Promise<Result<Album[]>>;
 }

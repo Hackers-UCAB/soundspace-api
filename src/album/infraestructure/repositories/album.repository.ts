@@ -47,7 +47,40 @@ export class AlbumRepository
     }
   }
 
-  async findTopAlbumlist(): Promise<Result<Album[]>> {
-    throw new Error('Method not implemented.');
+  async findTopAlbum(): Promise<Result<Album[]>> {
+    let response: Album[];
+    let error: Error;
+    try {
+      const albums = await this.createQueryBuilder('playlist')
+        .select([
+          'playlist.codigo_playlist',
+          'playlist.nombre',
+          'playlist.referencia_imagen',
+          'cancion.codigo_cancion',
+        ])
+        .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
+        .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
+        .where("playlist.tipo = 'album'")
+        .where('playlist.trending = :trending', { trending: true })
+        .getMany();
+      response = await Promise.all(
+        albums.map(
+          async (playlist) => await this.OrmAlbumMapper.toDomain(playlist),
+        ),
+      );
+    } catch (e) {
+      error = e;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado obteniendo el album, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success<Album[]>(response, 200);
+    }
   }
 }
