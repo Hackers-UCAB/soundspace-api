@@ -4,7 +4,7 @@ import { InvalidAlbumNameException } from '../exceptions/invalid-album-name.exce
 export class AlbumName extends ValueObject<AlbumName> {
   private readonly name: string;
 
-  private constructor(name: string) {
+  constructor(name: string) {
     let valid: boolean = true;
     if (!name)
       throw new InvalidAlbumNameException(

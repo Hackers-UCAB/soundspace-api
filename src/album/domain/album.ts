@@ -40,17 +40,10 @@ export class Album extends AggregateRoot<AlbumId> {
     name: AlbumName,
     cover: AlbumCover,
     albumSongs: AlbumSongs,
-    duration: AlbumDuration,
-    genre: AlbumGenre,
+    //duration: AlbumDuration,
+    //genre: AlbumGenre,
   ) {
-    const albumCreated = AlbumCreated.create(
-      id,
-      name,
-      cover,
-      albumSongs,
-      duration,
-      genre,
-    );
+    const albumCreated = AlbumCreated.create(id, name, cover, albumSongs);
     super(id, albumCreated);
   }
 
@@ -59,8 +52,8 @@ export class Album extends AggregateRoot<AlbumId> {
       this.name = event.name;
       this.cover = event.cover;
       this.albumSongs = event.albumSongs;
-      this.duration = event.duration;
-      this.genre = event.genre;
+      //this.duration = event.duration;
+      //this.genre = event.genre;
     }
   }
 
@@ -81,10 +74,10 @@ export class Album extends AggregateRoot<AlbumId> {
     name: AlbumName,
     cover: AlbumCover,
     albumSongs: AlbumSongs,
-    duration: AlbumDuration,
-    genre: AlbumGenre,
+    //duration: AlbumDuration,
+    //genre: AlbumGenre,
   ): Album {
-    const album = new Album(id, name, cover, albumSongs, duration, genre);
+    const album = new Album(id, name, cover, albumSongs);
     return album;
   }
 }
