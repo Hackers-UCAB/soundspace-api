@@ -1,12 +1,13 @@
 import { Controller, Inject, Get, Param } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/responses/playlist-response.application.dto';
 import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entrys/get-playlist-by-id-entry.application.dto';
-import { AuthHeaderInfraestructureDto } from '../../../auth/infraestructure/dto/entrys/auth-header.infraestructure.dto';
-import { UserId } from '../../../user/domain/value-objects/user-id';
-import { GetUser } from '../../../auth/infraestructure/jwt/decorators/get-user.decorator';
-import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
+import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/responses/get-playlist-by-id-response.application.dto';
+import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
+import { TopPlaylistServiceEntryDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
+import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
+import { Result } from '../../../common/application/result-handler/result';
+import { GetTopPlaylistResponseInfrastructureDto } from '../dto/responses/get-top-playlist-response.infrastructure.dto';
 
 @Controller('playlist')
 export class playlistController {
@@ -18,20 +19,49 @@ export class playlistController {
         private readonly GetPlaylistByIdService: IApplicationService<
             GetPlaylistByIdEntryApplicationDto,
             GetPlaylistByIdResponseApplicationDto
+            >,
+        @Inject('GetTopPlaylistService')
+        private readonly GetTopPlaylistService: IApplicationService<
+            TopPlaylistServiceEntryDto,
+            GetTopPlaylistResponseApplicationDto
         >,
-    ) {}
-    
-    @Get()
-    @Auth()
-    async getPlaylists() {
+    ) { }
 
-        return "alo";
+    /*
+    @Get('TopPlaylist')
+    async getTopPlaylist() {
+        const dto: TopPlaylistServiceEntryDto = {
+            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+        }
+        const response = await this.GetTopPlaylistService.execute(dto);
+        return response.Data;
+    }
+    */
+
+    @Get('TopPlaylist')
+    async getTopPlaylist() {
+        const dto: TopPlaylistServiceEntryDto = {
+            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+        }
+        const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
+            await this.GetTopPlaylistService.execute(dto);
+        if (!serviceResult.IsSuccess) {
+            HttpResponseHandler.HandleException(
+                serviceResult.statusCode,
+                serviceResult.message,
+                serviceResult.error,
+            );
+        }
+        const response: GetTopPlaylistResponseInfrastructureDto = {
+            playlists: serviceResult.Data.playlists
+        }
+        return HttpResponseHandler.Success(200, response);
     }
 
     @Get(':id')
-    async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
+    async getPlaylist(@Param('id') id: string) {
         const dto: GetPlaylistByIdEntryApplicationDto = {
-            userId: userId.Id,
+            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
             PlaylistId: id
         }
         const response = await this.GetPlaylistByIdService.execute(dto);

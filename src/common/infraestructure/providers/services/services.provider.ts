@@ -32,6 +32,7 @@ import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum'
 import { PromotionRepository } from 'src/promotions/infraestructure/repositories/promotion.repository';
 import { GetRandomPromotionApplicationService } from 'src/promotions/application/services/get-random-promotion.application.service';
 import { AzureBufferImageHelper } from '../../azure/helpers/get-blob-image.helper';
+import { GetTopPlaylistService } from '../../../../playlist/application/services/get-top-playlist.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -321,6 +322,25 @@ export const servicesProvidersManager: Provider[] = [
                 ),
                 logger,
                 'GetPlaylistByIdService',
+            )
+        },
+        inject: ['DataSource', 'ILogger'],
+    },
+    {
+        provide: 'GetTopPlaylistService',
+        useFactory: (dataSource: DataSource, logger: ILogger) => {
+            return new LoggerApplicationServiceDecorator(
+                new AuditingCommandServiceDecorator(
+                    new GetTopPlaylistService(
+                        new PlaylistRepository(dataSource),
+                        new AzureBufferImageHelper(),
+                    ),
+                    new AuditingRepository(dataSource),
+                    'GetTopPlaylistService',
+                    logger,
+                ),
+                logger,
+                'GetTopPlaylistService',
             )
         },
         inject: ['DataSource', 'ILogger'],

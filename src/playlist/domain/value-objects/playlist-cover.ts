@@ -1,5 +1,5 @@
 import { ValueObject } from '../../../common/domain/value-object';
-import { InvalidPlaylistCoverException } from '../exceptions/invalid-Playlist-cover.exception';
+import { InvalidPlaylistCoverException } from '../exceptions/invalid-playlist-cover.exception';
 
 export class PlaylistCover extends ValueObject<PlaylistCover>{
     private readonly path: string;
