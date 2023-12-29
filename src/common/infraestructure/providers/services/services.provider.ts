@@ -27,6 +27,9 @@ import { GetUserInfoApplicationService } from 'src/user/application/services/get
 import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
 import { SecurityApplicationServiceDecorator } from 'src/common/application/services/decorators/security-decorator/security-application-service.service.decorator';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
+import { PromotionRepository } from 'src/promotions/infraestructure/repositories/promotion.repository';
+import { GetRandomPromotionApplicationService } from 'src/promotions/application/services/get-random-promotion.application.service';
+import { AzureBufferImageHelper } from '../../azure/helpers/get-blob-image.helper';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -254,6 +257,28 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Update User Info',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetRandomPromotionApplicationService',
+    useFactory: (
+      dataSource: DataSource,
+      logger: ILogger
+    ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetRandomPromotionApplicationService(
+            new PromotionRepository(dataSource),
+            new AzureBufferImageHelper(),
+          ),
+          new AuditingRepository(dataSource),
+          'Get Random Promotion',
+          logger,
+        ),
+        logger,
+        'Get Random Promotion',
       );
     },
     inject: ['DataSource', 'ILogger'],
