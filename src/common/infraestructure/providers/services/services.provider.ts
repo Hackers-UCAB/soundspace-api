@@ -306,14 +306,6 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
-
-
-
-
-
-
-
-
   {
     provide: 'GetPlaylistByIdService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
@@ -333,8 +325,6 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
-
-  
   {
     provide: 'GetTopPlaylistService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
@@ -354,10 +344,6 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
-
-
-
-
   {
     provide: 'GetAlbumByIdService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
@@ -374,8 +360,6 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
-
-
   {
     provide: 'GetTopAlbumService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {

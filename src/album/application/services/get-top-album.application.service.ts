@@ -30,8 +30,9 @@ export class GetTopAlbumService
   async execute(
     param: TopAlbumEntryApplicationDto,
   ): Promise<Result<GetTopAlbumResponseApplicationDto>> {
+      console.log("aja service");
     const albumResult = await this.AlbumRepository.findTopAlbum();
-    //console.log("playlistResult: ", playlistResult);
+      console.log("albumResult: ", albumResult);
     if (!albumResult.IsSuccess) {
       return Result.fail<GetTopAlbumResponseApplicationDto>(
         null,
@@ -40,7 +41,7 @@ export class GetTopAlbumService
         albumResult.error,
       );
     }
-
+      console.log("albumResult service", albumResult);
     const albums = [];
     for (let i = 0; i < albumResult.Data.length; i++) {
       const album = albumResult.Data[i];

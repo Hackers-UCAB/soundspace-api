@@ -61,9 +61,9 @@ export class Album extends AggregateRoot<AlbumId> {
     if (
       !this.name ||
       !this.cover ||
-      !this.albumSongs ||
-      !this.duration ||
-      !this.genre
+      !this.albumSongs 
+      //!this.duration ||
+      //!this.genre
     ) {
       throw new InvalidAlbumException('Album not valid');
     }

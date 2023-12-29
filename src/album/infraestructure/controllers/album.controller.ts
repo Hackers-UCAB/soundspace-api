@@ -13,7 +13,7 @@ import { HttpResponseHandler } from 'src/common/infraestructure/http-response-ha
 import { Result } from '../../../common/application/result-handler/result';
 import { GetTopAlbumResponseInfrastructureDto } from '../dto/responses/get-top-album-response.infraestructure.dto';
 
-@Controller('playlist')
+@Controller('album')
 export class AlbumController {
   constructor(
     @Inject('DataSource')
@@ -30,7 +30,28 @@ export class AlbumController {
       TopAlbumEntryApplicationDto,
       GetTopAlbumResponseApplicationDto
     >,
-  ) {}
+    ) { }
+
+    @Get('TopAlbum')
+    async getTopAlbum() {
+        console.log("AJAAAAAAAAAAA");
+        const dto: TopAlbumEntryApplicationDto = {
+            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+        };
+        const serviceResult: Result<GetTopAlbumResponseApplicationDto> =
+            await this.GetTopAlbumService.execute(dto);
+        if (!serviceResult.IsSuccess) {
+            HttpResponseHandler.HandleException(
+                serviceResult.statusCode,
+                serviceResult.message,
+                serviceResult.error,
+            );
+        }
+        const response: GetTopAlbumResponseInfrastructureDto = {
+            albums: serviceResult.Data.albums,
+        };
+        return HttpResponseHandler.Success(200, response);
+    }
 
   @Get(':id')
   async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
@@ -42,23 +63,5 @@ export class AlbumController {
     return response.Data;
   }
 
-  @Get('TopAlbum')
-  async getTopAlbum() {
-    const dto: TopAlbumEntryApplicationDto = {
-      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-    };
-    const serviceResult: Result<GetTopAlbumResponseApplicationDto> =
-      await this.GetTopAlbumService.execute(dto);
-    if (!serviceResult.IsSuccess) {
-      HttpResponseHandler.HandleException(
-        serviceResult.statusCode,
-        serviceResult.message,
-        serviceResult.error,
-      );
-    }
-    const response: GetTopAlbumResponseInfrastructureDto = {
-      albums: serviceResult.Data.albums,
-    };
-    return HttpResponseHandler.Success(200, response);
-  }
+  
 }

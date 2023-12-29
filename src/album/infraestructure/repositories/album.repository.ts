@@ -17,7 +17,13 @@ export class AlbumRepository
   async findAlbumById(albumId: AlbumId): Promise<Result<Album>> {
     let response: Album;
     let error: Error;
-    try {
+      try {
+          console.log("aja repo");
+          console.log("aja repo");
+          console.log("aja repo");
+          console.log("aja repo");
+          console.log("aja repo");
+
       const album = await this.createQueryBuilder('playlist')
         .select([
           'playlist.codigo_playlist',
@@ -29,7 +35,8 @@ export class AlbumRepository
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
         .where("playlist.tipo = 'album'")
         .where('playlist.codigo_playlist = :id', { id: albumId.Id })
-        .getOne();
+              .getOne();
+
       response = await this.OrmAlbumMapper.toDomain(album);
     } catch (e) {
       error = e;
@@ -51,6 +58,7 @@ export class AlbumRepository
     let response: Album[];
     let error: Error;
     try {
+      console.log("aja repo");
       const albums = await this.createQueryBuilder('playlist')
         .select([
           'playlist.codigo_playlist',
@@ -60,12 +68,14 @@ export class AlbumRepository
         ])
         .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
-        .where("playlist.tipo = 'album'")
         .where('playlist.trending = :trending', { trending: true })
+        .where("playlist.tipo = 'album'")
         .getMany();
+        
+        console.log("albums repo",albums);
       response = await Promise.all(
         albums.map(
-          async (playlist) => await this.OrmAlbumMapper.toDomain(playlist),
+          async (albums) => await this.OrmAlbumMapper.toDomain(albums),
         ),
       );
     } catch (e) {
