@@ -19,6 +19,30 @@ export class Song extends AggregateRoot<SongId>{
     private duration: SongDuration;
     private previewUrl: SongPreviewUrl;
 
+    get Name(): SongName{
+        return this.name;
+    }
+
+    get Url(): SongUrl{
+        return this.url;
+    }
+
+    get Cover(): SongCover{
+        return this.cover;
+    }
+
+    get Genre(): SongGenre{
+        return this.genre;
+    }
+
+    get Duration(): SongDuration{
+        return this.duration;
+    }
+
+    get PreviewUrl(): SongPreviewUrl{
+        return this.previewUrl;
+    }
+
     protected constructor(
         id: SongId,
         name: SongName,

@@ -2,9 +2,9 @@ import { ValueObject } from '../../../common/domain/value-object';
 import { InvalidSongGenreException } from '../exceptions/invalid-song-genre.exception';
 
 export class SongGenre extends ValueObject<SongGenre>{
-    private readonly genre: string;
+    private readonly genre: string[];
 
-    constructor(genre: string){
+    constructor(genre: string[]){
         let valid = true;
         if (!genre) valid = false;
         if (!valid) {
@@ -18,11 +18,11 @@ export class SongGenre extends ValueObject<SongGenre>{
         return this.genre === obj.genre;
     }
 
-    get Genre(): string {
+    get Genre(): string[] {
         return this.genre;    
     }
 
-    static create(genre: string): SongGenre {
+    static create(genre: string[]): SongGenre {
         return new SongGenre(genre);
     }
 }

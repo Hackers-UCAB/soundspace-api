@@ -29,7 +29,7 @@ export class SendSongHelper implements ISendSongHelper {
     //         })
     // }
 
-    async sendSong(client: Socket, blob:any, size:number, second:number) {
+    async sendSong(client: Socket, blob:any, size:number) {
         let sequence = 1;
         const bufferSize = size / 20;
         let buffer = Buffer.alloc(0);
