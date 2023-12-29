@@ -5,6 +5,7 @@ import { NotifierDto } from 'src/common/application/notifications-handler/dto/en
 import { NotifierResponse } from 'src/common/application/notifications-handler/dto/response/notifier-response.dto';
 import { INotifier } from 'src/common/application/notifications-handler/notifier.interface';
 import { Result } from 'src/common/application/result-handler/result';
+import { MulticastMessage } from 'firebase-admin/lib/messaging/messaging-api';
 
 @Injectable()
 export class FirebaseNotifier implements INotifier{
@@ -15,25 +16,24 @@ export class FirebaseNotifier implements INotifier{
     ){}
 
     async notify(message: NotifierDto): Promise<Result<NotifierResponse>> {
-        const user = await this.userRepository.findUserEntityById(message.userId.Id);
+        // const user = await this.userRepository.findUserEntityById(message.userId.Id);
 
-        if(!user){
-            return;
-        }
+        // if(!user){
+        //     return;
+        // }
 
-        const tokens: string[] = user.tokens;
+        const tokens: string[] = ['dmoXopNZQkyRtSljqzpWD0:APA91bHwbaL9aIGHLlTEztyldl8HfOzqYiqXVKyQOZXaZItraDnFYbsRtl0qTJc3iUJedZEAc_eZh7har0PdFVI1PPNOXT6NCVkN2HvJLwhDxeGIEVSLSy7NzO4RT8hjOtKNbdcOvgng'];
 
-        const payload = {
+        const payload: MulticastMessage = {
             notification: {
                 title: message.tittle,
                 body: message.body,
-                data: message.data,
             },
+            data: message.data,
             tokens: tokens,
         };
         
-        let fail:boolean = false;
-        let notifierData: NotifierResponse;
+        let fail = false;
         let error: Error;
 
         let successfulTokens: string[] = [];
@@ -51,30 +51,27 @@ export class FirebaseNotifier implements INotifier{
                 }
             });
 
-            console.log(response.successCount + ' messages were sent successfully'); //TODO: Tambien podria ir en la response honestly   
+            console.log(response.successCount + ' messages were sent successfully'); //TODO: Si te patece util puede ir en el NotifierResponse too   
         } catch (error) {
             fail = true;
             error = error;
         }
 
+        const notifierResponse: NotifierResponse = {
+            successfulTokens: successfulTokens,
+            unsuccessfulTokens: unsuccessfulTokens,            
+        };
+
         if (fail) {
             return Result.fail<NotifierResponse>(
-                null,
+                notifierResponse, 
                 500,
                 'Ha ocurrido un error inesperado enviando la notificacion, hable con el administrador',
                 new Error(error?.message || 'Ha ocurrido un error inesperado enviando la notificacion, hable con el administrador')
             );
         }
         else {
-            return Result.success<NotifierResponse>(
-                {
-                    userId: user.codigo_usuario,
-                    payload: JSON.stringify(payload),
-                    successfulTokens: successfulTokens,
-                    unsuccessfulTokens: unsuccessfulTokens,
-                },
-                200
-            );
+            return Result.success<NotifierResponse>(notifierResponse, 200);
         }
     }
 }

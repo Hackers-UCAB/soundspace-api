@@ -56,19 +56,19 @@ export class SignUpMovistarApplicationService
     param: SignUpEntryApplicationDto,
   ): Promise<Result<SignUpResponseApplicationDto>> {
     //Se valida con el api externo
-    const valid: Result<boolean> =
-      await this.movistarSubscriptionValidation.validateSubscription(
-        param.phone,
-      );
+    // const valid: Result<boolean> =
+    //   await this.movistarSubscriptionValidation.validateSubscription(
+    //     param.phone,
+    //   );
 
-    if (!valid.IsSuccess) {
-      return Result.fail(
-        null,
-        valid.StatusCode,
-        valid.message,
-        new Error(valid.message),
-      );
-    }
+    // if (!valid.IsSuccess) {
+    //   return Result.fail(
+    //     null,
+    //     valid.StatusCode,
+    //     valid.message,
+    //     new Error(valid.message),
+    //   );
+    // }
     let userId: string;
     let newUser: User;
     let newSubscription: Subscription;
@@ -129,7 +129,11 @@ export class SignUpMovistarApplicationService
         new Error(subscriptionSaving.message),
       );
     }
-    this.eventPublisher.publish(newSubscription.pullDomainEvents());
+
+    //TODO: Aqui si quiera nos importa la respuesta de esto, porque si falla el usuario igual ya quedo registrado
+    //los eventPublisherDecorators ya se encargan de reportar los errores 
+    await this.eventPublisher.publish(newSubscription.pullDomainEvents());
+
     const response: SignUpResponseApplicationDto = {
       userId,
       token: this.tokenGenerator.create({ id: userId }),

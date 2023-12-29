@@ -1,6 +1,6 @@
-export interface NotifierResponse {
-    userId: string;
-    payload: string;
+import { EventResponse } from "src/common/application/events/dto/response/event-response.dto";
+
+export interface NotifierResponse{
     successfulTokens: string[];
     unsuccessfulTokens: string[];
 }

@@ -26,14 +26,14 @@ export class EventPublisherLoggerDecorator extends IEventPublisherDecorator {
                 const log = { 
                     user: eventResult.Data.user, 
                     ocurredOn: date,
-                    operation: eventResult.Data.operation, 
+                    operation: eventResult.Data.event, 
                     data: eventResult.Data.data, 
                 };
                 this.logger.logSuccess(log);
             }
             else{
                 const log = { 
-                    user: 'unknown', //hay una forma de arreglar esto y es modificando el Result :)
+                    user: 'unknown', //hay una forma de arreglar el logError y es modificando el Result :)
                     ocurredOn: date,
                     operation: eventResult.constructor.name, 
                     data: eventResult.message, 

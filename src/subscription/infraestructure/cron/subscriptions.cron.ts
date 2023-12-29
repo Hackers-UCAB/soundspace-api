@@ -1,4 +1,3 @@
-
 import { Inject } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { Result } from "src/common/application/result-handler/result";

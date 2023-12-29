@@ -40,6 +40,7 @@ export const providersManager: Provider[] = [
     {
         provide: 'EventBus',
         useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, dataSource: DataSource) => {
+            //TODO: Hacer el de Auditing?
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
             //aqui subscribimos a todos los que escuchan los eventos

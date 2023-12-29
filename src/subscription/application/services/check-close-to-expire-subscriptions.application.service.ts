@@ -38,7 +38,8 @@ export class CheckCloseToExpireSubscriptionsApplicationService
     }
 
     if (subscriptionsExpired15Days.Data.length > 0) {
-      subscriptionsExpired15Days.Data.forEach(async (subscription) => {
+      //No quitar este Promise.all por nada del mundo sino se vuelve shit 
+      await Promise.all(subscriptionsExpired15Days.Data.map(async (subscription) => {
         subscription.nearToExpireSubscription();
 
         const subscriptionUpdating: Result<string> =
@@ -47,11 +48,18 @@ export class CheckCloseToExpireSubscriptionsApplicationService
         if (subscriptionUpdating.IsSuccess) {
           this.eventPublisher.publish([subscription.pullDomainEvents().at(-1)]);
         }
-      });
+      }));
     }
+
     const response: ServiceResponse = {
       userId: 'Admin',
     };
+
+    //Se supone que el logger de los eventos ya capturo cada error, so generalizar esto asi no lo veo mal
+    if (fail) {
+      return Result.fail(response, 500, 'Error al publicar los eventos', Error('Error al publicar los eventos')); 
+    }
+
     return Result.success(response, 200);
   }
 }

@@ -39,34 +39,44 @@ export class CheckExpiredSubscriptionsApplicationService
         subscriptionsExpiredToday.error,
       );
     }
+
+    let fail = false;
+
     if (subscriptionsExpiredToday.Data.length > 0) {
-      subscriptionsExpiredToday.Data.forEach(async (subscription) => {
-        const userResult: Result<User> = await this.userRepisitory.findUserById(
-          subscription.User,
-        );
+      //No quitar este Promise.all por nada del mundo sino se vuelve shit 
+      await Promise.all(subscriptionsExpiredToday.Data.map(async (subscription) => { 
+        const userResult: Result<User> = await this.userRepisitory.findUserById(subscription.User);
+        
         if (userResult.IsSuccess) {
           const user: User = userResult.Data;
           user.changedToGuest();
 
-          const userUpdating: Result<string> =
-            await this.userRepisitory.saveAggregate(user);
+          const userUpdating: Result<string> = await this.userRepisitory.saveAggregate(user);
+
           if (userUpdating.IsSuccess) {
             subscription.expireSubscription();
 
-            const subscriptionUpdating: Result<string> =
-              await this.subscriptionRepository.saveAggregate(subscription);
+            const subscriptionUpdating: Result<string> = await this.subscriptionRepository.saveAggregate(subscription);
             if (subscriptionUpdating.IsSuccess) {
-              this.eventPublisher.publish([
-                subscription.pullDomainEvents().at(-1),
-              ]);
+              const eventResponses = await this.eventPublisher.publish([subscription.pullDomainEvents().at(-1)]);
+              if (eventResponses.some(eventResponse => !eventResponse.IsSuccess)) {
+                fail = true;
+              }
             }
           }
         }
-      });
+      }));
     }
+
     const response: ServiceResponse = {
       userId: 'Admin',
     };
+    
+    //Se supone que el logger de los eventos ya capturo cada error, so generalizar esto asi no lo veo mal
+    if (fail) {
+      return Result.fail(response, 500, 'Error al publicar los eventos', Error('Error al publicar los eventos')); 
+    }
+
     return Result.success(response, 200);
   }
 }
