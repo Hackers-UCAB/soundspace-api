@@ -11,6 +11,7 @@ export class SubscriptionChanelRepository
   implements ISubscriptionChanelRepository
 {
   //Todo estos metodos los tengo que pasar para el repo de subscripion
+  //aca estoy lanzando una vaina xs
   private readonly ormSubscriptionChanelMapper: OrmSubscriptionChanelMapper;
   constructor(dataSource: DataSource) {
     super(OrmSubscriptionChanelEntity, dataSource.createEntityManager());
