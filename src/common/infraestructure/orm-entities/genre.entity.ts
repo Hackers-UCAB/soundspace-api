@@ -16,4 +16,7 @@ export class OrmGeneroEntity {
 
     @ManyToMany(() => OrmArtistaEntity, artista => artista.generos)
     artistas: OrmArtistaEntity[];
+
+    @ManyToMany(() => OrmArtistaEntity, artista => artista.generos)
+    albums: OrmArtistaEntity[];
 }
