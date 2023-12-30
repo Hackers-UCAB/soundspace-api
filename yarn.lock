@@ -1046,7 +1046,7 @@
 
 "@nestjs/typeorm@^10.0.1":
   version "10.0.1"
-  resolved "http://23.22.253.223:4873/@nestjs%2ftypeorm/-/typeorm-10.0.1.tgz"
+  resolved "https://registry.npmjs.org/@nestjs/typeorm/-/typeorm-10.0.1.tgz"
   integrity sha512-YVFYL7D25VAVp5/G+KLXIgsRfYomA+VaFZBpm2rtwrrBOmkXNrxr7kuI2bBBO/Xy4kKBDe6wbvIVVFeEA7/ngA==
   dependencies:
     uuid "9.0.1"
@@ -5184,7 +5184,7 @@ pg-types@^2.1.0:
 
 pg@^8.11.3:
   version "8.11.3"
-  resolved "http://23.22.253.223:4873/pg/-/pg-8.11.3.tgz"
+  resolved "https://registry.npmjs.org/pg/-/pg-8.11.3.tgz"
   integrity sha512-+9iuvG8QfaaUrrph+kpF24cXkH1YOOUeArRNYIxq1viYHZagBxrTno7cecY1Fa44tJeZvaoG+Djpkc3JwehN5g==
   dependencies:
     buffer-writer "2.0.0"
@@ -6211,7 +6211,7 @@ typedarray@^0.0.6:
 
 typeorm@^0.3.17:
   version "0.3.17"
-  resolved "http://23.22.253.223:4873/typeorm/-/typeorm-0.3.17.tgz"
+  resolved "https://registry.npmjs.org/typeorm/-/typeorm-0.3.17.tgz"
   integrity sha512-UDjUEwIQalO9tWw9O2A4GU+sT3oyoUXheHJy4ft+RFdnRdQctdQ34L9SqE2p7LdwzafHx1maxT+bqXON+Qnmig==
   dependencies:
     "@sqltools/formatter" "^1.2.5"
