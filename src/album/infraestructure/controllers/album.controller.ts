@@ -34,7 +34,6 @@ export class AlbumController {
 
     @Get('TopAlbum')
     async getTopAlbum() {
-        console.log("AJAAAAAAAAAAA");
         const dto: TopAlbumEntryApplicationDto = {
             userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
         };
@@ -54,9 +53,9 @@ export class AlbumController {
     }
 
   @Get(':id')
-  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
+  async getPlaylist(@Param('id') id: string) {
     const dto: GetAlbumByIdEntryApplicationDto = {
-      userId: userId.Id,
+        userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
       albumId: id,
     };
     const response = await this.GetAlbumByIdService.execute(dto);
