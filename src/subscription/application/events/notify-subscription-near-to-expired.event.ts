@@ -2,22 +2,22 @@ import { IEventSubscriber } from 'src/common/application/events/event-subscriber
 import { INotifier } from 'src/common/application/notifications-handler/notifier.interface';
 import { Result } from 'src/common/application/result-handler/result';
 import { SubscriptionNearToExpired } from 'src/subscription/domain/events/subscription-near-to-expired.event';
-import { ISubscriptionChanelRepository } from 'src/subscription/domain/repositories/subscription-chanel.repository.interface';
+import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { SubscriptionChanel } from 'src/subscription/domain/subscription-chanel/subscription-chanel';
 
 export class NotifySubscriptionNearToExpiredEvent implements IEventSubscriber {
   private readonly notifier: INotifier;
-  private readonly subscriptionChanelRepository: ISubscriptionChanelRepository;
+  private readonly subscriptionRepository: ISubscriptionRepository;
 
   constructor(
     notifier: INotifier,
-    subscriptionChanelRepository: ISubscriptionChanelRepository,
+    subscriptionRepository: ISubscriptionRepository,
   ) {
     this.notifier = notifier;
-    this.subscriptionChanelRepository = subscriptionChanelRepository;
+    this.subscriptionRepository = subscriptionRepository;
   }
   async on(event: SubscriptionNearToExpired): Promise<void> {
-    const subscriptionChanel: Result<SubscriptionChanel> = await this.subscriptionChanelRepository.findSubscriptionChanelById(
+    const subscriptionChanel: Result<SubscriptionChanel> = await this.subscriptionRepository.findSubscriptionChanelById(
       event.chanel,
     );
 
