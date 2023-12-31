@@ -28,17 +28,6 @@ export class playlistController {
         >,
     ) { }
 
-    /*
-    @Get('TopPlaylist')
-    async getTopPlaylist() {
-        const dto: TopPlaylistServiceEntryDto = {
-            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-        }
-        const response = await this.GetTopPlaylistService.execute(dto);
-        return response.Data;
-    }
-    */
-
     @Get('TopPlaylist')
     async getTopPlaylist() {
         const dto: TopPlaylistEntryApplicationDto = {
@@ -60,14 +49,12 @@ export class playlistController {
     }
 
     @Get(':id')
-    async getPlaylist(@Param('id') id: GetPlaylistByIdEntryInfrastructureDto) {
+    async getPlaylist(@Param('id') id: string) {
         const dto: GetPlaylistByIdEntryApplicationDto = {
             userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-            PlaylistId: id.toString()//o se manda diferente en el postman o se pone pamaretro string, no consegui otra forma
+            PlaylistId: id
         }
-        console.log("dto: ", dto);
         const response = await this.GetPlaylistByIdService.execute(dto);
-        console.log("response: ", response);
         return response.Data;
     }
 }

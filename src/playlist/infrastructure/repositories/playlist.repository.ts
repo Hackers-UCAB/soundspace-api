@@ -18,70 +18,17 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
         this.OrmPlaylistMapper = new OrmPlaylistMapper();
     }
 
-    /*
-    //retornar aggregate o map
-    async findPlaylistById(PlaylistIdEntryApplicationDto: GetPlaylistByIdEntryApplicationDto): Promise<Result<PlaylistResponseApplicationDto>> {
-        console.log('codigo_playlist: ', PlaylistIdEntryApplicationDto.PlaylistId);
-        const playlist = await this.findOne(
-            {
-                where: {
-                    codigo_playlist: PlaylistIdEntryApplicationDto.PlaylistId
-                },
-                select: ['codigo_playlist', 'nombre', 'referencia_imagen', 'tipo', 'trending']
-            });
-
-        //console.log('codigo_playlist: ', playlist.codigo_playlist, playlist.nombre);
-        const playlistMapper = new OrmPlaylistMapper();
-
-        const playlistDomain = await playlistMapper.toDomain(playlist);
-        //console.log('codigo_playlist2 : ', playlistDomain.Id, playlistDomain.Name);
-
-        const totalDuration = await this.createQueryBuilder('playlist')
-            .leftJoin('playlist.canciones', 'playlist_cancion')
-            .leftJoin('playlist_cancion.cancion', 'cancion')
-            .where('playlist.codigo_playlist = :playlistId', { playlistId: PlaylistIdEntryApplicationDto.PlaylistId })
-            .select('SUM(cancion.duracion)', 'duracion_total')
-            .getRawOne();
-
-        //console.log('Duraci�n total de las canciones en la playlist:', totalDuration.duracion_total);
-        const playlistResponse: PlaylistResponseApplicationDto = {
-            userId: "userId",
-            id: playlistDomain.Id.Id,
-            name: playlistDomain.Name.Name,
-            cover: playlistDomain.Cover.Path,
-            duration: totalDuration.duracion_total
-        };
-
-        return Result.success(playlistResponse, 200);
-    }
-
-
-    */
-
-
     async findPlaylistById(id: PlaylistId): Promise<Result<Playlist>> {
         let response: Playlist;
         let error: Error;
-
         try {
-            //realizamos el query, aqui el unico join es con la tabla de playlistCancion para obtener los ids de las canciones
-            //no se hace con los creadores porque nuestra entity Playlist de dominio no tiene dicho atributo
             const playlist = await this.createQueryBuilder("playlist")
                 .select(["playlist.codigo_playlist", "playlist.nombre", "playlist.referencia_imagen", "cancion.codigo_cancion"])
                 .innerJoinAndSelect("playlist.canciones", "playlistCancion")
                 .innerJoinAndSelect("playlistCancion.cancion", "cancion")
-                //.where("playlist.tipo = 'playlist'")
-                .where("playlist.codigo_playlist = :id", { id: id.Id })
+                .where("playlist.codigo_playlist = :id and playlist.tipo = 'playlist'", { id: id.Id })
                 .getOne();
-            /*
-            console.log("playlist: ", playlist);
-            console.log("nombre: ", playlist.nombre);
-            console.log("canciones: ", playlist.canciones);
-            */
-            //mapeamos el resultado
             response = await this.OrmPlaylistMapper.toDomain(playlist);
-
-
         } catch (e) {
             error = e;
         } finally {
@@ -101,10 +48,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
     async findTopPlaylist(): Promise<Result<Playlist[]>> {
         let response: Playlist[];
         let error: Error;
-
         try {
-            //realizamos el query, aqui el unico join es con la tabla de playlistCancion para obtener los ids de las canciones
-            //no se hace con los creadores porque nuestra entity Playlist de dominio no tiene dicho atributo
             const playlists = await this.createQueryBuilder("playlist")
                 .select(["playlist.codigo_playlist", "playlist.nombre", "playlist.referencia_imagen", "cancion.codigo_cancion"])
                 .innerJoinAndSelect("playlist.canciones", "playlistCancion")
@@ -112,12 +56,6 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
                 .where("playlist.trending = :trending", { trending: true })
                 .where("playlist.tipo = 'playlist'")
                 .getMany();
-            /*
-            console.log("playlist: ", playlist);
-            console.log("nombre: ", playlist.nombre);
-            console.log("canciones: ", playlist.canciones);
-            */
-            //mapeamos el resultado
             response = await Promise.all(playlists.map(async (playlist) => await this.OrmPlaylistMapper.toDomain(playlist)));
 
         } catch (e) {
@@ -134,7 +72,5 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             }
             return Result.success<Playlist[]>(response, 200);
         }
-
     }
-
 }

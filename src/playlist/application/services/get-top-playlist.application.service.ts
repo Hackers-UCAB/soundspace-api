@@ -1,6 +1,7 @@
 import { Result } from "../../../common/application/result-handler/result";
 import { IApplicationService } from "../../../common/application/services/interfaces/application-service.interface";
 import { IGetBufferImageInterface } from "../../../common/domain/interfaces/get-buffer-image.interface";
+import { SongRepository } from "../../../song/infraestructure/repositories/song.repository";
 import { IPlaylistRepository } from "../../domain/repositories/playlist.repository.interface";
 import { PlaylistId } from "../../domain/value-objects/playlist-id";
 import { GetPlaylistByIdEntryApplicationDto } from "../dto/entrys/get-playlist-by-id-entry.application.dto";
@@ -12,7 +13,7 @@ export class GetTopPlaylistService implements IApplicationService<TopPlaylistEnt
 
     private readonly PlaylistRepository: IPlaylistRepository;
     private readonly getBufferImage: IGetBufferImageInterface;
-    songRepository: any;
+    songRepository: SongRepository;
 
     constructor(PlaylistRepository: IPlaylistRepository, getBufferImage: IGetBufferImageInterface) {
         this.PlaylistRepository = PlaylistRepository;
@@ -21,7 +22,6 @@ export class GetTopPlaylistService implements IApplicationService<TopPlaylistEnt
 
     async execute(param: TopPlaylistEntryApplicationDto): Promise<Result<GetTopPlaylistResponseApplicationDto>> {
         const playlistResult = await this.PlaylistRepository.findTopPlaylist();
-        //console.log("playlistResult: ", playlistResult);
         if (!playlistResult.IsSuccess) {
             return Result.fail<GetTopPlaylistResponseApplicationDto>(null, playlistResult.statusCode, playlistResult.message, playlistResult.error);
         }
@@ -30,11 +30,6 @@ export class GetTopPlaylistService implements IApplicationService<TopPlaylistEnt
         for (let i = 0; i < playlistResult.Data.length; i++) {
             const playlist = playlistResult.Data[i];
             const imageResult = await this.getBufferImage.getFile(playlist.Cover.Path);
-            /*
-            if (!imageResult.IsSuccess) {
-                return Result.fail(null, imageResult.statusCode, imageResult.message, imageResult.error);
-            }
-            */
             const playlistObject = {
                 id: playlist.Id.Id,
                 image: imageResult.Data
