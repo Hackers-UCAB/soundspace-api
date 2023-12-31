@@ -9,11 +9,14 @@ import { servicesProvidersManager } from './common/infraestructure/providers/ser
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 import { SongController } from './song/infraestructure/controllers/song.controller';
 import { SongWsModule } from './song-ws/song-ws.module';
+import { playlistController } from './playlist/infrastructure/controllers/playlist.controller';
+import { AlbumController } from './album/infraestructure/controllers/album.controller';
 import { UserController } from './user/infraestructure/controllers/user.controller';
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CheckSubscriptionsCronService } from './subscription/infraestructure/cron/subscriptions.cron';
 import { PromotionController } from './promotions/infraestructure/controllers/promotion.controller';
+import { SearchController } from './search/infraestructure/controllers/search.controller';
 
 @Module({
   imports: [
@@ -24,18 +27,35 @@ import { PromotionController } from './promotions/infraestructure/controllers/pr
     JwtModule.registerAsync({
       imports: [],
       inject: [],
-      useFactory:()=>{
+      useFactory: () => {
         return {
           secret: process.env.JWT_SECRET,
           signOptions: { expiresIn: '1d' },
-        }
-      }
+        };
+      },
     }),
     SongWsModule,
     ScheduleModule.forRoot(),
   ],
-  controllers: [AuthController, SubscriptionController, SongController, UserController, PromotionController],
-  providers: [...databaseProviders, ...servicesProvidersManager, ...providersManager,  JwtStrategy, JwtModule, PassportModule, CheckSubscriptionsCronService],
+  controllers: [
+    AuthController,
+    SubscriptionController,
+    SongController,
+    UserController,
+    PromotionController,
+    playlistController,
+    AlbumController,
+    SearchController
+  ],
+  providers: [
+    ...databaseProviders,
+    ...servicesProvidersManager,
+    ...providersManager,
+    JwtStrategy,
+    JwtModule,
+    PassportModule,
+    CheckSubscriptionsCronService,
+  ],
   exports: [],
 })
 export class AppModule {}

@@ -2,10 +2,10 @@ import { DomainEvent } from "src/common/domain/domain-event";
 import { SongId } from "../value-objects/song-id";
 import { SongName } from "../value-objects/song-name";
 import { SongCover } from "../value-objects/song-cover";
-import { SongGenre } from "../value-objects/song-genre";
 import { SongDuration } from "../value-objects/song-duration";
 import { SongUrl } from "../value-objects/song-url";
 import { SongPreviewUrl } from "../value-objects/song-preview-url";
+import { SongGenres } from "../value-objects/song-genre";
 
 
 export class SongCreated extends DomainEvent{
@@ -15,7 +15,7 @@ export class SongCreated extends DomainEvent{
        public name: SongName,
        public url: SongUrl,
        public cover: SongCover,
-       public genre: SongGenre,
+       public genres: SongGenres,
        public duration: SongDuration,
        public previewUrl: SongPreviewUrl,
     ){
@@ -27,11 +27,11 @@ export class SongCreated extends DomainEvent{
         name: SongName,
         url: SongUrl,
         cover: SongCover,
-        genre: SongGenre,
+        genres: SongGenres,
         duration: SongDuration,
         previewUrl: SongPreviewUrl
 
     ): SongCreated{
-        return new SongCreated(id, name, url, cover, genre, duration, previewUrl);
+        return new SongCreated(id, name, url, cover, genres, duration, previewUrl);
     }
 }

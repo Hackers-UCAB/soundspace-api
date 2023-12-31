@@ -25,11 +25,21 @@ import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscript
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
 import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
 import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
+import { GetPlaylistByIdService } from '../../../../playlist/application/services/get-playlist-by-id.application.service';
+import { PlaylistRepository } from '../../../../playlist/infrastructure/repositories/playlist.repository';
 import { SecurityApplicationServiceDecorator } from 'src/common/application/services/decorators/security-decorator/security-application-service.service.decorator';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
 import { PromotionRepository } from 'src/promotions/infraestructure/repositories/promotion.repository';
 import { GetRandomPromotionApplicationService } from 'src/promotions/application/services/get-random-promotion.application.service';
 import { AzureBufferImageHelper } from '../../azure/helpers/get-blob-image.helper';
+import { GetTopPlaylistService } from '../../../../playlist/application/services/get-top-playlist.application.service';
+import { OrmSongMapper } from '../../../../song/infraestructure/mapper/orm-song.mapper';
+import { GetAlbumByIdService } from 'src/album/application/services/get-album-by-id.application.service';
+import { AlbumRepository } from 'src/album/infraestructure/repositories/album.repository';
+import { GetTopAlbumService } from 'src/album/application/services/get-top-album.application.service';
+import { GetArtistByIdService } from '../../../../artist/application/services/get-artist-by-id.application.service';
+import { ArtistRepository } from '../../../../artist/infraestructure/repositories/artist.repository';
+import { SearchApplicationService } from 'src/search/application/services/search.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -263,10 +273,7 @@ export const servicesProvidersManager: Provider[] = [
   },
   {
     provide: 'GetRandomPromotionApplicationService',
-    useFactory: (
-      dataSource: DataSource,
-      logger: ILogger
-    ) => {
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new GetRandomPromotionApplicationService(
@@ -283,4 +290,134 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
+  {
+    provide: 'GetRandomPromotionApplicationService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetRandomPromotionApplicationService(
+            new PromotionRepository(dataSource),
+            new AzureBufferImageHelper(),
+          ),
+          new AuditingRepository(dataSource),
+          'Get Random Promotion',
+          logger,
+        ),
+        logger,
+        'Get Random Promotion',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetPlaylistByIdService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetPlaylistByIdService(
+            new PlaylistRepository(dataSource),
+            new SongRepository(dataSource, new OrmSongMapper()),
+          ),
+          new AuditingRepository(dataSource),
+          'GetPlaylistByIdService',
+          logger,
+        ),
+        logger,
+        'GetPlaylistByIdService',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetTopPlaylistService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetTopPlaylistService(
+            new PlaylistRepository(dataSource),
+            new AzureBufferImageHelper(),
+          ),
+          new AuditingRepository(dataSource),
+          'GetTopPlaylistService',
+          logger,
+        ),
+        logger,
+        'GetTopPlaylistService',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetAlbumByIdService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetAlbumByIdService(new AlbumRepository(dataSource)),
+          new AuditingRepository(dataSource),
+          'GetAlbumByIdService',
+          logger,
+        ),
+        logger,
+        'GetAlbumByIdService',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetTopAlbumService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetTopAlbumService(
+            new AlbumRepository(dataSource),
+            new AzureBufferImageHelper(),
+          ),
+          new AuditingRepository(dataSource),
+          'GetTopAlbumService',
+          logger,
+        ),
+        logger,
+        'GetTopAlbumService',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetArtistByIdService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetArtistByIdService(new ArtistRepository(dataSource)),
+          new AuditingRepository(dataSource),
+          'GetArtistByIdService',
+          logger,
+        ),
+        logger,
+        'GetArtistByIdService',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'SearchApplicationService',
+    useFactory: (
+      dataSource: DataSource,
+      logger: ILogger,
+    ) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new SearchApplicationService(
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new AlbumRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'Search Service',
+          logger,
+        ),
+        logger,
+        'Search Service',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  }
 ];

@@ -1,49 +1,37 @@
-import { Song } from "src/song/domain/song";
-import { OrmCancionEntity } from "../orm-entities/song.entity";
 import { IMapper } from "src/common/application/mappers/mapper.interface";
+import { OrmCancionEntity } from "../orm-entities/song.entity";
+import { Song } from "src/song/domain/song";
+import { InvalidToDomainMapper } from "src/playlist/infrastructure/exceptions/invalid-to-domaim-mapper.exception";
 import { SongId } from "src/song/domain/value-objects/song-id";
 import { SongName } from "src/song/domain/value-objects/song-name";
+import { SongDuration } from "src/song/domain/value-objects/song-duration";
 import { SongUrl } from "src/song/domain/value-objects/song-url";
 import { SongCover } from "src/song/domain/value-objects/song-cover";
-import { SongGenre } from "src/song/domain/value-objects/song-genre";
-import { OrmGeneroEntity } from "src/common/infraestructure/orm-entities/genre.entity";
-import { SongDuration } from "src/song/domain/value-objects/song-duration";
+import { SongGenres } from "src/song/domain/value-objects/song-genre";
 import { SongPreviewUrl } from "src/song/domain/value-objects/song-preview-url";
 
-export class OrmSongMapper implements IMapper<Song, OrmCancionEntity>{
+export class OrmSongMapper implements IMapper<Song, OrmCancionEntity> {
 
     async toDomain(persistence: OrmCancionEntity): Promise<Song> {
-        let array: string[]
-        persistence.generos.forEach(function (genero){
-            array.push(String(genero))
-        })
         if (persistence) {
+            const genres = persistence.generos.map(genre => genre.nombre_genero);
+
             const song: Song = await Song.create(
                 SongId.create(persistence.codigo_cancion),
                 SongName.create(persistence.nombre_cancion),
                 SongUrl.create(persistence.referencia_cancion),
                 SongCover.create(persistence.referencia_imagen),
-                SongGenre.create(array),
+                SongGenres.create(genres),
                 SongDuration.create(persistence.duracion),
                 SongPreviewUrl.create(persistence.referencia_preview)
             );
             return song;
         }
-        return null;
+        throw InvalidToDomainMapper;
     }
 
-    async toPersistence(domain: Song): Promise<OrmCancionEntity> {
-        if (domain) {
-            const song = await OrmCancionEntity.create(
-                domain.Id.Id,
-                domain.Name.Name,
-                domain.Url.Path,
-                domain.Cover.Path,
-                domain.Duration.Duration,
-                domain.PreviewUrl.Path
-            );
-            return song;
-        }
-        return null;    
+    toPersistence(domain: Song): Promise<OrmCancionEntity> {
+        throw new Error("Method not implemented.");
     }
+
 }
