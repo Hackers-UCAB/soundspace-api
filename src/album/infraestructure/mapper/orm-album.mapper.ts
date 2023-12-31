@@ -22,6 +22,7 @@ export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
         new AlbumName(persistence.nombre),
         new AlbumCover(persistence.referencia_imagen),
         new AlbumSongs(songsIds),
+        new AlbumGenre(null),
       );
       return album;
     }

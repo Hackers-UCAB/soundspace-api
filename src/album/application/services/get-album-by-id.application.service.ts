@@ -23,7 +23,7 @@ export class GetAlbumByIdService
   async execute(
     param: GetAlbumByIdEntryApplicationDto,
   ): Promise<Result<GetAlbumByIdResponseApplicationDto>> {
-      /*
+    /*
     console.log('param: ', param);
     //creamos el value object de Playlist Id
     const albumId = AlbumId.create(param.albumId);
@@ -41,24 +41,25 @@ export class GetAlbumByIdService
       );
     }
     */
-      
-       //console.log('param: ', param);
-       //creamos el value object de Playlist Id
-       const albumId = AlbumId.create(param.albumId);
 
-       console.log('probando  albumId: ', albumId);
-      //buscamos en el repositorio la playlist por id
-      const albumResult = await this.AlbumRepository.findAlbumsByArtist(new ArtistId('808da108-1dbc-4214-9e7c-fe7cfccd5285'));
-       console.log('albumResult: ', albumResult);
-       if (!albumResult.IsSuccess) {
-         return Result.fail<GetAlbumByIdResponseApplicationDto>(
-           null,
-           albumResult.statusCode,
-           albumResult.message,
-           albumResult.error,
-         );
-       }
-   
+    //console.log('param: ', param);
+    //creamos el value object de Playlist Id
+    const albumId = AlbumId.create(param.albumId);
+
+    console.log('probando  albumId: ', albumId);
+    //buscamos en el repositorio la playlist por id
+    const albumResult = await this.AlbumRepository.findAlbumsByArtist(
+      new ArtistId('8dcf93a9-b07d-46e8-9f85-cacbec5b9d0b'),
+    );
+    console.log('albumResult: ', albumResult);
+    if (!albumResult.IsSuccess) {
+      return Result.fail<GetAlbumByIdResponseApplicationDto>(
+        null,
+        albumResult.statusCode,
+        albumResult.message,
+        albumResult.error,
+      );
+    }
 
     //return Result.success<GetPlaylistByIdResponseApplicationDto>(playlistResult.Data, playlistResult.statusCode);
 
