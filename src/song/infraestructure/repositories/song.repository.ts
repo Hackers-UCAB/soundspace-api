@@ -17,7 +17,6 @@ export class SongRepository extends Repository<OrmCancionEntity> implements ISon
         let response: Song;
         let error: Error;
         try {
-            console.log("Repo id: ", id);
             const song = await this.createQueryBuilder("cancion")
                 .select(["cancion.codigo_cancion",
                     "cancion.nombre_cancion",
@@ -29,9 +28,7 @@ export class SongRepository extends Repository<OrmCancionEntity> implements ISon
                 .innerJoinAndSelect("cancion.generos", "genero")
                 .where("cancion.codigo_cancion = :id", { id: id.Id })
                 .getOne();
-            console.log("Repo song: ", song);
             response = await this.ormSongMapper.toDomain(song);
-            console.log("Repo response: ", response);
         } catch (e) {
             error = e;
         } finally {

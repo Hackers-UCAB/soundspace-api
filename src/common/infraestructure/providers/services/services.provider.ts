@@ -315,7 +315,8 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetPlaylistByIdService(
             new PlaylistRepository(dataSource),
-            new SongRepository(dataSource,new OrmSongMapper())
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),
           'GetPlaylistByIdService',
