@@ -3,13 +3,13 @@ import { Result } from 'src/common/application/result-handler/result';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { Song } from 'src/song/domain/song';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
-import { SearchResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
+import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 
 export class SearchSongsApplicationService
   implements
     IApplicationService<
       SearchItemsEntryApplicationDto,
-      SearchResponseApplicationDto
+      SearchItemsResponseApplicationDto
     >
 {
   private readonly songRepository: ISongRepository;
@@ -20,7 +20,7 @@ export class SearchSongsApplicationService
 
   async execute(
     param: SearchItemsEntryApplicationDto,
-  ): Promise<Result<SearchResponseApplicationDto>> {
+  ): Promise<Result<SearchItemsResponseApplicationDto>> {
    
     const songsResult: Result<Song[]> = await this.songRepository.findSongsByName(param.name);
     
@@ -32,7 +32,7 @@ export class SearchSongsApplicationService
         songsResult.error,
       );
     }
-    const response: SearchResponseApplicationDto = {
+    const response: SearchItemsResponseApplicationDto = {
       userId: param.userId,
       data: songsResult.Data.map((song) => ({
         id: song.Id.Id,

@@ -2,6 +2,6 @@ import { ServiceEntry } from "src/common/application/services/dto/entry/service-
 
 export class SearchEntryApplicationDto implements ServiceEntry{
     userId: string;
-    type: string; 
+    types: string []; 
     name: string;
 }

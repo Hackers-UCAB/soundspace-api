@@ -1,6 +1,6 @@
 import { Result } from 'src/common/application/result-handler/result';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
-import { SearchResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
+import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { Playlist } from 'src/playlist/domain/playlist';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
@@ -9,7 +9,7 @@ export class SearchPlaylistsApplicationService
   implements
     IApplicationService<
       SearchItemsEntryApplicationDto,
-      SearchResponseApplicationDto
+      SearchItemsResponseApplicationDto
     >
 {
   private readonly playlistRepository: IPlaylistRepository;
@@ -19,7 +19,7 @@ export class SearchPlaylistsApplicationService
   }
   async execute(
     param: SearchItemsEntryApplicationDto,
-  ): Promise<Result<SearchResponseApplicationDto>> {
+  ): Promise<Result<SearchItemsResponseApplicationDto>> {
     const playlistsResult: Result<Playlist[]> =
       await this.playlistRepository.findPlaylistsByName(param.name);
 
@@ -31,7 +31,7 @@ export class SearchPlaylistsApplicationService
         playlistsResult.error,
       );
     }
-    const response: SearchResponseApplicationDto = {
+    const response: SearchItemsResponseApplicationDto = {
       userId: param.userId,
       data: playlistsResult.Data.map((playlist) => ({
         id: playlist.Id.Id,

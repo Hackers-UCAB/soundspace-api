@@ -2,14 +2,14 @@ import { Artist } from 'src/artist/domain/artist';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { Result } from 'src/common/application/result-handler/result';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
-import { SearchResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
+import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 
 export class SearchArtistsApplicationService
   implements
     IApplicationService<
       SearchItemsEntryApplicationDto,
-      SearchResponseApplicationDto
+      SearchItemsResponseApplicationDto
     >
 {
   private readonly artistRepository: IArtistRepository;
@@ -18,7 +18,7 @@ export class SearchArtistsApplicationService
   }
   async execute(
     param: SearchItemsEntryApplicationDto,
-  ): Promise<Result<SearchResponseApplicationDto>> {
+  ): Promise<Result<SearchItemsResponseApplicationDto>> {
     const aritstsResult: Result<Artist[]> = await this.artistRepository.findArtistsByName(param.name);
 
     if (!aritstsResult.IsSuccess) {
@@ -29,7 +29,7 @@ export class SearchArtistsApplicationService
         aritstsResult.error,
       );
     }
-    const response: SearchResponseApplicationDto = {
+    const response: SearchItemsResponseApplicationDto = {
       userId: param.userId,
       data: aritstsResult.Data.map((artist) => ({
         id: artist.Id.Id,
