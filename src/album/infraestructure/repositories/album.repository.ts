@@ -19,7 +19,8 @@ export class AlbumRepository
 
   async findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
     let response: Album[];
-    let error: Error;
+      let error: Error;
+      console.log(" repo artistId: ", artistId);
     try {
       const albums = await this.createQueryBuilder('playlist')
         .distinct(true)
@@ -42,12 +43,11 @@ export class AlbumRepository
         .where('playlist.tipo = :albumType', { albumType: 'album' })
         .andWhere('a.codigo_artista = :artistId', { artistId: artistId.Id })
         .getMany();
-
-      console.log('albums repo', albums);
-
+        console.log(" repo albums: ", albums);
       response = await Promise.all(
         albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
-      );
+        );
+        console.log(" repo response: ", response);
     } catch (e) {
       error = e;
     } finally {
@@ -68,11 +68,6 @@ export class AlbumRepository
     let response: Album;
     let error: Error;
     try {
-      console.log('aja repo');
-      console.log('aja repo');
-      console.log('aja repo');
-      console.log('aja repo');
-      console.log('aja repo');
 
       const album = await this.createQueryBuilder('playlist')
         .select([
@@ -108,7 +103,6 @@ export class AlbumRepository
     let response: Album[];
     let error: Error;
     try {
-      console.log('aja repo');
       const albums = await this.createQueryBuilder('playlist')
         .select([
           'playlist.codigo_playlist',
@@ -121,8 +115,6 @@ export class AlbumRepository
         .where('playlist.trending = :trending', { trending: true })
         .where("playlist.tipo = 'album'")
         .getMany();
-
-      console.log('albums repo', albums);
       response = await Promise.all(
         albums.map(
           async (albums) => await this.OrmAlbumMapper.toDomain(albums),

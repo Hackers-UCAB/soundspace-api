@@ -1,6 +1,6 @@
 import { OrmCancionEntity } from "../../../song/infraestructure/orm-entities/song.entity";
 import { OrmPlaylistCreadorEntity } from "../../../common/infraestructure/orm-entities/playlist-creator.entity";
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrmGeneroEntity } from "../../../common/infraestructure/orm-entities/genre.entity";
 
 @Entity('artista')
@@ -25,18 +25,7 @@ export class OrmArtistaEntity {
   @OneToMany(() => OrmPlaylistCreadorEntity, playlistCreador => playlistCreador.artista)
   playlistCreadores: OrmPlaylistCreadorEntity[];
 
-    @ManyToMany(() => OrmGeneroEntity, genero => genero.artistas)
-    @JoinTable({
-        name: 'artista_genero',
-        joinColumn: {
-            name: 'codigo_artista',
-            referencedColumnName: 'codigo_artista'
-        },
-        inverseJoinColumn: {
-            name: 'codigo_genero',
-            referencedColumnName: 'codigo_genero'
-        }
-    })
-    generos: OrmGeneroEntity[];
+    @ManyToOne(() => OrmGeneroEntity, (genero) => genero.artistas)
+    genero: OrmGeneroEntity;
 
 }

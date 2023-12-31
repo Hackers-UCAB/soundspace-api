@@ -8,6 +8,7 @@ import { HttpResponseHandler } from '../../../common/infraestructure/http-respon
 import { Result } from '../../../common/application/result-handler/result';
 import { GetTopPlaylistResponseInfrastructureDto } from '../dto/responses/get-top-playlist-response.infrastructure.dto';
 import { TopPlaylistEntryApplicationDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
+import { GetPlaylistByIdEntryInfrastructureDto } from '../dto/entrys/get-playlist-by-id-entry.infrastrucrure.dto';
 
 @Controller('playlist')
 export class playlistController {
@@ -59,12 +60,14 @@ export class playlistController {
     }
 
     @Get(':id')
-    async getPlaylist(@Param('id') id: string) {
+    async getPlaylist(@Param('id') id: GetPlaylistByIdEntryInfrastructureDto) {
         const dto: GetPlaylistByIdEntryApplicationDto = {
             userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-            PlaylistId: id
+            PlaylistId: id.toString()//o se manda diferente en el postman o se pone pamaretro string, no consegui otra forma
         }
+        console.log("dto: ", dto);
         const response = await this.GetPlaylistByIdService.execute(dto);
+        console.log("response: ", response);
         return response.Data;
     }
 }

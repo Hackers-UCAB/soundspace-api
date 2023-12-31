@@ -26,7 +26,7 @@ import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/ap
 import { GetUserInfoApplicationService } from 'src/user/application/services/get-user-info.application.service';
 import { UpdateUserInfoApplicationService } from 'src/user/application/services/update-user-info.application.service';
 import { GetPlaylistByIdService } from '../../../../playlist/application/services/get-playlist-by-id.application.service';
-import { PlaylistRepository } from '../../../../playlist/infraestructure/repositories/playlist.repository';
+import { PlaylistRepository } from '../../../../playlist/infrastructure/repositories/playlist.repository';
 import { SecurityApplicationServiceDecorator } from 'src/common/application/services/decorators/security-decorator/security-application-service.service.decorator';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
 import { PromotionRepository } from 'src/promotions/infraestructure/repositories/promotion.repository';
