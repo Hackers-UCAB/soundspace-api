@@ -22,22 +22,25 @@ export class AlbumRepository
     let error: Error;
     try {
       const albums = await this.createQueryBuilder('playlist')
+        .distinct(true)
         .select([
           'playlist.codigo_playlist',
           'playlist.nombre',
           'playlist.referencia_imagen',
-          'cancion.codigo_cancion',
         ])
-        .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
-        .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
+        .innerJoin(
+          'playlist_cancion',
+          'pc',
+          'playlist.codigo_playlist = pc."playlistCodigoPlaylist"',
+        )
         .innerJoin(
           'cancion_artista',
           'ca',
-          'ca.codigo_cancion = cancion.codigo_cancion',
+          'pc."cancionCodigoCancion" = ca.codigo_cancion',
         )
-        .innerJoinAndSelect('ca.artista', 'artista')
-        .where('artista.codigo_artista = :artistId', { artistId: artistId.Id })
-        .where("playlist.tipo = 'album'")
+        .innerJoin('artista', 'a', 'ca.codigo_artista = a.codigo_artista')
+        .where('playlist.tipo = :albumType', { albumType: 'album' })
+        .andWhere('a.codigo_artista = :artistId', { artistId: artistId.Id })
         .getMany();
 
       console.log('albums repo', albums);
