@@ -6,6 +6,6 @@ export class QuerySearchDto {
 
     @IsOptional()
     @Type(() => String)
-    @IsIn(['album', 'song'])
+    @IsIn(['album', 'playlist', 'song', 'artist'])
     type?: string
 }

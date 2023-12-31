@@ -290,25 +290,25 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
-  {
-    provide: 'GetRandomPromotionApplicationService',
-    useFactory: (dataSource: DataSource, logger: ILogger) => {
-      return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
-          new GetRandomPromotionApplicationService(
-            new PromotionRepository(dataSource),
-            new AzureBufferImageHelper(),
-          ),
-          new AuditingRepository(dataSource),
-          'Get Random Promotion',
-          logger,
-        ),
-        logger,
-        'Get Random Promotion',
-      );
-    },
-    inject: ['DataSource', 'ILogger'],
-  },
+  // {
+  //   provide: 'GetRandomPromotionApplicationService',
+  //   useFactory: (dataSource: DataSource, logger: ILogger) => {
+  //     return new LoggerApplicationServiceDecorator(
+  //       new AuditingCommandServiceDecorator(
+  //         new GetRandomPromotionApplicationService(
+  //           new PromotionRepository(dataSource),
+  //           new AzureBufferImageHelper(),
+  //         ),
+  //         new AuditingRepository(dataSource),
+  //         'Get Random Promotion',
+  //         logger,
+  //       ),
+  //       logger,
+  //       'Get Random Promotion',
+  //     );
+  //   },
+  //   inject: ['DataSource', 'ILogger'],
+  // },
   {
     provide: 'GetPlaylistByIdService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
@@ -409,6 +409,8 @@ export const servicesProvidersManager: Provider[] = [
           new SearchApplicationService(
             new SongRepository(dataSource, new OrmSongMapper()),
             new AlbumRepository(dataSource),
+            new PlaylistRepository(dataSource),
+            new ArtistRepository(dataSource),
           ),
           new AuditingRepository(dataSource),
           'Search Service',

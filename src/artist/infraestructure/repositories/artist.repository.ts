@@ -65,9 +65,8 @@ export class ArtistRepository
           'artist.codigo_artista',
           'artist.referencia_imagen',
         ])
-        .limit(5)
         .getMany();
-
+        
       response = await Promise.all(
         artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
@@ -75,6 +74,8 @@ export class ArtistRepository
       );
     } catch (err) {
       error = err;
+      console.log(error);
+      
     } finally {
       if (error) {
         return Result.fail(
@@ -87,6 +88,5 @@ export class ArtistRepository
       }
       return Result.success(response, 200);
     }
-    return null;
   }
 }

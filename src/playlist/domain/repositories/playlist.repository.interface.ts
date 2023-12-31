@@ -7,4 +7,5 @@ export interface IPlaylistRepository {
     GetPlaylistByIdEntryApplicationDto: PlaylistId,
   ): Promise<Result<Playlist>>;
   findTopPlaylist(): Promise<Result<Playlist[]>>;
+  findPlaylistsByName(name: string): Promise<Result<Playlist []>>
 }

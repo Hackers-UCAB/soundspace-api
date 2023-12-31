@@ -42,6 +42,6 @@ export class SearchController {
           searchResult.error
         );
       }
-    return HttpResponseHandler.Success(200, searchResult.Data);
+    return HttpResponseHandler.Success(200, searchResult.Data.data);
   }
 }
