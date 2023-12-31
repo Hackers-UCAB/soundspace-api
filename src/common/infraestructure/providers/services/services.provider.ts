@@ -39,6 +39,7 @@ import { AlbumRepository } from 'src/album/infraestructure/repositories/album.re
 import { GetTopAlbumService } from 'src/album/application/services/get-top-album.application.service';
 import { GetArtistByIdService } from '../../../../artist/application/services/get-artist-by-id.application.service';
 import { ArtistRepository } from '../../../../artist/infraestructure/repositories/artist.repository';
+import { GetTopSongsService } from '../../../../song/application/services/get-top-songs.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -398,5 +399,23 @@ export const servicesProvidersManager: Provider[] = [
         },
         inject: ['DataSource', 'ILogger'],
     },
-
+    {
+        provide: 'GetTopSongsService',
+        useFactory: (dataSource: DataSource, logger: ILogger) => {
+            return new LoggerApplicationServiceDecorator(
+                new AuditingCommandServiceDecorator(
+                    new GetTopSongsService(
+                        new SongRepository(dataSource, new OrmSongMapper()),
+                        new AzureBufferImageHelper(),
+                    ),
+                    new AuditingRepository(dataSource),
+                    'GetTopSongsService',
+                    logger,
+                ),
+                logger,
+                'GetTopSongsService',
+            );
+        },
+        inject: ['DataSource', 'ILogger'],
+    },
 ];

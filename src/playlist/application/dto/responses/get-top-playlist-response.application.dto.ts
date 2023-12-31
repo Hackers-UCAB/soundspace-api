@@ -4,8 +4,6 @@ export class GetTopPlaylistResponseApplicationDto implements ServiceResponse {
     userId: string;
     playlists: {
         id: string;
-        //image: string;
         image: Buffer;
-
     }[];
 }

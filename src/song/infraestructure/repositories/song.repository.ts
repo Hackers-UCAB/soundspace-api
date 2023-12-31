@@ -62,6 +62,37 @@ export class SongRepository extends Repository<OrmCancionEntity> implements ISon
                 error
             );
         }
+    }
 
+    async findTopSongs(): Promise<Result<Song[]>> {
+        let response: Song[];
+        let error: Error;
+        try {
+            const songs = await this.createQueryBuilder("cancion")
+                .select(["cancion.codigo_cancion",
+                    "cancion.nombre_cancion",
+                    "cancion.duracion",
+                    "cancion.referencia_cancion",
+                    "cancion.referencia_preview",
+                    "cancion.referencia_imagen",
+                    "genero.nombre_genero"])
+                .innerJoinAndSelect("cancion.generos", "genero")
+                .where("cancion.trending = true")
+                .getMany();
+            response = await Promise.all(songs.map(async (songs) => await this.ormSongMapper.toDomain(songs)));
+
+        } catch (e) {
+            error = e;
+        } finally {
+            if (error) {
+                return Result.fail(
+                    null,
+                    500,
+                    error.message || 'Ha ocurrido un error inesperado, hable con el administrador',
+                    error
+                );
+            }
+            return Result.success<Song[]>(response, 200);
+        }
     }
 }

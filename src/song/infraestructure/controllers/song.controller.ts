@@ -5,6 +5,12 @@ import { DataSource } from 'typeorm';
 import axios from 'axios';
 import { AzureBlobHelper } from '../helpers/get-blob-file.helper';
 import { Readable } from 'stream';
+import { GetTopSongsEntryApplicationDto } from '../../application/dto/entrys/get-top-songs.entry.application.dto';
+import { GetTopSongsResponseApplicationDto } from '../../application/dto/responses/get-top-songs.response.application.dto';
+import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
+import { Result } from '../../../common/application/result-handler/result';
+import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
+import { GetTopSongsResponseInfrastructureDto } from '../dto/responses/get-top-songs-response.infrastructure.dto';
 
 
 
@@ -14,9 +20,13 @@ export class SongController {
     constructor(
         @Inject('DataSource')
         private readonly dataSource: DataSource,
-    ){
 
-    }
+        @Inject('GetTopSongsService')
+        private readonly GetTopPlaylistService: IApplicationService<
+            GetTopSongsEntryApplicationDto,
+            GetTopSongsResponseApplicationDto
+        >,
+    ){ }
     
   //   @Get()
   // async getFile(@Res({passthrough: true}) res: Response) {
@@ -30,4 +40,24 @@ export class SongController {
   //   const streamable = new Readable(client)
   //   return new StreamableFile(streamable);
   // }
+
+    @Get('TopSongs')
+    async getTopPlaylist() {
+        const dto: GetTopSongsEntryApplicationDto = {
+            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+        }
+        const serviceResult: Result<GetTopSongsResponseApplicationDto> =
+            await this.GetTopPlaylistService.execute(dto);
+        if (!serviceResult.IsSuccess) {
+            HttpResponseHandler.HandleException(
+                serviceResult.statusCode,
+                serviceResult.message,
+                serviceResult.error,
+            );
+        }
+        const response: GetTopSongsResponseInfrastructureDto = {
+            songs: serviceResult.Data.songs
+        }
+        return HttpResponseHandler.Success(200, response);
+    }
 }
