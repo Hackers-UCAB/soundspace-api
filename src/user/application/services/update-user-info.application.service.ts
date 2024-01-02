@@ -28,21 +28,38 @@ export class UpdateUserInfoApplicationService
     param: UpdateUserInfoEntryApplicationDto,
   ): Promise<Result<UpdateUserInfoResponseApplicationDto>> {
     let updatedUser: User;
-    
+
     try {
-      const userResult: Result<User> = await this.userRepository.findUserById(UserId.create(param.userId));
+      const userResult: Result<User> = await this.userRepository.findUserById(
+        UserId.create(param.userId),
+      );
       if (!userResult.IsSuccess) {
-        return Result.fail(null, userResult.statusCode, userResult.message, userResult.error);
+        return Result.fail(
+          null,
+          userResult.statusCode,
+          userResult.message,
+          userResult.error,
+        );
       }
       updatedUser = userResult.Data;
-      updatedUser.updateUser(
-        param.name ? UserName.create(param.name) : null,
-        param.birthdate ? UserBirthday.create(param.birthdate) : null,
-        param.email ? UserEmail.create(param.email) : null,
-        param.gender ? UserGender.create(UserGenderEnum[param.gender]) : null,
-      );
+      if (param.name) updatedUser.updateName(UserName.create(param.name));
+
+      if (param.birthdate)
+        updatedUser.updateBirthday(UserBirthday.create(param.birthdate));
+
+      if (param.email) updatedUser.updateEmail(UserEmail.create(param.email));
+
+      if (param.gender)
+        updatedUser.updateGender(UserGender.create(UserGenderEnum[param.gender]));
+      
     } catch (error: any) {
-      return Result.fail(null, error.statusCode || 500, error.message || 'Ha ocurrido un error buscando y/o actualizando el usuario', error);
+      return Result.fail(
+        null,
+        error.statusCode || 500,
+        error.message ||
+          'Ha ocurrido un error buscando y/o actualizando el usuario',
+        error,
+      );
     }
 
     const savingUserResult: Result<string> =

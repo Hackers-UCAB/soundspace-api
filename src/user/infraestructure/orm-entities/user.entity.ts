@@ -27,7 +27,7 @@ export enum UserRole {
 @Entity('user')
 export class OrmUserEntity {
   @PrimaryGeneratedColumn('uuid')
-  codigo_usuario: string;
+  codigo_usuario: string;A
 
   @Column({ nullable: true })
   nombre?: string;
