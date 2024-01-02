@@ -1,4 +1,4 @@
-import { BlockBlobClient, BlobServiceClient } from '@azure/storage-blob';
+import { BlockBlobClient, BlobServiceClient, BlobDownloadResponseParsed } from '@azure/storage-blob';
 import { createReadStream } from 'fs';
 
 
@@ -50,11 +50,12 @@ export class AzureBlobHelper{
       const metadata = await blobClient.getProperties()
       const rate = metadata.contentLength/duration
       console.log(metadata.contentLength)
-      console.log(rate * startPointInSeconds)
-      const blobDownloaded = await blobClient.download( Math.trunc(rate * startPointInSeconds ) -1);   
+      console.log(rate)
+      const blobDownloaded = await blobClient.download()
       return {
         blob: blobDownloaded.readableStreamBody,
-        size: metadata.contentLength
+        size: metadata.contentLength,
+        startByte: rate
       };
     } catch (error) {
       throw error;
