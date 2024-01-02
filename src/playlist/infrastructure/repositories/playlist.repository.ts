@@ -41,7 +41,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             return Result.success<Playlist>(response, 200);
         }
     }
-  }
+  
 
   async findTopPlaylist(): Promise<Result<Playlist[]>> {
     let response: Playlist[];
