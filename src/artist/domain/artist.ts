@@ -87,12 +87,18 @@ export class Artist extends AggregateRoot<ArtistId> {
     }
 
     protected ensureValidaState(): void {
+        // if (
+        //     !this.name ||
+        //     !this.genre ||
+        //     !this.photo ||
+        //     !this.albums ||
+        //     !this.songs
+        // ) {
+        //     throw new InvalidArtistException("Artist not valid");
+        // }
         if (
             !this.name ||
-            !this.genre ||
-            !this.photo ||
-            !this.albums ||
-            !this.songs
+            !this.photo 
         ) {
             throw new InvalidArtistException("Artist not valid");
         }

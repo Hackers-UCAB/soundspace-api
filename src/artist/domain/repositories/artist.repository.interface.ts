@@ -8,4 +8,6 @@ export interface IArtistRepository {
 
     findTopArtists(): Promise<Result<Artist[]>>;
 
+    findArtistsByName(name: string): Promise<Result<Artist[]>>
+
 }

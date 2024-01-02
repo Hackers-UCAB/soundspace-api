@@ -14,7 +14,7 @@ import { Inject } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
-import { SubscriptionChanelRepository } from '../repositories/subscription-chanel.repository';
+import { SubscriptionRepository } from '../repositories/subscription.repository';
 
 export class OrmSubscriptionMapper
   implements IMapper<Subscription, OrmSubscripcionEntity>
@@ -53,7 +53,7 @@ export class OrmSubscriptionMapper
         domain.User.Id,
         new UserRepository(this.dataSource),
         domain.Chanel.Id,
-        new SubscriptionChanelRepository(this.dataSource),
+        new SubscriptionRepository(this.dataSource),
       );
       return subscription;
     }

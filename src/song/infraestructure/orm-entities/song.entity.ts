@@ -66,4 +66,24 @@ export class OrmCancionEntity {
 
   @OneToMany(() => OrmPlaylistCancionEntity, playlistCancion => playlistCancion.cancion)
   playlistCanciones: OrmPlaylistCancionEntity[];
+
+  static async create(
+    songId: string,
+    songName: string,
+    songUrl: string,
+    songCover: string,
+    songDuration: number,
+    songPreviewUrl: string,
+  ): Promise<OrmCancionEntity> {
+    const song = new OrmCancionEntity();
+    song.codigo_cancion = songId;
+    song.nombre_cancion = songName;
+    song.referencia_cancion = songUrl;
+    song.referencia_imagen = songCover;
+    song.duracion = songDuration;
+    song.referencia_preview = songPreviewUrl;
+    return song;
+  }
+
+  
 }

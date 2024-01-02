@@ -1,6 +1,5 @@
 import { Controller, Get, Inject, Param, Res, Headers, StreamableFile, Body } from '@nestjs/common';
-import { Response } from 'express';
-import { createReadStream } from 'fs';
+
 import { DataSource } from 'typeorm';
 import axios from 'axios';
 import { AzureBlobHelper } from '../helpers/get-blob-file.helper';

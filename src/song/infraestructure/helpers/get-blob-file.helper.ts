@@ -44,12 +44,10 @@ export class AzureBlobHelper{
 
   //!Este esta borrado XD
   //TODO: Debo buscar la manera de leer los segundos que me manden del front y convertirlos a bytes para poder pasarselo a la logica
-  async getFile(fileName: string, container: string, startPointInSeconds: number) {
+  async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
     try {
-      fileName = `${fileName}.mp3`;
       const blobClient = await this.getBlobClient(fileName, container);
       const metadata = await blobClient.getProperties()
-      const duration = 287
       const rate = metadata.contentLength/duration
       console.log(metadata.contentLength)
       console.log(rate * startPointInSeconds)

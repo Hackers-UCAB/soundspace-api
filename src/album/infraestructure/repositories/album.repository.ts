@@ -19,8 +19,8 @@ export class AlbumRepository
 
   async findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
     let response: Album[];
-      let error: Error;
-      console.log(" repo artistId: ", artistId);
+    let error: Error;
+    console.log(' repo artistId: ', artistId);
     try {
       const albums = await this.createQueryBuilder('playlist')
         .select([
@@ -40,11 +40,11 @@ export class AlbumRepository
         .where('artista.codigo_artista = :artistId', { artistId: artistId.Id })
         .where("playlist.tipo = 'album'")
         .getMany();
-        console.log(" repo albums: ", albums);
+      console.log(' repo albums: ', albums);
       response = await Promise.all(
         albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
-        );
-        console.log(" repo response: ", response);
+      );
+      console.log(' repo response: ', response);
     } catch (e) {
       error = e;
     } finally {
@@ -65,7 +65,6 @@ export class AlbumRepository
     let response: Album;
     let error: Error;
     try {
-
       const album = await this.createQueryBuilder('playlist')
         .select([
           'playlist.codigo_playlist',
@@ -130,6 +129,42 @@ export class AlbumRepository
         );
       }
       return Result.success<Album[]>(response, 200);
+    }
+  }
+
+  async findAlbumsByName(name: string): Promise<Result<Album[]>> {
+    let response: Album[];
+    let error: any;
+    try {
+      const albums = await this.createQueryBuilder('album')
+        .leftJoinAndSelect('album.canciones', 'playlistCancion')
+        .leftJoinAndSelect('playlistCancion.cancion', 'cancion')
+        .where(' LOWER(album.nombre) LIKE :name', {
+          name: `%${name.toLowerCase()}%`,
+        })
+        .andWhere('album.tipo = :tipo', {
+          tipo: 'album',
+        })    
+        .getMany();
+        
+        response = await Promise.all(
+          albums.map(
+            async (album) => await this.OrmAlbumMapper.toDomain(album),
+          ),
+        );
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado buscando los albums, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success(response, 200);
     }
   }
 }

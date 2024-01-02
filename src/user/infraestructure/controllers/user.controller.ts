@@ -15,7 +15,7 @@ import { HttpResponseHandler } from 'src/common/infraestructure/http-response-ha
 import { GetUserInfoResponseApplicationDto } from 'src/user/application/dto/responses/get-user-info-response.application.dto';
 
 import { UserId } from 'src/user/domain/value-objects/user-id';
-import { GetUserInfoResponseInfraestructureDto } from '../dto/responses/get-user-info-response.infraestructure.dto';
+import { GetUserInfoResponseInfraestructureDto, GetUserInfoSwaggerResponseInfraestructureDto } from '../dto/responses/get-user-info-response.infraestructure.dto';
 import { UpdateUserInfoEntryInfraestructureDto } from '../dto/entrys/update-user-info.entry.infraestructure.dto';
 import { UpdateUserInfoEntryApplicationDto } from 'src/user/application/dto/entrys/update-user-info-entry.application.dto';
 import { UserRole } from 'src/user/domain/value-objects/user-role';
@@ -24,8 +24,12 @@ import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum'
 import { User } from 'src/user/domain/user';
 import { AuthGuard } from '@nestjs/passport';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
+import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('user')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 export class UserController {
   constructor(
     @Inject('GetUserInfoApplicationService')
@@ -53,6 +57,7 @@ export class UserController {
 
   @Get()
   @Auth()
+  @ApiResponse({ status: 200, description: 'Se recibio correctamente la info del usuario', type: GetUserInfoSwaggerResponseInfraestructureDto })
   async getUser(@GetUser('id') userId: UserId) {
     const serviceResult: Result<GetUserInfoResponseApplicationDto> =
       await this.getUserInfoApplicationService.execute({userId: userId.Id});
@@ -75,6 +80,7 @@ export class UserController {
 
   @Patch()
   @Auth()
+  @ApiOkResponse({ description: 'Se actualizo correctamente la info del usuario, devuelve true'})
   async updateUser(
     @Body() updateUserDto: UpdateUserInfoEntryInfraestructureDto,
     @GetUser('id') userId: UserId,
@@ -97,3 +103,4 @@ export class UserController {
     return HttpResponseHandler.Success(200, serviceResult.Data.success);
   }
 }
+

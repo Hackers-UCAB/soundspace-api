@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
+import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { Result } from 'src/common/application/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
@@ -14,6 +15,7 @@ import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.
 import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
 import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
 import { DataSource } from 'typeorm';
+import { JwtService } from "@nestjs/jwt";
 import { OrmSongMapper } from '../song/infraestructure/mapper/orm-song.mapper';
 
 
@@ -48,12 +50,14 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     payload: {preview: boolean, songId: string, second: number} 
     ) 
     {
-      const gen = new UuidGenerator()
+
+      const token = client.handshake.auth.token
+      const jwt = new JwtService()
+      const decoded = jwt.verify(token, {secret: process.env.JWT_SECRET})
       const dto: PlaySongEntryApplicationDto = {
         ...payload,
-        userId: gen.generate()
+        userId: decoded.id
       }
-
     const service = 
     new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
