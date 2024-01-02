@@ -70,15 +70,34 @@ export class AlbumRepository
     try {
       const album = await this.createQueryBuilder('playlist')
         .select([
-          'playlist.codigo_playlist',
-          'playlist.nombre',
-          'playlist.referencia_imagen',
+          'pl.codigo_playlist',
+          'pl.nombre',
+          'pl.referencia_imagen',
           'cancion.codigo_cancion',
+          'genero.nombre_genero',
         ])
-        .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
-        .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
-        .where("playlist.tipo = 'album'")
-        .where('playlist.codigo_playlist = :id', { id: albumId.Id })
+        .innerJoin(
+          'playlist_cancion',
+          'pc',
+          'pl.codigo_playlist = pc."playlistCodigoPlaylist"',
+        )
+        .innerJoin(
+          'cancion_artista',
+          'ca',
+          'pc."cancionCodigoCancion" = ca.codigo_cancion',
+        )
+        .innerJoin(
+          'cancion',
+          'cancion',
+          'ca.codigo_cancion = cancion.codigo_cancion',
+        )
+        .innerJoin(
+          'genero',
+          'genero',
+          'pl."generoCodigoGenero" = genero.codigo_genero',
+        )
+        .where('pl.tipo = :tipo', { tipo: 'album' })
+        .andWhere('pl.codigo_playlist = :id', { id: albumId.Id })
         .getOne();
 
       response = await this.OrmAlbumMapper.toDomain(album);
@@ -90,7 +109,7 @@ export class AlbumRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo el album, hable con el administrador',
+            'Ha ocurrido un error inesperado obteniendo el álbum, hable con el administrador',
           error,
         );
       }

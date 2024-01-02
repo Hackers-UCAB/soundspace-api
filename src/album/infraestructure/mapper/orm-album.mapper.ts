@@ -1,5 +1,6 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
+import { OrmGeneroEntity } from 'src/common/infraestructure/orm-entities/genre.entity';
 import { Album } from '../../domain/album';
 import { AlbumId } from '../../domain/value-objects/album-id';
 import { AlbumName } from '../../domain/value-objects/album-name';
@@ -18,11 +19,11 @@ export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
       );
 
       const album: Album = await Album.create(
-        new AlbumId(persistence.codigo_playlist),
-        new AlbumName(persistence.nombre),
-        new AlbumCover(persistence.referencia_imagen),
-        new AlbumSongs(songsIds),
-        new AlbumGenre(null),
+        AlbumId.create(persistence.codigo_playlist),
+        AlbumName.create(persistence.nombre),
+        AlbumCover.create(persistence.referencia_imagen),
+        AlbumSongs.create(songsIds),
+        AlbumGenre.create(persistence.genero.nombre_genero),
       );
       return album;
     }
