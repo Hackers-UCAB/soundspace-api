@@ -39,6 +39,7 @@ export class CheckExpiredSubscriptionsApplicationService
         subscriptionsExpiredToday.error,
       );
     }
+    
     if (subscriptionsExpiredToday.Data.length > 0) {
       subscriptionsExpiredToday.Data.forEach(async (subscription) => {
         const userResult: Result<User> = await this.userRepisitory.findUserById(
@@ -47,7 +48,8 @@ export class CheckExpiredSubscriptionsApplicationService
         if (userResult.IsSuccess) {
           const user: User = userResult.Data;
           user.changedToGuest();
-
+          console.log(user);
+          
           const userUpdating: Result<string> =
             await this.userRepisitory.saveAggregate(user);
           if (userUpdating.IsSuccess) {
@@ -60,6 +62,8 @@ export class CheckExpiredSubscriptionsApplicationService
                 subscription.pullDomainEvents().at(-1),
               ]);
             }
+          }else{
+            console.log(userUpdating.message);
           }
         }
       });

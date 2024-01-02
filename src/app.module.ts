@@ -16,6 +16,7 @@ import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy'
 import { ScheduleModule } from '@nestjs/schedule';
 import { CheckSubscriptionsCronService } from './subscription/infraestructure/cron/subscriptions.cron';
 import { PromotionController } from './promotions/infraestructure/controllers/promotion.controller';
+import { SearchController } from './search/infraestructure/controllers/search.controller';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { PromotionController } from './promotions/infraestructure/controllers/pr
     PromotionController,
     playlistController,
     AlbumController,
+    SearchController
   ],
   providers: [
     ...databaseProviders,

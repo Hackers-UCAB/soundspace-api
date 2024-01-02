@@ -25,9 +25,7 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
         if (!playlistResult.IsSuccess) {
             return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, playlistResult.statusCode, playlistResult.message, playlistResult.error);
         }
-
         const imageResult = await this.getBufferImage.getFile(playlistResult.Data.Cover.Path);
-
         const playlistResponseDto: GetPlaylistByIdResponseApplicationDto = {
             userId: param.userId,
             id: playlistResult.Data.Id.Id,
@@ -38,7 +36,6 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
         }
         let tiempoTotalPlaylist = 0;
         //buscamos todas las canciones relacionadas a ese playlist para crear el songResponseDto
-        console.log("playlistResponseDto:", playlistResponseDto);
         for (const songId of playlistResult.data.PlaylistSongs.Songs) {
             const song = await this.songRepository.findSongById(songId);
             if (!song.IsSuccess) {

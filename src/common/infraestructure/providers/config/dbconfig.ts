@@ -12,12 +12,11 @@ export const databaseProviders = [
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        entities: getMetadataArgsStorage().tables.map((table) => table.target),
-        //entities: ['dist/src/*/.entity.js', 'dist/src/*/.entity.enum.js'],
-        //entities: [__dirname + '/*/.entity{.ts,.js}'],
-        //entities: ["dist/*/.entity{.ts,.js}"],
-        /*
-        ssl: {
+        //entities: getMetadataArgsStorage().tables.map((table) => table.target),
+        //entities: ['dist/src/**/*.entity.js', 'dist/src/**/*.entity.enum.js'],
+        //entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        /*: {
           rejectUnauthorized: false
         },*/
         synchronize: true,

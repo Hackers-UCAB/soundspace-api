@@ -26,15 +26,15 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
 
         const {preview , second, songId, userId} = param
 
-        const url = await this.songRepository.findSongUrlById(songId);
+        const data = await this.songRepository.findPartialSongById(songId);
 
-        if (!url.IsSuccess) {
-            return Result.fail(null, 500, url.message, new Error(url.message));
+        if (!data.IsSuccess) {
+            return Result.fail(null, 500, data.message, new Error(data.message));
         }
             
-        const {blob, size} = await this.getSongHelper.getFile(url.Data.Id, 'cancion', second);
+        const {blob, size} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
 
-        this.sendSongHelper.sendSong(this.client, blob, size, second);
+        this.sendSongHelper.sendSong(this.client, blob, size);
         
         const response: PlaySongResponseApplicationDto = {
             userId: userId,

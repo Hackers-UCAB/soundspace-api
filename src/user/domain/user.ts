@@ -13,6 +13,10 @@ import { UserGenderEnum } from './value-objects/enum/user-gender.enum';
 import { UserUpdated } from './events/user-updated.event';
 import { UserChangedToGuest } from './events/user-changed-to-guest.event';
 import { UserRoleEnum } from './value-objects/enum/user-role.enum';
+import { UserNameModified } from './events/user-name-modified';
+import { UserEmailModified } from './events/user-email-modified';
+import { UserBirthdayModified } from './events/user-birthday-modified';
+import { UserGenderModified } from './events/user-gender-modified';
 
 export class User extends AggregateRoot<UserId> {
   private name: UserName;
@@ -66,6 +70,22 @@ export class User extends AggregateRoot<UserId> {
       this.email = event.userEmail;
     }
 
+    if (event instanceof UserNameModified) {
+      this.name = event.name;
+    }
+
+    if (event instanceof UserEmailModified) {
+      this.email = event.email;
+    }
+
+    if (event instanceof UserBirthdayModified) {
+      this.birthday = event.birthday;
+    }
+
+    if (event instanceof UserGenderModified) {
+      this.gender = event.gender;
+    }
+
     if (event instanceof UserUpdated) {
       this.name = event.name ? event.name : this.name;
       this.birthday = event.birthday ? event.birthday : this.birthday;
@@ -81,6 +101,22 @@ export class User extends AggregateRoot<UserId> {
     if (!this.role || !this.Id) {
       throw new InvalidUserException('User not valid');
     }
+  }
+
+  public updateName(name: UserName): void {
+    this.apply(UserNameModified.create(this.Id, name));
+  }
+
+  public updateEmail(email: UserEmail): void {
+    this.apply(UserEmailModified.create(this.Id, email));
+  }
+
+  public updateBirthday(birthday: UserBirthday): void {
+    this.apply(UserBirthdayModified.create(this.Id, birthday));
+  }
+
+  public updateGender(gender: UserGender): void {
+    this.apply(UserGenderModified.create(this.Id, gender));
   }
 
   public changedToGuest(): void {

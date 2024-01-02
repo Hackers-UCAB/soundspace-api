@@ -153,4 +153,40 @@ export class AlbumRepository
       return Result.success<Album[]>(response, 200);
     }
   }
+
+  async findAlbumsByName(name: string): Promise<Result<Album[]>> {
+    let response: Album[];
+    let error: any;
+    try {
+      const albums = await this.createQueryBuilder('album')
+        .leftJoinAndSelect('album.canciones', 'playlistCancion')
+        .leftJoinAndSelect('playlistCancion.cancion', 'cancion')
+        .where(' LOWER(album.nombre) LIKE :name', {
+          name: `%${name.toLowerCase()}%`,
+        })
+        .andWhere('album.tipo = :tipo', {
+          tipo: 'album',
+        })    
+        .getMany();
+        
+        response = await Promise.all(
+          albums.map(
+            async (album) => await this.OrmAlbumMapper.toDomain(album),
+          ),
+        );
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado buscando los albums, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success(response, 200);
+    }
+  }
 }

@@ -10,10 +10,10 @@ import { FirebaseNotifier } from "src/common/infraestructure/firebase-notificati
 import { LoggerImpl } from "src/common/infraestructure/logger/logger";
 import { NotifySubscriptionCreatedEvent } from "src/subscription/application/events/notify-subscription-created.event";
 import { NotifySubscriptionExpiredEvent } from "src/subscription/application/events/notify-subscription-expired.event";
-import { SubscriptionChanelRepository } from "src/subscription/infraestructure/repositories/subscription-chanel.repository";
 import { DataSource } from "typeorm";
 import { UuidGenerator } from "../../uuid-generator";
 import { NotifySubscriptionNearToExpiredEvent } from "src/subscription/application/events/notify-subscription-near-to-expired.event";
+import { SubscriptionRepository } from "src/subscription/infraestructure/repositories/subscription.repository";
 
 export const providersManager: Provider[] = [
     {
@@ -43,9 +43,9 @@ export const providersManager: Provider[] = [
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
             //aqui subscribimos a todos los que escuchan los eventos
-            eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
-            eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
-            eventBus.subscribe('SubscriptionNearToExpired', [new NotifySubscriptionNearToExpiredEvent(notifier, new SubscriptionChanelRepository(dataSource))]);
+            eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier, new SubscriptionRepository(dataSource))]);
+            eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, new SubscriptionRepository(dataSource))]);
+            eventBus.subscribe('SubscriptionNearToExpired', [new NotifySubscriptionNearToExpiredEvent(notifier, new SubscriptionRepository(dataSource))]);
 
             return eventBus;
     },
