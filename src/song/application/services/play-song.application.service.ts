@@ -34,7 +34,7 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
             
         const {blob, size, startByte} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
 
-        this.sendSongHelper.sendSong(this.client, blob, size, startByte);
+        this.sendSongHelper.sendSong(this.client, blob, size, startByte, second);
         
         const response: PlaySongResponseApplicationDto = {
             userId: userId,

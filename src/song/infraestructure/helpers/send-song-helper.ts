@@ -56,29 +56,36 @@ export class SendSongHelper implements ISendSongHelper {
     //       });
     //     });
     // }
-
-    async sendSong(client: Socket, blob:any, size:number, rate: number) {
+  
+    //! Este lo hace bien en todos los sentidos. Potencialmente la opcion final
+    async sendSong(client: Socket, blob:any, size:number, rate: number, second: number) {
       let sequence = 1;
       const bufferSize = size / 20;
       let buffer = Buffer.alloc(0);
       let startTime=0;
       let endTime=0;
-      
+      let flag = false;
       blob.on('data', (chunk) => {
-        
-          buffer = Buffer.concat([buffer, chunk]);
+        buffer = Buffer.concat([buffer, chunk]);
     
           if (buffer.length >= bufferSize) {
             endTime = startTime + (buffer.length/rate);
-            client.emit('message-from-server', {
-              secuencia: sequence,
-              chunk: buffer,
-              start: Math.trunc(startTime),
-              end: Math.trunc(endTime)
-            });
-            sequence += 1;
-            buffer = Buffer.alloc(0);
-            startTime= endTime;
+            if(((second >= startTime) && (second <= endTime )) || flag === true){
+              flag=true
+              client.emit('message-from-server', {
+                secuencia: sequence,
+                chunk: buffer,
+                start: Math.trunc(startTime),
+                end: Math.trunc(endTime)
+              });
+              sequence += 1;
+              buffer = Buffer.alloc(0);
+              startTime= endTime;
+            }else{
+              sequence += 1;
+              buffer = Buffer.alloc(0);
+              startTime= endTime;
+            }
           }
         
       });
@@ -92,4 +99,45 @@ export class SendSongHelper implements ISendSongHelper {
         });
       });
   }
+
+    //!Aqui manda mal la secuencia pero el resto lo hace bien
+//   async sendSong(client: Socket, blob:any, size:number, rate: number, second: number) {
+//     let sequence = 1;
+//     const bufferSize = size / 20;
+//     let buffer = Buffer.alloc(0);
+//     let startTime = 0;
+//     let endTime = 0;
+
+//     blob.on('data', (chunk) => {
+//       if (startTime >= second) {
+//         buffer = Buffer.concat([buffer, chunk]);
+  
+//         if (buffer.length >= bufferSize) {
+//           endTime = startTime + (buffer.length / rate);
+//           client.emit('message-from-server', {
+//             secuencia: sequence,
+//             chunk: buffer,
+//             start: Math.trunc(startTime),
+//             end: Math.trunc(endTime)
+//           });
+//           sequence += 1;
+//           buffer = Buffer.alloc(0);
+//           startTime = endTime;
+//         }
+//       } else {
+//         startTime += chunk.length / rate;
+//       }
+//     });
+  
+//     blob.on('end', () => {
+//       if (buffer.length > 0) {
+//         client.emit('message-from-server', {
+//           secuencia: sequence,
+//           chunk: buffer,
+//           start: Math.trunc(startTime),
+//           end: Math.trunc(size / rate)
+//         });
+//       }
+//     });
+// }
 }

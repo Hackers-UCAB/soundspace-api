@@ -49,8 +49,6 @@ export class AzureBlobHelper{
       const blobClient = await this.getBlobClient(fileName, container);
       const metadata = await blobClient.getProperties()
       const rate = metadata.contentLength/duration
-      console.log(metadata.contentLength)
-      console.log(rate)
       const blobDownloaded = await blobClient.download()
       return {
         blob: blobDownloaded.readableStreamBody,
