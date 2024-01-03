@@ -5,6 +5,7 @@ import { Artist } from '../../domain/artist';
 import { ArtistId } from '../../domain/value-objects/artist-id';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
+import { SongId } from 'src/song/domain/value-objects/song-id';
 
 export class ArtistRepository
   extends Repository<OrmArtistaEntity>
@@ -46,6 +47,10 @@ export class ArtistRepository
       }
       return Result.success<Artist>(response, 200);
     }
+  }
+
+  findArtistBySongId(songId: SongId): Promise<Result<Artist>> {
+    throw new Error('Method not implemented.');
   }
 
   async findTopArtists(): Promise<Result<Artist[]>> {

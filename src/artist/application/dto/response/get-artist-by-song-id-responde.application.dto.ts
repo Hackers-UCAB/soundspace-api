@@ -2,7 +2,9 @@ import { ServiceResponse } from "src/common/application/services/dto/response/se
 
 export class GetArtistBySongIdResponseApplicationDto implements ServiceResponse {
     userId: string;
-    id: string;
-    name: string;
-    image: string;
+    artist: {
+        id: string;
+        name: string;
+        image: Buffer;
+    };
 }
