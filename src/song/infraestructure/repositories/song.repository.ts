@@ -20,26 +20,18 @@ export class SongRepository
   }
 
   async findPartialSongById(id: string): Promise<Result<PartialSong>> {
-    let error: any;
-    try {
-      const song = await this.findOne({
+    let error: any
+    try{
+      const song = await this.findOne(
+      {
         where: {
-          codigo_cancion: id,
+          codigo_cancion: id
         },
-        select: ['referencia_cancion', 'duracion'],
+        select: ['referencia_cancion','duracion']
       });
-      return Result.success(
-        { name: song.referencia_cancion, duration: song.duracion },
-        200,
-      );
-    } catch (error) {
-      return Result.fail(
-        null,
-        500,
-        error.message ||
-          'Ha ocurrido un error inesperado, hable con el administrador',
-        error,
-      );
+      return Result.success({name:song.referencia_cancion, duration:song.duracion}, 200)
+    }catch(error){
+      return Result.fail(null, 500, error.message, new Error(error.message))
     }
   }
 

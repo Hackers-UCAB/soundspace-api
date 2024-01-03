@@ -32,9 +32,9 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
             return Result.fail(null, 500, data.message, new Error(data.message));
         }
             
-        const {blob, size} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
+        const {blob, size, startByte} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
 
-        this.sendSongHelper.sendSong(this.client, blob, size);
+        this.sendSongHelper.sendSong(this.client, blob, size, startByte, second);
         
         const response: PlaySongResponseApplicationDto = {
             userId: userId,
