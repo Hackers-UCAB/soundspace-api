@@ -30,7 +30,8 @@ import { SearchController } from './search/infraestructure/controllers/search.co
       useFactory: () => {
         return {
           secret: process.env.JWT_SECRET,
-          signOptions: { expiresIn: '1d' },
+          // signOptions: { expiresIn: '1d' },
+          signOptions: {},
         };
       },
     }),
