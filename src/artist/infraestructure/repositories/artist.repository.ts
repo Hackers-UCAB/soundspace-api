@@ -5,11 +5,11 @@ import { Artist } from '../../domain/artist';
 import { ArtistId } from '../../domain/value-objects/artist-id';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
+import { SongId } from 'src/song/domain/value-objects/song-id';
 
 export class ArtistRepository
   extends Repository<OrmArtistaEntity>
-  implements IArtistRepository
-{
+  implements IArtistRepository {
   private readonly OrmArtistMapper: OrmArtistMapper;
 
   constructor(dataSource: DataSource) {
@@ -40,12 +40,46 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
           error,
         );
       }
       return Result.success<Artist>(response, 200);
     }
+  }
+
+  async findArtistBySongId(songId: SongId): Promise<Result<Artist>> {
+
+    let response: Artist;
+    let error: Error;
+
+    try {
+      const artist = await this.createQueryBuilder('artista')
+        .select([
+          'artista.codigo_artista',
+          'artista.nombre',
+          'artista.referencia_imagen',
+        ])
+        .innerJoin('artista.canciones', 'cancion')
+        .where('cancion.codigo_cancion = :id', { id: songId.Id })
+        .getOne();
+
+      response = await this.OrmArtistMapper.toDomain(artist);
+    } catch (e) {
+      error = e;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success<Artist>(response, 200);
+    }
+
   }
 
   async findTopArtists(): Promise<Result<Artist[]>> {
@@ -66,7 +100,7 @@ export class ArtistRepository
           'artist.referencia_imagen',
         ])
         .getMany();
-        
+
       response = await Promise.all(
         artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
@@ -75,14 +109,14 @@ export class ArtistRepository
     } catch (err) {
       error = err;
       console.log(error);
-      
+
     } finally {
       if (error) {
         return Result.fail(
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado buscando los artistas, hable con el administrador',
+          'Ha ocurrido un error inesperado buscando los artistas, hable con el administrador',
           error,
         );
       }
