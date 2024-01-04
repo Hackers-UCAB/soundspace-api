@@ -51,8 +51,8 @@ export class ArtistRepository
   async findArtistBySongId(songId: SongId): Promise<Result<Artist>> {
 
     let response: Artist;
-    let error: Error;
-
+      let error: Error;
+      console.log("songId", songId);
     try {
       const artist = await this.createQueryBuilder('artista')
         .select([
@@ -63,7 +63,7 @@ export class ArtistRepository
         .innerJoin('artista.canciones', 'cancion')
         .where('cancion.codigo_cancion = :id', { id: songId.Id })
         .getOne();
-
+        console.log("artist", artist);
       response = await this.OrmArtistMapper.toDomain(artist);
     } catch (e) {
       error = e;

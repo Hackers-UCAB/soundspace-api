@@ -23,7 +23,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
                 .select(["playlist.codigo_playlist", "playlist.nombre", "playlist.referencia_imagen", "cancion.codigo_cancion"])
                 .innerJoinAndSelect("playlist.canciones", "playlistCancion")
                 .innerJoinAndSelect("playlistCancion.cancion", "cancion")
-                .where("playlist.codigo_playlist = :id and playlist.tipo = 'playlist'", { id: id.Id })
+                .where("playlist.codigo_playlist = :id and playlist.tipo = 'Playlist'", { id: id.Id })
                 .getOne();
             response = await this.OrmPlaylistMapper.toDomain(playlist);
         } catch (e) {
@@ -60,7 +60,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
         .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
         .where('playlist.trending = :trending', { trending: true })
-        .where("playlist.tipo = 'playlist'")
+        .where("playlist.tipo = 'Playlist'")
         .getMany();
       /*
             console.log("playlist: ", playlist);
@@ -100,7 +100,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
             name: `%${name.toLowerCase()}%`,
           })
           .andWhere('playlist.tipo = :tipo', {
-            tipo: 'playlist',
+            tipo: 'Playlist',
           })
         .getMany();
         response = await Promise.all(
