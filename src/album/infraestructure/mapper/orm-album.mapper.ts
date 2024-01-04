@@ -14,16 +14,23 @@ import { InvalidToDomainMapper } from '../exception/invalid-to-domain-mapper.exc
 export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
   async toDomain(persistence: OrmPlaylistEntity): Promise<Album> {
     if (persistence) {
-      const songsIds = persistence.canciones.map((song) =>
-        SongId.create(song.cancion.codigo_cancion),
-      );
+      const songsIds = persistence.canciones
+        ? persistence.canciones.map((song) =>
+            SongId.create(song.cancion.codigo_cancion),
+          )
+        : [];
+
+      const genreName =
+        persistence.genero && persistence.genero.nombre_genero
+          ? persistence.genero.nombre_genero
+          : 'Sin Género';
 
       const album: Album = await Album.create(
         AlbumId.create(persistence.codigo_playlist),
         AlbumName.create(persistence.nombre),
         AlbumCover.create(persistence.referencia_imagen),
         AlbumSongs.create(songsIds),
-        AlbumGenre.create(persistence.genero.nombre_genero),
+        AlbumGenre.create(genreName),
       );
       return album;
     }

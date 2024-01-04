@@ -49,8 +49,10 @@ export class GetAlbumByIdService
   async execute(
     param: GetAlbumByIdEntryApplicationDto,
   ): Promise<Result<GetAlbumByIdResponseApplicationDto>> {
+    //console.log('Entre al service');
     const albumId = AlbumId.create(param.albumId);
     const albumResult = await this.albumRepository.findAlbumById(albumId);
+    //console.log('Imprimiendo albumResult:', albumResult);
     if (!albumResult.IsSuccess) {
       return Result.fail<GetAlbumByIdResponseApplicationDto>(
         null,

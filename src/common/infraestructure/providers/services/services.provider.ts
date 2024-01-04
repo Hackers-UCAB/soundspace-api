@@ -354,7 +354,12 @@ export const servicesProvidersManager: Provider[] = [
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new GetAlbumByIdService(new AlbumRepository(dataSource)),
+          new GetAlbumByIdService(
+            new AlbumRepository(dataSource),
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new AzureBufferImageHelper(),
+          ),
+
           new AuditingRepository(dataSource),
           'GetAlbumByIdService',
           logger,
@@ -402,10 +407,7 @@ export const servicesProvidersManager: Provider[] = [
   },
   {
     provide: 'SearchApplicationService',
-    useFactory: (
-      dataSource: DataSource,
-      logger: ILogger,
-    ) => {
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new SearchApplicationService(
@@ -427,20 +429,20 @@ export const servicesProvidersManager: Provider[] = [
   {
     provide: 'GetTopSongsService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {
-        return new LoggerApplicationServiceDecorator(
-            new AuditingCommandServiceDecorator(
-                new GetTopSongsService(
-                    new SongRepository(dataSource, new OrmSongMapper()),
-                    new AzureBufferImageHelper(),
-                ),
-                new AuditingRepository(dataSource),
-                'GetTopSongsService',
-                logger,
-            ),
-            logger,
-            'GetTopSongsService',
-        );
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetTopSongsService(
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new AzureBufferImageHelper(),
+          ),
+          new AuditingRepository(dataSource),
+          'GetTopSongsService',
+          logger,
+        ),
+        logger,
+        'GetTopSongsService',
+      );
     },
     inject: ['DataSource', 'ILogger'],
-},
+  },
 ];
