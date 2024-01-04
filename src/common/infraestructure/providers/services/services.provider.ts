@@ -47,6 +47,7 @@ import { SearchArtistsApplicationService } from 'src/artist/application/services
 import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 import { SearchPlaylistsApplicationService } from 'src/playlist/application/services/search-playlists.application.service';
 import { SearchSongsApplicationService } from 'src/song/application/services/search-songs.application.service';
+import { CancelSubscriptionApplicationService } from 'src/subscription/application/services/cancel-subscription.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -439,6 +440,22 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'Search Service',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'CancelSubscriptionService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new CancelSubscriptionApplicationService(new SubscriptionRepository(dataSource), new UserRepository(dataSource)),
+          new AuditingRepository(dataSource),
+          'CancelSubscriptionService',
+          logger,
+        ),
+        logger,
+        'CancelSubscriptionService',
       );
     },
     inject: ['DataSource', 'ILogger'],
