@@ -60,7 +60,7 @@ export class SendSongHelper implements ISendSongHelper {
     //! Este lo hace bien en todos los sentidos. Potencialmente la opcion final
     async sendSong(client: Socket, blob:any, size:number, rate: number, second: number) {
       let sequence = 1;
-      const bufferSize = size / 20;
+      const bufferSize = size / 40;
       let buffer = Buffer.alloc(0);
       let startTime=0;
       let endTime=0;
