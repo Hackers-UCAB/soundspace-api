@@ -16,7 +16,7 @@ export class SearchAlbumsApplicationService
         this.albumRepository = albumRepository;
     }
     async execute(param: SearchItemsEntryApplicationDto): Promise<Result<SearchItemsResponseApplicationDto>> {
-        const albumsResult: Result<Album[]> = await this.albumRepository.findAlbumsByName(param.name);
+        const albumsResult: Result<Album[]> = await this.albumRepository.findAlbumsByName(param.name, param.limit, param.offset);
 
         if (!albumsResult.IsSuccess) {
             return Result.fail(

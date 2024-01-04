@@ -92,7 +92,7 @@ export class SongRepository
     }
   }
 
-  async findSongsByName(name: string): Promise<Result<Song[]>> {
+  async findSongsByName(name: string, limit?: number, offset?: number): Promise<Result<Song[]>> {
     let response: Song[];
     let error: any;
     try {
@@ -101,7 +101,8 @@ export class SongRepository
         .where(' LOWER(song.nombre_cancion) LIKE :name', {
           name: `%${name.toLowerCase()}%`,
         })
-        // .limit(5)
+        .limit(limit)
+        .offset(offset)
         .getMany();
 
       response = await Promise.all(

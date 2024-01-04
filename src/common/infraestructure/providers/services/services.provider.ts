@@ -40,6 +40,13 @@ import { GetTopAlbumService } from 'src/album/application/services/get-top-album
 import { GetArtistByIdService } from '../../../../artist/application/services/get-artist-by-id.application.service';
 import { ArtistRepository } from '../../../../artist/infraestructure/repositories/artist.repository';
 import { SearchApplicationService } from 'src/search/application/services/search.application.service';
+import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
+import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
+import { SearchAlbumsApplicationService } from 'src/album/application/services/search-albums.application.service';
+import { SearchArtistsApplicationService } from 'src/artist/application/services/search-artists.application.service';
+import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
+import { SearchPlaylistsApplicationService } from 'src/playlist/application/services/search-playlists.application.service';
+import { SearchSongsApplicationService } from 'src/song/application/services/search-songs.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -400,18 +407,32 @@ export const servicesProvidersManager: Provider[] = [
   },
   {
     provide: 'SearchApplicationService',
-    useFactory: (
-      dataSource: DataSource,
-      logger: ILogger,
-    ) => {
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      let strategies: Record<
+        string,
+        IApplicationService<
+          SearchItemsEntryApplicationDto,
+          SearchItemsResponseApplicationDto
+        >
+      >;
+
+      strategies = {
+        song: new SearchSongsApplicationService(
+          new SongRepository(dataSource, new OrmSongMapper()),
+        ),
+        album: new SearchAlbumsApplicationService(
+          new AlbumRepository(dataSource),
+        ),
+        playlist: new SearchPlaylistsApplicationService(
+          new PlaylistRepository(dataSource),
+        ),
+        artist: new SearchArtistsApplicationService(
+          new ArtistRepository(dataSource),
+        ),
+      };
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new SearchApplicationService(
-            new SongRepository(dataSource, new OrmSongMapper()),
-            new AlbumRepository(dataSource),
-            new PlaylistRepository(dataSource),
-            new ArtistRepository(dataSource),
-          ),
+          new SearchApplicationService(strategies),
           new AuditingRepository(dataSource),
           'Search Service',
           logger,
@@ -421,5 +442,5 @@ export const servicesProvidersManager: Provider[] = [
       );
     },
     inject: ['DataSource', 'ILogger'],
-  }
+  },
 ];

@@ -31,6 +31,8 @@ export class SearchController {
       userId: userId.Id,
       types: querySearchDto.type ? [querySearchDto.type] : ['artist', 'album', 'playlist', 'song'],
       name: term,
+      limit: querySearchDto.limit ? querySearchDto.limit : 20,
+      offset: querySearchDto.offset ? querySearchDto.offset : 0
     };
     
     const searchResult: Result<SearchResponseApplicationDto> =

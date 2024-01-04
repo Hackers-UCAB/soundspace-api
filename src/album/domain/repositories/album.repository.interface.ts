@@ -7,5 +7,5 @@ export interface IAlbumRepository {
   findAlbumById(albumId: AlbumId): Promise<Result<Album>>;
   findTopAlbum(): Promise<Result<Album[]>>;
   findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>>;
-  findAlbumsByName(name: string): Promise<Result<Album[]>>;
+  findAlbumsByName(name: string, limit?: number, offset?: number): Promise<Result<Album[]>>;
 }

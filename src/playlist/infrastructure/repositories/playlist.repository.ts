@@ -146,7 +146,7 @@ export class PlaylistRepository
     }
   }
 
-  async findPlaylistsByName(name: string): Promise<Result<Playlist[]>> {
+  async findPlaylistsByName(name: string, limit?: number, offset?: number): Promise<Result<Playlist[]>> {
     let response: Playlist [];
     let error: any;
     try {
@@ -159,6 +159,8 @@ export class PlaylistRepository
           .andWhere('playlist.tipo = :tipo', {
             tipo: 'playlist',
           })
+        .limit(limit)
+        .offset(offset)
         .getMany();
         response = await Promise.all(
             playlists.map(
