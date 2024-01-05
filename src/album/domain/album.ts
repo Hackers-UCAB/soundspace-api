@@ -41,9 +41,15 @@ export class Album extends AggregateRoot<AlbumId> {
     cover: AlbumCover,
     albumSongs: AlbumSongs,
     //duration: AlbumDuration,
-    //genre: AlbumGenre,
+    genre: AlbumGenre,
   ) {
-    const albumCreated = AlbumCreated.create(id, name, cover, albumSongs);
+    const albumCreated = AlbumCreated.create(
+      id,
+      name,
+      cover,
+      albumSongs,
+      genre,
+    );
     super(id, albumCreated);
   }
 
@@ -53,7 +59,7 @@ export class Album extends AggregateRoot<AlbumId> {
       this.cover = event.cover;
       this.albumSongs = event.albumSongs;
       //this.duration = event.duration;
-      //this.genre = event.genre;
+      this.genre = event.genre;
     }
   }
 
@@ -61,9 +67,9 @@ export class Album extends AggregateRoot<AlbumId> {
     if (
       !this.name ||
       !this.cover ||
-      !this.albumSongs 
+      !this.albumSongs ||
       //!this.duration ||
-      //!this.genre
+      !this.genre
     ) {
       throw new InvalidAlbumException('Album not valid');
     }
@@ -75,9 +81,9 @@ export class Album extends AggregateRoot<AlbumId> {
     cover: AlbumCover,
     albumSongs: AlbumSongs,
     //duration: AlbumDuration,
-    //genre: AlbumGenre,
+    genre: AlbumGenre,
   ): Album {
-    const album = new Album(id, name, cover, albumSongs);
+    const album = new Album(id, name, cover, albumSongs, genre);
     return album;
   }
 }

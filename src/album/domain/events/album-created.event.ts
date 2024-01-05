@@ -13,7 +13,7 @@ export class AlbumCreated extends DomainEvent {
     public cover: AlbumCover,
     public albumSongs: AlbumSongs,
     //public duration: AlbumDuration,
-    //public genre: AlbumGenre,
+    public genre: AlbumGenre,
   ) {
     super();
   }
@@ -24,8 +24,8 @@ export class AlbumCreated extends DomainEvent {
     cover: AlbumCover,
     albumSongs: AlbumSongs,
     //duration: AlbumDuration,
-    //genre: AlbumGenre,
+    genre: AlbumGenre,
   ): AlbumCreated {
-    return new AlbumCreated(id, name, cover, albumSongs);
+    return new AlbumCreated(id, name, cover, albumSongs, genre);
   }
 }

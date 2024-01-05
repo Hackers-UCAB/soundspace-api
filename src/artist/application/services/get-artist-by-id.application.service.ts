@@ -4,13 +4,22 @@ import { IArtistRepository } from "../../domain/repositories/artist.repository.i
 import { ArtistId } from "../../domain/value-objects/artist-id";
 import { GetArtistByIdEntryApplicationDto } from "../dto/entry/get-artist-by-id-entry.application.dto";
 import { GetArtistByIdResponseApplicationDto } from "../dto/response/get-artist-by-id-response.application.dto";
+import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 
-export class GetArtistByIdService implements IApplicationService<GetArtistByIdEntryApplicationDto, GetArtistByIdResponseApplicationDto>{
+export class GetArtistByIdService implements IApplicationService<
+    GetArtistByIdEntryApplicationDto,
+    GetArtistByIdResponseApplicationDto
+> {
 
     private readonly ArtistRepository: IArtistRepository;
+    private readonly getBufferImage: IGetBufferImageInterface;
 
-    constructor(ArtistRepository: IArtistRepository) {
+    constructor(
+        ArtistRepository: IArtistRepository,
+        getBufferImage: IGetBufferImageInterface
+    ) {
         this.ArtistRepository = ArtistRepository;
+        this.getBufferImage = getBufferImage;
     }
 
     async execute(param: GetArtistByIdEntryApplicationDto): Promise<Result<GetArtistByIdResponseApplicationDto>> {
@@ -22,14 +31,25 @@ export class GetArtistByIdService implements IApplicationService<GetArtistByIdEn
         const artistResult = await this.ArtistRepository.findArtistById(artistId);
 
         if (!artistResult.IsSuccess) {
-            return Result.fail<GetArtistByIdResponseApplicationDto>(null, artistResult.statusCode, artistResult.message, artistResult.error);
+            return Result.fail<GetArtistByIdResponseApplicationDto>(
+                null, 
+                artistResult.statusCode, 
+                artistResult.message, 
+                artistResult.error
+                );
         }
+
+        const artist = artistResult.Data[0];
+        const imageResult = await this.getBufferImage.getFile(artist.Cover.Path);
+        const artistObject = {
+            id: artist.Id.Id,
+            name : artist.Name.Name,
+            image: imageResult.Data,
+        };
 
         const responseDto: GetArtistByIdResponseApplicationDto = {
             userId: param.userId,
-            id: artistResult.Data.Id.Id,
-            name: artistResult.Data.Name.Name,
-            image: artistResult.Data.Photo.Path
+            artist: artistObject
         };
 
         return Result.success<GetArtistByIdResponseApplicationDto>(responseDto, artistResult.statusCode);

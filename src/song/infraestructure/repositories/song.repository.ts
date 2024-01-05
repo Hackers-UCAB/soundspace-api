@@ -20,18 +20,20 @@ export class SongRepository
   }
 
   async findPartialSongById(id: string): Promise<Result<PartialSong>> {
-    let error: any
-    try{
-      const song = await this.findOne(
-      {
+    let error: any;
+    try {
+      const song = await this.findOne({
         where: {
-          codigo_cancion: id
+          codigo_cancion: id,
         },
-        select: ['referencia_cancion','duracion']
+        select: ['referencia_cancion', 'duracion'],
       });
-      return Result.success({name:song.referencia_cancion, duration:song.duracion}, 200)
-    }catch(error){
-      return Result.fail(null, 500, error.message, new Error(error.message))
+      return Result.success(
+        { name: song.referencia_cancion, duration: song.duracion },
+        200,
+      );
+    } catch (error) {
+      return Result.fail(null, 500, error.message, new Error(error.message));
     }
   }
 
@@ -39,7 +41,6 @@ export class SongRepository
     let response: Song;
     let error: Error;
     try {
-      console.log('Repo id: ', id);
       const song = await this.createQueryBuilder('cancion')
         .select([
           'cancion.codigo_cancion',
@@ -53,7 +54,6 @@ export class SongRepository
         .innerJoinAndSelect('cancion.generos', 'genero')
         .where('cancion.codigo_cancion = :id', { id: id.Id })
         .getOne();
-      console.log('Repo song: ', song);
       response = await this.ormSongMapper.toDomain(song);
       console.log('Repo response: ', response);
     } catch (e) {
@@ -92,7 +92,11 @@ export class SongRepository
     }
   }
 
-  async findSongsByName(name: string, limit?: number, offset?: number): Promise<Result<Song[]>> {
+  async findSongsByName(
+    name: string,
+    limit?: number,
+    offset?: number,
+  ): Promise<Result<Song[]>> {
     let response: Song[];
     let error: any;
     try {
@@ -122,6 +126,42 @@ export class SongRepository
         );
       }
       return Result.success(response, 200);
+    }
+  }
+
+  async findTopSongs(): Promise<Result<Song[]>> {
+    let response: Song[];
+    let error: Error;
+    try {
+      const songs = await this.createQueryBuilder('cancion')
+        .select([
+          'cancion.codigo_cancion',
+          'cancion.nombre_cancion',
+          'cancion.duracion',
+          'cancion.referencia_cancion',
+          'cancion.referencia_preview',
+          'cancion.referencia_imagen',
+          'genero.nombre_genero',
+        ])
+        .innerJoinAndSelect('cancion.generos', 'genero')
+        .where('cancion.trending = true')
+        .getMany();
+      response = await Promise.all(
+        songs.map(async (songs) => await this.ormSongMapper.toDomain(songs)),
+      );
+    } catch (e) {
+      error = e;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success<Song[]>(response, 200);
     }
   }
 }
