@@ -318,8 +318,8 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetPlaylistByIdService(
             new PlaylistRepository(dataSource),
-              new SongRepository(dataSource, new OrmSongMapper()),
-              new ArtistRepository(dataSource),
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new ArtistRepository(dataSource),
             new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),
@@ -358,6 +358,7 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetAlbumByIdService(
             new AlbumRepository(dataSource),
+            new ArtistRepository(dataSource),
             new SongRepository(dataSource, new OrmSongMapper()),
             new AzureBufferImageHelper(),
           ),
@@ -396,10 +397,10 @@ export const servicesProvidersManager: Provider[] = [
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-            new GetArtistByIdService(
-                new ArtistRepository(dataSource),
-                new AzureBufferImageHelper(),
-            ),
+          new GetArtistByIdService(
+            new ArtistRepository(dataSource),
+            new AzureBufferImageHelper(),
+          ),
           new AuditingRepository(dataSource),
           'GetArtistByIdService',
           logger,
