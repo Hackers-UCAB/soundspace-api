@@ -30,37 +30,35 @@ export class AlbumController {
       TopAlbumEntryApplicationDto,
       GetTopAlbumResponseApplicationDto
     >,
-    ) { }
+  ) {}
 
-    @Get('TopAlbum')
-    async getTopAlbum() {
-        const dto: TopAlbumEntryApplicationDto = {
-            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-        };
-        const serviceResult: Result<GetTopAlbumResponseApplicationDto> =
-            await this.GetTopAlbumService.execute(dto);
-        if (!serviceResult.IsSuccess) {
-            HttpResponseHandler.HandleException(
-                serviceResult.statusCode,
-                serviceResult.message,
-                serviceResult.error,
-            );
-        }
-        const response: GetTopAlbumResponseInfrastructureDto = {
-            albums: serviceResult.Data.albums,
-        };
-        return HttpResponseHandler.Success(200, response);
+  @Get('TopAlbum')
+  async getTopAlbum() {
+    const dto: TopAlbumEntryApplicationDto = {
+      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+    };
+    const serviceResult: Result<GetTopAlbumResponseApplicationDto> =
+      await this.GetTopAlbumService.execute(dto);
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.statusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
     }
+    const response: GetTopAlbumResponseInfrastructureDto = {
+      albums: serviceResult.Data.albums,
+    };
+    return HttpResponseHandler.Success(200, response);
+  }
 
   @Get(':id')
   async getPlaylist(@Param('id') id: string) {
     const dto: GetAlbumByIdEntryApplicationDto = {
-        userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
       albumId: id,
     };
     const response = await this.GetAlbumByIdService.execute(dto);
     return response.Data;
   }
-
-  
 }
