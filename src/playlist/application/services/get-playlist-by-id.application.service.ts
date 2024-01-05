@@ -52,7 +52,7 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
                 artists: [],
             };
             playlistResponseDto.songs.push(songResponseDto);
-            /*//metodo aun no implementado
+            
             const artists = await this.artistRepository.findArtistBySongId(songId);
             for (const artist of artists.Data) {
                 const artistResponse = {
@@ -61,7 +61,7 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
                 };
                 songResponseDto.artists.push(artistResponse);
             }
-            */
+            
         }
         playlistResponseDto.duration = this.conversorTiempo(tiempoTotalPlaylist);
         return Result.success<GetPlaylistByIdResponseApplicationDto>(playlistResponseDto, playlistResult.statusCode);

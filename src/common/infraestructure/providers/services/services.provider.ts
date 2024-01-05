@@ -437,7 +437,8 @@ export const servicesProvidersManager: Provider[] = [
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new GetTopSongsService(
-            new SongRepository(dataSource, new OrmSongMapper()),
+              new SongRepository(dataSource, new OrmSongMapper()),
+              new ArtistRepository(dataSource),
             new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),
