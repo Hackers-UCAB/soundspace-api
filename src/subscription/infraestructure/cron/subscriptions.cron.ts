@@ -1,4 +1,3 @@
-
 import { Inject } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { Result } from "src/common/application/result-handler/result";
@@ -17,7 +16,7 @@ export class CheckSubscriptionsCronService {
         ) {}
     
     //   @Cron(CronExpression.EVERY_DAY_AT_8AM)
-      @Cron(CronExpression.EVERY_DAY_AT_8AM, {
+      @Cron('25 20 * * *', {
         name: 'check-subscriptions',
         timeZone: 'America/Caracas',
       })
