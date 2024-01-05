@@ -16,9 +16,9 @@ export const databaseProviders = [
          //entities: ['dist/src/**/*.entity.js', 'dist/src/**/*.entity.enum.js'],
         //entities: [__dirname + '/**/*.entity{.ts,.js}'],
         // entities: ['dist/**/*.entity{.ts,.js}'],
-        // ssl: {
-        //   rejectUnauthorized: false
-        // },
+        ssl: {
+          rejectUnauthorized: false
+        },
         synchronize: true,
         
       });
