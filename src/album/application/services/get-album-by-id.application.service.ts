@@ -2,6 +2,7 @@ import { ArtistId } from '../../../artist/domain/value-objects/artist-id';
 import { Result } from '../../../common/application/result-handler/result';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IAlbumRepository } from '../../domain/repositories/album.repository.interface';
+import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { AlbumId } from '../../domain/value-objects/album-id';
 import { GetAlbumByIdEntryApplicationDto } from '../dto/entries/get-album-by-id-entry.application.dto';
 import { GetAlbumByIdResponseApplicationDto } from '../dto/responses/get-album-by-id-response.application.dto';
@@ -17,15 +18,18 @@ export class GetAlbumByIdService
     >
 {
   private readonly albumRepository: IAlbumRepository;
+  private readonly artistRepository: IArtistRepository;
   private readonly songRepository: ISongRepository;
   private readonly getBufferImage: IGetBufferImageInterface;
 
   constructor(
     albumRepository: IAlbumRepository,
+    artistRepository: IArtistRepository,
     songRepository: ISongRepository,
     getBufferImage: IGetBufferImageInterface,
   ) {
     this.albumRepository = albumRepository;
+    this.artistRepository = artistRepository;
     this.songRepository = songRepository;
     this.getBufferImage = getBufferImage;
   }
@@ -73,10 +77,18 @@ export class GetAlbumByIdService
       duration: '',
       genre: albumResult.Data.Genre.Genre,
       im: imageResult.Data,
+      creators: [],
       songs: [],
     };
     let duracionAlbum = 0;
-    //buscamos todas las canciones relacionadas a ese playlist para crear el songResponseDto
+    const creators = await this.artistRepository.findArtistByAlbumId(albumId);
+    for (const creator of creators.Data) {
+      const creatorResponse = {
+        creatorId: creator.Id.Id,
+        creatorName: creator.Name.Name,
+      };
+      albumResponseDto.creators.push(creatorResponse);
+    }
     console.log('albumResponseDto:', albumResponseDto);
     for (const songId of albumResult.data.AlbumSongs.Id) {
       const song = await this.songRepository.findSongById(songId);
@@ -97,6 +109,15 @@ export class GetAlbumByIdService
         artists: [],
       };
       albumResponseDto.songs.push(songResponseDto);
+
+      const artists = await this.artistRepository.findArtistBySongId(songId);
+      for (const artist of artists.Data) {
+        const artistResponse = {
+          id: artist.Id.Id,
+          name: artist.Name.Name,
+        };
+        songResponseDto.artists.push(artistResponse);
+      }
     }
     albumResponseDto.duration = this.conversorTiempo(duracionAlbum);
     return Result.success<GetAlbumByIdResponseApplicationDto>(

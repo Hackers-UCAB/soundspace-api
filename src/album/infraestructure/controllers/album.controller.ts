@@ -12,6 +12,7 @@ import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/application/result-handler/result';
 import { GetTopAlbumResponseInfrastructureDto } from '../dto/responses/get-top-album-response.infraestructure.dto';
+import { GetAlbumByIdResponseInfrastructureDto } from '../dto/responses/get-album-by-id-response.infrastructure.dto';
 
 @Controller('album')
 export class AlbumController {
@@ -58,7 +59,27 @@ export class AlbumController {
       userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
       albumId: id,
     };
-    const response = await this.GetAlbumByIdService.execute(dto);
-    return response.Data;
+
+    const serviceResult: Result<GetAlbumByIdResponseApplicationDto> =
+      await this.GetAlbumByIdService.execute(dto);
+
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.StatusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
+    }
+
+    const response: GetAlbumByIdResponseInfrastructureDto = {
+      id: serviceResult.Data.id,
+      name: serviceResult.Data.name,
+      duration: serviceResult.Data.duration,
+      genre: serviceResult.Data.genre,
+      im: serviceResult.Data.im,
+      creators: serviceResult.Data.creators,
+      songs: serviceResult.Data.songs,
+    };
+    return HttpResponseHandler.Success(200, response);
   }
 }
