@@ -1,4 +1,4 @@
-import { And } from "typeorm";
+import { IArtistRepository } from "../../../artist/domain/repositories/artist.repository.interface";
 import { Result } from "../../../common/application/result-handler/result";
 import { IApplicationService } from "../../../common/application/services/interfaces/application-service.interface";
 import { IGetBufferImageInterface } from "../../../common/domain/interfaces/get-buffer-image.interface";
@@ -12,10 +12,12 @@ import { GetPlaylistByIdResponseApplicationDto } from "../dto/responses/get-play
 export class GetPlaylistByIdService implements IApplicationService<GetPlaylistByIdEntryApplicationDto, GetPlaylistByIdResponseApplicationDto>{
     private readonly PlaylistRepository: IPlaylistRepository;
     private readonly songRepository: ISongRepository;
+    private readonly artistRepository: IArtistRepository;
     private readonly getBufferImage: IGetBufferImageInterface;
-    constructor(PlaylistRepository: IPlaylistRepository, songRepository: ISongRepository, getBufferImage: IGetBufferImageInterface) {
+    constructor(PlaylistRepository: IPlaylistRepository, songRepository: ISongRepository, artistRepository: IArtistRepository, getBufferImage: IGetBufferImageInterface) {
         this.PlaylistRepository = PlaylistRepository;
         this.songRepository = songRepository;
+        this.artistRepository = artistRepository;
         this.getBufferImage = getBufferImage;
     }
 
@@ -42,7 +44,7 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
                 return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, song.statusCode, song.message, song.error);
             }
             tiempoTotalPlaylist = tiempoTotalPlaylist +song.data.Duration.Duration;
-            const songResponseDto: GetSongByIdResponseApplicationDto = {
+            const songResponseDto = {
                 userId: param.userId,
                 songId: song.data.Id.Id,
                 name: song.data.Name.Name,
@@ -50,16 +52,16 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
                 artists: [],
             };
             playlistResponseDto.songs.push(songResponseDto);
-
-            /*
-            //buscamos al artista de la cancion
-            for (const artistsId of playlistResponseDto.songs) {
-                const artist = await this.artistRepository.findArtistBySongId(songId);
-
-
+            
+            const artists = await this.artistRepository.findArtistBySongId(songId);
+            for (const artist of artists.Data) {
+                const artistResponse = {
+                    id: artist.Id.Id,
+                    name: artist.Name.Name,
+                };
+                songResponseDto.artists.push(artistResponse);
             }
-            */
-
+            
         }
         playlistResponseDto.duration = this.conversorTiempo(tiempoTotalPlaylist);
         return Result.success<GetPlaylistByIdResponseApplicationDto>(playlistResponseDto, playlistResult.statusCode);

@@ -13,7 +13,6 @@ export class GetTopPlaylistService implements IApplicationService<TopPlaylistEnt
 
     private readonly PlaylistRepository: IPlaylistRepository;
     private readonly getBufferImage: IGetBufferImageInterface;
-    songRepository: SongRepository;
 
     constructor(PlaylistRepository: IPlaylistRepository, getBufferImage: IGetBufferImageInterface) {
         this.PlaylistRepository = PlaylistRepository;

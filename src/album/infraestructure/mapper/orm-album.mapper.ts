@@ -1,5 +1,6 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
+import { OrmGeneroEntity } from 'src/common/infraestructure/orm-entities/genre.entity';
 import { Album } from '../../domain/album';
 import { AlbumId } from '../../domain/value-objects/album-id';
 import { AlbumName } from '../../domain/value-objects/album-name';
@@ -13,15 +14,23 @@ import { InvalidToDomainMapper } from '../exception/invalid-to-domain-mapper.exc
 export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
   async toDomain(persistence: OrmPlaylistEntity): Promise<Album> {
     if (persistence) {
-      const songsIds = persistence.canciones.map((song) =>
-        SongId.create(song.cancion.codigo_cancion),
-      );
+      const songsIds = persistence.canciones
+        ? persistence.canciones.map((song) =>
+            SongId.create(song.cancion.codigo_cancion),
+          )
+        : [];
+
+      const genreName =
+        persistence.genero && persistence.genero.nombre_genero
+          ? persistence.genero.nombre_genero
+          : 'Sin Género';
 
       const album: Album = await Album.create(
-        new AlbumId(persistence.codigo_playlist),
-        new AlbumName(persistence.nombre),
-        new AlbumCover(persistence.referencia_imagen),
-        new AlbumSongs(songsIds),
+        AlbumId.create(persistence.codigo_playlist),
+        AlbumName.create(persistence.nombre),
+        AlbumCover.create(persistence.referencia_imagen),
+        AlbumSongs.create(songsIds),
+        AlbumGenre.create(genreName),
       );
       return album;
     }
