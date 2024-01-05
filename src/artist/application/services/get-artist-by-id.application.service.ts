@@ -39,8 +39,8 @@ export class GetArtistByIdService implements IApplicationService<
                 );
         }
 
-        const artist = artistResult.Data[0];
-        const imageResult = await this.getBufferImage.getFile(artist.Cover.Path);
+        const artist = artistResult.Data;
+        const imageResult = await this.getBufferImage.getFile(artist.Photo.Path);
         const artistObject = {
             id: artist.Id.Id,
             name : artist.Name.Name,

@@ -6,6 +6,7 @@ import { ArtistId } from '../../domain/value-objects/artist-id';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
 import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
 import { SongId } from 'src/song/domain/value-objects/song-id';
+import { AlbumId } from 'src/album/domain/value-objects/album-id';
 
 export class ArtistRepository
   extends Repository<OrmArtistaEntity>
@@ -25,7 +26,7 @@ export class ArtistRepository
       const artist = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
-          'artista.nombre',
+          'artista.nombre_artista',
           'artista.referencia_imagen',
         ])
         .where('artista.codigo_artista = :id', { id: artistId.Id })
@@ -48,16 +49,18 @@ export class ArtistRepository
     }
   }
 
-  async findArtistBySongId(songId: SongId): Promise<Result<Artist>> {
+  //Deprecado...
+  async findSingleArtistBySongId(songId: SongId): Promise<Result<Artist>> {
 
     let response: Artist;
     let error: Error;
 
     try {
+
       const artist = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
-          'artista.nombre',
+          'artista.nombre_artista',
           'artista.referencia_imagen',
         ])
         .innerJoin('artista.canciones', 'cancion')
@@ -65,6 +68,7 @@ export class ArtistRepository
         .getOne();
 
       response = await this.OrmArtistMapper.toDomain(artist);
+
     } catch (e) {
       error = e;
     } finally {
@@ -80,6 +84,90 @@ export class ArtistRepository
       return Result.success<Artist>(response, 200);
     }
 
+  }
+
+  async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
+
+    let response: Artist[];
+    let error: Error;
+
+    try {
+
+      const artist = await this.createQueryBuilder('artista')
+        .select([
+          'artista.codigo_artista',
+          'artista.nombre_artista',
+          'artista.referencia_imagen',
+        ])
+        .innerJoin('artista.canciones', 'cancion')
+        .where('cancion.codigo_cancion = :id', { id: songId.Id })
+        .getMany();
+
+      response = await Promise.all(
+        artist.map(
+          async (artist) => await this.OrmArtistMapper.toDomain(artist)
+        )
+      );
+
+      console.log("response repo: ", response);
+
+    } catch (e) {
+      error = e;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success<Artist[]>(response, 200);
+    }
+
+  }
+
+  async findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
+
+    let response: Artist[];
+    let error: Error;
+
+    try {
+
+      const artist = await this.createQueryBuilder('artista')
+        .select([
+          'artista.codigo_artista',
+          'artista.nombre_artista',
+          'artista.referencia_imagen',
+        ])
+        .innerJoin('artista.playlistCreadores', 'playlist_creador')
+        .where('playlist_creador.playlistCodigoPlaylist = :id', { id: albumId.Id })
+        .getMany();
+
+      response = await Promise.all(
+        artist.map(
+          async (artist) => await this.OrmArtistMapper.toDomain(artist),
+        )
+      );
+
+      console.log("response repo: ", response);
+
+    } catch (e) {
+      error = e;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success<Artist[]>(response, 200);
+    }
+    
   }
 
   async findTopArtists(): Promise<Result<Artist[]>> {

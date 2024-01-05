@@ -28,7 +28,7 @@ export class GetArtistBySongIdService implements IApplicationService<
         const songId = SongId.create(param.songId);
 
         //buscamos en el repositorio el artista por id
-        const artistResult = await this.ArtistRepository.findArtistBySongId(songId);
+        const artistResult = await this.ArtistRepository.findSingleArtistBySongId(songId);
 
         if (!artistResult.IsSuccess) {
             return Result.fail<GetArtistBySongIdResponseApplicationDto>(
@@ -39,8 +39,8 @@ export class GetArtistBySongIdService implements IApplicationService<
             );
         }
 
-        const artist = artistResult.Data[0];
-        const imageResult = await this.getBufferImage.getFile(artist.Cover.Path);
+        const artist = artistResult.Data;
+        const imageResult = await this.getBufferImage.getFile(artist.Photo.Path);
         const artistObject = {
             id: artist.Id.Id,
             name : artist.Name.Name,
