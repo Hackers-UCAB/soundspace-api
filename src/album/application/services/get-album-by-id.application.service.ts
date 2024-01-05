@@ -81,7 +81,7 @@ export class GetAlbumByIdService
       songs: [],
     };
     let duracionAlbum = 0;
-    const creators = await this.artistRepository.findArtistByAlbumId(albumId);
+    const creators = await this.artistRepository.findArtistsByAlbumId(albumId);
     for (const creator of creators.Data) {
       const creatorResponse = {
         creatorId: creator.Id.Id,
@@ -110,7 +110,7 @@ export class GetAlbumByIdService
       };
       albumResponseDto.songs.push(songResponseDto);
 
-      const artists = await this.artistRepository.findArtistBySongId(songId);
+      const artists = await this.artistRepository.findArtistsBySongId(songId);
       for (const artist of artists.Data) {
         const artistResponse = {
           id: artist.Id.Id,

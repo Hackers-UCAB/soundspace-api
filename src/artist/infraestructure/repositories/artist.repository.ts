@@ -50,7 +50,7 @@ export class ArtistRepository
     }
   }
 
-  async findArtistBySongId(songId: SongId): Promise<Result<Artist[]>> {
+  async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
     let response: Artist[];
     let error: Error;
     try {
@@ -125,7 +125,7 @@ export class ArtistRepository
     }
   }
 
-  async findArtistByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
+  async findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
     let response: Artist[];
     let error: Error;
     try {
