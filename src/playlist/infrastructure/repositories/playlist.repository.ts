@@ -19,12 +19,14 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
         let response: Playlist;
         let error: Error;
         try {
+            //se realiza la consulta a la base de datos
             const playlist = await this.createQueryBuilder("playlist")
                 .select(["playlist.codigo_playlist", "playlist.nombre", "playlist.referencia_imagen", "cancion.codigo_cancion"])
                 .innerJoinAndSelect("playlist.canciones", "playlistCancion")
                 .innerJoinAndSelect("playlistCancion.cancion", "cancion")
-                .where("playlist.codigo_playlist = :id and playlist.tipo = 'Playlist'", { id: id.Id })
+                .where("playlist.codigo_playlist = :id and playlist.tipo = 'Playlist' or playlist.tipo = 'playlist'", { id: id.Id })
                 .getOne();
+            //la respuesta de la base de datos se mapea 
             response = await this.OrmPlaylistMapper.toDomain(playlist);
         } catch (e) {
             error = e;
@@ -46,10 +48,8 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
   async findTopPlaylist(): Promise<Result<Playlist[]>> {
     let response: Playlist[];
     let error: Error;
-
-    try {
-      //realizamos el query, aqui el unico join es con la tabla de playlistCancion para obtener los ids de las canciones
-      //no se hace con los creadores porque nuestra entity Playlist de dominio no tiene dicho atributo
+      try {
+      //se realiza la consulta a la base de datos
       const playlists = await this.createQueryBuilder('playlist')
         .select([
           'playlist.codigo_playlist',
@@ -59,15 +59,9 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
         ])
         .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
-        .where('playlist.trending = :trending', { trending: true })
-        .where("playlist.tipo = 'Playlist'")
-        .getMany();
-      /*
-            console.log("playlist: ", playlist);
-            console.log("nombre: ", playlist.nombre);
-            console.log("canciones: ", playlist.canciones);
-            */
-      //mapeamos el resultado
+          .where("playlist.tipo = 'Playlist' and playlist.trending = true")
+              .getMany();
+      //la respuesta de la base de datos se mapea
       response = await Promise.all(
         playlists.map(
           async (playlist) => await this.OrmPlaylistMapper.toDomain(playlist),

@@ -1,4 +1,3 @@
-import { And } from "typeorm";
 import { IArtistRepository } from "../../../artist/domain/repositories/artist.repository.interface";
 import { Result } from "../../../common/application/result-handler/result";
 import { IApplicationService } from "../../../common/application/services/interfaces/application-service.interface";
@@ -45,7 +44,7 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
                 return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, song.statusCode, song.message, song.error);
             }
             tiempoTotalPlaylist = tiempoTotalPlaylist +song.data.Duration.Duration;
-            const songResponseDto: GetSongByIdResponseApplicationDto = {
+            const songResponseDto = {
                 userId: param.userId,
                 songId: song.data.Id.Id,
                 name: song.data.Name.Name,
@@ -53,19 +52,16 @@ export class GetPlaylistByIdService implements IApplicationService<GetPlaylistBy
                 artists: [],
             };
             playlistResponseDto.songs.push(songResponseDto);
-            console.log("songId service:", songId);
-            const artist = await this.artistRepository.findArtistBySongId(songId);
-            console.log("artist service:", artist);
-
-            /*
-            //buscamos al artista de la cancion
-            for (const artistsId of playlistResponseDto.songs) {
-                const artist = await this.artistRepository.findArtistBySongId(songId);
-                console.log("artist service:", artist);
-
+            /*//metodo aun no implementado
+            const artists = await this.artistRepository.findArtistBySongId(songId);
+            for (const artist of artists.Data) {
+                const artistResponse = {
+                    id: artist.Id.Id,
+                    name: artist.Name.Name,
+                };
+                songResponseDto.artists.push(artistResponse);
             }
             */
-
         }
         playlistResponseDto.duration = this.conversorTiempo(tiempoTotalPlaylist);
         return Result.success<GetPlaylistByIdResponseApplicationDto>(playlistResponseDto, playlistResult.statusCode);
