@@ -167,11 +167,48 @@ export class ArtistRepository
       }
       return Result.success<Artist[]>(response, 200);
     }
-    
+
   }
 
   async findTopArtists(): Promise<Result<Artist[]>> {
-    throw new Error('Method not implemented.');
+
+    let response: Artist[];
+    let error: Error;
+
+    try {
+
+      const artist = await this.createQueryBuilder('artista')
+        .select([
+          'artista.codigo_artista',
+          'artista.nombre_artista',
+          'artista.referencia_imagen',
+        ])
+        .where('artista.trending = :trending', { trending: true })
+        .getMany();
+
+      response = await Promise.all(
+        artist.map(
+          async (artist) => await this.OrmArtistMapper.toDomain(artist),
+        )
+      );
+
+      console.log("response repo: ", response);
+
+    } catch (e) {
+      error = e;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+          error,
+        );
+      }
+      return Result.success<Artist[]>(response, 200);
+    }
+
   }
 
   async findArtistsByName(name: string): Promise<Result<Artist[]>> {
