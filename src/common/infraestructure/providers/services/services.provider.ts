@@ -41,6 +41,7 @@ import { GetArtistByIdService } from '../../../../artist/application/services/ge
 import { ArtistRepository } from '../../../../artist/infraestructure/repositories/artist.repository';
 import { GetTopSongsService } from '../../../../song/application/services/get-top-songs.application.service';
 import { SearchApplicationService } from 'src/search/application/services/search.application.service';
+import { OrmArtistMapper } from '../../../../artist/infraestructure/mapper/orm-artist.mapper';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -317,7 +318,8 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetPlaylistByIdService(
             new PlaylistRepository(dataSource),
-            new SongRepository(dataSource, new OrmSongMapper()),
+              new SongRepository(dataSource, new OrmSongMapper()),
+              new ArtistRepository(dataSource),
             new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),
@@ -394,7 +396,10 @@ export const servicesProvidersManager: Provider[] = [
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new GetArtistByIdService(new ArtistRepository(dataSource)),
+            new GetArtistByIdService(
+                new ArtistRepository(dataSource),
+                new AzureBufferImageHelper(),
+            ),
           new AuditingRepository(dataSource),
           'GetArtistByIdService',
           logger,

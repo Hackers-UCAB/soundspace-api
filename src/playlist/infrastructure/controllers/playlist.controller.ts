@@ -9,6 +9,7 @@ import { Result } from '../../../common/application/result-handler/result';
 import { GetTopPlaylistResponseInfrastructureDto } from '../dto/responses/get-top-playlist-response.infrastructure.dto';
 import { TopPlaylistEntryApplicationDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
 import { GetPlaylistByIdEntryInfrastructureDto } from '../dto/entrys/get-playlist-by-id-entry.infrastrucrure.dto';
+import { GetPlaylistByIdResponseInfrastructureDto } from '../dto/responses/get-playlist-by-id-response.infrastructure.dto';
 
 @Controller('playlist')
 export class playlistController {
@@ -54,7 +55,25 @@ export class playlistController {
             userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
             PlaylistId: id
         }
-        const response = await this.GetPlaylistByIdService.execute(dto);
-        return response.Data;
+
+        const serviceResult: Result<GetPlaylistByIdResponseApplicationDto> =
+            await this.GetPlaylistByIdService.execute(dto);
+
+        if (!serviceResult.IsSuccess) {
+            HttpResponseHandler.HandleException(
+                serviceResult.StatusCode,
+                serviceResult.message,
+                serviceResult.error,
+            );
+        }
+        const response: GetPlaylistByIdResponseInfrastructureDto = {
+            id: serviceResult.Data.id,
+            name: serviceResult.Data.name,
+            duration: serviceResult.Data.duration,
+            image: serviceResult.Data.im,
+            songs: serviceResult.Data.songs
+        };
+
+        return HttpResponseHandler.Success(200, response);;
     }
 }
