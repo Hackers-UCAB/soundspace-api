@@ -100,6 +100,8 @@ export class SubscriptionRepository
       response = await this.ormSubscriptionMapper.toDomain(subscription);
     } catch (err) {
       error = err;
+      console.log(err);
+      
     } finally {
       if (error) {
         return Result.fail(
