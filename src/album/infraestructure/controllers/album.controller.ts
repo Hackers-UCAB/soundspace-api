@@ -13,12 +13,19 @@ import { HttpResponseHandler } from 'src/common/infraestructure/http-response-ha
 import { Result } from '../../../common/application/result-handler/result';
 import { GetTopAlbumResponseInfrastructureDto } from '../dto/responses/get-top-album-response.infraestructure.dto';
 import { GetAlbumByIdResponseInfrastructureDto } from '../dto/responses/get-album-by-id-response.infrastructure.dto';
+import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
+import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
+import { timeConverter } from 'src/common/domain/helpers/convert-duration';
+import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
 
 @Controller('album')
 export class AlbumController {
   constructor(
     @Inject('DataSource')
     private readonly dataSource: DataSource,
+
+    @Inject('AzureBufferImageHelper')
+    private readonly azureBufferImageHelper: IGetBufferImageInterface,
 
     @Inject('GetAlbumByIdService')
     private readonly GetAlbumByIdService: IApplicationService<
@@ -71,15 +78,47 @@ export class AlbumController {
       );
     }
 
-    const response: GetAlbumByIdResponseInfrastructureDto = {
-      id: serviceResult.Data.id,
-      name: serviceResult.Data.name,
-      duration: serviceResult.Data.duration,
-      genre: serviceResult.Data.genre,
-      im: serviceResult.Data.im,
-      creators: serviceResult.Data.creators,
-      songs: serviceResult.Data.songs,
+    const albumImage = await this.azureBufferImageHelper.getFile(
+      serviceResult.Data.album.Cover.Path,
+    );
+
+    let duration: number = 0;
+    let songs: SongInfraestructureResponseDto[] = [];
+    const creators = serviceResult.Data.creators.map((artist) => {
+      return {
+        creatorId: artist.Id.Id,
+        creatorName: artist.Name.Name,
+      };
+    });
+
+    for (const song of serviceResult.Data.songs) {
+      duration += song.song.Duration.Duration;
+      const songImage = await this.azureBufferImageHelper.getFile(
+        song.song.Cover.Path,
+      );
+      const artists = song.artists.map((artist) => {
+        return {
+          id: artist.Id.Id,
+          name: artist.Name.Name,
+        };
+      });
+      const returnSong: SongInfraestructureResponseDto = {
+        id: song.song.Id.Id,
+        name: song.song.Name.Name,
+        duration: timeConverter(song.song.Duration.Duration),
+        image: songImage.IsSuccess ? songImage.Data : null,
+        artists: artists,
+      };
+      songs.push(returnSong);
+    }
+
+    const response: PlaylistInfraestructureResponseDto = {
+      id: serviceResult.Data.album.Id.Id,
+      name: serviceResult.Data.album.Name.Name,
+      duration: timeConverter(duration),
+      image: albumImage.IsSuccess ? albumImage.Data : null,
+      creators: creators,
+      songs: songs,
     };
-    return HttpResponseHandler.Success(200, response);
   }
 }

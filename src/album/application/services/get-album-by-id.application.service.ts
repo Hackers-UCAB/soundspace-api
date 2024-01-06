@@ -9,6 +9,8 @@ import { GetAlbumByIdResponseApplicationDto } from '../dto/responses/get-album-b
 import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
 import { ISongRepository } from '../../../song/domain/repositories/song.repository.interface';
 import { GetSongByIdResponseApplicationDto } from '../../../song/application/dto/responses/get-song-by-id.response.application.dto';
+import { Song } from 'src/song/domain/song';
+import { Artist } from 'src/artist/domain/artist';
 
 export class GetAlbumByIdService
   implements
@@ -66,11 +68,53 @@ export class GetAlbumByIdService
       );
     }
 
-    const imageResult = await this.getBufferImage.getFile(
-      albumResult.Data.Cover.Path,
-    );
+    const creators: Result<Artist[]> =
+      await this.artistRepository.findArtistsByAlbumId(albumId);
 
-    const albumResponseDto: GetAlbumByIdResponseApplicationDto = {
+    if (!creators.IsSuccess) {
+      return Result.fail<GetAlbumByIdResponseApplicationDto>(
+        null,
+        creators.statusCode,
+        creators.message,
+        creators.error,
+      );
+    }
+
+    let songs: {
+      song: Song;
+      artists: Artist[];
+    }[] = [];
+    for (const songId of albumResult.data.AlbumSongs.Id) {
+      const searchedSong: Result<Song> =
+        await this.songRepository.findSongById(songId);
+
+      if (!searchedSong.IsSuccess) {
+        return Result.fail<GetAlbumByIdResponseApplicationDto>(
+          null,
+          searchedSong.statusCode,
+          searchedSong.message,
+          searchedSong.error,
+        );
+      }
+
+      const artist: Result<Artist[]> =
+        await this.artistRepository.findArtistsBySongId(songId);
+
+      if (!artist.IsSuccess) {
+        return Result.fail<GetAlbumByIdResponseApplicationDto>(
+          null,
+          artist.statusCode,
+          artist.message,
+          artist.error,
+        );
+      }
+      songs.push({
+        song: searchedSong.Data,
+        artists: artist.Data,
+      });
+    }
+
+    /*const albumResponseDto: GetAlbumByIdResponseApplicationDto = {
       userId: param.userId,
       id: albumResult.Data.Id.Id,
       name: albumResult.Data.Name.Name,
@@ -79,8 +123,18 @@ export class GetAlbumByIdService
       im: imageResult.Data,
       creators: [],
       songs: [],
+    };*/
+
+    const albumResponseDto: GetAlbumByIdResponseApplicationDto = {
+      userId: param.userId,
+      creators: creators.Data,
+      album: albumResult.Data,
+      songs: songs,
     };
-    let duracionAlbum = 0;
+
+    return Result.success(albumResponseDto, 200);
+
+    /*let duracionAlbum = 0;
     const creators = await this.artistRepository.findArtistsByAlbumId(albumId);
     for (const creator of creators.Data) {
       const creatorResponse = {
@@ -123,6 +177,6 @@ export class GetAlbumByIdService
     return Result.success<GetAlbumByIdResponseApplicationDto>(
       albumResponseDto,
       albumResult.statusCode,
-    );
+    );*/
   }
 }
