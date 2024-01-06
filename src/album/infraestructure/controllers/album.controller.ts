@@ -17,6 +17,7 @@ import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffe
 import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
+import { TopPlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/top-playlist.response.dto';
 
 @Controller('album')
 export class AlbumController {
@@ -41,9 +42,9 @@ export class AlbumController {
   ) {}
 
   @Get('TopAlbum')
-  async getTopAlbum() {
+  async getTopAlbum(@GetUser('id') userId: UserId) {
     const dto: TopAlbumEntryApplicationDto = {
-      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+      userId: userId.Id,
     };
     const serviceResult: Result<GetTopAlbumResponseApplicationDto> =
       await this.GetTopAlbumService.execute(dto);
@@ -54,16 +55,31 @@ export class AlbumController {
         serviceResult.error,
       );
     }
-    const response: GetTopAlbumResponseInfrastructureDto = {
-      albums: serviceResult.Data.albums,
+
+    const albums = [];
+
+    for (const album of serviceResult.Data.albums) {
+      const albumImage = await this.azureBufferImageHelper.getFile(
+        album.Cover.Path,
+      );
+      const returnAlbum = {
+        id: album.Id.Id,
+        image: albumImage.IsSuccess ? albumImage.Data : null,
+      };
+      albums.push(returnAlbum);
+    }
+
+    const response: TopPlaylistInfraestructureResponseDto = {
+      playlists: albums,
     };
+
     return HttpResponseHandler.Success(200, response);
   }
 
   @Get(':id')
-  async getPlaylist(@Param('id') id: string) {
+  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
     const dto: GetAlbumByIdEntryApplicationDto = {
-      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+      userId: userId.Id,
       albumId: id,
     };
 

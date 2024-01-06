@@ -16,7 +16,7 @@ export class GetTopAlbumService
     >
 {
   private readonly AlbumRepository: IAlbumRepository;
-  private readonly getBufferImage: IGetBufferImageInterface;
+
   songRepository: any;
 
   constructor(
@@ -24,15 +24,14 @@ export class GetTopAlbumService
     getBufferImage: IGetBufferImageInterface,
   ) {
     this.AlbumRepository = AlbumRepository;
-    this.getBufferImage = getBufferImage;
   }
 
   async execute(
     param: TopAlbumEntryApplicationDto,
   ): Promise<Result<GetTopAlbumResponseApplicationDto>> {
-    console.log('aja service');
+    //console.log('aja service');
     const albumResult = await this.AlbumRepository.findTopAlbum();
-    console.log('albumResult: ', albumResult);
+    //console.log('albumResult: ', albumResult);
     if (!albumResult.IsSuccess) {
       return Result.fail<GetTopAlbumResponseApplicationDto>(
         null,
@@ -41,25 +40,11 @@ export class GetTopAlbumService
         albumResult.error,
       );
     }
-    console.log('albumResult service', albumResult);
-    const albums = [];
-    for (let i = 0; i < albumResult.Data.length; i++) {
-      const album = albumResult.Data[i];
-      const imageResult = await this.getBufferImage.getFile(album.Cover.Path);
-      /*
-            if (!imageResult.IsSuccess) {
-                return Result.fail(null, imageResult.statusCode, imageResult.message, imageResult.error);
-            }
-            */
-      const albumObject = {
-        id: album.Id.Id,
-        image: imageResult.Data,
-      };
-      albums.push(albumObject);
-    }
+    //console.log('albumResult service', albumResult);
+
     const response: GetTopAlbumResponseApplicationDto = {
       userId: param.userId,
-      albums: albums,
+      albums: albumResult.Data,
     };
     return Result.success<GetTopAlbumResponseApplicationDto>(
       response,

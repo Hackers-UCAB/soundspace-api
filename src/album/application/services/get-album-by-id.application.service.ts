@@ -36,22 +36,6 @@ export class GetAlbumByIdService
     this.getBufferImage = getBufferImage;
   }
 
-  conversorTiempo(tiempo: number): string {
-    let horas = 0;
-    let minutos = 0;
-    let resultado = '';
-    if (tiempo >= 3600) {
-      horas = Math.floor(tiempo / 3600);
-      tiempo = Math.floor(tiempo % 3600);
-      resultado = resultado + horas + ':';
-    }
-    minutos = Math.floor(tiempo / 60);
-    tiempo = Math.floor(tiempo % 60);
-    resultado =
-      resultado + (minutos < 10 && horas > 0 ? '0' + minutos : minutos) + ':';
-    return resultado + (tiempo < 10 ? '0' + tiempo : tiempo);
-  }
-
   async execute(
     param: GetAlbumByIdEntryApplicationDto,
   ): Promise<Result<GetAlbumByIdResponseApplicationDto>> {
