@@ -11,7 +11,7 @@ export interface IArtistRepository {
 
   findTopArtists(): Promise<Result<Artist[]>>;
 
-  findArtistsByName(name: string): Promise<Result<Artist[]>>;
+  findArtistsByName(name: string, limit?: number, offset?: number): Promise<Result<Artist[]>>
 
   findArtistsByAlbumId(songId: AlbumId): Promise<Result<Artist[]>>;
 }

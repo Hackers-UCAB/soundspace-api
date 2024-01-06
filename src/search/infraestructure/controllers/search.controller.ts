@@ -26,11 +26,13 @@ export class SearchController {
     @Query() querySearchDto: QuerySearchDto,
     @GetUser('id') userId: UserId,
   ){
-    
+    //TODO: Agregarle paginacion, limit y offset
     const dto: SearchEntryApplicationDto = {
       userId: userId.Id,
       types: querySearchDto.type ? [querySearchDto.type] : ['artist', 'album', 'playlist', 'song'],
       name: term,
+      limit: querySearchDto.limit ? querySearchDto.limit : 20,
+      offset: querySearchDto.offset ? querySearchDto.offset : 0
     };
     
     const searchResult: Result<SearchResponseApplicationDto> =

@@ -13,6 +13,7 @@ import { SubscriptionExpired } from './events/subscription-expired.event';
 import { SubscriptionStatusEnum } from './enums/subscription-status.enum';
 import { SubscriptionChanelId } from './subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionNearToExpired } from './events/subscription-near-to-expired.event';
+import { SubscriptionCanceled } from './events/subscription-canceled.event';
 
 export class Subscription extends AggregateRoot<SubscriptionId> {
   private status: SubscriptionStatus;
@@ -87,6 +88,10 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       this.status = event.status;
     }
 
+    if (event instanceof SubscriptionCanceled) {
+      this.status = event.status;
+    }
+
     if (event instanceof SubscriptionNearToExpired) {
       this.status = event.status;
     }
@@ -120,6 +125,17 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
         this.Id,
         this.user,
         SubscriptionStatus.create(SubscriptionStatusEnum.EXPIRED),
+        this.Chanel,
+      ),
+    );
+  }
+
+  public cancelSubscription() {
+    this.apply(
+      SubscriptionCanceled.create(
+        this.Id,
+        this.user,
+        SubscriptionStatus.create(SubscriptionStatusEnum.CANCELED),
         this.Chanel,
       ),
     );

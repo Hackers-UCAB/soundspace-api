@@ -4,4 +4,6 @@ export class SearchEntryApplicationDto implements ServiceEntry{
     userId: string;
     types: string []; 
     name: string;
+    limit : number;
+    offset : number;
 }

@@ -83,7 +83,7 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
     }
   }
 
-  async findPlaylistsByName(name: string): Promise<Result<Playlist[]>> {
+  async findPlaylistsByName(name: string, limit?: number, offset?: number): Promise<Result<Playlist[]>> {
     let response: Playlist [];
     let error: any;
     try {
@@ -96,6 +96,8 @@ export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements
           .andWhere('playlist.tipo = :tipo', {
             tipo: 'Playlist',
           })
+        .limit(limit)
+        .offset(offset)
         .getMany();
         response = await Promise.all(
             playlists.map(

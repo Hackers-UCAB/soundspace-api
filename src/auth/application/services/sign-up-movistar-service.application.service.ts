@@ -97,7 +97,8 @@ export class SignUpMovistarApplicationService
       return Result.fail(
         null,
         error.statusCode || 500,
-        error.message || 'Ha ocurrido un error inesperado creando el usuario y/o la subscripción, hable con un administrador',
+        error.message ||
+          'Ha ocurrido un error inesperado creando el usuario y/o la subscripción, hable con un administrador',
         error,
       );
     }
@@ -129,7 +130,8 @@ export class SignUpMovistarApplicationService
         new Error(subscriptionSaving.message),
       );
     }
-    this.eventPublisher.publish(newSubscription.pullDomainEvents());
+    await this.eventPublisher.publish(newSubscription.pullDomainEvents());
+
     const response: SignUpResponseApplicationDto = {
       userId,
       token: this.tokenGenerator.create({ id: userId }),

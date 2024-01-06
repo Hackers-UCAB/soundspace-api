@@ -189,7 +189,7 @@ export class AlbumRepository
     }
   }
 
-  async findAlbumsByName(name: string): Promise<Result<Album[]>> {
+  async findAlbumsByName(name: string, limit?: number, offset?: number): Promise<Result<Album[]>> {
     let response: Album[];
     let error: any;
     try {
@@ -201,7 +201,9 @@ export class AlbumRepository
         })
         .andWhere('album.tipo = :tipo', {
           tipo: 'album',
-        })
+        })    
+        .limit(limit)
+        .offset(offset)
         .getMany();
 
       response = await Promise.all(

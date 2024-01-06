@@ -21,7 +21,7 @@ export class SearchPlaylistsApplicationService
     param: SearchItemsEntryApplicationDto,
   ): Promise<Result<SearchItemsResponseApplicationDto>> {
     const playlistsResult: Result<Playlist[]> =
-      await this.playlistRepository.findPlaylistsByName(param.name);
+      await this.playlistRepository.findPlaylistsByName(param.name, param.limit, param.offset);
 
     if (!playlistsResult.IsSuccess) {
       return Result.fail(

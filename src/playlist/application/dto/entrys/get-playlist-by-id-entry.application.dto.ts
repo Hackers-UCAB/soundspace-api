@@ -2,5 +2,5 @@ import { ServiceEntry } from "../../../../common/application/services/dto/entry/
 
 export class GetPlaylistByIdEntryApplicationDto implements ServiceEntry {
     userId: string;
-    PlaylistId: string;
+    playlistId: string;
 }

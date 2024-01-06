@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OrmSubscriptionChanelEntity } from '../orm-entities/subscription-chanel.entity';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionChanel } from 'src/subscription/domain/subscription-chanel/subscription-chanel';
+import { UserId } from 'src/user/domain/value-objects/user-id';
 
 export class SubscriptionRepository
   extends Repository<OrmSubscripcionEntity>
@@ -99,6 +100,8 @@ export class SubscriptionRepository
       response = await this.ormSubscriptionMapper.toDomain(subscription);
     } catch (err) {
       error = err;
+      console.log(err);
+      
     } finally {
       if (error) {
         return Result.fail(
@@ -141,6 +144,45 @@ export class SubscriptionRepository
           500,
           'Error al buscar o mapear las subscripciones',
           error,
+        );
+      }
+      return Result.success(response, 200);
+    }
+  }
+
+  async findSubscriptionByUser(id: UserId): Promise<Result<Subscription>> {
+    let response: Subscription;
+    let error: any;
+    try {
+      const subscripcion = await this.findOne({
+        where: {
+          usuario: {
+            codigo_usuario: id.Id,
+          },
+        },
+        relations: {
+          usuario: true,
+          canal: true,
+        },
+      });
+      response = await this.ormSubscriptionMapper.toDomain(subscripcion);
+    } catch (err) {
+      error = err;
+    }finally{
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          'Error al buscar o mapear la subscripción',
+          error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe la subscripción del usuario',
+          new Error('No existe la subscripción del usuario'),
         );
       }
       return Result.success(response, 200);
