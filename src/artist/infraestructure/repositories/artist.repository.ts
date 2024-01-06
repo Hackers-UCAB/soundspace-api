@@ -170,7 +170,7 @@ export class ArtistRepository
 
   }
 
-  async findTopArtists(): Promise<Result<Artist[]>> {
+  async findTrendingArtists(): Promise<Result<Artist[]>> {
 
     let response: Artist[];
     let error: Error;

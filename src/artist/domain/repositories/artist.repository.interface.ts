@@ -15,7 +15,7 @@ export interface IArtistRepository {
 
     findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>>;
 
-    findTopArtists(): Promise<Result<Artist[]>>;
+    findTrendingArtists(): Promise<Result<Artist[]>>;
 
     findArtistsByName(name: string): Promise<Result<Artist[]>>
 
