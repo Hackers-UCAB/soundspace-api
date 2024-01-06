@@ -327,7 +327,6 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetTopPlaylistService(
             new PlaylistRepository(dataSource),
-            new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),
           'GetTopPlaylistService',
