@@ -26,31 +26,6 @@ export class GetTopSongsService implements IApplicationService<ServiceEntry, Get
         if (!SongsResult.IsSuccess) {
             return Result.fail<GetTopSongsResponseApplicationDto>(null, SongsResult.statusCode, SongsResult.message, SongsResult.error);
         }
-        /*
-        for (let i = 0; i < SongsResult.Data.length; i++) {
-            const song = SongsResult.Data[i];
-
-            const imageResult = await (await this.getBufferImage.getFile(song.Cover.Path)).Data;
-            const songObject = {
-                songId: song.Id.Id,
-                name: song.Name.Name,
-                image: imageResult,
-                duration: this.conversorTiempo(song.Duration.Duration),
-                artists : []
-            };
-            songs.push(songObject);
-
-            const artists = await this.artistRepository.findArtistBySongId(song.Id);
-            for (const artist of artists.Data) {
-                const artistResponse = {
-                    id: artist.Id.Id,
-                    name: artist.Name.Name,
-                };
-                songObject.artists.push(artistResponse);
-            }
-        }
-        */
-
         let songs: {
             song: Song;
             artists: Artist[];
