@@ -55,7 +55,6 @@ export class SongRepository
         .where('cancion.codigo_cancion = :id', { id: id.Id })
         .getOne();
       response = await this.ormSongMapper.toDomain(song);
-      console.log('Repo response: ', response);
     } catch (e) {
       error = e;
     } finally {

@@ -9,7 +9,7 @@ import { servicesProvidersManager } from './common/infraestructure/providers/ser
 import { providersManager } from 'src/common/infraestructure/providers/config/providers-manager';
 import { SongController } from './song/infraestructure/controllers/song.controller';
 import { SongWsModule } from './song-ws/song-ws.module';
-import { playlistController } from './playlist/infrastructure/controllers/playlist.controller';
+import { PlaylistController } from './playlist/infrastructure/controllers/playlist.controller';
 import { AlbumController } from './album/infraestructure/controllers/album.controller';
 import { UserController } from './user/infraestructure/controllers/user.controller';
 import { JwtStrategy } from './auth/infraestructure/jwt/strategies/jwt.strategy';
@@ -44,7 +44,7 @@ import { SearchController } from './search/infraestructure/controllers/search.co
     SongController,
     UserController,
     PromotionController,
-    playlistController,
+    PlaylistController,
     AlbumController,
     SearchController
   ],
