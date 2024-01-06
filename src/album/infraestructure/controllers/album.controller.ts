@@ -29,7 +29,7 @@ export class AlbumController {
     private readonly azureBufferImageHelper: IGetBufferImageInterface,
 
     @Inject('GetAlbumByIdService')
-    private readonly GetAlbumByIdService: IApplicationService<
+    private readonly getAlbumByIdService: IApplicationService<
       GetAlbumByIdEntryApplicationDto,
       GetAlbumByIdResponseApplicationDto
     >,
@@ -86,7 +86,7 @@ export class AlbumController {
     };
 
     const serviceResult: Result<GetAlbumByIdResponseApplicationDto> =
-      await this.GetAlbumByIdService.execute(dto);
+      await this.getAlbumByIdService.execute(dto);
 
     if (!serviceResult.IsSuccess) {
       HttpResponseHandler.HandleException(
@@ -138,5 +138,7 @@ export class AlbumController {
       creators: creators,
       songs: songs,
     };
+
+    return HttpResponseHandler.Success(200, response);
   }
 }
