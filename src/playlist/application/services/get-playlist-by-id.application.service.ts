@@ -35,7 +35,7 @@ export class GetPlaylistByIdService
   ): Promise<Result<GetPlaylistByIdResponseApplicationDto>> {
     //Primero se crea el id del playlist
     const playlistId = PlaylistId.create(param.playlistId);
-    //Buscamos el playlist
+    //Buscamos el playlist en el repo
     const playlistResult =
       await this.playlistRepository.findPlaylistById(playlistId);
 
