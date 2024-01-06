@@ -6,6 +6,7 @@ import { GetArtistBySongIdEntryApplicationDto } from "../dto/entry/get-artist-by
 import { GetArtistBySongIdResponseApplicationDto } from "../dto/response/get-artist-by-song-id-responde.application.dto";
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 
+//Deprecado...
 export class GetArtistBySongIdService implements IApplicationService<
     GetArtistBySongIdEntryApplicationDto,
     GetArtistBySongIdResponseApplicationDto

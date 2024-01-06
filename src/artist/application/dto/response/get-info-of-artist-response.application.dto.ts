@@ -1,5 +1,7 @@
 import { ServiceResponse } from "src/common/application/services/dto/response/service-response.dto";
 
+//Por implementar correctamente...
+
 /*export class GetArtistByIdResponseApplicationDto implements ServiceResponse {
     userId: string;
     id: string;
