@@ -6,7 +6,6 @@ import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/res
 import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/application/result-handler/result';
-import { TopPlaylistEntryApplicationDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
@@ -15,6 +14,7 @@ import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffe
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
 import { TopPlaylistInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/top-playlist.response.dto';
+import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -32,7 +32,7 @@ export class PlaylistController {
     >,
     @Inject('GetTopPlaylistService')
     private readonly GetTopPlaylistService: IApplicationService<
-      TopPlaylistEntryApplicationDto,
+        ServiceEntry,
       GetTopPlaylistResponseApplicationDto
     >,
   ) {}
@@ -40,11 +40,8 @@ export class PlaylistController {
   @Get('top_playlist')
   @Auth()
   async getTopPlaylist(@GetUser('id') userId: UserId) {
-      const dto: TopPlaylistEntryApplicationDto = {
-          userId: userId.Id,
-    };
     const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
-      await this.GetTopPlaylistService.execute(dto);
+        await this.GetTopPlaylistService.execute({ userId: userId.Id });
         if (!serviceResult.IsSuccess) {
           HttpResponseHandler.HandleException(
             serviceResult.statusCode,

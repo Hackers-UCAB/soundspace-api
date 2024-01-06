@@ -1,15 +1,10 @@
 import { Result } from '../../../common/application/result-handler/result';
+import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IPlaylistRepository } from '../../domain/repositories/playlist.repository.interface';
-import { TopPlaylistEntryApplicationDto } from '../dto/entrys/get-top-playlist-entry.application.dto';
 import { GetTopPlaylistResponseApplicationDto } from '../dto/responses/get-top-playlist-response.application.dto';
 
-export class GetTopPlaylistService
-  implements
-    IApplicationService<
-      TopPlaylistEntryApplicationDto,
-      GetTopPlaylistResponseApplicationDto
-    >
+export class GetTopPlaylistService implements IApplicationService<ServiceEntry,GetTopPlaylistResponseApplicationDto>
 {
   private readonly playlistRepository: IPlaylistRepository;
 
@@ -19,8 +14,8 @@ export class GetTopPlaylistService
       this.playlistRepository = PlaylistRepository;
   }
 
-  async execute(
-    param: TopPlaylistEntryApplicationDto,
+    async execute(
+        param: ServiceEntry,
   ): Promise<Result<GetTopPlaylistResponseApplicationDto>> {
       const playlistResult = await this.playlistRepository.findTopPlaylist();
     if (!playlistResult.IsSuccess) {
