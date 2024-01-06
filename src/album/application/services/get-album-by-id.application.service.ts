@@ -22,18 +22,15 @@ export class GetAlbumByIdService
   private readonly albumRepository: IAlbumRepository;
   private readonly artistRepository: IArtistRepository;
   private readonly songRepository: ISongRepository;
-  private readonly getBufferImage: IGetBufferImageInterface;
 
   constructor(
     albumRepository: IAlbumRepository,
     artistRepository: IArtistRepository,
     songRepository: ISongRepository,
-    getBufferImage: IGetBufferImageInterface,
   ) {
     this.albumRepository = albumRepository;
     this.artistRepository = artistRepository;
     this.songRepository = songRepository;
-    this.getBufferImage = getBufferImage;
   }
 
   async execute(

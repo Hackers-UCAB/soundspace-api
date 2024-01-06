@@ -325,9 +325,7 @@ export const servicesProvidersManager: Provider[] = [
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new GetTopPlaylistService(
-            new PlaylistRepository(dataSource),
-          ),
+          new GetTopPlaylistService(new PlaylistRepository(dataSource)),
           new AuditingRepository(dataSource),
           'GetTopPlaylistService',
           logger,
@@ -347,7 +345,6 @@ export const servicesProvidersManager: Provider[] = [
             new AlbumRepository(dataSource),
             new ArtistRepository(dataSource),
             new SongRepository(dataSource, new OrmSongMapper()),
-            new AzureBufferImageHelper(),
           ),
 
           new AuditingRepository(dataSource),
@@ -365,10 +362,7 @@ export const servicesProvidersManager: Provider[] = [
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new GetTopAlbumService(
-            new AlbumRepository(dataSource),
-            new AzureBufferImageHelper(),
-          ),
+          new GetTopAlbumService(new AlbumRepository(dataSource)),
           new AuditingRepository(dataSource),
           'GetTopAlbumService',
           logger,
@@ -441,7 +435,10 @@ export const servicesProvidersManager: Provider[] = [
     useFactory: (dataSource: DataSource, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new CancelSubscriptionApplicationService(new SubscriptionRepository(dataSource), new UserRepository(dataSource)),
+          new CancelSubscriptionApplicationService(
+            new SubscriptionRepository(dataSource),
+            new UserRepository(dataSource),
+          ),
           new AuditingRepository(dataSource),
           'CancelSubscriptionService',
           logger,
@@ -458,8 +455,8 @@ export const servicesProvidersManager: Provider[] = [
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new GetTopSongsService(
-              new SongRepository(dataSource, new OrmSongMapper()),
-              new ArtistRepository(dataSource),
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new ArtistRepository(dataSource),
             new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),

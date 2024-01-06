@@ -15,22 +15,19 @@ export class GetTopAlbumService
       GetTopAlbumResponseApplicationDto
     >
 {
-  private readonly AlbumRepository: IAlbumRepository;
+  private readonly albumRepository: IAlbumRepository;
 
   songRepository: any;
 
-  constructor(
-    AlbumRepository: IAlbumRepository,
-    getBufferImage: IGetBufferImageInterface,
-  ) {
-    this.AlbumRepository = AlbumRepository;
+  constructor(AlbumRepository: IAlbumRepository) {
+    this.albumRepository = AlbumRepository;
   }
 
   async execute(
     param: TopAlbumEntryApplicationDto,
   ): Promise<Result<GetTopAlbumResponseApplicationDto>> {
     //console.log('aja service');
-    const albumResult = await this.AlbumRepository.findTopAlbum();
+    const albumResult = await this.albumRepository.findTopAlbum();
     //console.log('albumResult: ', albumResult);
     if (!albumResult.IsSuccess) {
       return Result.fail<GetTopAlbumResponseApplicationDto>(
