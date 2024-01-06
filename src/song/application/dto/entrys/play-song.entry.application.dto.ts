@@ -5,4 +5,5 @@ export class PlaySongEntryApplicationDto implements ServiceEntry {
     preview?: boolean
     songId: string
     second?: number
+    streaming?: boolean
 }
