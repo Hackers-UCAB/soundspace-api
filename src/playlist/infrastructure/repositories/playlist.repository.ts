@@ -5,7 +5,6 @@ import { Playlist } from '../../domain/playlist';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
 import { OrmPlaylistMapper } from '../mapper/orm-playlist.mapper';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
-import { throwError } from 'rxjs';
 
 export class PlaylistRepository extends Repository<OrmPlaylistEntity> implements IPlaylistRepository {
 
