@@ -1,6 +1,5 @@
 import { ServiceEntry } from "src/common/application/services/dto/entry/service-entry.dto";
 
-//Deprecado...
-export class GetTrendingArtistsEntryApplicationDto implements ServiceEntry {
+export class GetTopEntryApplicationDto implements ServiceEntry {
     userId: string;
 }

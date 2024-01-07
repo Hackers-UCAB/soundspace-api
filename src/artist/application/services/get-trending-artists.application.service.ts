@@ -1,12 +1,12 @@
 import { Result } from "../../../common/application/result-handler/result";
 import { IApplicationService } from "../../../common/application/services/interfaces/application-service.interface";
+import { GetTopEntryApplicationDto } from "../../../common/application/top/dto/entry/get-top.entry.dto";
 import { IArtistRepository } from "../../domain/repositories/artist.repository.interface";
-import { GetTrendingArtistsEntryApplicationDto } from "../dto/entry/get-trending-artists-entry.application.dto";
 import { GetTrendingArtistsResponseApplicationDto } from "../dto/response/get-trending-artists-response.application.dto";
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 
 export class GetTrendingArtistsService implements IApplicationService<
-    GetTrendingArtistsEntryApplicationDto,
+    GetTopEntryApplicationDto,
     GetTrendingArtistsResponseApplicationDto
 > {
 
@@ -21,7 +21,7 @@ export class GetTrendingArtistsService implements IApplicationService<
         this.getBufferImage = getBufferImage;
     }
 
-    async execute(param: GetTrendingArtistsEntryApplicationDto): Promise<
+    async execute(param: GetTopEntryApplicationDto): Promise<
         Result<GetTrendingArtistsResponseApplicationDto>
     > {
 
