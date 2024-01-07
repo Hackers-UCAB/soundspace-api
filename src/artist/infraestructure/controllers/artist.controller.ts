@@ -54,8 +54,6 @@ export class ArtistController {
             );
         }
 
-        console.log(serviceResult.Data);
-
         const artists = [];
 
         for (const artist of serviceResult.Data.artists) {
@@ -66,6 +64,7 @@ export class ArtistController {
 
             const returnArtists = {
                 id: artist.Id.Id,
+                name: artist.Name.Name,
                 image: artistImage.IsSuccess ? artistImage.Data : null,
             };
 

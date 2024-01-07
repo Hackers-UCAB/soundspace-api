@@ -23,12 +23,21 @@ export class ArtistRepository
     let error: Error;
 
     try {
-      const artist = await this.createQueryBuilder('artista')
+      /*const artist = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
           'artista.nombre_artista',
           'artista.referencia_imagen',
         ])
+        .where('artista.codigo_artista = :id', { id: artistId.Id })
+        .getOne();*/
+
+      const artist = await this.createQueryBuilder('artista')
+        .innerJoinAndSelect("artista.canciones", "cancion")
+        .innerJoinAndSelect("cancion.generos", "generoCancion")
+        .innerJoinAndSelect("artista.playlistCreadores", "playlistCreador")
+        .innerJoinAndSelect("playlistCreador.playlist", "playlist")
+        .innerJoinAndSelect("artista.genero", "generoArtista")
         .where('artista.codigo_artista = :id', { id: artistId.Id })
         .getOne();
 
@@ -93,13 +102,22 @@ export class ArtistRepository
 
     try {
 
-      const artists = await this.createQueryBuilder('artista')
+      /*const artists = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
           'artista.nombre_artista',
           'artista.referencia_imagen',
         ])
         .innerJoin('artista.canciones', 'cancion')
+        .where('cancion.codigo_cancion = :id', { id: songId.Id })
+        .getMany();*/
+
+      const artists = await this.createQueryBuilder('artista')
+        .innerJoinAndSelect("artista.canciones", "cancion")
+        .innerJoinAndSelect("cancion.generos", "generoCancion")
+        .innerJoinAndSelect("artista.playlistCreadores", "playlistCreador")
+        .innerJoinAndSelect("playlistCreador.playlist", "playlist")
+        .innerJoinAndSelect("artista.genero", "generoArtista")
         .where('cancion.codigo_cancion = :id', { id: songId.Id })
         .getMany();
 
@@ -108,8 +126,6 @@ export class ArtistRepository
           async (artist) => await this.OrmArtistMapper.toDomain(artist)
         )
       );
-
-      console.log("response repo: ", response);
 
     } catch (e) {
       error = e;
@@ -135,13 +151,22 @@ export class ArtistRepository
 
     try {
 
-      const artists = await this.createQueryBuilder('artista')
+      /*const artists = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
           'artista.nombre_artista',
           'artista.referencia_imagen',
         ])
         .innerJoin('artista.playlistCreadores', 'playlist_creador')
+        .where('playlist_creador.playlistCodigoPlaylist = :id', { id: albumId.Id })
+        .getMany();*/
+
+      const artists = await this.createQueryBuilder('artista')
+        .innerJoinAndSelect("artista.canciones", "cancion")
+        .innerJoinAndSelect("cancion.generos", "generoCancion")
+        .innerJoinAndSelect("artista.playlistCreadores", "playlistCreador")
+        .innerJoinAndSelect("playlistCreador.playlist", "playlist")
+        .innerJoinAndSelect("artista.genero", "generoArtista")
         .where('playlist_creador.playlistCodigoPlaylist = :id', { id: albumId.Id })
         .getMany();
 
@@ -150,8 +175,6 @@ export class ArtistRepository
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         )
       );
-
-      console.log("response repo: ", response);
 
     } catch (e) {
       error = e;
@@ -191,8 +214,6 @@ export class ArtistRepository
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         )
       );
-
-      console.log("response repo: ", response);
 
     } catch (e) {
       error = e;
@@ -235,7 +256,6 @@ export class ArtistRepository
       );
     } catch (err) {
       error = err;
-      console.log(error);
 
     } finally {
       if (error) {
