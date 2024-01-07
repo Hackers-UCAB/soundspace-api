@@ -39,6 +39,47 @@ export class ArtistController {
         >,
     ) { }
 
+    @Get('top_artist')
+    @Auth()
+    async getTrendingArtists(@GetUser('id') userId: UserId) {
+
+        const dto: ServiceEntry = {
+            userId: userId.Id,
+        };
+
+        const serviceResult: Result<GetTrendingArtistsResponseApplicationDto> =
+            await this.getTrendingArtistsService.execute(dto);
+        if (!serviceResult.IsSuccess) {
+            HttpResponseHandler.HandleException(
+                serviceResult.statusCode,
+                serviceResult.message,
+                serviceResult.error,
+            );
+        }
+
+        const artists = [];
+
+        for (const artist of serviceResult.Data.artists) {
+
+            const artistImage = await this.azureBufferImageHelper.getFile(
+                artist.Photo.Path,
+            );
+
+            const returnArtists = {
+                id: artist.Id.Id,
+                name: artist.Name.Name,
+                image: artistImage.IsSuccess ? artistImage.Data : null,
+            };
+
+            artists.push(returnArtists);
+        }
+        const response: TrendingArtistsInfraestructureResponseDto = {
+            artists: artists
+        };
+
+        return HttpResponseHandler.Success(200, response);
+    }
+
     @Get(':id')
     @Auth()
     async getArtist(@Param('id') id: string, @GetUser('id') userId: UserId) {
@@ -113,50 +154,6 @@ export class ArtistController {
             songs: songs,
         };
 
-        console.log(response);
-
         return HttpResponseHandler.Success(200, response);
     }
-
-    @Get('top_artist')
-    @Auth()
-    async getTrendingArtists(@GetUser('id') userId: UserId) {
-
-        const dto: ServiceEntry = {
-            userId: userId.Id,
-        };
-
-        const serviceResult: Result<GetTrendingArtistsResponseApplicationDto> =
-            await this.getTrendingArtistsService.execute(dto);
-        if (!serviceResult.IsSuccess) {
-            HttpResponseHandler.HandleException(
-                serviceResult.statusCode,
-                serviceResult.message,
-                serviceResult.error,
-            );
-        }
-
-        const artists = [];
-
-        for (const artist of serviceResult.Data.artists) {
-
-            const artistImage = await this.azureBufferImageHelper.getFile(
-                artist.Photo.Path,
-            );
-
-            const returnArtists = {
-                id: artist.Id.Id,
-                name: artist.Name.Name,
-                image: artistImage.IsSuccess ? artistImage.Data : null,
-            };
-
-            artists.push(returnArtists);
-        }
-        const response: TrendingArtistsInfraestructureResponseDto = {
-            artists: artists
-        };
-
-        return HttpResponseHandler.Success(200, response);
-    }
-
 }

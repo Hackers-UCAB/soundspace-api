@@ -38,7 +38,7 @@ export class AlbumController {
     >,
   ) {}
 
-  @Get('TopAlbum')
+  @Get('top_album')
   @Auth()
   async getTopAlbum(@GetUser('id') userId: UserId) {
     const dto: TopAlbumEntryApplicationDto = {
@@ -76,7 +76,7 @@ export class AlbumController {
 
   @Get(':id')
   @Auth()
-  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
+  async getAlbum(@Param('id') id: string, @GetUser('id') userId: UserId) {
     const dto: GetAlbumByIdEntryApplicationDto = {
       userId: userId.Id,
       albumId: id,
