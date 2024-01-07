@@ -17,6 +17,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CheckSubscriptionsCronService } from './subscription/infraestructure/cron/subscriptions.cron';
 import { PromotionController } from './promotions/infraestructure/controllers/promotion.controller';
 import { SearchController } from './search/infraestructure/controllers/search.controller';
+import { ArtistController } from './artist/infraestructure/controllers/artist.controller';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { SearchController } from './search/infraestructure/controllers/search.co
     PromotionController,
     PlaylistController,
     AlbumController,
-    SearchController
+    SearchController,
+    ArtistController
   ],
   providers: [
     ...databaseProviders,
