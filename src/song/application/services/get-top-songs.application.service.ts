@@ -34,7 +34,7 @@ export class GetTopSongsService implements IApplicationService<ServiceEntry, Get
         for (const song of SongsResult.Data) {
 
             const artist: Result<Artist[]> =
-                await this.artistRepository.findArtistBySongId(song.Id);
+                await this.artistRepository.findArtistsBySongId(song.Id);
 
             if (!artist.IsSuccess) {
                 return Result.fail<GetTopSongsResponseApplicationDto>(null, artist.statusCode, artist.message, artist.error,);
