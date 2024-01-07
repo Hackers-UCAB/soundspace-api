@@ -1,12 +1,10 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
-import { OrmGeneroEntity } from 'src/common/infraestructure/orm-entities/genre.entity';
 import { Album } from '../../domain/album';
 import { AlbumId } from '../../domain/value-objects/album-id';
 import { AlbumName } from '../../domain/value-objects/album-name';
 import { AlbumCover } from '../../domain/value-objects/album-cover';
 import { AlbumSongs } from '../../domain/value-objects/album-songs';
-import { AlbumDuration } from '../../domain/value-objects/album-duration';
 import { AlbumGenre } from '../../domain/value-objects/album-genre';
 import { SongId } from '../../../song/domain/value-objects/song-id';
 import { InvalidToDomainMapper } from '../../../common/infraestructure/exceptions/invalid-to-domain-mapper.exception';

@@ -8,6 +8,7 @@ import { AlbumName } from './value-objects/album-name';
 import { AlbumSongs } from './value-objects/album-songs';
 import { AlbumCreated } from './events/album-created.event';
 import { InvalidAlbumException } from './exceptions/invalid-album.exception';
+
 export class Album extends AggregateRoot<AlbumId> {
   private name: AlbumName;
   private cover: AlbumCover;

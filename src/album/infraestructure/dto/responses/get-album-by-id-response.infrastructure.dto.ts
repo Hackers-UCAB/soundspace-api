@@ -1,4 +1,5 @@
 import { GetSongByIdResponseApplicationDto } from '../../../../song/application/dto/responses/get-song-by-id.response.application.dto';
+
 export class GetAlbumByIdResponseInfrastructureDto {
   id: string;
   name: string;
