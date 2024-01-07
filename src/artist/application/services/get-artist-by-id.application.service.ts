@@ -11,14 +11,14 @@ export class GetArtistByIdService implements IApplicationService<
     GetArtistByIdResponseApplicationDto
 > {
 
-    private readonly ArtistRepository: IArtistRepository;
+    private readonly artistRepository: IArtistRepository;
     private readonly getBufferImage: IGetBufferImageInterface;
 
     constructor(
-        ArtistRepository: IArtistRepository,
+        artistRepository: IArtistRepository,
         getBufferImage: IGetBufferImageInterface
     ) {
-        this.ArtistRepository = ArtistRepository;
+        this.artistRepository = artistRepository;
         this.getBufferImage = getBufferImage;
     }
 
@@ -28,7 +28,7 @@ export class GetArtistByIdService implements IApplicationService<
         const artistId = ArtistId.create(param.artistId);
 
         //buscamos en el repositorio el artista por id
-        const artistResult = await this.ArtistRepository.findArtistById(artistId);
+        const artistResult = await this.artistRepository.findArtistById(artistId);
 
         if (!artistResult.IsSuccess) {
             return Result.fail<GetArtistByIdResponseApplicationDto>(

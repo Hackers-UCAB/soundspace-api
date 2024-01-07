@@ -10,14 +10,14 @@ export class GetTrendingArtistsService implements IApplicationService<
     GetTrendingArtistsResponseApplicationDto
 > {
 
-    private readonly ArtistRepository: IArtistRepository;
+    private readonly artistRepository: IArtistRepository;
     private readonly getBufferImage: IGetBufferImageInterface;
 
     constructor(
-        ArtistRepository: IArtistRepository,
+        artistRepository: IArtistRepository,
         getBufferImage: IGetBufferImageInterface
     ) {
-        this.ArtistRepository = ArtistRepository;
+        this.artistRepository = artistRepository;
         this.getBufferImage = getBufferImage;
     }
 
@@ -26,7 +26,7 @@ export class GetTrendingArtistsService implements IApplicationService<
     > {
 
         //buscamos en el repositorio el artista por id
-        const artistResult = await this.ArtistRepository.findTrendingArtists();
+        const artistResult = await this.artistRepository.findTrendingArtists();
 
         if (!artistResult.IsSuccess) {
             return Result.fail<GetTrendingArtistsResponseApplicationDto>(
@@ -37,7 +37,7 @@ export class GetTrendingArtistsService implements IApplicationService<
             );
         }
 
-        const artists = [];
+        /*const artists = [];
         for (let i = 0; i < artistResult.Data.length; i++) {
             const artist = artistResult.Data[i];
             const imageResult = await this.getBufferImage.getFile(artist.Photo.Path);
@@ -47,11 +47,11 @@ export class GetTrendingArtistsService implements IApplicationService<
                 image: imageResult.Data,
             };
             artists.push(artistObject);
-        }
+        }*/
 
         const responseDto: GetTrendingArtistsResponseApplicationDto = {
             userId: param.userId,
-            artists: artists
+            artists: artistResult.Data,
         };
 
         return Result.success<GetTrendingArtistsResponseApplicationDto>(responseDto, artistResult.statusCode);

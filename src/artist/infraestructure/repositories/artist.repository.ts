@@ -93,7 +93,7 @@ export class ArtistRepository
 
     try {
 
-      const artist = await this.createQueryBuilder('artista')
+      const artists = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
           'artista.nombre_artista',
@@ -104,7 +104,7 @@ export class ArtistRepository
         .getMany();
 
       response = await Promise.all(
-        artist.map(
+        artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist)
         )
       );
@@ -135,7 +135,7 @@ export class ArtistRepository
 
     try {
 
-      const artist = await this.createQueryBuilder('artista')
+      const artists = await this.createQueryBuilder('artista')
         .select([
           'artista.codigo_artista',
           'artista.nombre_artista',
@@ -146,7 +146,7 @@ export class ArtistRepository
         .getMany();
 
       response = await Promise.all(
-        artist.map(
+        artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         )
       );
@@ -177,17 +177,17 @@ export class ArtistRepository
 
     try {
 
-      const artist = await this.createQueryBuilder('artista')
-        .select([
-          'artista.codigo_artista',
-          'artista.nombre_artista',
-          'artista.referencia_imagen',
-        ])
-        .where('artista.trending = :trending', { trending: true })
+      const artists = await this.createQueryBuilder('artista')
+        .innerJoinAndSelect("artista.canciones", "cancion")
+        .innerJoinAndSelect("cancion.generos", "generoCancion")
+        .innerJoinAndSelect("artista.playlistCreadores", "playlistCreador")
+        .innerJoinAndSelect("playlistCreador.playlist", "playlist")
+        .innerJoinAndSelect("artista.genero", "generoArtista")
+        .where("artista.trending = :trending", { trending: true })
         .getMany();
 
       response = await Promise.all(
-        artist.map(
+        artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         )
       );
