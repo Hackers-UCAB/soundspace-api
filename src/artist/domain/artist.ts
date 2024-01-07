@@ -37,7 +37,7 @@ export class Artist extends AggregateRoot<ArtistId> {
         return this.songs;
     }
 
-    /*protected constructor(
+    protected constructor(
         id: ArtistId,
         name: ArtistName,
         genre: ArtistGenre,
@@ -54,9 +54,9 @@ export class Artist extends AggregateRoot<ArtistId> {
             songs
         )
         super(id, artistCreated);
-    }*/
+    }
 
-    protected constructor(
+    /*protected constructor(
         id: ArtistId,
         name: ArtistName,
         photo: ArtistPhoto
@@ -67,9 +67,9 @@ export class Artist extends AggregateRoot<ArtistId> {
             photo
         )
         super(id, artistCreated);
-    }
+    }*/
 
-    /*protected when(event: DomainEvent): void {
+    protected when(event: DomainEvent): void {
         if (event instanceof ArtistCreated) {
             this.name = event.name;
             this.genre = event.genre;
@@ -77,34 +77,37 @@ export class Artist extends AggregateRoot<ArtistId> {
             this.albums = event.albums;
             this.songs = event.songs;
         }
-    }*/
+    }
 
-    protected when(event: DomainEvent): void {
+    /*protected when(event: DomainEvent): void {
         if (event instanceof ArtistCreated) {
             this.name = event.name;
             this.photo = event.photo
         }
-    }
+    }*/
 
     protected ensureValidaState(): void {
-        // if (
-        //     !this.name ||
-        //     !this.genre ||
-        //     !this.photo ||
-        //     !this.albums ||
-        //     !this.songs
-        // ) {
-        //     throw new InvalidArtistException("Artist not valid");
-        // }
+
         if (
+            !this.name ||
+            !this.genre ||
+            !this.photo ||
+            !this.albums ||
+            !this.songs
+        ) {
+            throw new InvalidArtistException("Artist not valid");
+        }
+        
+        /*if (
             !this.name ||
             !this.photo 
         ) {
             throw new InvalidArtistException("Artist not valid");
-        }
+        }*/
+        
     }
 
-    /*static create(
+    static create(
         id: ArtistId,
         name: ArtistName,
         genre: ArtistGenre,
@@ -120,9 +123,9 @@ export class Artist extends AggregateRoot<ArtistId> {
             albums,
             songs
         )
-    }*/
+    }
 
-    static create(
+    /*static create(
         id: ArtistId,
         name: ArtistName,
         photo: ArtistPhoto
@@ -132,6 +135,6 @@ export class Artist extends AggregateRoot<ArtistId> {
             name,
             photo
         )
-    }
+    }*/
 
 }
