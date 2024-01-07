@@ -41,36 +41,34 @@ export class CheckExpiredSubscriptionsApplicationService
     }
     
     if (subscriptionsExpiredToday.Data.length > 0) {
-      subscriptionsExpiredToday.Data.forEach(async (subscription) => {
-        const userResult: Result<User> = await this.userRepisitory.findUserById(
-          subscription.User,
-        );
+      await Promise.all(subscriptionsExpiredToday.Data.map(async (subscription) => { 
+        const userResult: Result<User> = await this.userRepisitory.findUserById(subscription.User);
+        
         if (userResult.IsSuccess) {
           const user: User = userResult.Data;
           user.changedToGuest();
-          console.log(user);
-          
-          const userUpdating: Result<string> =
-            await this.userRepisitory.saveAggregate(user);
+
+          const userUpdating: Result<string> = await this.userRepisitory.saveAggregate(user);
+
           if (userUpdating.IsSuccess) {
             subscription.expireSubscription();
 
-            const subscriptionUpdating: Result<string> =
-              await this.subscriptionRepository.saveAggregate(subscription);
+            const subscriptionUpdating: Result<string> = await this.subscriptionRepository.saveAggregate(subscription);
             if (subscriptionUpdating.IsSuccess) {
-              this.eventPublisher.publish([
-                subscription.pullDomainEvents().at(-1),
-              ]);
+              this.eventPublisher.publish([subscription.pullDomainEvents().at(-1)]);
             }
           }else{
+            //TODO: Esto en verdad esta mal
             console.log(userUpdating.message);
           }
         }
-      });
+      }));
     }
+
     const response: ServiceResponse = {
       userId: 'Admin',
     };
+    
     return Result.success(response, 200);
   }
 }

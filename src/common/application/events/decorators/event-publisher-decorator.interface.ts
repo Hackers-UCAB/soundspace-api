@@ -1,6 +1,8 @@
 import { DomainEvent } from "src/common/domain/domain-event";
 import { IEventPublisher } from "../event-publisher.interface";
 import { IEventSubscriber } from "../event-subscriber.interface";
+import { Result } from "../../result-handler/result";
+import { EventResponse } from "../dto/response/event-response.dto";
 
 export abstract class IEventPublisherDecorator extends IEventPublisher{
     protected decoratePublisher: IEventPublisher;
@@ -10,8 +12,8 @@ export abstract class IEventPublisherDecorator extends IEventPublisher{
         this.decoratePublisher= decoratePublisher;
     }
 
-    publish(events: DomainEvent[]): void {
-        this.decoratePublisher.publish(events);
+    async publish(events: DomainEvent[]): Promise<Result<EventResponse>[]> {
+        return await this.decoratePublisher.publish(events);
     }
 
     subscribe(event: string, subscribers: IEventSubscriber[]): void {

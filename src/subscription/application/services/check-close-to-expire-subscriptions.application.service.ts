@@ -38,20 +38,26 @@ export class CheckCloseToExpireSubscriptionsApplicationService
     }
 
     if (subscriptionsExpired15Days.Data.length > 0) {
-      subscriptionsExpired15Days.Data.forEach(async (subscription) => {
-        subscription.nearToExpireSubscription();
+      await Promise.all(
+        subscriptionsExpired15Days.Data.map(async (subscription) => {
+          subscription.nearToExpireSubscription();
 
-        const subscriptionUpdating: Result<string> =
-          await this.subscriptionRepository.saveAggregate(subscription);
+          const subscriptionUpdating: Result<string> =
+            await this.subscriptionRepository.saveAggregate(subscription);
 
-        if (subscriptionUpdating.IsSuccess) {
-          this.eventPublisher.publish([subscription.pullDomainEvents().at(-1)]);
-        }
-      });
+          if (subscriptionUpdating.IsSuccess) {
+            this.eventPublisher.publish([
+              subscription.pullDomainEvents().at(-1),
+            ]);
+          }
+        }),
+      );
     }
+
     const response: ServiceResponse = {
       userId: 'Admin',
     };
+
     return Result.success(response, 200);
   }
 }

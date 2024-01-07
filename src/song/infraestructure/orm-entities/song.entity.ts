@@ -23,9 +23,7 @@ export class OrmCancionEntity {
   })
   referencia_cancion: string;
 
-  @Column({
-    unique: true
-  })
+  @Column()
   referencia_preview: string;
 
   @Column()

@@ -17,6 +17,6 @@ export interface IArtistRepository {
 
     findTrendingArtists(): Promise<Result<Artist[]>>;
 
-    findArtistsByName(name: string): Promise<Result<Artist[]>>
+    findArtistsByName(name: string, limit?: number, offset?: number): Promise<Result<Artist[]>>
 
 }

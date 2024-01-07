@@ -211,7 +211,7 @@ export class ArtistRepository
 
   }
 
-  async findArtistsByName(name: string): Promise<Result<Artist[]>> {
+  async findArtistsByName(name: string, limit?: number, offset?: number): Promise<Result<Artist[]>> {
     let response: Artist[];
     let error: any;
     try {
@@ -224,6 +224,8 @@ export class ArtistRepository
           'artist.codigo_artista',
           'artist.referencia_imagen',
         ])
+        .limit(limit)
+        .offset(offset)
         .getMany();
 
       response = await Promise.all(

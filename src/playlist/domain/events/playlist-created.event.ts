@@ -11,7 +11,7 @@ export class PlaylistCreated extends DomainEvent {
         public id: PlaylistId,
         public name: PlaylistName,
         public cover: PlaylistCover,
-        public playlistSongs: PlaylistSong
+        public playlistSongs: PlaylistSong,
     ) {
         super()
     }
@@ -20,9 +20,10 @@ export class PlaylistCreated extends DomainEvent {
         id: PlaylistId,
         name: PlaylistName,
         cover: PlaylistCover,
-        playlistSongs: PlaylistSong
+        playlistSongs: PlaylistSong,
 
     ): PlaylistCreated {
         return new PlaylistCreated(id, name, cover, playlistSongs);
+
     }
 }

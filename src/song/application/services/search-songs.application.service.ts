@@ -22,7 +22,7 @@ export class SearchSongsApplicationService
     param: SearchItemsEntryApplicationDto,
   ): Promise<Result<SearchItemsResponseApplicationDto>> {
    
-    const songsResult: Result<Song[]> = await this.songRepository.findSongsByName(param.name);
+    const songsResult: Result<Song[]> = await this.songRepository.findSongsByName(param.name, param.limit, param.offset);
     
     if (!songsResult.IsSuccess) {
       return Result.fail(

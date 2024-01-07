@@ -6,16 +6,24 @@ import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/res
 import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/application/result-handler/result';
-import { GetTopPlaylistResponseInfrastructureDto } from '../dto/responses/get-top-playlist-response.infrastructure.dto';
 import { TopPlaylistEntryApplicationDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
-import { GetPlaylistByIdEntryInfrastructureDto } from '../dto/entrys/get-playlist-by-id-entry.infrastrucrure.dto';
-import { GetPlaylistByIdResponseInfrastructureDto } from '../dto/responses/get-playlist-by-id-response.infrastructure.dto';
+import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
+import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
+import { UserId } from 'src/user/domain/value-objects/user-id';
+import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
+import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
+import { timeConverter } from 'src/common/domain/helpers/convert-duration';
+import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
+import { TopPlaylistInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/top-playlist.response.dto';
 
 @Controller('playlist')
-export class playlistController {
+export class PlaylistController {
   constructor(
     @Inject('DataSource')
     private readonly dataSource: DataSource,
+
+    @Inject('AzureBufferImageHelper')
+    private readonly azureBufferImageHelper: IGetBufferImageInterface,
 
     @Inject('GetPlaylistByIdService')
     private readonly GetPlaylistByIdService: IApplicationService<
@@ -29,31 +37,47 @@ export class playlistController {
     >,
   ) {}
 
-  @Get('TopPlaylist')
-  async getTopPlaylist() {
-    const dto: TopPlaylistEntryApplicationDto = {
-      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
+  @Get('top_playlist')
+  @Auth()
+  async getTopPlaylist(@GetUser('id') userId: UserId) {
+      const dto: TopPlaylistEntryApplicationDto = {
+          userId: userId.Id,
     };
     const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
       await this.GetTopPlaylistService.execute(dto);
-    if (!serviceResult.IsSuccess) {
-      HttpResponseHandler.HandleException(
-        serviceResult.statusCode,
-        serviceResult.message,
-        serviceResult.error,
-      );
-    }
-    const response: GetTopPlaylistResponseInfrastructureDto = {
-      playlists: serviceResult.Data.playlists,
-    };
+        if (!serviceResult.IsSuccess) {
+          HttpResponseHandler.HandleException(
+            serviceResult.statusCode,
+            serviceResult.message,
+            serviceResult.error,
+            );
+      }
+
+      const playlists = [];
+
+      for (const playlist of serviceResult.Data.playlists) {
+          const playlistImage = await this.azureBufferImageHelper.getFile(
+              playlist.Cover.Path,
+          );
+          const returnPlaylist= {
+              id: playlist.Id.Id,
+              image: playlistImage.IsSuccess ? playlistImage.Data : null,
+          };
+          playlists.push(returnPlaylist);
+      }
+      const response: TopPlaylistInfraestructureResponseDto = {
+          playlists: playlists
+      };
+
     return HttpResponseHandler.Success(200, response);
   }
 
   @Get(':id')
-  async getPlaylist(@Param('id') id: string) {
+  @Auth()
+  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
     const dto: GetPlaylistByIdEntryApplicationDto = {
-      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-      PlaylistId: id,
+      userId: userId.Id,
+      playlistId: id,
     };
 
     const serviceResult: Result<GetPlaylistByIdResponseApplicationDto> =
@@ -66,12 +90,43 @@ export class playlistController {
         serviceResult.error,
       );
     }
-    const response: GetPlaylistByIdResponseInfrastructureDto = {
-      id: serviceResult.Data.id,
-      name: serviceResult.Data.name,
-      duration: serviceResult.Data.duration,
-      image: serviceResult.Data.im,
-      songs: serviceResult.Data.songs,
+
+    const playlistImage = await this.azureBufferImageHelper.getFile(
+      serviceResult.Data.playlist.Cover.Path,
+    );
+
+    //TODO: Ver si lo enviamos para el coño o que si falla la imagen
+
+    let duration: number = 0;
+    let songs: SongInfraestructureResponseDto[] = [];
+
+    for (const song of serviceResult.Data.songs) {
+      duration += song.song.Duration.Duration;
+      const songImage = await this.azureBufferImageHelper.getFile(
+        song.song.Cover.Path,
+      );
+      const artists = song.artists.map((artist) => {
+        return {
+          id: artist.Id.Id,
+          name: artist.Name.Name,
+        };
+      });
+      const returnSong: SongInfraestructureResponseDto = {
+        id: song.song.Id.Id,
+        name: song.song.Name.Name,
+        duration: timeConverter(song.song.Duration.Duration),
+        image: songImage.IsSuccess ? songImage.Data : null,
+        artists: artists,
+      };
+      songs.push(returnSong);
+    }
+
+    const response: PlaylistInfraestructureResponseDto = {
+      id: serviceResult.Data.playlist.Id.Id,
+      name: serviceResult.Data.playlist.Name.Name,
+      duration: timeConverter(duration),
+      image: playlistImage.IsSuccess ? playlistImage.Data : null,
+      songs: songs,
     };
 
     return HttpResponseHandler.Success(200, response);

@@ -24,7 +24,7 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
 
     async execute(param: PlaySongEntryApplicationDto): Promise<Result<PlaySongResponseApplicationDto>> {
 
-        const {preview , second, songId, userId} = param
+        const {preview , second, songId, userId, streaming} = param
 
         const data = await this.songRepository.findPartialSongById(songId);
 
@@ -32,10 +32,10 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
             return Result.fail(null, 500, data.message, new Error(data.message));
         }
             
-        const {blob, size} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
-
-        this.sendSongHelper.sendSong(this.client, blob, size);
+        const {blob, size, startByte} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
         
+        this.sendSongHelper.sendSong(this.client, blob, size, startByte, second, streaming);
+       
         const response: PlaySongResponseApplicationDto = {
             userId: userId,
             success: true

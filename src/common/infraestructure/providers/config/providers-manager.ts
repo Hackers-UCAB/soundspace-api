@@ -14,6 +14,7 @@ import { DataSource } from "typeorm";
 import { UuidGenerator } from "../../uuid-generator";
 import { NotifySubscriptionNearToExpiredEvent } from "src/subscription/application/events/notify-subscription-near-to-expired.event";
 import { SubscriptionRepository } from "src/subscription/infraestructure/repositories/subscription.repository";
+import { AzureBufferImageHelper } from "../../azure/helpers/get-blob-image.helper";
 
 export const providersManager: Provider[] = [
     {
@@ -40,6 +41,7 @@ export const providersManager: Provider[] = [
     {
         provide: 'EventBus',
         useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, dataSource: DataSource) => {
+            //TODO: Hacer el de Auditing?
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
             //aqui subscribimos a todos los que escuchan los eventos
@@ -51,5 +53,11 @@ export const providersManager: Provider[] = [
     },
         inject: ['IEventPublisher', 'INotifier', 'ILogger', 'DataSource'],
     },
+    {
+        provide: 'AzureBufferImageHelper',
+        useFactory: () => {
+          return new AzureBufferImageHelper();
+        }
+      }
     
 ]

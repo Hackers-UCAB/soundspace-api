@@ -15,5 +15,5 @@ export interface ISongRepository {
     findSongUrlById(id: string): Promise<Result<SongId>>
     findTopSongs(): Promise<Result<Song[]>>
     findPartialSongById(id: string): Promise<Result<PartialSong>>
-    findSongsByName(name: string): Promise<Result<Song[]>>
+    findSongsByName(name: string, limit?: number, offset?: number): Promise<Result<Song[]>>
 }

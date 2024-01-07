@@ -3,4 +3,6 @@ import { ServiceEntry } from "src/common/application/services/dto/entry/service-
 export class SearchItemsEntryApplicationDto implements ServiceEntry{
     userId: string;
     name: string;
+    limit?: number;
+    offset?: number;
 }

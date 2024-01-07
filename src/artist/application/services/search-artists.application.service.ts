@@ -19,7 +19,7 @@ export class SearchArtistsApplicationService
   async execute(
     param: SearchItemsEntryApplicationDto,
   ): Promise<Result<SearchItemsResponseApplicationDto>> {
-    const aritstsResult: Result<Artist[]> = await this.artistRepository.findArtistsByName(param.name);
+    const aritstsResult: Result<Artist[]> = await this.artistRepository.findArtistsByName(param.name, param.limit, param.offset);
 
     if (!aritstsResult.IsSuccess) {
       return Result.fail(
