@@ -118,7 +118,7 @@ export class ArtistController {
         return HttpResponseHandler.Success(200, response);
     }
 
-    @Get('trending_artists')
+    @Get('top_artist')
     @Auth()
     async getTrendingArtists(@GetUser('id') userId: UserId) {
 

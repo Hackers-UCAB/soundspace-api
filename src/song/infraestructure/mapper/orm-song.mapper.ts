@@ -1,7 +1,6 @@
 import { IMapper } from "src/common/application/mappers/mapper.interface";
 import { OrmCancionEntity } from "../orm-entities/song.entity";
 import { Song } from "src/song/domain/song";
-import { InvalidToDomainMapper } from "src/playlist/infrastructure/exceptions/invalid-to-domaim-mapper.exception";
 import { SongId } from "src/song/domain/value-objects/song-id";
 import { SongName } from "src/song/domain/value-objects/song-name";
 import { SongDuration } from "src/song/domain/value-objects/song-duration";
@@ -9,6 +8,7 @@ import { SongUrl } from "src/song/domain/value-objects/song-url";
 import { SongCover } from "src/song/domain/value-objects/song-cover";
 import { SongGenres } from "src/song/domain/value-objects/song-genre";
 import { SongPreviewUrl } from "src/song/domain/value-objects/song-preview-url";
+import { InvalidToDomainMapper } from "../../../common/infraestructure/exceptions/invalid-to-domain-mapper.exception";
 
 export class OrmSongMapper implements IMapper<Song, OrmCancionEntity> {
 

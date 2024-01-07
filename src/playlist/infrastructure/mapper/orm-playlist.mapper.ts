@@ -6,7 +6,7 @@ import { PlaylistName } from '../../domain/value-objects/playlist-name';
 import { PlaylistCover } from '../../domain/value-objects/playlist-cover';
 import { PlaylistSong } from '../../domain/value-objects/playlist-songs';
 import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../exceptions/invalid-to-domaim-mapper.exception';
+import { InvalidToDomainMapper } from '../../../common/infraestructure/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
 
