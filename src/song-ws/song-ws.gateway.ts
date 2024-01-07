@@ -17,6 +17,8 @@ import { SongRepository } from 'src/song/infraestructure/repositories/song.repos
 import { DataSource } from 'typeorm';
 import { JwtService } from "@nestjs/jwt";
 import { OrmSongMapper } from '../song/infraestructure/mapper/orm-song.mapper';
+import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
+import { SongReferenceImplementationHelper } from 'src/song/infraestructure/helpers/song-reference.implementation.helper';
 
 
 @WebSocketGateway({ cors: true })
@@ -61,12 +63,11 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const service = 
     new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
-          new PlaySongService(
-          new SongRepository(this.dataSource,this.ormSongMapper), 
-          new UuidGenerator(), 
+          new PlaySongService( 
           new AzureBlobHelper(), 
           new SendSongHelper(), 
-          client),
+          client,
+          new SongReferenceImplementationHelper(new UserRepository(this.dataSource), new SongRepository(this.dataSource,this.ormSongMapper))),
         new AuditingRepository(this.dataSource),
         'PlaySongService',
         new LoggerImpl()
