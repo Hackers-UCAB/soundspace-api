@@ -1,6 +1,6 @@
 import { OrmCancionEntity } from "../../../song/infraestructure/orm-entities/song.entity";
 import { OrmPlaylistCreadorEntity } from "../../../common/infraestructure/orm-entities/playlist-creator.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrmGeneroEntity } from "../../../common/infraestructure/orm-entities/genre.entity";
 
 @Entity('artista')

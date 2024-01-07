@@ -9,12 +9,12 @@ import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
-import { GetTopEntryApplicationDto } from 'src/common/application/top/dto/entry/get-top.entry.dto';
 import { GetTrendingArtistsResponseApplicationDto } from 'src/artist/application/dto/response/get-trending-artists-response.application.dto';
 import { TrendingArtistsInfraestructureResponseDto } from '../dto/response/trending-artists-response.infraestructure.dto';
 import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { ArtistByIdInfraestructureResponseDto } from '../dto/response/artist-by-id-response.infraestructure.dto';
+import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
 @Controller('artist')
 export class ArtistController {
@@ -34,7 +34,7 @@ export class ArtistController {
 
         @Inject('GetTrendingArtistsService')
         private readonly getTrendingArtistsService: IApplicationService<
-            GetTopEntryApplicationDto,
+            ServiceEntry,
             GetTrendingArtistsResponseApplicationDto
         >,
     ) { }
@@ -122,7 +122,7 @@ export class ArtistController {
     @Auth()
     async getTrendingArtists(@GetUser('id') userId: UserId) {
 
-        const dto: GetTopEntryApplicationDto = {
+        const dto: ServiceEntry = {
             userId: userId.Id,
         };
 

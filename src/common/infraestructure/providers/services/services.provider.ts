@@ -381,7 +381,6 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetArtistByIdService(
             new ArtistRepository(dataSource),
-            new AzureBufferImageHelper(),
             new SongRepository(dataSource, new OrmSongMapper()),
             new AlbumRepository(dataSource),
           ),
@@ -402,7 +401,6 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetTrendingArtistsService(
             new ArtistRepository(dataSource),
-            new AzureBufferImageHelper(),
           ),
           new AuditingRepository(dataSource),
           'GetTrendingArtistsService',

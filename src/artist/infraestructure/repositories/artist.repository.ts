@@ -23,14 +23,6 @@ export class ArtistRepository
     let error: Error;
 
     try {
-      /*const artist = await this.createQueryBuilder('artista')
-        .select([
-          'artista.codigo_artista',
-          'artista.nombre_artista',
-          'artista.referencia_imagen',
-        ])
-        .where('artista.codigo_artista = :id', { id: artistId.Id })
-        .getOne();*/
 
       const artist = await this.createQueryBuilder('artista')
         .innerJoinAndSelect("artista.canciones", "cancion")
@@ -58,59 +50,12 @@ export class ArtistRepository
     }
   }
 
-  //Deprecado...
-  async findSingleArtistBySongId(songId: SongId): Promise<Result<Artist>> {
-
-    let response: Artist;
-    let error: Error;
-
-    try {
-
-      const artist = await this.createQueryBuilder('artista')
-        .select([
-          'artista.codigo_artista',
-          'artista.nombre_artista',
-          'artista.referencia_imagen',
-        ])
-        .innerJoin('artista.canciones', 'cancion')
-        .where('cancion.codigo_cancion = :id', { id: songId.Id })
-        .getOne();
-
-      response = await this.OrmArtistMapper.toDomain(artist);
-
-    } catch (e) {
-      error = e;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success<Artist>(response, 200);
-    }
-
-  }
-
   async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
 
     let response: Artist[];
     let error: Error;
 
     try {
-
-      /*const artists = await this.createQueryBuilder('artista')
-        .select([
-          'artista.codigo_artista',
-          'artista.nombre_artista',
-          'artista.referencia_imagen',
-        ])
-        .innerJoin('artista.canciones', 'cancion')
-        .where('cancion.codigo_cancion = :id', { id: songId.Id })
-        .getMany();*/
 
       const artists = await this.createQueryBuilder('artista')
         .innerJoinAndSelect("artista.canciones", "cancion")
@@ -151,23 +96,13 @@ export class ArtistRepository
 
     try {
 
-      /*const artists = await this.createQueryBuilder('artista')
-        .select([
-          'artista.codigo_artista',
-          'artista.nombre_artista',
-          'artista.referencia_imagen',
-        ])
-        .innerJoin('artista.playlistCreadores', 'playlist_creador')
-        .where('playlist_creador.playlistCodigoPlaylist = :id', { id: albumId.Id })
-        .getMany();*/
-
       const artists = await this.createQueryBuilder('artista')
         .innerJoinAndSelect("artista.canciones", "cancion")
         .innerJoinAndSelect("cancion.generos", "generoCancion")
         .innerJoinAndSelect("artista.playlistCreadores", "playlistCreador")
         .innerJoinAndSelect("playlistCreador.playlist", "playlist")
         .innerJoinAndSelect("artista.genero", "generoArtista")
-        .where('playlist_creador.playlistCodigoPlaylist = :id', { id: albumId.Id })
+        .where('playlistCreador.playlistCodigoPlaylist = :id', { id: albumId.Id })
         .getMany();
 
       response = await Promise.all(

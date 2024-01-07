@@ -7,7 +7,6 @@ import { IAlbumRepository } from "src/album/domain/repositories/album.repository
 import { ArtistId } from "../../domain/value-objects/artist-id";
 import { GetArtistByIdEntryApplicationDto } from "../dto/entry/get-artist-by-id-entry.application.dto";
 import { GetArtistByIdResponseApplicationDto } from "../dto/response/get-artist-by-id-response.application.dto";
-import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { Artist } from "src/artist/domain/artist";
 
 export class GetArtistByIdService implements IApplicationService<
@@ -16,18 +15,15 @@ export class GetArtistByIdService implements IApplicationService<
 > {
 
     private readonly artistRepository: IArtistRepository;
-    private readonly getBufferImage: IGetBufferImageInterface;
     private readonly songRepository: ISongRepository;
     private readonly albumRepository: IAlbumRepository;
 
     constructor(
         artistRepository: IArtistRepository,
-        getBufferImage: IGetBufferImageInterface,
         songRepository: ISongRepository,
         albumRepository: IAlbumRepository
     ) {
         this.artistRepository = artistRepository;
-        this.getBufferImage = getBufferImage;
         this.songRepository = songRepository;
         this.albumRepository = albumRepository;
     }
@@ -93,14 +89,6 @@ export class GetArtistByIdService implements IApplicationService<
               artists: artist.Data,
             });
           }
-
-        /*const artist = artistResult.Data;
-        const imageResult = await this.getBufferImage.getFile(artist.Photo.Path);
-        const artistObject = {
-            id: artist.Id.Id,
-            name : artist.Name.Name,
-            image: imageResult.Data,
-        };*/
 
         const responseDto: GetArtistByIdResponseApplicationDto = {
             userId: param.userId,

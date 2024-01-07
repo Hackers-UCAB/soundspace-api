@@ -8,8 +8,8 @@ import { ArtistPhoto } from '../../domain/value-objects/artist-photo';
 import { ArtistAlbums } from '../../domain/value-objects/artist-albums';
 import { ArtistSongs } from '../../domain/value-objects/artist-songs';
 import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../exceptions/invalid-to-domain-mapper.exception';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
+import { InvalidToDomainMapper } from 'src/common/infraestructure/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
 

@@ -8,9 +8,6 @@ export interface IArtistRepository {
 
     findArtistById(artistId: ArtistId): Promise<Result<Artist>>;
 
-    //Deprecado...
-    findSingleArtistBySongId(songId: SongId): Promise<Result<Artist>>;
-
     findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>>;
 
     findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>>;

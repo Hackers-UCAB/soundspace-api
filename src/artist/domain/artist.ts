@@ -56,19 +56,6 @@ export class Artist extends AggregateRoot<ArtistId> {
         super(id, artistCreated);
     }
 
-    /*protected constructor(
-        id: ArtistId,
-        name: ArtistName,
-        photo: ArtistPhoto
-    ) {
-        const artistCreated = ArtistCreated.create(
-            id,
-            name,
-            photo
-        )
-        super(id, artistCreated);
-    }*/
-
     protected when(event: DomainEvent): void {
         if (event instanceof ArtistCreated) {
             this.name = event.name;
@@ -78,13 +65,6 @@ export class Artist extends AggregateRoot<ArtistId> {
             this.songs = event.songs;
         }
     }
-
-    /*protected when(event: DomainEvent): void {
-        if (event instanceof ArtistCreated) {
-            this.name = event.name;
-            this.photo = event.photo
-        }
-    }*/
 
     protected ensureValidaState(): void {
 
@@ -97,13 +77,6 @@ export class Artist extends AggregateRoot<ArtistId> {
         ) {
             throw new InvalidArtistException("Artist not valid");
         }
-        
-        /*if (
-            !this.name ||
-            !this.photo 
-        ) {
-            throw new InvalidArtistException("Artist not valid");
-        }*/
         
     }
 
@@ -124,17 +97,5 @@ export class Artist extends AggregateRoot<ArtistId> {
             songs
         )
     }
-
-    /*static create(
-        id: ArtistId,
-        name: ArtistName,
-        photo: ArtistPhoto
-    ): Artist {
-        return new Artist(
-            id,
-            name,
-            photo
-        )
-    }*/
 
 }

@@ -19,14 +19,6 @@ export class ArtistCreated extends DomainEvent {
         super()
     }
 
-    /*protected constructor(
-        public id: ArtistId,
-        public name: ArtistName,
-        public photo: ArtistPhoto
-    ){
-        super()
-    }*/
-
     static create(
         id: ArtistId,
         name: ArtistName,
@@ -44,17 +36,5 @@ export class ArtistCreated extends DomainEvent {
             songs
         )
     }
-
-    /*static create(
-        id: ArtistId,
-        name: ArtistName,
-        photo: ArtistPhoto
-    ): ArtistCreated{
-        return new ArtistCreated(
-            id,
-            name,
-            photo
-        )
-    }*/
     
 }
