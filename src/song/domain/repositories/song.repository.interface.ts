@@ -1,14 +1,8 @@
 import { Result } from "src/common/application/result-handler/result";
 import { SongId } from "../value-objects/song-id";
-import { SongUrl } from "../value-objects/song-url";
 import { Song } from "../song";
-import { SongDuration } from "../value-objects/song-duration";
+import { PartialSong } from "../parameter-object/partial-song.parameter.object";
 
-
-export interface PartialSong{
-    name: SongUrl
-    duration: SongDuration
-}
 export interface ISongRepository {
     findSongById(id: SongId): Promise<Result<Song>>
     findSongUrlById(id: string): Promise<Result<SongId>>

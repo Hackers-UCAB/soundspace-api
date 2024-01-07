@@ -1,5 +1,6 @@
 import { Result } from "src/common/application/result-handler/result";
-import { PartialSong, ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
+import { PartialSong } from "src/song/domain/parameter-object/partial-song.parameter.object";
+import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { SongReferenceDomainServiceDto, ISongReferenceDomainService } from "src/song/domain/services/song-reference.domain,service";
 import { SongDuration } from "src/song/domain/value-objects/song-duration";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";

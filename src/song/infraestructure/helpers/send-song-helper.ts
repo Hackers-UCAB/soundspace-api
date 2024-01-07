@@ -23,8 +23,8 @@ export class SendSongHelper implements ISendSongHelper {
               client.emit('message-from-server', {
                 secuencia: sequence,
                 chunk: buffer,
-                start: Math.trunc(startTime),
-                end: Math.trunc(endTime)
+                start: (startTime),
+                end: (endTime)
               });
               sequence += 1;
               buffer = Buffer.alloc(0);
@@ -44,8 +44,8 @@ export class SendSongHelper implements ISendSongHelper {
           client.emit('message-from-server', {
             secuencia: sequence,
             chunk: buffer,
-            start: Math.trunc(startTime),
-            end: Math.trunc(size/rate)
+            start: (startTime),
+            end: (size/rate)
           });
         })
   }
