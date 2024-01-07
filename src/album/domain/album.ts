@@ -40,7 +40,6 @@ export class Album extends AggregateRoot<AlbumId> {
     name: AlbumName,
     cover: AlbumCover,
     albumSongs: AlbumSongs,
-    //duration: AlbumDuration,
     genre: AlbumGenre,
   ) {
     const albumCreated = AlbumCreated.create(
@@ -58,19 +57,12 @@ export class Album extends AggregateRoot<AlbumId> {
       this.name = event.name;
       this.cover = event.cover;
       this.albumSongs = event.albumSongs;
-      //this.duration = event.duration;
       this.genre = event.genre;
     }
   }
 
   protected ensureValidaState(): void {
-    if (
-      !this.name ||
-      !this.cover ||
-      !this.albumSongs ||
-      //!this.duration ||
-      !this.genre
-    ) {
+    if (!this.name || !this.cover || !this.albumSongs || !this.genre) {
       throw new InvalidAlbumException('Album not valid');
     }
   }
@@ -80,7 +72,6 @@ export class Album extends AggregateRoot<AlbumId> {
     name: AlbumName,
     cover: AlbumCover,
     albumSongs: AlbumSongs,
-    //duration: AlbumDuration,
     genre: AlbumGenre,
   ): Album {
     const album = new Album(id, name, cover, albumSongs, genre);

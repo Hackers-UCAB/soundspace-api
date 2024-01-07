@@ -7,11 +7,11 @@ import { AlbumId } from '../../../album/domain/value-objects/album-id';
 export interface IArtistRepository {
   findArtistById(artistId: ArtistId): Promise<Result<Artist>>;
 
-  findArtistBySongId(songId: SongId): Promise<Result<Artist[]>>;
+  findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>>;
 
   findTopArtists(): Promise<Result<Artist[]>>;
 
   findArtistsByName(name: string, limit?: number, offset?: number): Promise<Result<Artist[]>>
 
-  findArtistByAlbumId(songId: AlbumId): Promise<Result<Artist[]>>;
+  findArtistsByAlbumId(songId: AlbumId): Promise<Result<Artist[]>>;
 }
