@@ -382,6 +382,8 @@ export const servicesProvidersManager: Provider[] = [
           new GetArtistByIdService(
             new ArtistRepository(dataSource),
             new AzureBufferImageHelper(),
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new AlbumRepository(dataSource),
           ),
           new AuditingRepository(dataSource),
           'GetArtistByIdService',

@@ -11,7 +11,10 @@ import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { GetTopEntryApplicationDto } from 'src/common/application/top/dto/entry/get-top.entry.dto';
 import { GetTrendingArtistsResponseApplicationDto } from 'src/artist/application/dto/response/get-trending-artists-response.application.dto';
-import { TrendingArtistsInfraestructureResponseDto } from '../dto/response/trending-artists.infraestructure.dto';
+import { TrendingArtistsInfraestructureResponseDto } from '../dto/response/trending-artists-response.infraestructure.dto';
+import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
+import { timeConverter } from 'src/common/domain/helpers/convert-duration';
+import { ArtistByIdInfraestructureResponseDto } from '../dto/response/artist-by-id-response.infraestructure.dto';
 
 @Controller('artist')
 export class ArtistController {
@@ -24,7 +27,7 @@ export class ArtistController {
         private readonly azureBufferImageHelper: IGetBufferImageInterface,
 
         @Inject('GetArtistByIdService')
-        private readonly getPlaylistByIdService: IApplicationService<
+        private readonly getArtistByIdService: IApplicationService<
             GetArtistByIdEntryApplicationDto,
             GetArtistByIdResponseApplicationDto
         >,
@@ -35,6 +38,85 @@ export class ArtistController {
             GetTrendingArtistsResponseApplicationDto
         >,
     ) { }
+
+    @Get(':id')
+    @Auth()
+    async getArtist(@Param('id') id: string, @GetUser('id') userId: UserId) {
+        const dto: GetArtistByIdEntryApplicationDto = {
+            userId: userId.Id,
+            artistId: id,
+        };
+
+        const serviceResult: Result<GetArtistByIdResponseApplicationDto> =
+            await this.getArtistByIdService.execute(dto);
+
+        if (!serviceResult.IsSuccess) {
+            HttpResponseHandler.HandleException(
+                serviceResult.StatusCode,
+                serviceResult.message,
+                serviceResult.error,
+            );
+        }
+
+        const artistImage = await this.azureBufferImageHelper.getFile(
+            serviceResult.Data.artist.Photo.Path,
+        );
+
+        let albums: {id: string, image: Buffer}[] = [];
+
+        for (const album of serviceResult.Data.albums) {
+            const albumImage = await this.azureBufferImageHelper.getFile(
+                album.Cover.Path,
+            );
+
+            const returnAlbum = {
+                id: album.Id.Id,
+                image: albumImage.IsSuccess ? albumImage.Data : null,
+            };
+
+            albums.push(returnAlbum);
+        }
+
+        let duration: number = 0;
+        let songs: SongInfraestructureResponseDto[] = [];
+
+        for (const song of serviceResult.Data.songs) {
+            duration += song.song.Duration.Duration;
+
+            const songImage = await this.azureBufferImageHelper.getFile(
+                song.song.Cover.Path,
+            );
+
+            const artists = song.artists.map((artist) => {
+                return {
+                    id: artist.Id.Id,
+                    name: artist.Name.Name,
+                };
+            });
+
+            const returnSong: SongInfraestructureResponseDto = {
+                id: song.song.Id.Id,
+                name: song.song.Name.Name,
+                duration: timeConverter(song.song.Duration.Duration),
+                image: songImage.IsSuccess ? songImage.Data : null,
+                artists: artists,
+            };
+
+            songs.push(returnSong);
+        }
+
+        const response: ArtistByIdInfraestructureResponseDto = {
+            id: serviceResult.Data.artist.Id.Id,
+            name: serviceResult.Data.artist.Name.Name,
+            image: artistImage.IsSuccess ? artistImage.Data : null,
+            albums: albums,
+            songs: songs,
+        };
+
+        console.log(response);
+
+        return HttpResponseHandler.Success(200, response);
+    }
 
     @Get('trending_artists')
     @Auth()
@@ -77,63 +159,4 @@ export class ArtistController {
         return HttpResponseHandler.Success(200, response);
     }
 
-    /*@Get(':id')
-    @Auth()
-    async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
-        const dto: GetPlaylistByIdEntryApplicationDto = {
-            userId: userId.Id,
-            playlistId: id,
-        };
-
-        const serviceResult: Result<GetPlaylistByIdResponseApplicationDto> =
-            await this.GetPlaylistByIdService.execute(dto);
-
-        if (!serviceResult.IsSuccess) {
-            HttpResponseHandler.HandleException(
-                serviceResult.StatusCode,
-                serviceResult.message,
-                serviceResult.error,
-            );
-        }
-
-        const playlistImage = await this.azureBufferImageHelper.getFile(
-            serviceResult.Data.playlist.Cover.Path,
-        );
-
-        //TODO: Ver si lo enviamos para el coño o que si falla la imagen
-
-        let duration: number = 0;
-        let songs: SongInfraestructureResponseDto[] = [];
-
-        for (const song of serviceResult.Data.songs) {
-            duration += song.song.Duration.Duration;
-            const songImage = await this.azureBufferImageHelper.getFile(
-                song.song.Cover.Path,
-            );
-            const artists = song.artists.map((artist) => {
-                return {
-                    id: artist.Id.Id,
-                    name: artist.Name.Name,
-                };
-            });
-            const returnSong: SongInfraestructureResponseDto = {
-                id: song.song.Id.Id,
-                name: song.song.Name.Name,
-                duration: timeConverter(song.song.Duration.Duration),
-                image: songImage.IsSuccess ? songImage.Data : null,
-                artists: artists,
-            };
-            songs.push(returnSong);
-        }
-
-        const response: PlaylistInfraestructureResponseDto = {
-            id: serviceResult.Data.playlist.Id.Id,
-            name: serviceResult.Data.playlist.Name.Name,
-            duration: timeConverter(duration),
-            image: playlistImage.IsSuccess ? playlistImage.Data : null,
-            songs: songs,
-        };
-
-        return HttpResponseHandler.Success(200, response);
-    }*/
 }
