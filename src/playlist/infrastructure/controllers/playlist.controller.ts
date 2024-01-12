@@ -6,10 +6,6 @@ import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/res
 import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/application/result-handler/result';
-import { GetTopPlaylistResponseInfrastructureDto } from '../dto/responses/get-top-playlist-response.infrastructure.dto';
-import { TopPlaylistEntryApplicationDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
-import { GetPlaylistByIdEntryInfrastructureDto } from '../dto/entrys/get-playlist-by-id-entry.infrastrucrure.dto';
-import { GetPlaylistByIdResponseInfrastructureDto } from '../dto/responses/get-playlist-by-id-response.infrastructure.dto';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
@@ -17,6 +13,8 @@ import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/d
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
+import { TopPlaylistInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/top-playlist.response.dto';
+import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -34,7 +32,7 @@ export class PlaylistController {
     >,
     @Inject('GetTopPlaylistService')
     private readonly GetTopPlaylistService: IApplicationService<
-      TopPlaylistEntryApplicationDto,
+        ServiceEntry,
       GetTopPlaylistResponseApplicationDto
     >,
   ) {}
@@ -42,21 +40,32 @@ export class PlaylistController {
   @Get('top_playlist')
   @Auth()
   async getTopPlaylist(@GetUser('id') userId: UserId) {
-    const dto: TopPlaylistEntryApplicationDto = {
-      userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-    };
     const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
-      await this.GetTopPlaylistService.execute(dto);
-    if (!serviceResult.IsSuccess) {
-      HttpResponseHandler.HandleException(
-        serviceResult.statusCode,
-        serviceResult.message,
-        serviceResult.error,
-      );
-    }
-    const response: GetTopPlaylistResponseInfrastructureDto = {
-      playlists: serviceResult.Data.playlists,
-    };
+        await this.GetTopPlaylistService.execute({ userId: userId.Id });
+        if (!serviceResult.IsSuccess) {
+          HttpResponseHandler.HandleException(
+            serviceResult.statusCode,
+            serviceResult.message,
+            serviceResult.error,
+            );
+      }
+
+      const playlists = [];
+
+      for (const playlist of serviceResult.Data.playlists) {
+          const playlistImage = await this.azureBufferImageHelper.getFile(
+              playlist.Cover.Path,
+          );
+          const returnPlaylist= {
+              id: playlist.Id.Id,
+              image: playlistImage.IsSuccess ? playlistImage.Data : null,
+          };
+          playlists.push(returnPlaylist);
+      }
+      const response: TopPlaylistInfraestructureResponseDto = {
+          playlists: playlists
+      };
+
     return HttpResponseHandler.Success(200, response);
   }
 

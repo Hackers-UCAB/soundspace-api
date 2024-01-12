@@ -11,7 +11,6 @@ export class AlbumName extends ValueObject<AlbumName> {
         `El nombre del album ${name} no existe`,
       );
 
-    //El nombre debe ser mayor a 3 y menor a 50
     if (name.length < 3 || name.length > 50) {
       valid = false;
     }
