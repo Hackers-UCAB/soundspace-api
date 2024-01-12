@@ -288,8 +288,7 @@ export const servicesProvidersManager: Provider[] = [
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new GetRandomPromotionApplicationService(
-            new PromotionRepository(dataSource),
-            new AzureBufferImageHelper(),
+            new PromotionRepository(dataSource)
           ),
           new AuditingRepository(dataSource),
           'Get Random Promotion',

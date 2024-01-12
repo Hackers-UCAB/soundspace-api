@@ -1,4 +1,4 @@
-import { Controller, Inject, Get, Param } from '@nestjs/common';
+import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entrys/get-playlist-by-id-entry.application.dto';
@@ -32,7 +32,7 @@ export class PlaylistController {
     >,
     @Inject('GetTopPlaylistService')
     private readonly GetTopPlaylistService: IApplicationService<
-        ServiceEntry,
+      ServiceEntry,
       GetTopPlaylistResponseApplicationDto
     >,
   ) {}
@@ -41,37 +41,40 @@ export class PlaylistController {
   @Auth()
   async getTopPlaylist(@GetUser('id') userId: UserId) {
     const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
-        await this.GetTopPlaylistService.execute({ userId: userId.Id });
-        if (!serviceResult.IsSuccess) {
-          HttpResponseHandler.HandleException(
-            serviceResult.statusCode,
-            serviceResult.message,
-            serviceResult.error,
-            );
-      }
+      await this.GetTopPlaylistService.execute({ userId: userId.Id });
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.statusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
+    }
 
-      const playlists = [];
+    const playlists = [];
 
-      for (const playlist of serviceResult.Data.playlists) {
-          const playlistImage = await this.azureBufferImageHelper.getFile(
-              playlist.Cover.Path,
-          );
-          const returnPlaylist= {
-              id: playlist.Id.Id,
-              image: playlistImage.IsSuccess ? playlistImage.Data : null,
-          };
-          playlists.push(returnPlaylist);
-      }
-      const response: TopPlaylistInfraestructureResponseDto = {
-          playlists: playlists
+    for (const playlist of serviceResult.Data.playlists) {
+      const playlistImage = await this.azureBufferImageHelper.getFile(
+        playlist.Cover.Path,
+      );
+      const returnPlaylist = {
+        id: playlist.Id.Id,
+        image: playlistImage.IsSuccess ? playlistImage.Data : null,
       };
+      playlists.push(returnPlaylist);
+    }
+    const response: TopPlaylistInfraestructureResponseDto = {
+      playlists: playlists,
+    };
 
     return HttpResponseHandler.Success(200, response);
   }
 
   @Get(':id')
   @Auth()
-  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
+  async getPlaylist(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') userId: UserId,
+  ) {
     const dto: GetPlaylistByIdEntryApplicationDto = {
       userId: userId.Id,
       playlistId: id,

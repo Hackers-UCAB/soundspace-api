@@ -1,11 +1,9 @@
-import { Controller, Inject, Get, Param } from '@nestjs/common';
+import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { GetAlbumByIdResponseApplicationDto } from '../../application/dto/responses/get-album-by-id-response.application.dto';
 import { GetAlbumByIdEntryApplicationDto } from '../../application/dto/entries/get-album-by-id-entry.application.dto';
 import { GetTopAlbumResponseApplicationDto } from '../../application/dto/responses/get-top-album-response.application.dto';
-import { TopAlbumEntryApplicationDto } from '../../application/dto/entries/get-top-album-entry.application.dto';
-import { AuthHeaderInfraestructureDto } from '../../../auth/infraestructure/dto/entrys/auth-header.infraestructure.dto';
 import { UserId } from '../../../user/domain/value-objects/user-id';
 import { GetUser } from '../../../auth/infraestructure/jwt/decorators/get-user.decorator';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
@@ -18,6 +16,7 @@ import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/r
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
 import { TopPlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/top-playlist.response.dto';
+import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 
 @Controller('album')
 export class AlbumController {
@@ -36,15 +35,15 @@ export class AlbumController {
 
     @Inject('GetTopAlbumService')
     private readonly GetTopAlbumService: IApplicationService<
-      TopAlbumEntryApplicationDto,
+      ServiceEntry,
       GetTopAlbumResponseApplicationDto
     >,
   ) {}
 
-  @Get('TopAlbum')
+  @Get('top_album')
   @Auth()
   async getTopAlbum(@GetUser('id') userId: UserId) {
-    const dto: TopAlbumEntryApplicationDto = {
+    const dto: ServiceEntry = {
       userId: userId.Id,
     };
     const serviceResult: Result<GetTopAlbumResponseApplicationDto> =
@@ -79,7 +78,7 @@ export class AlbumController {
 
   @Get(':id')
   @Auth()
-  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
+  async getPlaylist(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') userId: UserId) {
     const dto: GetAlbumByIdEntryApplicationDto = {
       userId: userId.Id,
       albumId: id,

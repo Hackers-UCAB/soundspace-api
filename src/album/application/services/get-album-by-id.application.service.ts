@@ -36,10 +36,11 @@ export class GetAlbumByIdService
   async execute(
     param: GetAlbumByIdEntryApplicationDto,
   ): Promise<Result<GetAlbumByIdResponseApplicationDto>> {
-    //console.log('Entre al service');
+    //Se crea el id del album
     const albumId = AlbumId.create(param.albumId);
+    //Se busca el album en el repo
     const albumResult = await this.albumRepository.findAlbumById(albumId);
-    //console.log('Imprimiendo albumResult:', albumResult);
+
     if (!albumResult.IsSuccess) {
       return Result.fail<GetAlbumByIdResponseApplicationDto>(
         null,
@@ -48,7 +49,7 @@ export class GetAlbumByIdService
         albumResult.error,
       );
     }
-
+    //Busca a los creadores del album
     const creators: Result<Artist[]> =
       await this.artistRepository.findArtistsByAlbumId(albumId);
 
@@ -65,6 +66,7 @@ export class GetAlbumByIdService
       song: Song;
       artists: Artist[];
     }[] = [];
+    //Arma las canciones
     for (const songId of albumResult.data.AlbumSongs.Id) {
       const searchedSong: Result<Song> =
         await this.songRepository.findSongById(songId);
@@ -94,18 +96,6 @@ export class GetAlbumByIdService
         artists: artist.Data,
       });
     }
-
-    /*const albumResponseDto: GetAlbumByIdResponseApplicationDto = {
-      userId: param.userId,
-      id: albumResult.Data.Id.Id,
-      name: albumResult.Data.Name.Name,
-      duration: '',
-      genre: albumResult.Data.Genre.Genre,
-      im: imageResult.Data,
-      creators: [],
-      songs: [],
-    };*/
-
     const albumResponseDto: GetAlbumByIdResponseApplicationDto = {
       userId: param.userId,
       creators: creators.Data,
@@ -114,50 +104,5 @@ export class GetAlbumByIdService
     };
 
     return Result.success(albumResponseDto, 200);
-
-    /*let duracionAlbum = 0;
-    const creators = await this.artistRepository.findArtistsByAlbumId(albumId);
-    for (const creator of creators.Data) {
-      const creatorResponse = {
-        creatorId: creator.Id.Id,
-        creatorName: creator.Name.Name,
-      };
-      albumResponseDto.creators.push(creatorResponse);
-    }
-    console.log('albumResponseDto:', albumResponseDto);
-    for (const songId of albumResult.data.AlbumSongs.Id) {
-      const song = await this.songRepository.findSongById(songId);
-      if (!song.IsSuccess) {
-        return Result.fail<GetAlbumByIdResponseApplicationDto>(
-          null,
-          song.statusCode,
-          song.message,
-          song.error,
-        );
-      }
-      duracionAlbum = duracionAlbum + song.data.Duration.Duration;
-      const songResponseDto: GetSongByIdResponseApplicationDto = {
-        userId: param.userId,
-        songId: song.data.Id.Id,
-        name: song.data.Name.Name,
-        duration: this.conversorTiempo(song.data.Duration.Duration),
-        artists: [],
-      };
-      albumResponseDto.songs.push(songResponseDto);
-
-      const artists = await this.artistRepository.findArtistsBySongId(songId);
-      for (const artist of artists.Data) {
-        const artistResponse = {
-          id: artist.Id.Id,
-          name: artist.Name.Name,
-        };
-        songResponseDto.artists.push(artistResponse);
-      }
-    }
-    albumResponseDto.duration = this.conversorTiempo(duracionAlbum);
-    return Result.success<GetAlbumByIdResponseApplicationDto>(
-      albumResponseDto,
-      albumResult.statusCode,
-    );*/
   }
 }

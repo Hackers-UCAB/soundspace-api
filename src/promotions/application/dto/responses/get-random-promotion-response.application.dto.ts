@@ -5,5 +5,4 @@ import { Promotion } from "src/promotions/domain/promotion";
 export class GetRandomPromotionResponseApplicationDto implements ServiceResponse{
     userId: string;
     promotion: Promotion;
-    image: Buffer;
 }
