@@ -8,7 +8,7 @@ import { ArtistSongs } from "./value-objects/artist-songs";
 import { ArtistPhoto } from "./value-objects/artist-photo";
 import { ArtistId } from "./value-objects/artist-id";
 import { ArtistCreated } from "./events/artist-created.event";
-
+//TODO: Cambiar implementacion
 export class Artist extends AggregateRoot<ArtistId> {
 
     private name: ArtistName;
