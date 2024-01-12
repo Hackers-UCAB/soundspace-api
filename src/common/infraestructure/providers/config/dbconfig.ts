@@ -17,10 +17,9 @@ export const databaseProviders = [
         //entities: [__dirname + '/**/*.entity{.ts,.js}'],
         // entities: ['dist/**/*.entity{.ts,.js}'],
         ssl: {
-          rejectUnauthorized: false
+          rejectUnauthorized: false,
         },
         synchronize: true,
-        
       });
 
       try {
@@ -40,5 +39,5 @@ export const databaseProviders = [
       return new UserRepository(dataSource);
     },
     inject: ['DataSource'],
-  }
+  },
 ];

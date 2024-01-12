@@ -49,6 +49,7 @@ export class SearchApplicationService
       if (!searchResult.IsSuccess) {
         return searchResult;
       }
+      
       response[type] = searchResult.Data.data;
     });
     return Result.success(response, 200);

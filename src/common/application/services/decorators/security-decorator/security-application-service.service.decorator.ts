@@ -15,7 +15,6 @@ export class SecurityApplicationServiceDecorator<
 > extends ApplicationServiceDecorator<D, R> {
   private readonly userRepository: IUserRepository;
   private readonly allowedRoles: UserRoleEnum[];
-
   constructor(
     applicationService: IApplicationService<D, R>,
     userRepository: IUserRepository,

@@ -40,7 +40,11 @@ export class GetPlaylistByIdService
       await this.playlistRepository.findPlaylistById(playlistId);
 
     if (!playlistResult.IsSuccess) {
-      return Result.fail<GetPlaylistByIdResponseApplicationDto>(null, playlistResult.statusCode, playlistResult.message, playlistResult.error,
+      return Result.fail<GetPlaylistByIdResponseApplicationDto>(
+        null,
+        playlistResult.statusCode,
+        playlistResult.message,
+        playlistResult.error,
       );
     }
     let songs: {
@@ -49,23 +53,34 @@ export class GetPlaylistByIdService
     }[] = [];
     //buscamos todas las canciones relacionadas a ese playlist para crear el arreglo de Song []
     for (const songId of playlistResult.data.PlaylistSongs.Songs) {
-      const searchedSong: Result<Song> = await this.songRepository.findSongById(songId);
+      const searchedSong: Result<Song> =
+        await this.songRepository.findSongById(songId);
 
       if (!searchedSong.IsSuccess) {
-        return Result.fail<GetPlaylistByIdResponseApplicationDto>(null,searchedSong.statusCode,searchedSong.message,searchedSong.error,);
+        return Result.fail<GetPlaylistByIdResponseApplicationDto>(
+          null,
+          searchedSong.statusCode,
+          searchedSong.message,
+          searchedSong.error,
+        );
       }
       const artist: Result<Artist[]> =
-        await this.artistRepository.findArtistBySongId(songId);
+        await this.artistRepository.findArtistsBySongId(songId);
 
       if (!artist.IsSuccess) {
-        return Result.fail<GetPlaylistByIdResponseApplicationDto>(null,artist.statusCode,artist.message,artist.error,);
+        return Result.fail<GetPlaylistByIdResponseApplicationDto>(
+          null,
+          artist.statusCode,
+          artist.message,
+          artist.error,
+        );
       }
       songs.push({
         song: searchedSong.Data,
         artists: artist.Data,
       });
     }
-    
+
     const playlistResponseDto: GetPlaylistByIdResponseApplicationDto = {
       userId: param.userId,
       playlist: playlistResult.Data,

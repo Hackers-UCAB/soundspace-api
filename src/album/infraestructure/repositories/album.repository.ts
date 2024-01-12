@@ -17,53 +17,6 @@ export class AlbumRepository
     this.OrmAlbumMapper = new OrmAlbumMapper();
   }
 
-  /*async findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
-    let response: Album[];
-    let error: Error;
-    console.log(' repo artistId: ', artistId);
-    try {
-      const albums = await this.createQueryBuilder('playlist')
-        .distinct(true)
-        .select([
-          'playlist.codigo_playlist',
-          'playlist.nombre',
-          'playlist.referencia_imagen',
-        ])
-        .innerJoin(
-          'playlist_cancion',
-          'pc',
-          'playlist.codigo_playlist = pc."playlistCodigoPlaylist"',
-        )
-        .innerJoin(
-          'cancion_artista',
-          'ca',
-          'pc."cancionCodigoCancion" = ca.codigo_cancion',
-        )
-        .innerJoin('artista', 'a', 'ca.codigo_artista = a.codigo_artista')
-        .where('playlist.tipo = :albumType', { albumType: 'album' })
-        .andWhere('a.codigo_artista = :artistId', { artistId: artistId.Id })
-        .getMany();
-      console.log(' repo albums: ', albums);
-      response = await Promise.all(
-        albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
-      );
-      console.log(' repo response: ', response);
-    } catch (e) {
-      error = e;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-            'Ha ocurrido un error obteniendo la lista de álbumes por artista, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success<Album[]>(response, 200);
-    }
-  }*/
-
   async findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
     let response: Album[];
     let error: Error;
@@ -75,14 +28,14 @@ export class AlbumRepository
           'playlist.nombre',
           'playlist.referencia_imagen',
           'cancion.codigo_cancion',
-          'cancion.nombre_cancion', // Incluir otras propiedades de la canción que desees
-          'genero.nombre_genero', // Agregado para incluir el nombre del género
+          'cancion.nombre_cancion',
+          'genero.nombre_genero',
         ])
         .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
         .innerJoinAndSelect('playlist.genero', 'genero')
         .innerJoin(
-          'playlist.playlist_creador',
+          'playlist.creadores',
           'creador',
           'creador.artistaCodigoArtista = :artistId',
           { artistId: artistId.Id },
@@ -119,18 +72,17 @@ export class AlbumRepository
           'playlist.nombre',
           'playlist.referencia_imagen',
           'cancion.codigo_cancion',
-          'cancion.nombre_cancion', // Incluir otras propiedades de la canción que desees
+          'cancion.nombre_cancion',
         ])
         .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
         .innerJoinAndSelect('playlist.genero', 'genero')
-        .where("playlist.codigo_playlist = :id and playlist.tipo = 'album'", {
+        .where("playlist.codigo_playlist = :id and playlist.tipo = 'Album'", {
           id: id.Id,
         })
         .getOne();
-      //console.log('response de const album:', album);
+
       response = await this.OrmAlbumMapper.toDomain(album);
-      //console.log('Imprimiendo Response: ', response);
     } catch (e) {
       error = e;
     } finally {
@@ -157,7 +109,7 @@ export class AlbumRepository
           'playlist.nombre',
           'playlist.referencia_imagen',
           'cancion.codigo_cancion',
-          'genero.nombre_genero', // Agregado para incluir el nombre del género
+          'genero.nombre_genero',
         ])
         .innerJoinAndSelect('playlist.canciones', 'playlistCancion')
         .innerJoinAndSelect('playlistCancion.cancion', 'cancion')
@@ -165,9 +117,9 @@ export class AlbumRepository
           'genero',
           'genero',
           'playlist.generoCodigoGenero = genero.codigo_genero',
-        ) // Agregado para incluir el nombre del género
+        )
         .where('playlist.trending = :trending', { trending: true })
-        .andWhere("playlist.tipo = 'album'")
+        .andWhere("playlist.tipo = 'Album'")
         .getMany();
 
       response = await Promise.all(
@@ -189,7 +141,11 @@ export class AlbumRepository
     }
   }
 
-  async findAlbumsByName(name: string, limit?: number, offset?: number): Promise<Result<Album[]>> {
+  async findAlbumsByName(
+    name: string,
+    limit?: number,
+    offset?: number,
+  ): Promise<Result<Album[]>> {
     let response: Album[];
     let error: any;
     try {
@@ -201,7 +157,7 @@ export class AlbumRepository
         })
         .andWhere('album.tipo = :tipo', {
           tipo: 'album',
-        })    
+        })
         .limit(limit)
         .offset(offset)
         .getMany();
