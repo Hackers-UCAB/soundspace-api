@@ -1,6 +1,5 @@
 export class Result<T> {
-  //Este es el como seran las respuestas de las peticiones
-
+//TODO: Pasar esto a dominio
   public readonly data: T;
   public readonly statusCode: number;
   public readonly message?: string;

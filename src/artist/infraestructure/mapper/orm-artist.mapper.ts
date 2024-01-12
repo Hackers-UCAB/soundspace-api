@@ -8,7 +8,8 @@ import { ArtistPhoto } from '../../domain/value-objects/artist-photo';
 import { ArtistAlbums } from '../../domain/value-objects/artist-albums';
 import { ArtistSongs } from '../../domain/value-objects/artist-songs';
 import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../exceptions/invalid-to-domain-mapper.exception';
+import { AlbumId } from 'src/album/domain/value-objects/album-id';
+import { InvalidToDomainMapper } from 'src/common/infraestructure/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
 
@@ -16,10 +17,25 @@ export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
 
         if (persistence) {
 
+            const songs = persistence.canciones.map
+                (song => SongId.create(song.codigo_cancion));
+
+            const albums = persistence.playlistCreadores.map
+                (playlist_creador => AlbumId.create
+                    (playlist_creador.playlist.codigo_playlist))
+
+            const genreName =
+                persistence.genero && persistence.genero.nombre_genero
+                    ? persistence.genero.nombre_genero
+                    : 'Sin Género';
+
             const artist: Artist = await Artist.create(
                 ArtistId.create(persistence.codigo_artista),
                 ArtistName.create(persistence.nombre_artista),
-                ArtistPhoto.create(persistence.referencia_imagen)
+                ArtistGenre.create(genreName),
+                ArtistPhoto.create(persistence.referencia_imagen),
+                ArtistAlbums.create(albums),
+                ArtistSongs.create(songs)
             );
 
             return artist;
@@ -27,7 +43,7 @@ export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
 
         throw InvalidToDomainMapper;
     }
-    
+
     async toPersistence(domain: Artist): Promise<OrmArtistaEntity> {
         return null;
     }
