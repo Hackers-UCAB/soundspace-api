@@ -14,8 +14,8 @@ export class Artist extends AggregateRoot<ArtistId> {
     private name: ArtistName;
     private genre: ArtistGenre;
     private photo: ArtistPhoto;
-    private albums: ArtistAlbums;
     private songs: ArtistSongs;
+    private albums: ArtistAlbums;
 
     get Name(): ArtistName {
         return this.name;
@@ -42,8 +42,8 @@ export class Artist extends AggregateRoot<ArtistId> {
         name: ArtistName,
         genre: ArtistGenre,
         photo: ArtistPhoto,
-        albums: ArtistAlbums,
-        songs: ArtistSongs
+        songs: ArtistSongs,
+        albums?: ArtistAlbums,
     ) {
         const artistCreated = ArtistCreated.create(
             id,
@@ -67,17 +67,14 @@ export class Artist extends AggregateRoot<ArtistId> {
     }
 
     protected ensureValidaState(): void {
-
         if (
             !this.name ||
             !this.genre ||
             !this.photo ||
-            !this.albums ||
             !this.songs
         ) {
             throw new InvalidArtistException("Artist not valid");
         }
-        
     }
 
     static create(
@@ -85,16 +82,16 @@ export class Artist extends AggregateRoot<ArtistId> {
         name: ArtistName,
         genre: ArtistGenre,
         photo: ArtistPhoto,
-        albums: ArtistAlbums,
-        songs: ArtistSongs
+        songs: ArtistSongs,
+        albums?: ArtistAlbums,
     ): Artist {
         return new Artist(
             id,
             name,
             genre,
             photo,
+            songs,
             albums,
-            songs
         )
     }
 

@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMan
 import { OrmGeneroEntity } from '../../../common/infraestructure/orm-entities/genre.entity';
 import { OrmPlaylistCancionEntity } from '../../../common/infraestructure/orm-entities/playlist-song.entity';
 import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/artist.entity';
+import { OrmArtistaCancionEntity } from 'src/common/infraestructure/orm-entities/song-artist.entity';
 
 @Entity('cancion')
 export class OrmCancionEntity {
@@ -65,6 +66,9 @@ export class OrmCancionEntity {
   @OneToMany(() => OrmPlaylistCancionEntity, playlistCancion => playlistCancion.cancion)
   playlistCanciones: OrmPlaylistCancionEntity[];
 
+  @OneToMany(() => OrmArtistaCancionEntity, (artistaCancion) => artistaCancion.artista)
+  artistaCanciones: OrmArtistaCancionEntity[]
+  
   static async create(
     songId: string,
     songName: string,
