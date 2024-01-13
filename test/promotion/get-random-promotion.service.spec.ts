@@ -1,3 +1,4 @@
+import exp from "constants";
 import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
 import { ServiceEntry } from "src/common/application/services/dto/entry/service-entry.dto";
@@ -58,7 +59,14 @@ describe('Buscar una promocion aleatoria', () => {
             userId: user.Id.Id
         }
 
+        const service = new GetRandomPromotionApplicationService(promotionRepositoryMock)
         
+        //act
+        const result = await service.execute(dto);
+
+        //assert
+
+        expect(result.IsSuccess).toBeFalsy();
     })
 
 
