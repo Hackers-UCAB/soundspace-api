@@ -66,7 +66,7 @@ export class AzureBlobHelper{
       const metadata = await blobClient.getProperties()
       const rate = metadata.contentLength/duration
       //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
-      const blobDownloaded = await blobClient.download(Math.trunc(startPointInSeconds * rate), Math.trunc(rate * 5));
+      const blobDownloaded = await blobClient.download(Math.trunc(startPointInSeconds * rate), Math.trunc(rate * 10));
       return {
         blob: blobDownloaded.readableStreamBody
       };
