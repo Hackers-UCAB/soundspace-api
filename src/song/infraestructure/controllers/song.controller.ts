@@ -47,7 +47,7 @@ export class SongController {
   //   return new StreamableFile(streamable);
   // }
 
-    @Get('top_song')
+    @Get('top_songs')
     @Auth()
     async getTopPlaylist(@GetUser('id') userId: UserId) {
         const serviceResult: Result<GetTopSongsResponseApplicationDto> =

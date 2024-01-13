@@ -37,7 +37,7 @@ export class PlaylistController {
     >,
   ) {}
 
-  @Get('top_playlist')
+  @Get('top_playlists')
   @Auth()
   async getTopPlaylist(@GetUser('id') userId: UserId) {
     const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
