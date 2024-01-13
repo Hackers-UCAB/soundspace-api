@@ -13,8 +13,8 @@ export class ArtistCreated extends DomainEvent {
         public name: ArtistName,
         public genre: ArtistGenre,
         public photo: ArtistPhoto,
-        public albums: ArtistAlbums,
-        public songs: ArtistSongs
+        public songs?: ArtistSongs,
+        public albums?: ArtistAlbums,
     ){
         super()
     }
@@ -24,16 +24,16 @@ export class ArtistCreated extends DomainEvent {
         name: ArtistName,
         genre: ArtistGenre,
         photo: ArtistPhoto,
-        albums: ArtistAlbums,
-        songs: ArtistSongs
+        songs?: ArtistSongs,
+        albums?: ArtistAlbums,
     ): ArtistCreated{
         return new ArtistCreated(
             id,
             name,
             genre,
             photo,
-            albums,
-            songs
+            songs,
+            albums
         )
     }
     

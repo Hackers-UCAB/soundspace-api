@@ -9,16 +9,14 @@ import { IApplicationService } from '../../../common/application/services/interf
 import { Result } from '../../../common/application/result-handler/result';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
-import { SongInfraestructureResponseDto, SongSwaggerInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/song.response.dto';
+import { SongInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/song.response.dto';
 import { timeConverter } from '../../../common/domain/helpers/convert-duration';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 
-@ApiTags('song')
 @Controller('song')
 export class SongController {
 
@@ -49,8 +47,7 @@ export class SongController {
   //   return new StreamableFile(streamable);
   // }
 
-    @Get('top_song')
-    @ApiCreatedResponse({ description: 'Se consulto correctamente la lista de Top songs', type: SongSwaggerInfraestructureResponseDto })
+    @Get('top_songs')
     @Auth()
     async getTopPlaylist(@GetUser('id') userId: UserId) {
         const serviceResult: Result<GetTopSongsResponseApplicationDto> =

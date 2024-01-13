@@ -25,11 +25,11 @@ export class ArtistRepository
 
     try {
       const artist = await this.createQueryBuilder('artista')
-        .innerJoinAndSelect('artista.canciones', 'cancion')
-        .innerJoinAndSelect('cancion.generos', 'generoCancion')
-        .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
-        .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
         .innerJoinAndSelect('artista.genero', 'generoArtista')
+        .leftJoinAndSelect('artista.canciones', 'cancion')
+        //.innerJoinAndSelect('cancion.generos', 'generoCancion')
+        .leftJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
+        .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.codigo_artista = :id', { id: artistId.Id })
         .getOne();
 
@@ -164,19 +164,16 @@ export class ArtistRepository
   ): Promise<Result<Artist[]>> {
     let response: Artist[];
     let error: any;
-    try {     
+    try {
       const artists = await this.createQueryBuilder('artist')
-      .innerJoinAndSelect('artist.canciones', 'cancion')
-      .innerJoinAndSelect('cancion.generos', 'generoCancion')
-      .innerJoinAndSelect('artist.playlistCreadores', 'playlistCreador')
-      .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
-      .innerJoinAndSelect('artist.genero', 'generoArtista')
+        .leftJoinAndSelect('artist.genero', 'generoArtista')
         .where(' LOWER(artist.nombre_artista) LIKE :name', {
           name: `%${name.toLowerCase()}%`,
         })
         .limit(limit)
         .offset(offset)
         .getMany();
+
       response = await Promise.all(
         artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),

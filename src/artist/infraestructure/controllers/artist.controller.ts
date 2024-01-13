@@ -36,7 +36,7 @@ export class ArtistController {
         >,
     ) { }
     
-    @Get('top_artist')
+    @Get('top_artists')
     @Auth()
     async getTrendingArtists(@GetUser('id') userId: UserId) {
 

@@ -12,40 +12,43 @@ import { AlbumId } from 'src/album/domain/value-objects/album-id';
 import { InvalidToDomainMapper } from 'src/common/infraestructure/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
+  async toDomain(persistence: OrmArtistaEntity): Promise<Artist> {
+    if (persistence) {
+      let songs: SongId[];
+      if (persistence.canciones) {
+        songs = persistence.canciones.map((song) =>
+          SongId.create(song.codigo_cancion),
+        );
+      }
 
-    async toDomain(persistence: OrmArtistaEntity): Promise<Artist> {
+      let albums: AlbumId[];
+      if (persistence.playlistCreadores) {
+        albums = persistence.playlistCreadores.map((playlist_creador) =>
+          AlbumId.create(playlist_creador.playlist.codigo_playlist),
+        );
+      }
 
-        if (persistence) {
+      const genreName =
+        persistence.genero && persistence.genero.nombre_genero
+          ? persistence.genero.nombre_genero
+          : 'Sin Género';
 
-            const songs = persistence.canciones.map
-                (song => SongId.create(song.codigo_cancion));
+      const artist: Artist = await Artist.create(
+        ArtistId.create(persistence.codigo_artista),
+        ArtistName.create(persistence.nombre_artista),
+        ArtistGenre.create(genreName),
+        ArtistPhoto.create(persistence.referencia_imagen),
+        persistence.canciones ? ArtistSongs.create(songs) : null,
+        persistence.playlistCreadores ? ArtistAlbums.create(albums) : null,
+      );
 
-            const albums = persistence.playlistCreadores.map
-                (playlist_creador => AlbumId.create
-                    (playlist_creador.playlist.codigo_playlist))
-
-            const genreName =
-                persistence.genero && persistence.genero.nombre_genero
-                    ? persistence.genero.nombre_genero
-                    : 'Sin Género';
-
-            const artist: Artist = await Artist.create(
-                ArtistId.create(persistence.codigo_artista),
-                ArtistName.create(persistence.nombre_artista),
-                ArtistGenre.create(genreName),
-                ArtistPhoto.create(persistence.referencia_imagen),
-                ArtistAlbums.create(albums),
-                ArtistSongs.create(songs)
-            );
-
-            return artist;
-        }
-
-        throw InvalidToDomainMapper;
+      return artist;
     }
 
-    async toPersistence(domain: Artist): Promise<OrmArtistaEntity> {
-        return null;
-    }
+    throw InvalidToDomainMapper;
+  }
 
+  async toPersistence(domain: Artist): Promise<OrmArtistaEntity> {
+    return null;
+  }
 }
