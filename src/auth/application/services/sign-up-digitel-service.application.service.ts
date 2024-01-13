@@ -127,6 +127,7 @@ export class SignUpDigitelApplicationService
         new Error(subscriptionSaving.message),
       );
     }
+
     // this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
     const response: SignUpResponseApplicationDto = {

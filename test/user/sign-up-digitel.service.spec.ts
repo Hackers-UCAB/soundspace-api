@@ -29,7 +29,7 @@ describe('SignUpDigitelService', () => {
         const auditingRepositoryMock = new AuditingRepositoryMock()
         const loggerMock = new LoggerMock()
         const dto: SignUpEntryApplicationDto = {
-            phone: '4',
+            phone: '4123684719',
             token: 'token',
             userId: 'Unknown',
         }
