@@ -41,7 +41,7 @@ export class AlbumController {
     >,
   ) {}
 
-  @Get('TopAlbum')
+  @Get('top_album')
   @Auth()
   async getTopAlbum(@GetUser('id') userId: UserId) {
     const dto: TopAlbumEntryApplicationDto = {
