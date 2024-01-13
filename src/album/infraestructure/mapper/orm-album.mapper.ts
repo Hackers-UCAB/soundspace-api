@@ -9,7 +9,7 @@ import { AlbumSongs } from '../../domain/value-objects/album-songs';
 import { AlbumDuration } from '../../domain/value-objects/album-duration';
 import { AlbumGenre } from '../../domain/value-objects/album-genre';
 import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../exception/invalid-to-domain-mapper.exception';
+import { InvalidToDomainMapper } from '../../../common/infraestructure/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
   async toDomain(persistence: OrmPlaylistEntity): Promise<Album> {

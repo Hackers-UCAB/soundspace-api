@@ -1,4 +1,4 @@
-import { Controller, Inject, Get, Param } from '@nestjs/common';
+import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entrys/get-playlist-by-id-entry.application.dto';
@@ -6,16 +6,18 @@ import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/res
 import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/application/result-handler/result';
-import { TopPlaylistEntryApplicationDto } from '../../application/dto/entrys/get-top-playlist-entry.application.dto';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
-import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
+import { PlaylistInfraestructureResponseDto, PlaylistSwaggerInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
-import { TopPlaylistInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/top-playlist.response.dto';
+import { TopPlaylistInfraestructureResponseDto, TopPlaylistSwaggerInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/top-playlist.response.dto';
+import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
+import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('playlist')
 @Controller('playlist')
 export class PlaylistController {
   constructor(
@@ -32,53 +34,56 @@ export class PlaylistController {
     >,
     @Inject('GetTopPlaylistService')
     private readonly GetTopPlaylistService: IApplicationService<
-      TopPlaylistEntryApplicationDto,
+      ServiceEntry,
       GetTopPlaylistResponseApplicationDto
     >,
   ) {}
 
-  @Get('top_playlist')
+    @Get('top_playlist')
+    @ApiCreatedResponse({ description: 'Se consulto correctamente la lista de Top playlists', type: TopPlaylistSwaggerInfraestructureResponseDto })
   @Auth()
   async getTopPlaylist(@GetUser('id') userId: UserId) {
-      const dto: TopPlaylistEntryApplicationDto = {
-          userId: userId.Id,
-    };
     const serviceResult: Result<GetTopPlaylistResponseApplicationDto> =
-      await this.GetTopPlaylistService.execute(dto);
-        if (!serviceResult.IsSuccess) {
-          HttpResponseHandler.HandleException(
-            serviceResult.statusCode,
-            serviceResult.message,
-            serviceResult.error,
-            );
-      }
+      await this.GetTopPlaylistService.execute({ userId: userId.Id });
+    if (!serviceResult.IsSuccess) {
+      HttpResponseHandler.HandleException(
+        serviceResult.statusCode,
+        serviceResult.message,
+        serviceResult.error,
+      );
+    }
 
-      const playlists = [];
+    const playlists = [];
 
-      for (const playlist of serviceResult.Data.playlists) {
-          const playlistImage = await this.azureBufferImageHelper.getFile(
-              playlist.Cover.Path,
-          );
-          const returnPlaylist= {
-              id: playlist.Id.Id,
-              image: playlistImage.IsSuccess ? playlistImage.Data : null,
-          };
-          playlists.push(returnPlaylist);
-      }
-      const response: TopPlaylistInfraestructureResponseDto = {
-          playlists: playlists
+    for (const playlist of serviceResult.Data.playlists) {
+      const playlistImage = await this.azureBufferImageHelper.getFile(
+        playlist.Cover.Path,
+      );
+      const returnPlaylist = {
+        id: playlist.Id.Id,
+        image: playlistImage.IsSuccess ? playlistImage.Data : null,
       };
+      playlists.push(returnPlaylist);
+    }
+    const response: TopPlaylistInfraestructureResponseDto = {
+      playlists: playlists,
+    };
 
     return HttpResponseHandler.Success(200, response);
   }
 
   @Get(':id')
+  @ApiParam({ name: 'id', description: 'El identificador único de la playlist', example: 'c77bd9ae-08a9-4f94-bc86-4afffd0fee3f' })
+  @ApiCreatedResponse({ description: 'Se consulto correctamente la playlist mediante su uuid', type: PlaylistSwaggerInfraestructureResponseDto })
   @Auth()
-  async getPlaylist(@Param('id') id: string, @GetUser('id') userId: UserId) {
-    const dto: GetPlaylistByIdEntryApplicationDto = {
-      userId: userId.Id,
-      playlistId: id,
-    };
+  async getPlaylist(
+      @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') userId: UserId,
+  ) {
+      const dto: GetPlaylistByIdEntryApplicationDto = {
+          userId: userId.Id,
+          playlistId: id,
+      };
 
     const serviceResult: Result<GetPlaylistByIdResponseApplicationDto> =
       await this.GetPlaylistByIdService.execute(dto);

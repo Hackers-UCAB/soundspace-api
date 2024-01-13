@@ -4,15 +4,21 @@ import { DataSource } from 'typeorm';
 import axios from 'axios';
 import { AzureBlobHelper } from '../helpers/get-blob-file.helper';
 import { Readable } from 'stream';
-import { GetTopSongsEntryApplicationDto } from '../../application/dto/entrys/get-top-songs.entry.application.dto';
 import { GetTopSongsResponseApplicationDto } from '../../application/dto/responses/get-top-songs.response.application.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { Result } from '../../../common/application/result-handler/result';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
-import { GetTopSongsResponseInfrastructureDto } from '../dto/responses/get-top-songs-response.infrastructure.dto';
+import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
+import { SongInfraestructureResponseDto, SongSwaggerInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/song.response.dto';
+import { timeConverter } from '../../../common/domain/helpers/convert-duration';
+import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
+import { UserId } from 'src/user/domain/value-objects/user-id';
+import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
+import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 
-
+@ApiTags('song')
 @Controller('song')
 export class SongController {
 
@@ -20,9 +26,12 @@ export class SongController {
         @Inject('DataSource')
         private readonly dataSource: DataSource,
 
+        @Inject('AzureBufferImageHelper')
+        private readonly azureBufferImageHelper: IGetBufferImageInterface,
+
         @Inject('GetTopSongsService')
         private readonly GetTopPlaylistService: IApplicationService<
-            GetTopSongsEntryApplicationDto,
+            ServiceEntry,
             GetTopSongsResponseApplicationDto
         >,
     ){ }
@@ -40,13 +49,12 @@ export class SongController {
   //   return new StreamableFile(streamable);
   // }
 
-    @Get('TopSongs')
-    async getTopPlaylist() {
-        const dto: GetTopSongsEntryApplicationDto = {
-            userId: '63fb22cb-e53f-4504-bdba-1b75a1209539',
-        }
+    @Get('top_song')
+    @ApiCreatedResponse({ description: 'Se consulto correctamente la lista de Top songs', type: SongSwaggerInfraestructureResponseDto })
+    @Auth()
+    async getTopPlaylist(@GetUser('id') userId: UserId) {
         const serviceResult: Result<GetTopSongsResponseApplicationDto> =
-            await this.GetTopPlaylistService.execute(dto);
+            await this.GetTopPlaylistService.execute({ userId: userId.Id });
         if (!serviceResult.IsSuccess) {
             HttpResponseHandler.HandleException(
                 serviceResult.statusCode,
@@ -54,9 +62,27 @@ export class SongController {
                 serviceResult.error,
             );
         }
-        const response: GetTopSongsResponseInfrastructureDto = {
-            songs: serviceResult.Data.songs
+        let songs: SongInfraestructureResponseDto[] = [];
+
+        for (const song of serviceResult.Data.songs) {
+            const songImage = await this.azureBufferImageHelper.getFile(
+                song.song.Cover.Path,
+            );
+            const artists = song.artists.map((artist) => {
+                return {
+                    id: artist.Id.Id,
+                    name: artist.Name.Name,
+                };
+            });
+            const returnSong: SongInfraestructureResponseDto = {
+                id: song.song.Id.Id,
+                name: song.song.Name.Name,
+                duration: timeConverter(song.song.Duration.Duration),
+                image: songImage.IsSuccess ? songImage.Data : null,
+                artists: artists,
+            };
+            songs.push(returnSong);
         }
-        return HttpResponseHandler.Success(200, response);
+        return HttpResponseHandler.Success(200, songs);
     }
 }

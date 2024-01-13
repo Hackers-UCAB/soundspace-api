@@ -50,6 +50,7 @@ import { SearchPlaylistsApplicationService } from 'src/playlist/application/serv
 import { SearchSongsApplicationService } from 'src/song/application/services/search-songs.application.service';
 import { CancelSubscriptionApplicationService } from 'src/subscription/application/services/cancel-subscription.application.service';
 import { OrmArtistMapper } from '../../../../artist/infraestructure/mapper/orm-artist.mapper';
+import { GetTrendingArtistsService } from 'src/artist/application/services/get-trending-artists.application.service';
 
 export const servicesProvidersManager: Provider[] = [
   {
@@ -287,8 +288,7 @@ export const servicesProvidersManager: Provider[] = [
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new GetRandomPromotionApplicationService(
-            new PromotionRepository(dataSource),
-            new AzureBufferImageHelper(),
+            new PromotionRepository(dataSource)
           ),
           new AuditingRepository(dataSource),
           'Get Random Promotion',
@@ -380,7 +380,8 @@ export const servicesProvidersManager: Provider[] = [
         new AuditingCommandServiceDecorator(
           new GetArtistByIdService(
             new ArtistRepository(dataSource),
-            new AzureBufferImageHelper(),
+            new SongRepository(dataSource, new OrmSongMapper()),
+            new AlbumRepository(dataSource),
           ),
           new AuditingRepository(dataSource),
           'GetArtistByIdService',
@@ -388,6 +389,24 @@ export const servicesProvidersManager: Provider[] = [
         ),
         logger,
         'GetArtistByIdService',
+      );
+    },
+    inject: ['DataSource', 'ILogger'],
+  },
+  {
+    provide: 'GetTrendingArtistsService',
+    useFactory: (dataSource: DataSource, logger: ILogger) => {
+      return new LoggerApplicationServiceDecorator(
+        new AuditingCommandServiceDecorator(
+          new GetTrendingArtistsService(
+            new ArtistRepository(dataSource),
+          ),
+          new AuditingRepository(dataSource),
+          'GetTrendingArtistsService',
+          logger,
+        ),
+        logger,
+        'GetTrendingArtistsService',
       );
     },
     inject: ['DataSource', 'ILogger'],

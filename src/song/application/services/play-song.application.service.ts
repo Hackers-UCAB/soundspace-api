@@ -6,35 +6,42 @@ import { IBlobHelper } from '../interfaces/blob-helper.interface';
 import { ISendSongHelper } from '../interfaces/send-song-helper.iterface';
 import { PlaySongEntryApplicationDto } from '../dto/entrys/play-song.entry.application.dto';
 import { PlaySongResponseApplicationDto } from '../dto/responses/play-song.response.application.dto';
+import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
+import { ISongReferenceDomainService, SongReferenceDomainServiceDto } from 'src/song/domain/services/song-reference.domain,service';
+import { UserId } from 'src/user/domain/value-objects/user-id';
+import { SongId } from 'src/song/domain/value-objects/song-id';
 
 export class PlaySongService implements IApplicationService<PlaySongEntryApplicationDto, PlaySongResponseApplicationDto>{
 
-    private readonly songRepository: ISongRepository;
-    private readonly idGen: IIdGenerator<string>;
     private readonly getSongHelper: IBlobHelper;
     private readonly sendSongHelper: ISendSongHelper;
     private readonly client: any
-    constructor(songRepository: ISongRepository, idGen: IIdGenerator<string>, getSongHelper: IBlobHelper, sendSondHelper: ISendSongHelper, client: any ) {
-        this.songRepository = songRepository;
-        this.idGen = idGen;
+    private readonly songReference: ISongReferenceDomainService
+    constructor(getSongHelper: IBlobHelper, sendSondHelper: ISendSongHelper, client: any, songReference: ISongReferenceDomainService) {
         this.getSongHelper = getSongHelper;
         this.sendSongHelper = sendSondHelper;
         this.client = client
+        this.songReference = songReference
     }
 
     async execute(param: PlaySongEntryApplicationDto): Promise<Result<PlaySongResponseApplicationDto>> {
 
-        const {preview , second, songId, userId, streaming} = param
+        const {second, songId, userId, streaming} = param
+        
+        const domainValues: SongReferenceDomainServiceDto = {
+            user: UserId.create(userId),
+            song: SongId.create(songId)
+        }
 
-        const data = await this.songRepository.findPartialSongById(songId);
+        const data = await this.songReference.execute(domainValues);
 
         if (!data.IsSuccess) {
             return Result.fail(null, 500, data.message, new Error(data.message));
         }
             
-        const {blob, size, startByte} = await this.getSongHelper.getFile(data.Data.name, 'cancion', second, data.Data.duration);
+        const {blob} = await this.getSongHelper.getFile(data.Data.name.Path, 'cancion', second, data.Data.duration.Duration);
         
-        this.sendSongHelper.sendSong(this.client, blob, size, startByte, second, streaming);
+        this.sendSongHelper.sendSong(this.client, blob);
        
         const response: PlaySongResponseApplicationDto = {
             userId: userId,
