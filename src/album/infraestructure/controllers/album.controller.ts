@@ -40,7 +40,7 @@ export class AlbumController {
     >,
   ) {}
 
-  @Get('top_album')
+  @Get('top_albums')
   @Auth()
   async getTopAlbum(@GetUser('id') userId: UserId) {
     const dto: ServiceEntry = {
