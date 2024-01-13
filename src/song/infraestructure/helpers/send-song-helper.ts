@@ -53,11 +53,26 @@ import { ISendSongHelper } from "src/song/application/interfaces/send-song-helpe
 // }
 
 //!Ahora es tan sencillo como esto porque ya el manejo para enviar la cancion lo hago es cuando hago la descarga
+// export class SendSongHelper implements ISendSongHelper {
+    
+//   async sendSong(client: Socket, blob:any) {
+//     client.emit('message-from-server', {
+//       chunk: blob
+//     })
+// }
+
 export class SendSongHelper implements ISendSongHelper {
     
   async sendSong(client: Socket, blob:any) {
-    client.emit('message-from-server', {
-      chunk: blob
+    let buffer = Buffer.alloc(0);
+    blob.on('data', (chunk) => {
+      buffer = Buffer.concat([buffer, chunk]);
     })
-}
+
+    blob.on('end', () => {
+      client.emit('message-from-server', {
+      chunk: buffer
+    })
+    })
+  }
 }
