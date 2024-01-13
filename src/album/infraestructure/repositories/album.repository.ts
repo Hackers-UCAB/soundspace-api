@@ -40,9 +40,9 @@ export class AlbumRepository
           'creador.artistaCodigoArtista = :artistId',
           { artistId: artistId.Id },
         )
-        .where("playlist.tipo = 'album'")
+        .where("playlist.tipo = 'Album'")
         .getMany();
-
+      
       response = await Promise.all(
         albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
       );
@@ -156,15 +156,22 @@ export class AlbumRepository
           name: `%${name.toLowerCase()}%`,
         })
         .andWhere('album.tipo = :tipo', {
-          tipo: 'album',
+          tipo: 'Album',
         })
-        .limit(limit)
-        .offset(offset)
         .getMany();
-
-      response = await Promise.all(
-        albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
+       
+      let finalAlbum: OrmPlaylistEntity[] = albums.slice(
+        offset,
+        offset + limit,
       );
+      response = await Promise.all(
+        finalAlbum.map(
+          async (album) => await this.OrmAlbumMapper.toDomain(album),
+        ),
+      );
+      // response = await Promise.all(
+      //   albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
+      // );
     } catch (err) {
       error = err;
     } finally {

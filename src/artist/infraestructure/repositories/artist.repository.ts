@@ -164,30 +164,22 @@ export class ArtistRepository
   ): Promise<Result<Artist[]>> {
     let response: Artist[];
     let error: any;
-    try {     
-      console.log(limit, offset);
-      
+    try {
       const artists = await this.createQueryBuilder('artist')
-      .leftJoinAndSelect('artist.canciones', 'cancion')
-      //.innerJoinAndSelect('artist.canciones', 'cancion')
-      // .innerJoinAndSelect('cancion.generos', 'generoCancion')
-      // .innerJoinAndSelect('artist.playlistCreadores', 'playlistCreador')
-      // .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
-      //.innerJoinAndSelect('artist.genero', 'generoArtista')
+        .leftJoinAndSelect('artist.canciones', 'cancion')
+        .leftJoinAndSelect('artist.genero', 'generoArtista')
         .where(' LOWER(artist.nombre_artista) LIKE :name', {
           name: `%${name.toLowerCase()}%`,
         })
-        // .limit(limit)
-        // .offset(offset)
         .getMany();
-        console.log(artists);
-        // artists.forEach(artist => {
-        //   console.log(artist.nombre_artista);
-          
-        //   console.log(artist.canciones)}
-        // )
+
+      let finalArtists: OrmArtistaEntity[] = artists.slice(
+        offset,
+        offset + limit,
+      );
+      
       response = await Promise.all(
-        artists.map(
+        finalArtists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         ),
       );

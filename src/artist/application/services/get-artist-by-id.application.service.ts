@@ -52,7 +52,7 @@ export class GetArtistByIdService
 
     const albumResult: Result<Album[]> =
       await this.albumRepository.findAlbumsByArtist(artistId);
-
+    
     if (!albumResult.IsSuccess) {
       return Result.fail<GetArtistByIdResponseApplicationDto>(
         null,
