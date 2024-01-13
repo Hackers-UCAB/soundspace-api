@@ -4,6 +4,7 @@ import { ISongRepository } from 'src/song/domain/repositories/song.repository.in
 import { Song } from 'src/song/domain/song';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
 import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
+import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 
 export class SearchSongsApplicationService
   implements
@@ -37,6 +38,7 @@ export class SearchSongsApplicationService
       data: songsResult.Data.map((song) => ({
         id: song.Id.Id,
         name: song.Name.Name,
+        duration: timeConverter(song.Duration.Duration)
       })),
     };
     return Result.success(

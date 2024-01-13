@@ -8,7 +8,6 @@ import { ArtistSongs } from "./value-objects/artist-songs";
 import { ArtistPhoto } from "./value-objects/artist-photo";
 import { ArtistId } from "./value-objects/artist-id";
 import { ArtistCreated } from "./events/artist-created.event";
-//TODO: Cambiar implementacion
 export class Artist extends AggregateRoot<ArtistId> {
 
     private name: ArtistName;
@@ -42,7 +41,7 @@ export class Artist extends AggregateRoot<ArtistId> {
         name: ArtistName,
         genre: ArtistGenre,
         photo: ArtistPhoto,
-        songs: ArtistSongs,
+        songs?: ArtistSongs,
         albums?: ArtistAlbums,
     ) {
         const artistCreated = ArtistCreated.create(
@@ -50,8 +49,8 @@ export class Artist extends AggregateRoot<ArtistId> {
             name,
             genre,
             photo,
-            albums,
-            songs
+            songs,
+            albums
         )
         super(id, artistCreated);
     }
@@ -70,8 +69,7 @@ export class Artist extends AggregateRoot<ArtistId> {
         if (
             !this.name ||
             !this.genre ||
-            !this.photo ||
-            !this.songs
+            !this.photo
         ) {
             throw new InvalidArtistException("Artist not valid");
         }
@@ -82,7 +80,7 @@ export class Artist extends AggregateRoot<ArtistId> {
         name: ArtistName,
         genre: ArtistGenre,
         photo: ArtistPhoto,
-        songs: ArtistSongs,
+        songs?: ArtistSongs,
         albums?: ArtistAlbums,
     ): Artist {
         return new Artist(

@@ -14,9 +14,13 @@ import { InvalidToDomainMapper } from 'src/common/infraestructure/exceptions/inv
 export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
   async toDomain(persistence: OrmArtistaEntity): Promise<Artist> {
     if (persistence) {
-      const songs = persistence.canciones.map((song) =>
-        SongId.create(song.codigo_cancion),
-      );
+      let songs: SongId[];
+      if (persistence.canciones) {
+        songs = persistence.canciones.map((song) =>
+          SongId.create(song.codigo_cancion),
+        );
+      }
+
       let albums: AlbumId[];
       if (persistence.playlistCreadores) {
         albums = persistence.playlistCreadores.map((playlist_creador) =>
@@ -34,7 +38,7 @@ export class OrmArtistMapper implements IMapper<Artist, OrmArtistaEntity> {
         ArtistName.create(persistence.nombre_artista),
         ArtistGenre.create(genreName),
         ArtistPhoto.create(persistence.referencia_imagen),
-        ArtistSongs.create(songs),
+        persistence.canciones ? ArtistSongs.create(songs) : null,
         persistence.playlistCreadores ? ArtistAlbums.create(albums) : null,
       );
 
