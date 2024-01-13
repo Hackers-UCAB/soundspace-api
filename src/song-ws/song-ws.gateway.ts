@@ -49,7 +49,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('message-from-client')
   async handleSong( 
     client: Socket,
-    payload: {preview: boolean, songId: string, second: number, streaming: boolean} 
+    payload: {preview: boolean, songId: string, second: number} 
     ) 
     {
 
