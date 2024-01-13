@@ -24,7 +24,7 @@ export class OrmArtistaEntity {
 
   @OneToMany(() => OrmPlaylistCreadorEntity, playlistCreador => playlistCreador.artista)
   playlistCreadores: OrmPlaylistCreadorEntity[];
-
+  //Hay que pullear
   @ManyToOne(() => OrmGeneroEntity, (genero) => genero.artistas)
   genero: OrmGeneroEntity;
 
