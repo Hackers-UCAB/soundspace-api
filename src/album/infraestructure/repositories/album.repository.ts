@@ -42,7 +42,7 @@ export class AlbumRepository
         )
         .where("playlist.tipo = 'Album'")
         .getMany();
-      
+
       response = await Promise.all(
         albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
       );
@@ -56,6 +56,17 @@ export class AlbumRepository
           error.message ||
             'Ha ocurrido un error obteniendo la lista de álbumes por artista, hable con el administrador',
           error,
+        );
+      }
+      // Filtrar los elementos nulos del array 'response'
+      response = response.filter((album) => album !== null);
+      // Verificar si el array 'response' es nulo
+      if (response === null || response.length === 0) {
+        return Result.fail(
+          null,
+          404,
+          'No se encontraron albums del artista solicitado',
+          new Error('No existe el album solicitado'),
         );
       }
       return Result.success<Album[]>(response, 200);
@@ -93,6 +104,14 @@ export class AlbumRepository
           error.message ||
             'Ha ocurrido un error inesperado obteniendo el album, hable con el administrador',
           error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe el album solicitado',
+          new Error('No existe el album solicitado'),
         );
       }
       return Result.success<Album>(response, 200);
@@ -137,6 +156,17 @@ export class AlbumRepository
           error,
         );
       }
+      // Filtrar los elementos nulos del array 'response'
+      response = response.filter((album) => album !== null);
+      // Verificar si el array 'response' es nulo
+      if (response === null || response.length === 0) {
+        return Result.fail(
+          null,
+          404,
+          'No se encontraron albums top',
+          new Error('No se encontraron albums top'),
+        );
+      }
       return Result.success<Album[]>(response, 200);
     }
   }
@@ -159,7 +189,7 @@ export class AlbumRepository
           tipo: 'Album',
         })
         .getMany();
-       
+
       let finalAlbum: OrmPlaylistEntity[] = albums.slice(
         offset,
         offset + limit,
@@ -182,6 +212,14 @@ export class AlbumRepository
           error.message ||
             'Ha ocurrido un error inesperado buscando los albums, hable con el administrador',
           error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No se encontró el album con el nombre solicitado',
+          new Error('No se encontró el album con el nombre solicitado'),
         );
       }
       return Result.success(response, 200);
