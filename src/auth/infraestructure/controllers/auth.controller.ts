@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Inject, Get, Headers } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { SignUpEntryInfraestructureDto } from '../dto/entrys/sign-up-entry.infraestructure.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { AuthHeaderInfraestructureDto } from '../dto/entrys/auth-header.infraestructure.dto';
 import { SignUpEntryApplicationDto } from 'src/auth/application/dto/entrys/sign-up-entry.application.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';

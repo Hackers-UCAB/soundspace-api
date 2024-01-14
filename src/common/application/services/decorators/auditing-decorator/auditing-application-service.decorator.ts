@@ -1,7 +1,7 @@
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { IApplicationService } from '../../interfaces/application-service.interface';
 import { ApplicationServiceDecorator } from '../application-service.decorator';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { AuditingDto } from 'src/common/application/dto/auditing.dto';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { LoggerDto } from 'src/common/application/dto/logger.dto';

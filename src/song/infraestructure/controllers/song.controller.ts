@@ -6,7 +6,7 @@ import { AzureBlobHelper } from '../helpers/get-blob-file.helper';
 import { Readable } from 'stream';
 import { GetTopSongsResponseApplicationDto } from '../../application/dto/responses/get-top-songs.response.application.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
 import { SongInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/song.response.dto';
@@ -47,7 +47,7 @@ export class SongController {
   //   return new StreamableFile(streamable);
   // }
 
-    @Get('top_song')
+    @Get('top_songs')
     @Auth()
     async getTopPlaylist(@GetUser('id') userId: UserId) {
         const serviceResult: Result<GetTopSongsResponseApplicationDto> =
@@ -80,6 +80,6 @@ export class SongController {
             };
             songs.push(returnSong);
         }
-        return HttpResponseHandler.Success(200, songs);
+        return HttpResponseHandler.Success(200, {songs});
     }
 }

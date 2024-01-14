@@ -1,7 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';

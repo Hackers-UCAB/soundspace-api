@@ -3,7 +3,7 @@ import {
   BlobServiceClient,
   BlobDownloadResponseParsed,
 } from '@azure/storage-blob';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 
 export class AzureBufferImageHelper implements IGetBufferImageInterface {

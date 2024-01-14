@@ -1,6 +1,6 @@
 import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { ServiceResponse } from 'src/common/application/services/dto/response/service-response.dto';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';

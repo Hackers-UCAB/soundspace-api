@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { ServiceResponse } from 'src/common/application/services/dto/response/service-response.dto';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';

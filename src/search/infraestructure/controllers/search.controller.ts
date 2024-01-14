@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { SearchEntryApplicationDto } from 'src/search/application/dto/entry/search.entry.application.dto';
 import { QuerySearchDto } from '../dto/queary-search.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
@@ -26,10 +26,10 @@ export class SearchController {
     @Query() querySearchDto: QuerySearchDto,
     @GetUser('id') userId: UserId,
   ){
-    //TODO: Agregarle paginacion, limit y offset
+    //TODO: Cambiar a plural
     const dto: SearchEntryApplicationDto = {
       userId: userId.Id,
-      types: querySearchDto.type ? [querySearchDto.type] : ['artist', 'album', 'playlist', 'song'],
+      types: querySearchDto.type ? [querySearchDto.type] : ['artists', 'albums', 'playlists', 'songs'],
       name: term,
       limit: querySearchDto.limit ? querySearchDto.limit : 20,
       offset: querySearchDto.offset ? querySearchDto.offset : 0

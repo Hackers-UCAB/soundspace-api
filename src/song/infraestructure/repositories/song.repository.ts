@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { OrmCancionEntity } from '../orm-entities/song.entity';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { SongId } from 'src/song/domain/value-objects/song-id';

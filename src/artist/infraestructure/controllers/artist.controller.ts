@@ -1,7 +1,7 @@
 import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { GetArtistByIdEntryApplicationDto } from 'src/artist/application/dto/entry/get-artist-by-id-entry.application.dto';
 import { GetArtistByIdResponseApplicationDto } from 'src/artist/application/dto/response/get-artist-by-id-response.application.dto';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
@@ -36,7 +36,7 @@ export class ArtistController {
         >,
     ) { }
     
-    @Get('top_artist')
+    @Get('top_artists')
     @Auth()
     async getTrendingArtists(@GetUser('id') userId: UserId) {
 
@@ -146,6 +146,7 @@ export class ArtistController {
         const response: ArtistByIdInfraestructureResponseDto = {
             id: serviceResult.Data.artist.Id.Id,
             name: serviceResult.Data.artist.Name.Name,
+            genre: serviceResult.Data.artist.Genre.Genre,
             image: artistImage.IsSuccess ? artistImage.Data : null,
             albums: albums,
             songs: songs,

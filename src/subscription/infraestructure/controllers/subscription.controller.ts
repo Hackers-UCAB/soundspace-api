@@ -8,7 +8,7 @@ import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ServiceResponse } from 'src/common/application/services/dto/response/service-response.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
 
 @ApiTags('Subscription')

@@ -4,7 +4,7 @@ import { SubscriptionChanelName } from './value-objects/subscription-chanel-name
 import { SubscriptionChanelType } from './value-objects/subscription-chanel-type';
 import { SubscriptionChanelUrlValidation } from './value-objects/subscription-chanel-url-validation';
 import { ISubscriptionValidation } from '../validation/subcscription-validaion.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 
 export class SubscriptionChanel extends Entity<SubscriptionChanelId> {
   private name: SubscriptionChanelName;

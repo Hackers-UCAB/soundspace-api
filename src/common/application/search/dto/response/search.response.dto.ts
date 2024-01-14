@@ -6,5 +6,6 @@ export class SearchItemsResponseApplicationDto implements ServiceResponse{
     data: {
         id: string;
         name: string;
+        duration?: string
     }[]
 }

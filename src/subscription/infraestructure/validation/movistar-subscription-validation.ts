@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { IMovistarSubscriptionValidation } from "src/subscription/domain/validation/movistar-subscription-validation.interface";
 
 interface ValidationResponse {

@@ -1,5 +1,5 @@
 import { Playlist } from '../playlist';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { PlaylistId } from '../value-objects/playlist-id';
 
 export interface IPlaylistRepository {

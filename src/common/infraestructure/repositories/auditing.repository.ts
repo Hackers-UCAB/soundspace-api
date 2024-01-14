@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { OrmAuditingEntity } from '../orm-entities/auditing.entity';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { UuidGenerator } from '../uuid-generator';
 import { AuditingDto } from 'src/common/application/dto/auditing.dto';
 

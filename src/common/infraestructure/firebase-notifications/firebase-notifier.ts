@@ -4,7 +4,7 @@ import { UserRepository } from "src/user/infraestructure/repositories/user.repos
 import { NotifierDto } from 'src/common/application/notifications-handler/dto/entry/notifier-entry.dto';
 import { NotifierResponse } from 'src/common/application/notifications-handler/dto/response/notifier-response.dto';
 import { INotifier } from 'src/common/application/notifications-handler/notifier.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { MulticastMessage } from 'firebase-admin/lib/messaging/messaging-api';
 
 @Injectable()
