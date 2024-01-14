@@ -9,12 +9,20 @@ import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decora
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { GetTrendingArtistsResponseApplicationDto } from 'src/artist/application/dto/response/get-trending-artists-response.application.dto';
-import { TrendingArtistsInfraestructureResponseDto } from '../dto/response/trending-artists-response.infraestructure.dto';
+import {
+    TrendingArtistsInfraestructureResponseDto,
+    TrendingArtistsSwaggerInfraestructureResponseDto
+} from '../dto/response/trending-artists-response.infraestructure.dto';
 import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
-import { ArtistByIdInfraestructureResponseDto } from '../dto/response/artist-by-id-response.infraestructure.dto';
+import {
+    ArtistByIdInfraestructureResponseDto,
+    ArtistByIdSwaggerInfraestructureResponseDto
+} from '../dto/response/artist-by-id-response.infraestructure.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
+import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('artist')
 @Controller('artist')
 export class ArtistController {
 
@@ -35,8 +43,13 @@ export class ArtistController {
             GetTrendingArtistsResponseApplicationDto
         >,
     ) { }
-    
-    @Get('top_artists')
+
+    @Get('top_artist')
+    @ApiCreatedResponse({
+        description: 'Se consulto correctamente la lista de trending artists',
+        type: TrendingArtistsSwaggerInfraestructureResponseDto
+    })
+    @Get('top_artist')
     @Auth()
     async getTrendingArtists(@GetUser('id') userId: UserId) {
 
@@ -76,7 +89,16 @@ export class ArtistController {
 
         return HttpResponseHandler.Success(200, response);
     }
-    
+
+    @Get(':id')
+    @ApiParam({
+        name: 'id', description: 'El identificador único de un artista',
+        example: 'c77bd9ae-08a9-4f94-bc86-4afffd0fee3f'
+    })
+    @ApiCreatedResponse({
+        description: 'Se consulto correctamente la informacion de un artista por su id',
+        type: ArtistByIdSwaggerInfraestructureResponseDto
+    })
     @Get(':id')
     @Auth()
     async getArtist(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') userId: UserId) {
@@ -100,7 +122,7 @@ export class ArtistController {
             serviceResult.Data.artist.Photo.Path,
         );
 
-        let albums: {id: string, image: Buffer}[] = [];
+        let albums: { id: string, image: Buffer }[] = [];
 
         for (const album of serviceResult.Data.albums) {
             const albumImage = await this.azureBufferImageHelper.getFile(
