@@ -31,7 +31,7 @@ export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
         );
       }
     }
-      throw null;
+      return null;
   }
 
   async toPersistence(domain: Playlist): Promise<OrmPlaylistEntity> {
