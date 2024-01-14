@@ -44,12 +44,12 @@ export class ArtistController {
         >,
     ) { }
 
-    @Get('top_artist')
+    @Get('top_artists')
     @ApiCreatedResponse({
         description: 'Se consulto correctamente la lista de trending artists',
         type: TrendingArtistsSwaggerInfraestructureResponseDto
     })
-    @Get('top_artist')
+    @Get('top_artists')
     @Auth()
     async getTrendingArtists(@GetUser('id') userId: UserId) {
 
