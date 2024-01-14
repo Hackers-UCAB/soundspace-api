@@ -19,6 +19,11 @@ import { PromotionController } from './promotions/infraestructure/controllers/pr
 import { SearchController } from './search/infraestructure/controllers/search.controller';
 import { ArtistController } from './artist/infraestructure/controllers/artist.controller';
 import { artistServicesProviders } from './common/infraestructure/providers/services/artist/artist.services.provider';
+import { albumServicesProviders } from './common/infraestructure/providers/services/album/album.services.provider';
+import { playlistServicesProviders } from './common/infraestructure/providers/services/playlist/playlist.services.provider';
+import { songServicesProviders } from './common/infraestructure/providers/services/song/song.services.provider';
+import { searchServicesProviders } from './common/infraestructure/providers/services/search/search.services.provider';
+import { promotionServicesProviders } from './common/infraestructure/providers/services/promotion/promotion.services.provider';
 
 @Module({
   imports: [
@@ -56,6 +61,11 @@ import { artistServicesProviders } from './common/infraestructure/providers/serv
     ...servicesProvidersManager,
     ...providersManager,
     ...artistServicesProviders,
+    ...albumServicesProviders,
+    ...playlistServicesProviders,
+    ...songServicesProviders,
+    ...searchServicesProviders,
+    ...promotionServicesProviders,
     JwtStrategy,
     JwtModule,
     PassportModule,
