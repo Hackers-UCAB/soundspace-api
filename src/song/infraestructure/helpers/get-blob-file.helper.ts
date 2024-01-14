@@ -1,4 +1,5 @@
 import { BlockBlobClient, BlobServiceClient, BlobDownloadResponseParsed } from '@azure/storage-blob';
+import axios from 'axios';
 import { createReadStream } from 'fs';
 
 
@@ -64,20 +65,22 @@ export class AzureBlobHelper{
     try {
       const blobClient = await this.getBlobClient(fileName, container);
       // const metadata = await blobClient.getProperties();
-      // const otherRate = metadata.contentLength/duration;
       // console.log(duration)
       // console.log(metadata.contentLength)
-      // console.log(otherRate)
       const rate = 16.25;
       const startPointInBytes = startPointInSeconds * rate * 1000;
-      // console.log(startPointInBytes)
-      // console.log(otherRate*startPointInSeconds)
-      // console.log('Usando rate: ' + rate*207*1000)
-      // console.log('Usando otherRate: ' + otherRate*207)
-      const bytesDuration = 10 * rate * 1000
-      // console.log('Bytes Duration: ' + bytesDuration)
+      console.log(startPointInBytes)
+      console.log('Usando rate: ' + rate*207*1000)
+      let bytesDuration = 0
+      if (startPointInSeconds === 0){
+        bytesDuration = rate * 1000
+      }else{
+        bytesDuration = 10 * rate * 1000
+      }
+      console.log(startPointInBytes)
+      console.log('Bytes Duration: ' + bytesDuration)
       //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
-      const blobDownloaded = await blobClient.download( startPointInBytes, bytesDuration);
+      const blobDownloaded = await blobClient.download( Math.round(startPointInBytes), Math.round(bytesDuration));
       return {
         blob: blobDownloaded.readableStreamBody
       };
@@ -85,4 +88,45 @@ export class AzureBlobHelper{
       throw error;
     }
   }
+
+  // async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
+  //   try {
+  //     const blobClient = await this.getBlobClient(fileName, container);
+  //     const metadata = await blobClient.getProperties();
+  //     const url = await blobClient.url
+  //     console.log(url)
+  //     // const otherRate = metadata.contentLength/duration;
+  //     // console.log(duration)
+  //     // console.log(metadata.contentLength)
+  //     // console.log(otherRate)
+  //     const rate = 16.25;
+  //     const startPointInBytes = startPointInSeconds * rate * 1000;
+  //     // console.log(startPointInBytes)
+  //     // console.log(otherRate*startPointInSeconds)
+  //     // console.log('Usando rate: ' + rate*207*1000)
+  //     // console.log('Usando otherRate: ' + otherRate*207)
+  //     const bytesDuration = 10 * rate * 1000
+  //     // console.log('Bytes Duration: ' + bytesDuration)
+  //     //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
+  //     // const blobDownloaded = await blobClient.download( startPointInBytes, bytesDuration);
+
+  //     const response = await axios.get(url,{
+  //     responseType: 'stream',
+  //     headers: {
+  //       "Content-Type": "audio/mpeg",
+  //       "Range": `bytes=${String(startPointInBytes)}-${String(metadata.contentLength)}`,
+  //       Authorization: `SharedAccessSignature sp=r&st=2024-01-14T13:39:24Z&se=2024-01-14T21:39:24Z&sv=2022-11-02&sr=c&sig=AxVSi14dvmb1XOVg2KXYc94V3G1cQvG6RVAaZtaDukI%3D`
+
+  //     }
+  //   })
+  //   console.log(startPointInBytes)
+  //   console.log(metadata.contentLength)
+  //   response
+  //     return {
+  //       blob: response
+  //     };
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }
