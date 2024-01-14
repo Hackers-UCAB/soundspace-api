@@ -11,6 +11,10 @@ export class SubscriptionValue extends ValueObject<SubscriptionValue>{
 
         if (!subscriptionValue) valid = false;
 
+        if (subscriptionValue.length !== 10) {
+            valid = false;
+        }
+
         if (!valid) {
             throw new InvalidSubscriptionValueException('Subscription value not valid');
         }

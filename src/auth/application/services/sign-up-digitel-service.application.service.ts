@@ -60,7 +60,6 @@ export class SignUpDigitelApplicationService
       await this.digitelSubscriptionValidation.validateSubscription(
         param.phone,
       );
-
     if (!valid.IsSuccess) {
       return Result.fail(
         null,
@@ -80,9 +79,7 @@ export class SignUpDigitelApplicationService
         UserId.create(userId),
         UserRole.create(UserRoleEnum.USER),
       );
-
       const createdOn = SubscriptionCreatedDate.create(new Date());
-
       //Se crea la subscripcion
       newSubscription = await Subscription.create(
         SubscriptionId.create(this.idGenerator.generate()),
@@ -93,6 +90,7 @@ export class SignUpDigitelApplicationService
         UserId.create(userId),
         SubscriptionChanelId.create(process.env.MOVISTAR_SUBSCRIPTION_ID),
       );
+
     } catch (error: any) {
       return Result.fail(
         null,
@@ -129,7 +127,8 @@ export class SignUpDigitelApplicationService
         new Error(subscriptionSaving.message),
       );
     }
-    this.eventPublisher.publish(newSubscription.pullDomainEvents());
+
+    // this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
     const response: SignUpResponseApplicationDto = {
       userId: userId,
