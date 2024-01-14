@@ -10,32 +10,41 @@ import { InvalidToDomainMapper } from '../../../common/infraestructure/exception
 
 export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
 
-    async toDomain(persistence: OrmPlaylistEntity): Promise<Playlist> {
-        if (persistence) {
-            const songsIds = persistence.canciones.map(song => SongId.create(song.cancion.codigo_cancion));
+  async toDomain(persistence: OrmPlaylistEntity): Promise<Playlist> {
 
-            const playlist: Playlist = await Playlist.create(
-                PlaylistId.create(persistence.codigo_playlist),
-                PlaylistName.create(persistence.nombre),
-                PlaylistCover.create(persistence.referencia_imagen),
-                PlaylistSong.create(songsIds)
-            );
-            return playlist;
-        }
-        throw InvalidToDomainMapper;
+    if (persistence) {
+      try {
+        const songsIds = persistence.canciones.map(song => SongId.create(song.cancion.codigo_cancion));
+
+        const playlist: Playlist = await Playlist.create(
+          PlaylistId.create(persistence.codigo_playlist),
+          PlaylistName.create(persistence.nombre),
+          PlaylistCover.create(persistence.referencia_imagen),
+          PlaylistSong.create(songsIds)
+        );
+        return playlist;
+      } catch (error: any) {
+        throw new InvalidToDomainMapper(
+          error.message
+            ? error.message
+            : 'Ha ocurrido un error mapeando la playlist',
+        );
+      }
     }
-    
-    async toPersistence(domain: Playlist): Promise<OrmPlaylistEntity> {
-        if (domain) {
+      throw null;
+  }
 
-            const playlist = OrmPlaylistEntity.create(
-                domain.Id.Id,
-                domain.Name.Name,
-                domain.Cover.Path,
-            );
+  async toPersistence(domain: Playlist): Promise<OrmPlaylistEntity> {
+    if (domain) {
 
-            return playlist;
-        }
-        return null;
+      const playlist = OrmPlaylistEntity.create(
+        domain.Id.Id,
+        domain.Name.Name,
+        domain.Cover.Path,
+      );
+
+      return playlist;
     }
+    return null;
+  }
 }
