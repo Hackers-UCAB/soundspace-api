@@ -53,22 +53,22 @@ import { ISendSongHelper } from "src/song/application/interfaces/send-song-helpe
 //   }
 // }
 
-//!Ahora es tan sencillo como esto porque ya el manejo para enviar la cancion lo hago es cuando hago la descarga
-export class SendSongHelper implements ISendSongHelper {
+//!Ahora es tan sencillo como esto porque ya el manejo para enviar la cancion lo hago es cuando hago la descarga. Envia una sola
+// export class SendSongHelper implements ISendSongHelper {
     
-  async sendSong(client: Socket, blob:any) {
-    let buffer = Buffer.alloc(0);
-    blob.on('data', (chunk) => {
-      buffer = Buffer.concat([buffer, chunk]);
-    })
+//   async sendSong(client: Socket, blob:any) {
+//     let buffer = Buffer.alloc(0);
+//     blob.on('data', (chunk) => {
+//       buffer = Buffer.concat([buffer, chunk]);
+//     })
 
-    blob.on('end', () => {
-      client.emit('message-from-server', {
-      chunk: buffer
-    })
-    })
-  }
-}
+//     blob.on('end', () => {
+//       client.emit('message-from-server', {
+//       chunk: buffer
+//     })
+//     })
+//   }
+// }
 
 // export class SendSongHelper implements ISendSongHelper {
     
@@ -117,3 +117,33 @@ export class SendSongHelper implements ISendSongHelper {
 
 //   }
 // }
+
+export class SendSongHelper implements ISendSongHelper {
+    
+  async sendSong(client: Socket, blob:any) {
+    let buffer = Buffer.alloc(0);
+    let border = 0
+    blob.on('data', (chunk) => {
+      buffer = Buffer.concat([buffer, chunk]);
+      if (border === 10) {
+        client.emit('message-from-server', {
+          chunk: buffer
+        })
+        border = 0
+        buffer = Buffer.alloc(0);
+      }else{
+        border += 1
+      }
+    })
+
+    blob.on('end', () => {
+      client.emit('message-from-server', {
+        chunk: buffer
+      })
+      buffer = Buffer.alloc(0);
+      client.emit('message-from-server', {
+        chunk: buffer
+      })
+    })
+  }
+}
