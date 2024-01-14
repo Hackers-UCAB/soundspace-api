@@ -18,6 +18,7 @@ import { CheckSubscriptionsCronService } from './subscription/infraestructure/cr
 import { PromotionController } from './promotions/infraestructure/controllers/promotion.controller';
 import { SearchController } from './search/infraestructure/controllers/search.controller';
 import { ArtistController } from './artist/infraestructure/controllers/artist.controller';
+import { artistServicesProviders } from './common/infraestructure/providers/services/artist/artist.services.provider';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { ArtistController } from './artist/infraestructure/controllers/artist.co
     ...databaseProviders,
     ...servicesProvidersManager,
     ...providersManager,
+    ...artistServicesProviders,
     JwtStrategy,
     JwtModule,
     PassportModule,

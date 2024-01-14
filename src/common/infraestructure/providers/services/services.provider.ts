@@ -373,44 +373,44 @@ export const servicesProvidersManager: Provider[] = [
     },
     inject: ['DataSource', 'ILogger'],
   },
-  {
-    provide: 'GetArtistByIdService',
-    useFactory: (dataSource: DataSource, logger: ILogger) => {
-      return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
-          new GetArtistByIdService(
-            new ArtistRepository(dataSource),
-            new SongRepository(dataSource, new OrmSongMapper()),
-            new AlbumRepository(dataSource),
-          ),
-          new AuditingRepository(dataSource),
-          'GetArtistByIdService',
-          logger,
-        ),
-        logger,
-        'GetArtistByIdService',
-      );
-    },
-    inject: ['DataSource', 'ILogger'],
-  },
-  {
-    provide: 'GetTrendingArtistsService',
-    useFactory: (dataSource: DataSource, logger: ILogger) => {
-      return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
-          new GetTrendingArtistsService(
-            new ArtistRepository(dataSource),
-          ),
-          new AuditingRepository(dataSource),
-          'GetTrendingArtistsService',
-          logger,
-        ),
-        logger,
-        'GetTrendingArtistsService',
-      );
-    },
-    inject: ['DataSource', 'ILogger'],
-  },
+  // {
+  //   provide: 'GetArtistByIdService',
+  //   useFactory: (dataSource: DataSource, logger: ILogger) => {
+  //     return new LoggerApplicationServiceDecorator(
+  //       new AuditingCommandServiceDecorator(
+  //         new GetArtistByIdService(
+  //           new ArtistRepository(dataSource),
+  //           new SongRepository(dataSource, new OrmSongMapper()),
+  //           new AlbumRepository(dataSource),
+  //         ),
+  //         new AuditingRepository(dataSource),
+  //         'GetArtistByIdService',
+  //         logger,
+  //       ),
+  //       logger,
+  //       'GetArtistByIdService',
+  //     );
+  //   },
+  //   inject: ['DataSource', 'ILogger'],
+  // },
+  // {
+  //   provide: 'GetTrendingArtistsService',
+  //   useFactory: (dataSource: DataSource, logger: ILogger) => {
+  //     return new LoggerApplicationServiceDecorator(
+  //       new AuditingCommandServiceDecorator(
+  //         new GetTrendingArtistsService(
+  //           new ArtistRepository(dataSource),
+  //         ),
+  //         new AuditingRepository(dataSource),
+  //         'GetTrendingArtistsService',
+  //         logger,
+  //       ),
+  //       logger,
+  //       'GetTrendingArtistsService',
+  //     );
+  //   },
+  //   inject: ['DataSource', 'ILogger'],
+  // },
   {
     provide: 'SearchApplicationService',
     useFactory: (dataSource: DataSource, logger: ILogger) => {

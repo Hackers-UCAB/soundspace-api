@@ -146,6 +146,7 @@ export class ArtistController {
         const response: ArtistByIdInfraestructureResponseDto = {
             id: serviceResult.Data.artist.Id.Id,
             name: serviceResult.Data.artist.Name.Name,
+            genre: serviceResult.Data.artist.Genre.Genre,
             image: artistImage.IsSuccess ? artistImage.Data : null,
             albums: albums,
             songs: songs,
