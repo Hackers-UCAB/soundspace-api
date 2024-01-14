@@ -1,5 +1,5 @@
 import { Playlist } from 'src/playlist/domain/playlist';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IPlaylistRepository } from '../../domain/repositories/playlist.repository.interface';

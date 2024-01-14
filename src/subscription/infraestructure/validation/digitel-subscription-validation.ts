@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { IDigitelSubscriptionValidation } from 'src/subscription/domain/validation/digitel-subscription-validation.interface';
 
 interface ValidationResponse {

@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
 import { Playlist } from '../../domain/playlist';
 import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';

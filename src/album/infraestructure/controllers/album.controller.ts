@@ -8,7 +8,7 @@ import { UserId } from '../../../user/domain/value-objects/user-id';
 import { GetUser } from '../../../auth/infraestructure/jwt/decorators/get-user.decorator';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { GetTopAlbumResponseInfrastructureDto } from '../dto/responses/get-top-album-response.infraestructure.dto';
 import { GetAlbumByIdResponseInfrastructureDto } from '../dto/responses/get-album-by-id-response.infrastructure.dto';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';

@@ -1,7 +1,7 @@
 import { IApplicationService } from "src/common/application/services/interfaces/application-service.interface";
 import { User } from "src/user/domain/user";
 import { GetUserInfoResponseApplicationDto } from "../dto/responses/get-user-info-response.application.dto";
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { UserId } from "src/user/domain/value-objects/user-id";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
 import { ServiceEntry } from "src/common/application/services/dto/entry/service-entry.dto";

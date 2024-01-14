@@ -1,4 +1,4 @@
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { PartialSong } from "src/song/domain/parameter-object/partial-song.parameter.object";
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { SongReferenceDomainServiceDto, ISongReferenceDomainService } from "src/song/domain/services/song-reference.domain,service";

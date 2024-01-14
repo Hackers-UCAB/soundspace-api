@@ -1,5 +1,5 @@
 import { Song } from 'src/song/domain/song';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IArtistRepository } from '../../domain/repositories/artist.repository.interface';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';

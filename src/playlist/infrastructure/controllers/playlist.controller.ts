@@ -5,7 +5,7 @@ import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entrys
 import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/responses/get-playlist-by-id-response.application.dto';
 import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';

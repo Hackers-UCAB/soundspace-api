@@ -1,6 +1,6 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { GetRandomPromotionResponseApplicationDto } from '../dto/responses/get-random-promotion-response.application.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IPromotionRepository } from 'src/promotions/domain/repositories/promotion.repository.interface';
 import { Promotion } from 'src/promotions/domain/promotion';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';

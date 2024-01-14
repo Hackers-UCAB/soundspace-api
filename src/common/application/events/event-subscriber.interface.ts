@@ -1,5 +1,5 @@
 import { DomainEvent } from "src/common/domain/domain-event";
-import { Result } from "../result-handler/result";
+import { Result } from "../../domain/result-handler/result";
 import { EventResponse } from "./dto/response/event-response.dto";
 
 export interface IEventSubscriber{

@@ -3,7 +3,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JwtPayload } from '../jwt-payload.interface';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { Inject } from '@nestjs/common';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { User } from 'src/user/domain/user';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';

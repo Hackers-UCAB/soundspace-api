@@ -5,7 +5,7 @@ import { Subscription } from 'src/subscription/domain/subscription';
 import { OrmSubscriptionMapper } from '../mapper/orm-subscription.mapper';
 import { SubscriptionId } from 'src/subscription/domain/value-objects/subscription-id';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { OrmSubscriptionChanelMapper } from '../mapper/orm-subscription-chanel.mapper';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrmSubscriptionChanelEntity } from '../orm-entities/subscription-chanel.entity';

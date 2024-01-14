@@ -1,4 +1,4 @@
-import { Result } from "../../result-handler/result";
+import { Result } from "../../../domain/result-handler/result";
 import { IApplicationService } from "../interfaces/application-service.interface";
 import { ServiceResponse } from "../dto/response/service-response.dto";
 import { ServiceEntry } from "../dto/entry/service-entry.dto";

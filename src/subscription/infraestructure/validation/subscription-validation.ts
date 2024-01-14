@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { ISubscriptionValidation } from 'src/subscription/domain/validation/subcscription-validaion.interface';
 
 interface ValidationResponse {

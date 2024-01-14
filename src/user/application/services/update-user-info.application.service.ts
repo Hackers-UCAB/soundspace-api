@@ -1,7 +1,7 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { UpdateUserInfoEntryApplicationDto } from '../dto/entrys/update-user-info-entry.application.dto';
 import { UpdateUserInfoResponseApplicationDto } from '../dto/responses/update-user-info-response.application.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { User } from 'src/user/domain/user';
 import { UserName } from 'src/user/domain/value-objects/user-name';

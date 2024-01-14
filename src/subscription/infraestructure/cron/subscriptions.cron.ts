@@ -1,6 +1,6 @@
 import { Inject } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { ServiceResponse } from "src/common/application/services/dto/response/service-response.dto";
 import { IApplicationService } from "src/common/application/services/interfaces/application-service.interface";
 import { EmptyDto } from "src/common/application/dto/empty.dto";

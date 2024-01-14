@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IAlbumRepository } from 'src/album/domain/repositories/album.repository.interface';
 import { Album } from '../../domain/album';
 import { Artist } from 'src/artist/domain/artist';

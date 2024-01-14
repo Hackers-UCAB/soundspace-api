@@ -3,7 +3,7 @@ import { OrmUserEntity } from '../orm-entities/user.entity';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { OrmUserMapper } from '../mapper/orm-user.mapper';
 import { User } from 'src/user/domain/user';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 
 export class UserRepository

@@ -1,5 +1,5 @@
 import { User } from '../user';
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { UserId } from '../value-objects/user-id';
 
   

@@ -423,16 +423,16 @@ export const servicesProvidersManager: Provider[] = [
       >;
 
       strategies = {
-        song: new SearchSongsApplicationService(
+        songs: new SearchSongsApplicationService(
           new SongRepository(dataSource, new OrmSongMapper()),
         ),
-        album: new SearchAlbumsApplicationService(
+        albums: new SearchAlbumsApplicationService(
           new AlbumRepository(dataSource),
         ),
-        playlist: new SearchPlaylistsApplicationService(
+        playlists: new SearchPlaylistsApplicationService(
           new PlaylistRepository(dataSource),
         ),
-        artist: new SearchArtistsApplicationService(
+        artists: new SearchArtistsApplicationService(
           new ArtistRepository(dataSource),
         ),
       };

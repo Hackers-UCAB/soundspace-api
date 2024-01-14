@@ -1,5 +1,5 @@
 import { ArtistId } from '../../../artist/domain/value-objects/artist-id';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IAlbumRepository } from '../../domain/repositories/album.repository.interface';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';

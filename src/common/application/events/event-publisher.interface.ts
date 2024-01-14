@@ -1,6 +1,6 @@
 import { DomainEvent } from "src/common/domain/domain-event";
 import { IEventSubscriber } from "./event-subscriber.interface";
-import { Result } from "../result-handler/result";
+import { Result } from "../../domain/result-handler/result";
 import { EventResponse } from "./dto/response/event-response.dto";
 
 export abstract class IEventPublisher {

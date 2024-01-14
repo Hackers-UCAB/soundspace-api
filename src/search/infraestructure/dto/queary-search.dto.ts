@@ -4,7 +4,7 @@ import { IsIn, IsOptional, IsPositive, Min } from 'class-validator';
 export class QuerySearchDto {
   @IsOptional()
   @Type(() => String)
-  @IsIn(['album', 'playlist', 'song', 'artist'])
+  @IsIn(['albums', 'playlists', 'songs', 'artists'])
   type?: string;
 
   @IsOptional()

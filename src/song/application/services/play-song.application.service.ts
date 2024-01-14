@@ -1,5 +1,5 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 import { IBlobHelper } from '../interfaces/blob-helper.interface';
