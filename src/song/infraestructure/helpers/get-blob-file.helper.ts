@@ -63,10 +63,21 @@ export class AzureBlobHelper{
   async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
     try {
       const blobClient = await this.getBlobClient(fileName, container);
-      const metadata = await blobClient.getProperties()
-      const rate = metadata.contentLength/duration
+      // const metadata = await blobClient.getProperties();
+      // const otherRate = metadata.contentLength/duration;
+      // console.log(duration)
+      // console.log(metadata.contentLength)
+      // console.log(otherRate)
+      const rate = 16.25;
+      const startPointInBytes = startPointInSeconds * rate * 1000;
+      // console.log(startPointInBytes)
+      // console.log(otherRate*startPointInSeconds)
+      // console.log('Usando rate: ' + rate*207*1000)
+      // console.log('Usando otherRate: ' + otherRate*207)
+      const bytesDuration = 10 * rate * 1000
+      // console.log('Bytes Duration: ' + bytesDuration)
       //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
-      const blobDownloaded = await blobClient.download(Math.trunc(startPointInSeconds * rate), Math.trunc(rate * 10));
+      const blobDownloaded = await blobClient.download( startPointInBytes, bytesDuration);
       return {
         blob: blobDownloaded.readableStreamBody
       };
