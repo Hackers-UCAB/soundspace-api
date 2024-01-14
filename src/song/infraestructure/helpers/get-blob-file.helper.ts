@@ -60,34 +60,34 @@ export class AzureBlobHelper{
   //   }
   // }
 
-  //Esta version esta como mejor realmente, obtengo el valor desde el segundo que me piden hasta 5 segundos despues
-  async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
-    try {
-      const blobClient = await this.getBlobClient(fileName, container);
-      // const metadata = await blobClient.getProperties();
-      // console.log(duration)
-      // console.log(metadata.contentLength)
-      const rate = 16.25;
-      const startPointInBytes = startPointInSeconds * rate * 1000;
-      console.log(startPointInBytes)
-      console.log('Usando rate: ' + rate*207*1000)
-      let bytesDuration = 0
-      if (startPointInSeconds === 0){
-        bytesDuration = rate * 1000
-      }else{
-        bytesDuration = 10 * rate * 1000
-      }
-      console.log(startPointInBytes)
-      console.log('Bytes Duration: ' + bytesDuration)
-      //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
-      const blobDownloaded = await blobClient.download( Math.round(startPointInBytes), Math.round(bytesDuration));
-      return {
-        blob: blobDownloaded.readableStreamBody
-      };
-    } catch (error) {
-      throw error;
-    }
-  }
+  //!Esta version esta como mejor realmente, obtengo el valor desde el segundo que me piden hasta 5 segundos despues
+  // async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
+  //   try {
+  //     const blobClient = await this.getBlobClient(fileName, container);
+  //     // const metadata = await blobClient.getProperties();
+  //     // console.log(duration)
+  //     // console.log(metadata.contentLength)
+  //     const rate = 16.25;
+  //     const startPointInBytes = startPointInSeconds * rate * 1000;
+  //     console.log(startPointInBytes)
+  //     console.log('Usando rate: ' + rate*207*1000)
+  //     let bytesDuration = 0
+  //     if (startPointInSeconds === 0){
+  //       bytesDuration = rate * 1000
+  //     }else{
+  //       bytesDuration = 10 * rate * 1000
+  //     }
+  //     console.log(startPointInBytes)
+  //     console.log('Bytes Duration: ' + bytesDuration)
+  //     //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
+  //     const blobDownloaded = await blobClient.download( Math.round(startPointInBytes), Math.round(bytesDuration));
+  //     return {
+  //       blob: blobDownloaded.readableStreamBody
+  //     };
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   // async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
   //   try {
@@ -129,4 +129,23 @@ export class AzureBlobHelper{
   //     throw error;
   //   }
   // }
+  
+  //!Esta manda toda la cancion desde x segundos
+  async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
+    try {
+      const blobClient = await this.getBlobClient(fileName, container);
+      // const metadata = await blobClient.getProperties();
+      // console.log(duration)
+      // console.log(metadata.contentLength)
+      const rate = 16.25;
+      const startPointInBytes = startPointInSeconds * rate * 1000;
+      //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
+      const blobDownloaded = await blobClient.download( Math.round(startPointInBytes));
+      return {
+        blob: blobDownloaded.readableStreamBody
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
