@@ -20,9 +20,10 @@ export class ArtistRepository
   }
 
   async findArtistById(artistId: ArtistId): Promise<Result<Artist>> {
+
     let response: Artist;
     let error: Error;
-
+  
     try {
       const artist = await this.createQueryBuilder('artista')
         .innerJoinAndSelect('artista.genero', 'generoArtista')
@@ -32,7 +33,7 @@ export class ArtistRepository
         .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.codigo_artista = :id', { id: artistId.Id })
         .getOne();
-
+  
       response = await this.OrmArtistMapper.toDomain(artist);
     } catch (e) {
       error = e;
@@ -45,117 +46,139 @@ export class ArtistRepository
             'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
           error,
         );
+      } 
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe el artista solicitado',
+          new Error('No existe el artista solicitado'),
+        );
       }
       return Result.success<Artist>(response, 200);
     }
+
   }
 
+  // In this version of the findArtistsBySongId method, if an error occurs 
+  // during the database query or the mapping of the artists, a Result 
+  // with a status code of 500 is returned. 
+  // If no artists are found for the given song ID (i.e., artists.length is 0), 
+  // an empty list is returned with a status code of 200. 
+  // If the artists are found and mapped successfully, a Result with 
+  // a status code of 200 is returned.
   async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
-    let response: Artist[];
-    let error: Error;
+  let response: Artist[] = [];
+  let error: Error;
 
-    try {
-      const artists = await this.createQueryBuilder('artista')
-        .innerJoinAndSelect('artista.canciones', 'cancion')
-        .innerJoinAndSelect('cancion.generos', 'generoCancion')
-        .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
-        .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
-        .innerJoinAndSelect('artista.genero', 'generoArtista')
-        .where('cancion.codigo_cancion = :id', { id: songId.Id })
-        .getMany();
+  try {
+    const artists = await this.createQueryBuilder('artista')
+      .innerJoinAndSelect('artista.canciones', 'cancion')
+      .innerJoinAndSelect('cancion.generos', 'generoCancion')
+      .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
+      .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
+      .innerJoinAndSelect('artista.genero', 'generoArtista')
+      .where('cancion.codigo_cancion = :id', { id: songId.Id })
+      .getMany();
 
+    if (artists.length > 0) {
       response = await Promise.all(
         artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         ),
       );
-    } catch (e) {
-      error = e;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success<Artist[]>(response, 200);
     }
+  } catch (e) {
+    error = e;
+  } finally {
+    if (error) {
+      return Result.fail(
+        null,
+        500,
+        error.message ||
+          'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
+        error,
+      );
+    }
+    return Result.success<Artist[]>(response, 200);
   }
+}
 
-  async findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
-    let response: Artist[];
-    let error: Error;
+async findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
+  let response: Artist[] = [];
+  let error: Error;
 
-    try {
-      const artists = await this.createQueryBuilder('artista')
-        .innerJoinAndSelect('artista.canciones', 'cancion')
-        .innerJoinAndSelect('cancion.generos', 'generoCancion')
-        .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
-        .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
-        .innerJoinAndSelect('artista.genero', 'generoArtista')
-        .where('playlistCreador.playlistCodigoPlaylist = :id', {
-          id: albumId.Id,
-        })
-        .getMany();
+  try {
+    const artists = await this.createQueryBuilder('artista')
+      .innerJoinAndSelect('artista.canciones', 'cancion')
+      .innerJoinAndSelect('cancion.generos', 'generoCancion')
+      .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
+      .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
+      .innerJoinAndSelect('artista.genero', 'generoArtista')
+      .where('playlistCreador.playlistCodigoPlaylist = :id', {
+        id: albumId.Id,
+      })
+      .getMany();
 
+    if (artists.length > 0) {
       response = await Promise.all(
         artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         ),
       );
-    } catch (e) {
-      error = e;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success<Artist[]>(response, 200);
     }
+  } catch (e) {
+    error = e;
+  } finally {
+    if (error) {
+      return Result.fail(
+        null,
+        500,
+        error.message ||
+          'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
+        error,
+      );
+    }
+    return Result.success<Artist[]>(response, 200);
   }
+}
 
-  async findTrendingArtists(): Promise<Result<Artist[]>> {
-    let response: Artist[];
-    let error: Error;
+async findTrendingArtists(): Promise<Result<Artist[]>> {
+  let response: Artist[] = [];
+  let error: Error;
 
-    try {
-      const artists = await this.createQueryBuilder('artista')
-        .innerJoinAndSelect('artista.canciones', 'cancion')
-        .innerJoinAndSelect('cancion.generos', 'generoCancion')
-        .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
-        .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
-        .innerJoinAndSelect('artista.genero', 'generoArtista')
-        .where('artista.trending = :trending', { trending: true })
-        .getMany();
+  try {
+    const artists = await this.createQueryBuilder('artista')
+      .innerJoinAndSelect('artista.canciones', 'cancion')
+      .innerJoinAndSelect('cancion.generos', 'generoCancion')
+      .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
+      .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
+      .innerJoinAndSelect('artista.genero', 'generoArtista')
+      .where('artista.trending = :trending', { trending: true })
+      .getMany();
 
+    if (artists.length > 0) {
       response = await Promise.all(
         artists.map(
           async (artist) => await this.OrmArtistMapper.toDomain(artist),
         ),
       );
-    } catch (e) {
-      error = e;
-    } finally {
-      if (error) {
-        return Result.fail(
-          null,
-          500,
-          error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
-          error,
-        );
-      }
-      return Result.success<Artist[]>(response, 200);
     }
+  } catch (e) {
+    error = e;
+  } finally {
+    if (error) {
+      return Result.fail(
+        null,
+        500,
+        error.message ||
+          'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
+        error,
+      );
+    }
+    return Result.success<Artist[]>(response, 200);
   }
+}
 
   async findArtistsByName(
     name: string,
