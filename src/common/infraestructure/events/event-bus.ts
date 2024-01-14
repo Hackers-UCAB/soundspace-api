@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { IEventPublisher } from "src/common/application/events/event-publisher.interface";
 import { IEventSubscriber } from "src/common/application/events/event-subscriber.interface";
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { EventResponse } from "src/common/application/events/dto/response/event-response.dto";
 import { DomainEvent } from "src/common/domain/domain-event";
 

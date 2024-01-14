@@ -18,6 +18,15 @@ import { CheckSubscriptionsCronService } from './subscription/infraestructure/cr
 import { PromotionController } from './promotions/infraestructure/controllers/promotion.controller';
 import { SearchController } from './search/infraestructure/controllers/search.controller';
 import { ArtistController } from './artist/infraestructure/controllers/artist.controller';
+import { artistServicesProviders } from './common/infraestructure/providers/services/artist/artist.services.provider';
+import { albumServicesProviders } from './common/infraestructure/providers/services/album/album.services.provider';
+import { playlistServicesProviders } from './common/infraestructure/providers/services/playlist/playlist.services.provider';
+import { songServicesProviders } from './common/infraestructure/providers/services/song/song.services.provider';
+import { searchServicesProviders } from './common/infraestructure/providers/services/search/search.services.provider';
+import { promotionServicesProviders } from './common/infraestructure/providers/services/promotion/promotion.services.provider';
+import { authServicesProviders } from './common/infraestructure/providers/services/auth/auth.services.provider';
+import { userServicesProviders } from './common/infraestructure/providers/services/user/user.services.provider';
+import { subscriptionServicesProviders } from './common/infraestructure/providers/services/subscription/subscription.services.provider';
 
 @Module({
   imports: [
@@ -52,8 +61,16 @@ import { ArtistController } from './artist/infraestructure/controllers/artist.co
   ],
   providers: [
     ...databaseProviders,
-    ...servicesProvidersManager,
     ...providersManager,
+    ...artistServicesProviders,
+    ...albumServicesProviders,
+    ...playlistServicesProviders,
+    ...songServicesProviders,
+    ...searchServicesProviders,
+    ...promotionServicesProviders,
+    ...authServicesProviders,
+    ...userServicesProviders,
+    ...subscriptionServicesProviders,
     JwtStrategy,
     JwtModule,
     PassportModule,

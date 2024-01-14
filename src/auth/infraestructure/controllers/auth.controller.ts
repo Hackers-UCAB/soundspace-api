@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Inject, Get, Headers } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { SignUpEntryInfraestructureDto } from '../dto/entrys/sign-up-entry.infraestructure.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { AuthHeaderInfraestructureDto } from '../dto/entrys/auth-header.infraestructure.dto';
 import { SignUpEntryApplicationDto } from 'src/auth/application/dto/entrys/sign-up-entry.application.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
@@ -56,7 +56,7 @@ export class AuthController {
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
-        404,
+        400,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
       );
@@ -92,7 +92,7 @@ export class AuthController {
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
-        404,
+        400,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
       );
@@ -127,7 +127,7 @@ export class AuthController {
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
-        404,
+        400,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
       );

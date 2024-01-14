@@ -3,6 +3,7 @@ import { SongInfraestructureResponseDto } from "src/common/infraestructure/dto/r
 export class ArtistByIdInfraestructureResponseDto {
     id: string;
     name: string;
+    genre: string;
     image: Buffer;
     albums: {
         id: string;

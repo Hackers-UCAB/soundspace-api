@@ -1,4 +1,5 @@
 import { BlockBlobClient, BlobServiceClient, BlobDownloadResponseParsed } from '@azure/storage-blob';
+import axios from 'axios';
 import { createReadStream } from 'fs';
 
 
@@ -59,30 +60,92 @@ export class AzureBlobHelper{
   //   }
   // }
 
-  //Esta version esta como mejor realmente, obtengo el valor desde el segundo que me piden hasta 5 segundos despues
+  //!Esta version esta como mejor realmente, obtengo el valor desde el segundo que me piden hasta 5 segundos despues
+  // async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
+  //   try {
+  //     const blobClient = await this.getBlobClient(fileName, container);
+  //     // const metadata = await blobClient.getProperties();
+  //     // console.log(duration)
+  //     // console.log(metadata.contentLength)
+  //     const rate = 16.25;
+  //     const startPointInBytes = startPointInSeconds * rate * 1000;
+  //     console.log(startPointInBytes)
+  //     console.log('Usando rate: ' + rate*207*1000)
+  //     let bytesDuration = 0
+  //     if (startPointInSeconds === 0){
+  //       bytesDuration = rate * 1000
+  //     }else{
+  //       bytesDuration = 10 * rate * 1000
+  //     }
+  //     console.log(startPointInBytes)
+  //     console.log('Bytes Duration: ' + bytesDuration)
+  //     //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
+  //     const blobDownloaded = await blobClient.download( Math.round(startPointInBytes), Math.round(bytesDuration));
+  //     return {
+  //       blob: blobDownloaded.readableStreamBody
+  //     };
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  // async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
+  //   try {
+  //     const blobClient = await this.getBlobClient(fileName, container);
+  //     const metadata = await blobClient.getProperties();
+  //     const url = await blobClient.url
+  //     console.log(url)
+  //     // const otherRate = metadata.contentLength/duration;
+  //     // console.log(duration)
+  //     // console.log(metadata.contentLength)
+  //     // console.log(otherRate)
+  //     const rate = 16.25;
+  //     const startPointInBytes = startPointInSeconds * rate * 1000;
+  //     // console.log(startPointInBytes)
+  //     // console.log(otherRate*startPointInSeconds)
+  //     // console.log('Usando rate: ' + rate*207*1000)
+  //     // console.log('Usando otherRate: ' + otherRate*207)
+  //     const bytesDuration = 10 * rate * 1000
+  //     // console.log('Bytes Duration: ' + bytesDuration)
+  //     //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
+  //     // const blobDownloaded = await blobClient.download( startPointInBytes, bytesDuration);
+
+  //     const response = await axios.get(url,{
+  //     responseType: 'stream',
+  //     headers: {
+  //       "Content-Type": "audio/mpeg",
+  //       "Range": `bytes=${String(startPointInBytes)}-${String(metadata.contentLength)}`,
+  //       Authorization: `SharedAccessSignature sp=r&st=2024-01-14T13:39:24Z&se=2024-01-14T21:39:24Z&sv=2022-11-02&sr=c&sig=AxVSi14dvmb1XOVg2KXYc94V3G1cQvG6RVAaZtaDukI%3D`
+
+  //     }
+  //   })
+  //   console.log(startPointInBytes)
+  //   console.log(metadata.contentLength)
+  //   response
+  //     return {
+  //       blob: response
+  //     };
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+  
+  //!Esta manda toda la cancion desde x segundos
   async getFile(fileName: string, container: string, startPointInSeconds: number, duration: number) {
     try {
       const blobClient = await this.getBlobClient(fileName, container);
-      const metadata = await blobClient.getProperties()
-      const rate = metadata.contentLength/duration
+      // const metadata = await blobClient.getProperties();
+      // console.log(duration)
+      // console.log(metadata.contentLength)
+      const rate = 16.25;
+      const startPointInBytes = startPointInSeconds * rate * 1000;
       //Esta nueva version deberia devolver el blob entero desde el punto que me pidan y descargar solo 5 segundos
-      const blobDownloaded = await blobClient.download(Math.trunc(startPointInSeconds * rate), Math.trunc(rate * 5));
-      const buffer = await streamToBuffer(blobDownloaded.readableStreamBody);
-      console.log(metadata.contentLength)
+      const blobDownloaded = await blobClient.download( Math.round(startPointInBytes));
       return {
-        blob: buffer
+        blob: blobDownloaded.readableStreamBody
       };
     } catch (error) {
       throw error;
     }
   }
 }
-
-const streamToBuffer = async (stream) => {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    stream.on("data", (chunk) => chunks.push(chunk));
-    stream.on("end", () => resolve(Buffer.concat(chunks)));
-    stream.on("error", (error) => reject(error));
-  });
-};

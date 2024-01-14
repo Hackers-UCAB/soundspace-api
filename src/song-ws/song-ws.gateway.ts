@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
@@ -19,6 +19,7 @@ import { JwtService } from "@nestjs/jwt";
 import { OrmSongMapper } from '../song/infraestructure/mapper/orm-song.mapper';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { SongReferenceImplementationHelper } from 'src/song/infraestructure/helpers/song-reference.implementation.helper';
+import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 
 
 @WebSocketGateway({ cors: true })
@@ -30,6 +31,9 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly dataSource: DataSource,
     @Inject('DataSource')
     private readonly ormSongMapper: OrmSongMapper,
+
+    @Inject('UserRepository')
+    private readonly userRepository: IUserRepository
   ) {}
 
   handleConnection( client: Socket ) {
@@ -49,7 +53,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('message-from-client')
   async handleSong( 
     client: Socket,
-    payload: {preview: boolean, songId: string, second: number, streaming: boolean} 
+    payload: {preview: boolean, songId: string, second: number} 
     ) 
     {
 
@@ -67,7 +71,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           new AzureBlobHelper(), 
           new SendSongHelper(), 
           client,
-          new SongReferenceImplementationHelper(new UserRepository(this.dataSource), new SongRepository(this.dataSource,this.ormSongMapper))),
+          new SongReferenceImplementationHelper(this.userRepository, new SongRepository(this.dataSource,this.ormSongMapper))),
         new AuditingRepository(this.dataSource),
         'PlaySongService',
         new LoggerImpl()

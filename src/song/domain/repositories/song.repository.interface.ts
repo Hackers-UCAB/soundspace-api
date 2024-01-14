@@ -1,4 +1,4 @@
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { SongId } from "../value-objects/song-id";
 import { Song } from "../song";
 import { PartialSong } from "../parameter-object/partial-song.parameter.object";

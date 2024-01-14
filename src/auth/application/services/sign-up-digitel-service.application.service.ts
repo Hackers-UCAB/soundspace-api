@@ -1,6 +1,6 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { SignUpEntryApplicationDto } from '../dto/entrys/sign-up-entry.application.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';

@@ -2,7 +2,7 @@ import { EventResponse } from "src/common/application/events/dto/response/event-
 import { IEventSubscriber } from "src/common/application/events/event-subscriber.interface";
 import { NotifierDto } from "src/common/application/notifications-handler/dto/entry/notifier-entry.dto";
 import { INotifier } from "src/common/application/notifications-handler/notifier.interface";
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { SubscriptionExpired } from "src/subscription/domain/events/subscription-expired.event";
 import { ISubscriptionRepository } from "src/subscription/domain/repositories/subscription.repository.interface";
 import { SubscriptionChanel } from "src/subscription/domain/subscription-chanel/subscription-chanel";

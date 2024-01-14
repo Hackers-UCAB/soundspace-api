@@ -29,14 +29,21 @@ export class OrmUserMapper implements IMapper<User, OrmUserEntity> {
   }
 
   async toDomain(persistence: OrmUserEntity): Promise<User> {
-    const user = User.create(
-      UserId.create(persistence.codigo_usuario),
-      UserRole.create(UserRoleEnum[persistence.rol]),
-      persistence.nombre ? UserName.create(persistence.nombre) : null,
-      persistence.fecha_nac ? UserBirthday.create(persistence.fecha_nac) : null,
-      persistence.correo ? UserEmail.create(persistence.correo) : null,
-      persistence.genero ? UserGender.create(UserGenderEnum[persistence.genero]) : null,
-    );
-    return user;
+    if (persistence) {
+      const user = User.create(
+        UserId.create(persistence.codigo_usuario),
+        UserRole.create(UserRoleEnum[persistence.rol]),
+        persistence.nombre ? UserName.create(persistence.nombre) : null,
+        persistence.fecha_nac
+          ? UserBirthday.create(persistence.fecha_nac)
+          : null,
+        persistence.correo ? UserEmail.create(persistence.correo) : null,
+        persistence.genero
+          ? UserGender.create(UserGenderEnum[persistence.genero])
+          : null,
+      );
+      return user;
+    }
+    return null;
   }
 }

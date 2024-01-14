@@ -1,6 +1,6 @@
 import { Album } from 'src/album/domain/album';
 import { IAlbumRepository } from 'src/album/domain/repositories/album.repository.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
 import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';

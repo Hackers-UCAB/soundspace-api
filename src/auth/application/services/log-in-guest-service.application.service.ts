@@ -1,7 +1,7 @@
 import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { LogInResponseApplicationDto } from '../dto/responses/log-in-response.application.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { IJwtGenerator } from '../interface/jwt-generator.interface';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';

@@ -1,5 +1,5 @@
 import { Album } from '../album';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { AlbumId } from '../value-objects/album-id';
 import { ArtistId } from 'src/artist/domain/value-objects/artist-id';
 

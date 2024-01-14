@@ -3,17 +3,18 @@ import { OrmUserEntity } from '../orm-entities/user.entity';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { OrmUserMapper } from '../mapper/orm-user.mapper';
 import { User } from 'src/user/domain/user';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { UserId } from 'src/user/domain/value-objects/user-id';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class UserRepository
   extends Repository<OrmUserEntity>
   implements IUserRepository
 {
-  private readonly ormUsermapper: OrmUserMapper;
-  constructor(dataSource: DataSource) {
+  private readonly ormUserMapper: IMapper<User, OrmUserEntity>;
+  constructor(dataSource: DataSource, ormUserMapper: IMapper<User, OrmUserEntity>) {
     super(OrmUserEntity, dataSource.createEntityManager());
-    this.ormUsermapper = new OrmUserMapper();
+    this.ormUserMapper = ormUserMapper;
   }
 
   async findUserEntityById(id: string): Promise<OrmUserEntity> {
@@ -32,7 +33,7 @@ export class UserRepository
   async saveAggregate(user: User, tokens?: string[]): Promise<Result<string>> {
     let error: any;
     try {
-      const ormUser = await this.ormUsermapper.toPersistence(user);
+      const ormUser = await this.ormUserMapper.toPersistence(user);
       ormUser.tokens = tokens;
       await this.save(ormUser);
     } catch (err) {
@@ -61,7 +62,7 @@ export class UserRepository
         },
       });
 
-      response = await this.ormUsermapper.toDomain(user);
+      response = await this.ormUserMapper.toDomain(user);
     } catch (err) {
       error = err;
     } finally {

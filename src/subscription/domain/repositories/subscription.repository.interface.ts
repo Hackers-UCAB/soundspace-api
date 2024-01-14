@@ -1,4 +1,4 @@
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { Subscription } from "../subscription";
 import { SubscriptionId } from "../value-objects/subscription-id";
 import { SubscriptionValue } from "../value-objects/subscription-value";

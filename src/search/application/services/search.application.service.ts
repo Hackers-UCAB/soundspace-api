@@ -1,4 +1,4 @@
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { SearchEntryApplicationDto } from '../dto/entry/search.entry.application.dto';
