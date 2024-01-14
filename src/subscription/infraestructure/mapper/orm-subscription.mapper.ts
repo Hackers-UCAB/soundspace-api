@@ -15,6 +15,7 @@ import { DataSource } from 'typeorm';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionRepository } from '../repositories/subscription.repository';
+import { OrmUserMapper } from 'src/user/infraestructure/mapper/orm-user.mapper';
 
 export class OrmSubscriptionMapper
   implements IMapper<Subscription, OrmSubscripcionEntity>
@@ -51,7 +52,7 @@ export class OrmSubscriptionMapper
         domain.Until.Date,
         domain.SubscriptionValue.SubscriptionValue,
         domain.User.Id,
-        new UserRepository(this.dataSource),
+        new UserRepository(this.dataSource, new OrmUserMapper()),
         domain.Chanel.Id,
         new SubscriptionRepository(this.dataSource),
       );

@@ -1,5 +1,14 @@
+import { AlbumRepository } from 'src/album/infraestructure/repositories/album.repository';
+import { ArtistRepository } from 'src/artist/infraestructure/repositories/artist.repository';
+import { PlaylistRepository } from 'src/playlist/infrastructure/repositories/playlist.repository';
+import { PromotionRepository } from 'src/promotions/infraestructure/repositories/promotion.repository';
+import { OrmSongMapper } from 'src/song/infraestructure/mapper/orm-song.mapper';
+import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
+import { SubscriptionRepository } from 'src/subscription/infraestructure/repositories/subscription.repository';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
+import { AuditingRepository } from '../../repositories/auditing.repository';
+import { OrmUserMapper } from 'src/user/infraestructure/mapper/orm-user.mapper';
 
 export const databaseProviders = [
   {
@@ -36,7 +45,70 @@ export const databaseProviders = [
   {
     provide: 'UserRepository',
     useFactory: (dataSource: DataSource) => {
-      return new UserRepository(dataSource);
+      return new UserRepository(dataSource, new OrmUserMapper());
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'SongRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new SongRepository(dataSource, new OrmSongMapper());
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'SubscriptionRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new SubscriptionRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'AlbumRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new AlbumRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'AlbumRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new AlbumRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'ArtistRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new ArtistRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'ArtistRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new ArtistRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'PlaylistRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new PlaylistRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'PromotionRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new PromotionRepository(dataSource);
+    },
+    inject: ['DataSource'],
+  },
+  {
+    provide: 'AuditintgRepository',
+    useFactory: (dataSource: DataSource) => {
+      return new AuditingRepository(dataSource);
     },
     inject: ['DataSource'],
   },

@@ -56,7 +56,7 @@ export class AuthController {
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
-        404,
+        400,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
       );
@@ -92,7 +92,7 @@ export class AuthController {
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
-        404,
+        400,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
       );
@@ -127,7 +127,7 @@ export class AuthController {
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
-        404,
+        400,
         'No se ha proporcionado un token de firebase',
         new Error('No se ha proporcionado un token de firebase'),
       );

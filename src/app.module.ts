@@ -24,6 +24,9 @@ import { playlistServicesProviders } from './common/infraestructure/providers/se
 import { songServicesProviders } from './common/infraestructure/providers/services/song/song.services.provider';
 import { searchServicesProviders } from './common/infraestructure/providers/services/search/search.services.provider';
 import { promotionServicesProviders } from './common/infraestructure/providers/services/promotion/promotion.services.provider';
+import { authServicesProviders } from './common/infraestructure/providers/services/auth/auth.services.provider';
+import { userServicesProviders } from './common/infraestructure/providers/services/user/user.services.provider';
+import { subscriptionServicesProviders } from './common/infraestructure/providers/services/subscription/subscription.services.provider';
 
 @Module({
   imports: [
@@ -58,7 +61,6 @@ import { promotionServicesProviders } from './common/infraestructure/providers/s
   ],
   providers: [
     ...databaseProviders,
-    ...servicesProvidersManager,
     ...providersManager,
     ...artistServicesProviders,
     ...albumServicesProviders,
@@ -66,6 +68,9 @@ import { promotionServicesProviders } from './common/infraestructure/providers/s
     ...songServicesProviders,
     ...searchServicesProviders,
     ...promotionServicesProviders,
+    ...authServicesProviders,
+    ...userServicesProviders,
+    ...subscriptionServicesProviders,
     JwtStrategy,
     JwtModule,
     PassportModule,
