@@ -1,12 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class TrendingArtistsInfraestructureResponseDto {
-
+export class TopPlaylistInfraestructureResponseDto {
     @ApiProperty({
         example: [
             {
                 id: '7bcbfd8a-e775-4149-83ee-9ba4c709e8a2',
-                name: 'Billie Eilish',
                 image: [
                     {
                         type: "Buffer",
@@ -20,7 +18,6 @@ export class TrendingArtistsInfraestructureResponseDto {
             },
             {
                 id: '2d1dd015-5d32-4299-8428-7acbd512a25b',
-                name: 'Tom Odell',
                 image: [
                     {
                         type: "Buffer",
@@ -34,7 +31,6 @@ export class TrendingArtistsInfraestructureResponseDto {
             },
             {
                 id: 'c77bd9ae-08a9-4f94-bc86-4afffd0fee3f',
-                name: 'Ellie Goulding',
                 image: [
                     {
                         type: "Buffer",
@@ -48,18 +44,15 @@ export class TrendingArtistsInfraestructureResponseDto {
             }
         ]
     })
-
-    artists: {
+    playlists: {
         id: string;
-        name: string;
         image: Buffer;
     }[];
-
 }
 
-export class TrendingArtistsSwaggerInfraestructureResponseDto {
+export class TopPlaylistSwaggerInfraestructureResponseDto {
     @ApiProperty()
-    data: TrendingArtistsInfraestructureResponseDto
+    data: TopPlaylistInfraestructureResponseDto
     @ApiProperty({ default: 200, description: 'Status Code' })
     statusCode: number
 }

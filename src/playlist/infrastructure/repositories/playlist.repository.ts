@@ -50,7 +50,14 @@ export class PlaylistRepository
             'Ha ocurrido un error inesperado obteniendo la playlist, hable con el administrador',
           error,
         );
-      }
+        } if (!response) {
+            return Result.fail(
+                null,
+                404,
+                'No existe la playlist solicitada',
+                new Error('No existe la playlist solicitada'),
+            );
+        }
       return Result.success<Playlist>(response, 200);
     }
   }
@@ -88,7 +95,18 @@ export class PlaylistRepository
             'Ha ocurrido un error inesperado obteniendo la playlist, hable con el administrador',
           error,
         );
-      }
+        }
+        // Filtrar los elementos nulos del array 'response'
+        response = response.filter((playlists) => playlists !== null);
+        // Verificar si el array 'response' es nulo
+        if (response === null || response.length === 0) {
+            return Result.fail(
+                null,
+                404,
+                'No se encontraron playlists top',
+                new Error('No se encontraron playlists top'),
+            );
+        }
       return Result.success<Playlist[]>(response, 200);
     }
   }
@@ -132,7 +150,15 @@ export class PlaylistRepository
             'Ha ocurrido un error inesperado buscnado la playlists, hable con el administrador',
           error,
         );
-      }
+        }
+        if (!response) {
+            return Result.fail(
+                null,
+                404,
+                'No se encontró la playlist con el nombre solicitado',
+                new Error('No se encontró la playlist con el nombre solicitado'),
+            );
+        }
       return Result.success<Playlist[]>(response, 200);
     }
   }

@@ -4,7 +4,7 @@ import { IAuditingRepository } from 'src/common/application/repositories/auditin
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infraestructure/events/event-bus';
-import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
+import { AuditingRepository } from 'src/common/infraestructure/auditing/repositories/auditing.repository';
 import { CancelSubscriptionApplicationService } from 'src/subscription/application/services/cancel-subscription.application.service';
 import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';

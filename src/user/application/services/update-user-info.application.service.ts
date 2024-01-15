@@ -75,7 +75,7 @@ export class UpdateUserInfoApplicationService
     }
     const response: UpdateUserInfoResponseApplicationDto = {
       userId: param.userId,
-      success: true,
+      message: 'Información del usuario actualizada',
     };
     return Result.success(response, 200);
   }

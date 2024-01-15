@@ -45,16 +45,6 @@ export class UserController {
     >,
   ) {}
 
-  //Prueba para lo del token
-  // @Get('test')
-  // @Auth(UserRoleEnum.USER)
-  // @UseGuards(AuthGuard())
-  // async getAll(@GetUser() user: User) {
-  //     console.log(user);
-
-  //     return `Si entro en esta monda con el user`;
-  // }
-
   @Get()
   @Auth()
   @ApiResponse({ status: 200, description: 'Se recibio correctamente la info del usuario', type: GetUserInfoSwaggerResponseInfraestructureDto })
@@ -100,7 +90,7 @@ export class UserController {
         serviceResult.error,
       );
     }
-    return HttpResponseHandler.Success(200, serviceResult.Data.success);
+    return HttpResponseHandler.Success(200, serviceResult.Data.message);
   }
 }
 

@@ -1,23 +1,20 @@
-import { SongInfraestructureResponseDto } from "src/common/infraestructure/dto/responses/song/song.response.dto";
 import { ApiProperty } from "@nestjs/swagger";
+import { SongInfraestructureResponseDto } from "../song/song.response.dto";
 
-export class ArtistByIdInfraestructureResponseDto {
 
+export class PlaylistInfraestructureResponseDto {
     @ApiProperty({
-        example: '7bcbfd8a-e775-4149-83ee-9ba4c709e8a2',
+        example: 'c77bd9ae-08a9-4f94-bc86-4afffd0fee3f',
     })
     id: string;
-
     @ApiProperty({
-        example: 'Harry Styles',
+        example: 'Pop',
     })
     name: string;
-
     @ApiProperty({
-        example: 'Música pop',
+        example: '3:16',
     })
-    genre: string;
-
+    duration: string;
     @ApiProperty({
         example: [
             {
@@ -31,29 +28,18 @@ export class ArtistByIdInfraestructureResponseDto {
         ],
     })
     image: Buffer;
-
     @ApiProperty({
         example: [
             {
-                id: '2d7ff672-acd2-4b86-901b-6d84383c3949',
-                image: [
-                    {
-                        type: "Buffer",
-                        data: [
-                            255,
-                            216,
-                            '...'
-                        ],
-                    },
-                ],
+                creatorId: '51fa551a-3f47-4ccb-9b88-71ed6eb5f51b',
+                creatorName: 'John Doe',
             },
         ],
     })
-    albums: {
-        id: string;
-        image: Buffer;
+    creators?: {
+        creatorId: string;
+        creatorName: string;
     }[];
-
     @ApiProperty({
         example: [
             {
@@ -73,19 +59,19 @@ export class ArtistByIdInfraestructureResponseDto {
                 artists: [
                     {
                         id: 'a252d93d-6f8a-4594-83ca-025aae8bce90',
-                        name: 'Imagine Dragons',
+                        name: 'Billie Eilish',
                     },
                 ],
             },
         ],
     })
     songs: SongInfraestructureResponseDto[];
-
 }
 
-export class ArtistByIdSwaggerInfraestructureResponseDto {
+
+export class PlaylistSwaggerInfraestructureResponseDto {
     @ApiProperty()
-    data: ArtistByIdInfraestructureResponseDto
+    data: PlaylistInfraestructureResponseDto
     @ApiProperty({ default: 200, description: 'Status Code' })
     statusCode: number
 }

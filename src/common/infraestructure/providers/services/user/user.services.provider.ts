@@ -4,7 +4,7 @@ import { IAuditingRepository } from "src/common/application/repositories/auditin
 import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
 import { SecurityApplicationServiceDecorator } from "src/common/application/services/decorators/security-decorator/security-application-service.service.decorator";
-import { AuditingRepository } from "src/common/infraestructure/repositories/auditing.repository";
+import { AuditingRepository } from "src/common/infraestructure/auditing/repositories/auditing.repository";
 import { GetUserInfoApplicationService } from "src/user/application/services/get-user-info.application.service";
 import { UpdateUserInfoApplicationService } from "src/user/application/services/update-user-info.application.service";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";

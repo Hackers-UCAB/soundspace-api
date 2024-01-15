@@ -6,7 +6,7 @@ import { Result } from 'src/common/domain/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
-import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
+import { AuditingRepository } from 'src/common/infraestructure/auditing/repositories/auditing.repository';
 import { UuidGenerator } from 'src/common/infraestructure/uuid-generator';
 import { PlaySongEntryApplicationDto } from 'src/song/application/dto/entrys/play-song.entry.application.dto';
 import { PlaySongResponseApplicationDto } from 'src/song/application/dto/responses/play-song.response.application.dto';

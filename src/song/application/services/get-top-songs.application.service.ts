@@ -1,4 +1,3 @@
-import { Res } from "@nestjs/common";
 import { Artist } from 'src/artist/domain/artist';
 import { IArtistRepository } from "../../../artist/domain/repositories/artist.repository.interface";
 import { Result } from "../../../common/domain/result-handler/result";
@@ -13,12 +12,10 @@ export class GetTopSongsService implements IApplicationService<ServiceEntry, Get
 
     private readonly SongRepository: ISongRepository;
     private readonly artistRepository: IArtistRepository;
-    private readonly getBufferImage: IGetBufferImageInterface;
 
-    constructor(SongRepository: ISongRepository, artistRepository: IArtistRepository, getBufferImage: IGetBufferImageInterface) {
+    constructor(SongRepository: ISongRepository, artistRepository: IArtistRepository) {
         this.SongRepository = SongRepository;
         this.artistRepository = artistRepository;
-        this.getBufferImage = getBufferImage;
     }
 
     async execute(param: ServiceEntry): Promise<Result<GetTopSongsResponseApplicationDto>> {

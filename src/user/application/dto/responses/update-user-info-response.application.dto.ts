@@ -3,5 +3,5 @@ import { ServiceResponse } from "src/common/application/services/dto/response/se
 
 export class UpdateUserInfoResponseApplicationDto implements ServiceResponse{
     userId: string;
-    success: boolean;
+    message: string;
 }

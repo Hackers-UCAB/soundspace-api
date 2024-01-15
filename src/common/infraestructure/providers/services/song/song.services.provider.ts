@@ -5,8 +5,8 @@ import { ILogger } from "src/common/application/logging-handler/logger.interface
 import { IAuditingRepository } from "src/common/application/repositories/auditing.repository.interface";
 import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
-import { AzureBufferImageHelper } from "src/common/infraestructure/azure/helpers/get-blob-image.helper";
-import { AuditingRepository } from "src/common/infraestructure/repositories/auditing.repository";
+import { AzureBufferImageHelper } from "src/common/infraestructure/azure/helpers/azure-get-buffer-image.helper";
+import { AuditingRepository } from "src/common/infraestructure/auditing/repositories/auditing.repository";
 import { GetTopSongsService } from "src/song/application/services/get-top-songs.application.service";
 import { ISongRepository } from "src/song/domain/repositories/song.repository.interface";
 import { OrmSongMapper } from "src/song/infraestructure/mapper/orm-song.mapper";
@@ -22,8 +22,7 @@ export const songServicesProviders: Provider[] = [
             new AuditingCommandServiceDecorator(
               new GetTopSongsService(
                songRepository,
-                artistRepository,
-                new AzureBufferImageHelper(),
+                artistRepository
               ),
               auditingRepository,
               'GetTopSongsService',

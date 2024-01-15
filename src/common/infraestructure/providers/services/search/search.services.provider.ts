@@ -12,10 +12,12 @@ import { SearchItemsResponseApplicationDto } from 'src/common/application/search
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
+import { AuditingRepository } from 'src/common/infraestructure/auditing/repositories/auditing.repository';
 import { SearchPlaylistsApplicationService } from 'src/playlist/application/services/search-playlists.application.service';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
 import { PlaylistRepository } from 'src/playlist/infrastructure/repositories/playlist.repository';
+import { SearchEntryApplicationDto } from 'src/search/application/dto/entry/search.entry.application.dto';
+import { SearchResponseApplicationDto } from 'src/search/application/dto/response/search.response.application.dto';
 import { SearchApplicationService } from 'src/search/application/services/search.application.service';
 import { SearchSongsApplicationService } from 'src/song/application/services/search-songs.application.service';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
@@ -49,7 +51,10 @@ export const searchServicesProviders: Provider[] = [
         artists: new SearchArtistsApplicationService(artistRepository),
       };
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingCommandServiceDecorator<
+          SearchEntryApplicationDto,
+          SearchResponseApplicationDto
+        >(
           new SearchApplicationService(strategies),
           auditingRepository,
           'Search Service',

@@ -49,12 +49,27 @@ export class ArtistRepository
           error,
         );
       }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe el artista solicitado',
+          new Error('No existe el artista solicitado'),
+        );
+      }
       return Result.success<Artist>(response, 200);
     }
   }
 
+  // In this version of the findArtistsBySongId method, if an error occurs
+  // during the database query or the mapping of the artists, a Result
+  // with a status code of 500 is returned.
+  // If no artists are found for the given song ID (i.e., artists.length is 0),
+  // an empty list is returned with a status code of 200.
+  // If the artists are found and mapped successfully, a Result with
+  // a status code of 200 is returned.
   async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
-    let response: Artist[];
+    let response: Artist[] = [];
     let error: Error;
 
     try {
@@ -66,11 +81,13 @@ export class ArtistRepository
         .where('cancion.codigo_cancion = :id', { id: songId.Id })
         .getMany();
 
-      response = await Promise.all(
-        artists.map(
-          async (artist) => await this.ormArtistMapper.toDomain(artist),
-        ),
-      );
+      if (artists.length > 0) {
+        response = await Promise.all(
+          artists.map(
+            async (artist) => await this.ormArtistMapper.toDomain(artist),
+          ),
+        );
+      }
     } catch (e) {
       error = e;
     } finally {
@@ -79,7 +96,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+            'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
           error,
         );
       }
@@ -88,7 +105,7 @@ export class ArtistRepository
   }
 
   async findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
-    let response: Artist[];
+    let response: Artist[] = [];
     let error: Error;
 
     try {
@@ -103,11 +120,13 @@ export class ArtistRepository
         })
         .getMany();
 
-      response = await Promise.all(
-        artists.map(
-          async (artist) => await this.ormArtistMapper.toDomain(artist),
-        ),
-      );
+      if (artists.length > 0) {
+        response = await Promise.all(
+          artists.map(
+            async (artist) => await this.ormArtistMapper.toDomain(artist),
+          ),
+        );
+      }
     } catch (e) {
       error = e;
     } finally {
@@ -116,7 +135,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+            'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
           error,
         );
       }
@@ -125,7 +144,7 @@ export class ArtistRepository
   }
 
   async findTrendingArtists(): Promise<Result<Artist[]>> {
-    let response: Artist[];
+    let response: Artist[] = [];
     let error: Error;
 
     try {
@@ -137,12 +156,14 @@ export class ArtistRepository
         .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.trending = :trending', { trending: true })
         .getMany();
-      
-      response = await Promise.all(
-        artists.map(
-          async (artist) => await this.ormArtistMapper.toDomain(artist),
-        ),
-      );
+
+      if (artists.length > 0) {
+        response = await Promise.all(
+          artists.map(
+            async (artist) => await this.ormArtistMapper.toDomain(artist),
+          ),
+        );
+      }
     } catch (e) {
       error = e;
     } finally {
@@ -151,7 +172,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+            'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
           error,
         );
       }

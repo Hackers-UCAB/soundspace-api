@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { JwtPayload } from '../jwt-payload.interface';
+import { JwtPayload } from '../../../application/interface/jwt-payload.interface';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { Inject } from '@nestjs/common';
 import { Result } from 'src/common/domain/result-handler/result';

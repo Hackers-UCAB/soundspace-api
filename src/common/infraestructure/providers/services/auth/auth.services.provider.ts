@@ -10,7 +10,7 @@ import { IAuditingRepository } from 'src/common/application/repositories/auditin
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infraestructure/events/event-bus';
-import { AuditingRepository } from 'src/common/infraestructure/repositories/auditing.repository';
+import { AuditingRepository } from 'src/common/infraestructure/auditing/repositories/auditing.repository';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { SubscriptionRepository } from 'src/subscription/infraestructure/repositories/subscription.repository';
 import { DigitelSubscriptionValidation } from 'src/subscription/infraestructure/validation/digitel-subscription-validation';

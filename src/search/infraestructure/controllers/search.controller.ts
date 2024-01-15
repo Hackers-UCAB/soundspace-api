@@ -26,7 +26,6 @@ export class SearchController {
     @Query() querySearchDto: QuerySearchDto,
     @GetUser('id') userId: UserId,
   ){
-    //TODO: Cambiar a plural
     const dto: SearchEntryApplicationDto = {
       userId: userId.Id,
       types: querySearchDto.type ? [querySearchDto.type] : ['artists', 'albums', 'playlists', 'songs'],

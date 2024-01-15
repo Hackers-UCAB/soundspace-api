@@ -9,32 +9,40 @@ import { AlbumSongs } from '../../domain/value-objects/album-songs';
 import { AlbumDuration } from '../../domain/value-objects/album-duration';
 import { AlbumGenre } from '../../domain/value-objects/album-genre';
 import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../../../common/infraestructure/exceptions/invalid-to-domain-mapper.exception';
+import { InvalidToDomainMapper } from '../../../common/application/mappers/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
   async toDomain(persistence: OrmPlaylistEntity): Promise<Album> {
     if (persistence) {
-      const songsIds = persistence.canciones
-        ? persistence.canciones.map((song) =>
-            SongId.create(song.cancion.codigo_cancion),
-          )
-        : [];
+      try {
+        const songsIds = persistence.canciones
+          ? persistence.canciones.map((song) =>
+              SongId.create(song.cancion.codigo_cancion),
+            )
+          : [];
 
-      const genreName =
-        persistence.genero && persistence.genero.nombre_genero
-          ? persistence.genero.nombre_genero
-          : 'Sin Género';
+        const genreName =
+          persistence.genero && persistence.genero.nombre_genero
+            ? persistence.genero.nombre_genero
+            : 'Sin Género';
 
-      const album: Album = await Album.create(
-        AlbumId.create(persistence.codigo_playlist),
-        AlbumName.create(persistence.nombre),
-        AlbumCover.create(persistence.referencia_imagen),
-        AlbumSongs.create(songsIds),
-        AlbumGenre.create(genreName),
-      );
-      return album;
+        const album: Album = await Album.create(
+          AlbumId.create(persistence.codigo_playlist),
+          AlbumName.create(persistence.nombre),
+          AlbumCover.create(persistence.referencia_imagen),
+          AlbumSongs.create(songsIds),
+          AlbumGenre.create(genreName),
+        );
+        return album;
+      } catch (error: any) {
+        throw new InvalidToDomainMapper(
+          error.message
+            ? error.message
+            : 'Ha ocurrido un error mapeando el album',
+        );
+      }
     }
-    throw InvalidToDomainMapper;
+    return null;
   }
 
   async toPersistence(domain: Album): Promise<OrmPlaylistEntity> {

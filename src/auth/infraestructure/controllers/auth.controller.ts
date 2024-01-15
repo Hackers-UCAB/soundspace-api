@@ -12,7 +12,6 @@ import { LogInResponseApplicationDto } from 'src/auth/application/dto/responses/
 import { SignUpResponseInfraestructureDto, SignUpSwaggerResponseInfraestructureDto } from '../dto/responses/sign-up-response.infraestructure.dto';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
 import { LogInResponseInfraestructureDto, LogInSwaggerResponseInfraestructureDto } from '../dto/responses/log-in-response.infraestructure.dto';
-import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 

@@ -16,12 +16,3 @@ export class QuerySearchDto {
   @Min(0)
   offset?: number;
 }
-
-// export class QuerySearchDto {
-
-//     @IsOptional()
-//     @Type(() => String)
-//     @IsArray()
-//     @IsIn(['album', 'playlist', 'song', 'artist'])
-//     types?: string[]
-// }

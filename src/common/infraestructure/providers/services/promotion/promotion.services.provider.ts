@@ -2,7 +2,7 @@ import { Provider } from "@nestjs/common";
 import { ILogger } from "src/common/application/logging-handler/logger.interface";
 import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
-import { AuditingRepository } from "src/common/infraestructure/repositories/auditing.repository";
+import { AuditingRepository } from "src/common/infraestructure/auditing/repositories/auditing.repository";
 import { GetRandomPromotionApplicationService } from "src/promotions/application/services/get-random-promotion.application.service";
 import { IPromotionRepository } from "src/promotions/domain/repositories/promotion.repository.interface";
 import { PromotionRepository } from "src/promotions/infraestructure/repositories/promotion.repository";

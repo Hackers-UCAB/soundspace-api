@@ -14,7 +14,7 @@ import { DataSource } from "typeorm";
 import { UuidGenerator } from "../../uuid-generator";
 import { NotifySubscriptionNearToExpiredEvent } from "src/subscription/application/events/notify-subscription-near-to-expired.event";
 import { SubscriptionRepository } from "src/subscription/infraestructure/repositories/subscription.repository";
-import { AzureBufferImageHelper } from "../../azure/helpers/get-blob-image.helper";
+import { AzureBufferImageHelper } from "../../azure/helpers/azure-get-buffer-image.helper";
 import { ISubscriptionRepository } from "src/subscription/domain/repositories/subscription.repository.interface";
 
 export const providersManager: Provider[] = [

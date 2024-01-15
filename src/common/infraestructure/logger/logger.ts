@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { LoggerDto } from "src/common/application/dto/logger.dto";
+import { LoggerDto } from "src/common/application/logger/dto/logger.dto";
 import { ILogger} from "src/common/application/logging-handler/logger.interface";
 
 @Injectable()

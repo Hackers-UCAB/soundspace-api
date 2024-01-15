@@ -1,4 +1,4 @@
-import { LoggerDto } from "../dto/logger.dto";
+import { LoggerDto } from "../logger/dto/logger.dto";
 
 export interface ILogger {
     execute(log: LoggerDto): void

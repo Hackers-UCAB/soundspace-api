@@ -9,7 +9,7 @@ import { IApplicationService } from '../../../common/application/services/interf
 import { Result } from '../../../common/domain/result-handler/result';
 import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
 import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
-import { SongInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/song.response.dto';
+import { SongInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/song/song.response.dto';
 import { timeConverter } from '../../../common/domain/helpers/convert-duration';
 import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';

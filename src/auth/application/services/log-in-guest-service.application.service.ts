@@ -1,4 +1,3 @@
-import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { LogInResponseApplicationDto } from '../dto/responses/log-in-response.application.dto';
 import { Result } from 'src/common/domain/result-handler/result';
@@ -26,7 +25,7 @@ export class LoginGuestApplicationService
     this.tokenGenerator = tokenGenerator;
     this.idGenerator = idGenerator;
   }
-  async execute(param: EmptyDto): Promise<Result<LogInResponseApplicationDto>> {
+  async execute(param: ServiceEntry): Promise<Result<LogInResponseApplicationDto>> {
     const userId = this.idGenerator.generate();
     let newUser: User;
     try {

@@ -9,15 +9,29 @@ import { GetUser } from '../../../auth/infraestructure/jwt/decorators/get-user.d
 import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
 import { HttpResponseHandler } from 'src/common/infraestructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/domain/result-handler/result';
-import { GetTopAlbumResponseInfrastructureDto } from '../dto/responses/get-top-album-response.infraestructure.dto';
-import { GetAlbumByIdResponseInfrastructureDto } from '../dto/responses/get-album-by-id-response.infrastructure.dto';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
-import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song.response.dto';
+import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song/song.response.dto';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
-import { PlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist.response.dto';
-import { TopPlaylistInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/top-playlist.response.dto';
+import {
+  PlaylistInfraestructureResponseDto,
+  PlaylistSwaggerInfraestructureResponseDto,
+} from 'src/common/infraestructure/dto/responses/playlist/playlist.response.dto';
+import {
+  TopPlaylistInfraestructureResponseDto,
+  TopPlaylistSwaggerInfraestructureResponseDto,
+} from '../../../common/infraestructure/dto/responses/playlist/top-playlist.response.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('album')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('album')
 export class AlbumController {
   constructor(
@@ -41,6 +55,10 @@ export class AlbumController {
   ) {}
 
   @Get('top_albums')
+  @ApiCreatedResponse({
+    description: 'Se consulto correctamente la lista de albums trending',
+    type: TopPlaylistSwaggerInfraestructureResponseDto,
+  })
   @Auth()
   async getTopAlbum(@GetUser('id') userId: UserId) {
     const dto: ServiceEntry = {
@@ -77,8 +95,20 @@ export class AlbumController {
   }
 
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'El identificador único del album',
+    example: '7abca2dc-7f77-4023-b5cd-13e44d3bf192',
+  })
+  @ApiCreatedResponse({
+    description: 'Se consultó correctamente al album mediante su uuid',
+    type: PlaylistSwaggerInfraestructureResponseDto,
+  })
   @Auth()
-  async getPlaylist(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') userId: UserId) {
+  async getPlaylist(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') userId: UserId,
+  ) {
     const dto: GetAlbumByIdEntryApplicationDto = {
       userId: userId.Id,
       albumId: id,

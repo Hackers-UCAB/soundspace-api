@@ -7,7 +7,7 @@ import { SongRepository } from 'src/song/infraestructure/repositories/song.repos
 import { SubscriptionRepository } from 'src/subscription/infraestructure/repositories/subscription.repository';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
-import { AuditingRepository } from '../../repositories/auditing.repository';
+import { AuditingRepository } from '../../auditing/repositories/auditing.repository';
 import { OrmUserMapper } from 'src/user/infraestructure/mapper/orm-user.mapper';
 import { OrmSubscriptionMapper } from 'src/subscription/infraestructure/mapper/orm-subscription.mapper';
 import { OrmSubscriptionChanelMapper } from 'src/subscription/infraestructure/mapper/orm-subscription-chanel.mapper';
