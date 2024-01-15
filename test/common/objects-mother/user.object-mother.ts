@@ -49,4 +49,14 @@ export class UserObjectMother {
             gender: 'M',
         }
     }
+
+    static invalidPatchEmailEntry (id: UserId): UpdateUserInfoEntryApplicationDto{
+        return {
+            userId: id.Id,
+            name: 'name',
+            email: 'email',
+            birthdate: new Date('1990-01-01'),
+            gender: 'M',
+        }
+    }
 }

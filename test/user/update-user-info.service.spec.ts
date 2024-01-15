@@ -27,4 +27,16 @@ describe('UpdateUserInfoService', () => {
 
         expect(result.IsSuccess).toBeFalsy();
     })
+
+    it('El usuario actualiza el correo con uno invalido', async () => {
+        const userRepositoryMock = UserRepositoryMock.create();
+        const user = await UserObjectMother.createNormalUser();
+        userRepositoryMock.saveAggregate(user);
+        const updateEntry = UserObjectMother.invalidPatchEmailEntry(user.Id);
+        const service = new UpdateUserInfoApplicationService(userRepositoryMock);
+
+        const result = await service.execute(updateEntry);
+
+        expect (result.IsSuccess).toBeFalsy();
+    })
 })
