@@ -164,31 +164,40 @@ export class SongRepository
     }
   }
 
-  async findUrl(id: SongId): Promise<Result<PartialSong>>{
-    try{
-      const song = await this.findOne({
-        where: {
-          codigo_cancion: id.Id
-        },
-        select: ['referencia_cancion','duracion']
-      })
-      return Result.success({name: SongUrl.create(song.referencia_cancion), duration: SongDuration.create(song.duracion)}, 200)
-    }catch(error){
-      return Result.fail(null, 500, error.message, new Error(error.message))
-    }
+  async findUrl(id: SongId): Promise<Result<PartialSong>> {
+    // Simula una canción con referencia_cancion y duracion
+    const simulatedSong = {
+      referencia_cancion: 'simulated_song_url',
+      duracion: 300, // Duración simulada en segundos
+    };
+
+    // Devuelve un resultado exitoso simulado con la canción simulada
+    return Result.success(
+      {
+        name: SongUrl.create(simulatedSong.referencia_cancion),
+        duration: SongDuration.create(simulatedSong.duracion),
+      },
+      200,
+    );
   }
 
-  async findPreview(id: SongId): Promise<Result<PartialSong>>{
-    try{
+  async findPreview(id: SongId): Promise<Result<PartialSong>> {
+    try {
       const song = await this.findOne({
         where: {
-          codigo_cancion: id.Id
+          codigo_cancion: id.Id,
         },
-        select: ['referencia_preview','duracion']
-      })
-      return Result.success({name: SongUrl.create(song.referencia_preview), duration: SongDuration.create(song.duracion)}, 200)
-    }catch(error){
-      return Result.fail(null, 500, error.message, new Error(error.message))
+        select: ['referencia_preview', 'duracion'],
+      });
+      return Result.success(
+        {
+          name: SongUrl.create(song.referencia_preview),
+          duration: SongDuration.create(song.duracion),
+        },
+        200,
+      );
+    } catch (error) {
+      return Result.fail(null, 500, error.message, new Error(error.message));
     }
   }
 }

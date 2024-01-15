@@ -94,6 +94,7 @@ export class AlbumRepository
         .getOne();
 
       response = await this.OrmAlbumMapper.toDomain(album);
+      console.log('resultado del repo: ', response);
     } catch (e) {
       error = e;
     } finally {
