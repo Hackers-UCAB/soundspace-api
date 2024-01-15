@@ -1,5 +1,5 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
+import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
 import { Playlist } from '../../domain/playlist';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
 import { PlaylistName } from '../../domain/value-objects/playlist-name';

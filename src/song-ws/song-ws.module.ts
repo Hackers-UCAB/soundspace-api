@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { SongWsGateway } from "./song-ws.gateway";
-import { databaseProviders } from "src/common/infraestructure/providers/config/dbconfig";
+import { databaseProviders } from "src/common/infrastructure/providers/config/dbconfig";
 
 
 @Module({

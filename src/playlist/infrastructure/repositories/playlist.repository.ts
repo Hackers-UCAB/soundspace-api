@@ -2,7 +2,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
 import { Playlist } from '../../domain/playlist';
-import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
+import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
 import { OrmPlaylistMapper } from '../mapper/orm-playlist.mapper';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
 import { throwError } from 'rxjs';
@@ -155,8 +155,8 @@ export class PlaylistRepository
             return Result.fail(
                 null,
                 404,
-                'No se encontró la playlist con el nombre solicitado',
-                new Error('No se encontró la playlist con el nombre solicitado'),
+                'No se encontrï¿½ la playlist con el nombre solicitado',
+                new Error('No se encontrï¿½ la playlist con el nombre solicitado'),
             );
         }
       return Result.success<Playlist[]>(response, 200);

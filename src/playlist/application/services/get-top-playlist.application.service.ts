@@ -3,7 +3,7 @@ import { Result } from '../../../common/domain/result-handler/result';
 import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IPlaylistRepository } from '../../domain/repositories/playlist.repository.interface';
-import { GetTopPlaylistResponseApplicationDto } from '../dto/responses/get-top-playlist-response.application.dto';
+import { GetTopPlaylistResponseApplicationDto } from '../dto/response/get-top-playlist-response.application.dto';
 
 export class GetTopPlaylistService
   implements

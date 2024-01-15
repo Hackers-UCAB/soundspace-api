@@ -6,7 +6,7 @@ import { IApplicationService } from "../../../common/application/services/interf
 import { IGetBufferImageInterface } from "../../../common/domain/interfaces/get-buffer-image.interface";
 import { ISongRepository } from "../../domain/repositories/song.repository.interface";
 import { Song } from "../../domain/song";
-import { GetTopSongsResponseApplicationDto } from "../dto/responses/get-top-songs.response.application.dto";
+import { GetTopSongsResponseApplicationDto } from "../dto/response/get-top-songs.response.application.dto";
 
 export class GetTopSongsService implements IApplicationService<ServiceEntry, GetTopSongsResponseApplicationDto>{
 
