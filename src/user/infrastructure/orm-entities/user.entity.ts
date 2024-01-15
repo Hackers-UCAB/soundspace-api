@@ -67,13 +67,6 @@ export class OrmUserEntity {
     const user = new OrmUserEntity();
     user.codigo_usuario = userId;
     user.rol = role;
-    // user.rol = role;
-    // user.token = token;
-    // user.genero = gender;
-    // user.correo = email;
-    // user.fecha_nac = birthdate;
-    // user.nombre = name;
-    // return user;
     if (name) user.nombre = name;
     if (email) user.correo = email;
     if (birthdate) user.fecha_nac = birthdate;

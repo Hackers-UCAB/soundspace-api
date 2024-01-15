@@ -15,6 +15,8 @@ import { OrmAlbumMapper } from 'src/album/infrastructure/mapper/orm-album.mapper
 import { OrmArtistMapper } from 'src/artist/infrastructure/mapper/orm-artist.mapper';
 import { OrmPlaylistMapper } from 'src/playlist/infrastructure/mapper/orm-playlist.mapper';
 import { OrmPromotionMapper } from 'src/promotions/infrastructure/mapper/orm-promotion.mapper';
+import mongoose, { Connection, connect } from 'mongoose';
+import { UserSchema } from 'src/user/infrastructure/odm-entities/user.entity';
 
 export const databaseProviders = [
   {
@@ -65,7 +67,11 @@ export const databaseProviders = [
   {
     provide: 'SubscriptionRepository',
     useFactory: (dataSource: DataSource) => {
-      return new SubscriptionRepository(dataSource, new OrmSubscriptionMapper(dataSource), new OrmSubscriptionChanelMapper());
+      return new SubscriptionRepository(
+        dataSource,
+        new OrmSubscriptionMapper(dataSource),
+        new OrmSubscriptionChanelMapper(),
+      );
     },
     inject: ['DataSource'],
   },
@@ -103,5 +109,26 @@ export const databaseProviders = [
       return new AuditingRepository(dataSource);
     },
     inject: ['DataSource'],
+  },
+  {
+    provide: 'MongoDataSource',
+    useFactory: async () => {
+      try {
+        const connection = await connect(process.env.MONGODB);
+        //console.log(mongoose.connection.readyState);
+
+        return connection;
+      } catch (error) {
+        console.log(`Error al conectar a MongoDB: ${error.message}`);
+        throw error;
+      }
+    },
+  },
+  {
+    provide: 'UserModel',
+    useFactory: (connection) => {
+      return connection.model('User', UserSchema);
+    },
+    inject: ['MongoDataSource'],
   },
 ];
