@@ -36,10 +36,10 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleConnection( client: Socket ) {
-    // console.log('Cliente conectado', client.id);
+    // console.log('Cliente conectado', client.id);  
 
-    
-    
+
+
   }
 
   handleDisconnect( client: Socket ) {
@@ -55,7 +55,6 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     payload: {preview: boolean, songId: string, second: number} 
     ) 
     {
-      client.data = payload.songId
       const token = client.handshake.auth.token
       const jwt = new JwtService()
       const decoded = jwt.verify(token, {secret: process.env.JWT_SECRET})
