@@ -1,6 +1,6 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { UpdateUserInfoEntryApplicationDto } from '../dto/entrys/update-user-info-entry.application.dto';
-import { UpdateUserInfoResponseApplicationDto } from '../dto/responses/update-user-info-response.application.dto';
+import { UpdateUserInfoEntryApplicationDto } from '../dto/entry/update-user-info-entry.application.dto';
+import { UpdateUserInfoResponseApplicationDto } from '../dto/response/update-user-info-response.application.dto';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { User } from 'src/user/domain/user';
@@ -75,7 +75,7 @@ export class UpdateUserInfoApplicationService
     }
     const response: UpdateUserInfoResponseApplicationDto = {
       userId: param.userId,
-      success: true,
+      message: 'Información del usuario actualizada',
     };
     return Result.success(response, 200);
   }

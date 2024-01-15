@@ -1,14 +1,12 @@
-import { ArtistId } from '../../../artist/domain/value-objects/artist-id';
 import { Result } from '../../../common/domain/result-handler/result';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IAlbumRepository } from '../../domain/repositories/album.repository.interface';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { AlbumId } from '../../domain/value-objects/album-id';
-import { GetAlbumByIdEntryApplicationDto } from '../dto/entries/get-album-by-id-entry.application.dto';
-import { GetAlbumByIdResponseApplicationDto } from '../dto/responses/get-album-by-id-response.application.dto';
+import { GetAlbumByIdEntryApplicationDto } from '../dto/entry/get-album-by-id-entry.application.dto';
+import { GetAlbumByIdResponseApplicationDto } from '../dto/response/get-album-by-id-response.application.dto';
 import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
 import { ISongRepository } from '../../../song/domain/repositories/song.repository.interface';
-import { GetSongByIdResponseApplicationDto } from '../../../song/application/dto/responses/get-song-by-id.response.application.dto';
 import { Song } from 'src/song/domain/song';
 import { Artist } from 'src/artist/domain/artist';
 

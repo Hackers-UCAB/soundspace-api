@@ -1,4 +1,3 @@
-import { Res } from "@nestjs/common";
 import { Artist } from 'src/artist/domain/artist';
 import { IArtistRepository } from "../../../artist/domain/repositories/artist.repository.interface";
 import { Result } from "../../../common/domain/result-handler/result";
@@ -7,18 +6,16 @@ import { IApplicationService } from "../../../common/application/services/interf
 import { IGetBufferImageInterface } from "../../../common/domain/interfaces/get-buffer-image.interface";
 import { ISongRepository } from "../../domain/repositories/song.repository.interface";
 import { Song } from "../../domain/song";
-import { GetTopSongsResponseApplicationDto } from "../dto/responses/get-top-songs.response.application.dto";
+import { GetTopSongsResponseApplicationDto } from "../dto/response/get-top-songs.response.application.dto";
 
 export class GetTopSongsService implements IApplicationService<ServiceEntry, GetTopSongsResponseApplicationDto>{
 
     private readonly SongRepository: ISongRepository;
     private readonly artistRepository: IArtistRepository;
-    private readonly getBufferImage: IGetBufferImageInterface;
 
-    constructor(SongRepository: ISongRepository, artistRepository: IArtistRepository, getBufferImage: IGetBufferImageInterface) {
+    constructor(SongRepository: ISongRepository, artistRepository: IArtistRepository) {
         this.SongRepository = SongRepository;
         this.artistRepository = artistRepository;
-        this.getBufferImage = getBufferImage;
     }
 
     async execute(param: ServiceEntry): Promise<Result<GetTopSongsResponseApplicationDto>> {

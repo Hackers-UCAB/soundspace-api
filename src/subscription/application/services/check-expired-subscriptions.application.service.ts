@@ -1,4 +1,3 @@
-import { EmptyDto } from 'src/common/application/dto/empty.dto';
 import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
@@ -25,7 +24,7 @@ export class CheckExpiredSubscriptionsApplicationService
     this.userRepisitory = userRepisitory;
     this.eventPublisher = eventPublisher;
   }
-  async execute(param: EmptyDto): Promise<Result<ServiceResponse>> {
+  async execute(param: ServiceEntry): Promise<Result<ServiceResponse>> {
     const actualDate: Date = new Date();
     const subscriptionsExpiredToday: Result<Subscription[]> =
       await this.subscriptionRepository.findSubscriptionsExpiringOnDate(
