@@ -1,24 +1,22 @@
 import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
+import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorator';
 import { Result } from 'src/common/domain/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
-import { LoggerImpl } from 'src/common/infraestructure/logger/logger';
-import { AuditingRepository } from 'src/common/infraestructure/auditing/repositories/auditing.repository';
-import { UuidGenerator } from 'src/common/infraestructure/uuid-generator';
+import { LoggerImpl } from 'src/common/infrastructure/logger/logger';
+import { AuditingRepository } from 'src/common/infrastructure/auditing/repositories/auditing.repository';
 import { PlaySongEntryApplicationDto } from 'src/song/application/dto/entrys/play-song.entry.application.dto';
 import { PlaySongResponseApplicationDto } from 'src/song/application/dto/responses/play-song.response.application.dto';
 import { PlaySongService} from 'src/song/application/services/play-song.application.service';
-import { AzureBlobHelper } from 'src/song/infraestructure/helpers/get-blob-file.helper';
-import { SendSongHelper } from 'src/song/infraestructure/helpers/send-song-helper';
-import { SongRepository } from 'src/song/infraestructure/repositories/song.repository';
+import { AzureBlobHelper } from 'src/song/infrastructure/helpers/get-blob-file.helper';
+import { SendSongHelper } from 'src/song/infrastructure/helpers/send-song-helper';
+import { SongRepository } from 'src/song/infrastructure/repositories/song.repository';
 import { DataSource } from 'typeorm';
 import { JwtService } from "@nestjs/jwt";
-import { OrmSongMapper } from '../song/infraestructure/mapper/orm-song.mapper';
-import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
-import { SongReferenceImplementationHelper } from 'src/song/infraestructure/helpers/song-reference.implementation.helper';
+import { OrmSongMapper } from '../song/infrastructure/mapper/orm-song.mapper';
+import { SongReferenceImplementationHelper } from 'src/song/infrastructure/helpers/song-reference.implementation.helper';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 
 

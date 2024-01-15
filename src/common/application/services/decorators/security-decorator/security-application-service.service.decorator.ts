@@ -37,7 +37,8 @@ export class SecurityApplicationServiceDecorator<
     if (!allowed) {
       return Result.fail(null, 403, 'Este usuario no tiene permisos para realizar esta operacion', new Error('Este usuario no tiene permisos para realizar esta operacion'));
     }
-    return this.applicationService.execute(param);
+    return await super.execute(param);
+    // return this.applicationService.execute(param);
   }
 
   private async checkAuthorization(user: User): Promise<boolean> {

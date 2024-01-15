@@ -4,16 +4,16 @@ import { IApplicationService } from 'src/common/application/services/interfaces/
 import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entrys/get-playlist-by-id-entry.application.dto';
 import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/responses/get-playlist-by-id-response.application.dto';
 import { GetTopPlaylistResponseApplicationDto } from '../../application/dto/responses/get-top-playlist-response.application.dto';
-import { HttpResponseHandler } from '../../../common/infraestructure/http-response-handler/http-response.handler';
+import { HttpResponseHandler } from '../../../common/infrastructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/domain/result-handler/result';
-import { Auth } from 'src/auth/infraestructure/jwt/decorators/auth.decorator';
-import { GetUser } from 'src/auth/infraestructure/jwt/decorators/get-user.decorator';
+import { Auth } from 'src/auth/infrastructure/jwt/decorators/auth.decorator';
+import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
-import { PlaylistInfraestructureResponseDto, PlaylistSwaggerInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/playlist/playlist.response.dto';
+import { PlaylistInfraestructureResponseDto, PlaylistSwaggerInfraestructureResponseDto } from 'src/common/infrastructure/dto/responses/playlist/playlist.response.dto';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
-import { SongInfraestructureResponseDto } from 'src/common/infraestructure/dto/responses/song/song.response.dto';
-import { TopPlaylistInfraestructureResponseDto, TopPlaylistSwaggerInfraestructureResponseDto } from '../../../common/infraestructure/dto/responses/playlist/top-playlist.response.dto';
+import { SongInfraestructureResponseDto } from 'src/common/infrastructure/dto/responses/song/song.response.dto';
+import { TopPlaylistInfraestructureResponseDto, TopPlaylistSwaggerInfraestructureResponseDto } from '../../../common/infrastructure/dto/responses/playlist/top-playlist.response.dto';
 import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
