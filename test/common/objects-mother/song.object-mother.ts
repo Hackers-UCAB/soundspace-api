@@ -1,4 +1,5 @@
-import { UuidGenerator } from "src/common/infraestructure/uuid-generator";
+
+import { UuidGenerator } from "src/common/infrastructure/uuid-generator";
 import { Song } from "src/song/domain/song";
 import { SongCover } from "src/song/domain/value-objects/song-cover";
 import { SongDuration } from "src/song/domain/value-objects/song-duration";
