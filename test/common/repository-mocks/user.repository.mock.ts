@@ -1,4 +1,4 @@
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
 import { User } from "src/user/domain/user";
 import { UserId } from "src/user/domain/value-objects/user-id";
@@ -16,6 +16,7 @@ export class UserRepositoryMock implements IUserRepository {
             const user = this.users[i];
             if (user.Id.equals(id)) { return Result.success(user,200); }
         }
+        return Result.fail(null, 404, 'No se encontro el usuario', new Error('No se encontro el usuario'));
     }
     async deleteUserById(id: UserId): Promise<Result<string>> {
         const index = this.users.findIndex(user => user.Id.equals(id));
@@ -26,4 +27,7 @@ export class UserRepositoryMock implements IUserRepository {
         throw new Error("Method not implemented.");
     }
 
+    static create(){
+        return new UserRepositoryMock();
+    }
 }

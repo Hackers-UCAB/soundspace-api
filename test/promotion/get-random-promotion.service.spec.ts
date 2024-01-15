@@ -14,30 +14,17 @@ describe('Buscar una promocion aleatoria', () => {
     it('Devuelve una promocion', async () => {
         //arrange
         const user = await UserObjectMother.createNormalUser();
-        const userRepositoryMock = new UserRepositoryMock();
+        const userRepositoryMock = UserRepositoryMock.create();
         userRepositoryMock.saveAggregate(user);
-        const promotionRepositoryMock = new PromotionRepositoryMock();
+        const promotionRepositoryMock = PromotionRepositoryMock.create();
         const promotion = await PromotionObjectMother.createRandomPromotion();
         promotionRepositoryMock.saveAggregate(promotion);
-        const auditingRepositoryMock = new AuditingRepositoryMock()
-        const loggerMock = new LoggerMock()
 
         const dto: ServiceEntry = {
             userId: user.Id.Id
         }
 
-        const service = new LoggerApplicationServiceDecorator(
-            new AuditingCommandServiceDecorator(
-              new GetRandomPromotionApplicationService(
-                promotionRepositoryMock
-              ),
-              auditingRepositoryMock,
-              'Get Random Promotion',
-              loggerMock,
-            ),
-            loggerMock,
-            'Get Random Promotion',
-          );
+        const service = new GetRandomPromotionApplicationService(promotionRepositoryMock);
         //act
 
         const result = await service.execute(dto);
@@ -49,11 +36,9 @@ describe('Buscar una promocion aleatoria', () => {
     it('No existe ninguna promocion', async() => {
         //arrange
         const user = await UserObjectMother.createNormalUser();
-        const userRepositoryMock = new UserRepositoryMock();
+        const userRepositoryMock = UserRepositoryMock.create();
         userRepositoryMock.saveAggregate(user);
-        const promotionRepositoryMock = new PromotionRepositoryMock();
-        const auditingRepositoryMock = new AuditingRepositoryMock()
-        const loggerMock = new LoggerMock()
+        const promotionRepositoryMock = PromotionRepositoryMock.create();
 
         const dto: ServiceEntry = {
             userId: user.Id.Id

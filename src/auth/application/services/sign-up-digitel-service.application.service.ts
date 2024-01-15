@@ -55,7 +55,7 @@ export class SignUpDigitelApplicationService
   async execute(
     param: SignUpEntryApplicationDto,
   ): Promise<Result<SignUpResponseApplicationDto>> {
-    //Se valida con el api externo
+    // Se valida con el api externo
     const valid: Result<boolean> =
       await this.digitelSubscriptionValidation.validateSubscription(
         param.phone,
@@ -128,7 +128,7 @@ export class SignUpDigitelApplicationService
       );
     }
 
-    // this.eventPublisher.publish(newSubscription.pullDomainEvents());
+    this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
     const response: SignUpResponseApplicationDto = {
       userId: userId,
