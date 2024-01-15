@@ -35,7 +35,7 @@ export class ArtistRepository
         .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.codigo_artista = :id', { id: artistId.Id })
         .getOne();
-
+      
       response = await this.ormArtistMapper.toDomain(artist);
     } catch (e) {
       error = e;
