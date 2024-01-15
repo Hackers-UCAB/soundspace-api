@@ -1,11 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsIn, IsOptional, IsPositive, Min } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsIn, IsOptional, IsPositive, IsString, Min } from 'class-validator';
 
 export class QuerySearchDto {
   @IsOptional()
-  @Type(() => String)
-  @IsIn(['albums', 'playlists', 'songs', 'artists'])
-  type?: string;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  @IsIn(['albums', 'playlists', 'songs', 'artists'], { each: true })
+  type?: string[];
 
   @IsOptional()
   @IsPositive()
