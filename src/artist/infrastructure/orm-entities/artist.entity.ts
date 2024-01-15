@@ -1,4 +1,4 @@
-import { OrmCancionEntity } from "../../../song/infrastructure/orm-entities/song.entity";
+import { OrmCancionEntity } from "../../../song/infrastructure/persistence-entities/orm-entities/orm-song.entity";
 import { OrmPlaylistCreadorEntity } from "../../../common/infrastructure/orm-entities/playlist-creator.entity";
 import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrmGeneroEntity } from "../../../common/infrastructure/orm-entities/genre.entity";

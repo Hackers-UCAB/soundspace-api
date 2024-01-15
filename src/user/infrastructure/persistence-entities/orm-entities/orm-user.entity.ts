@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { OrmSubscripcionEntity } from 'src/subscription/infrastructure/orm-entities/subscription.entity';
+import { OrmSubscripcionEntity } from 'src/subscription/infrastructure/persistence-entities/orm-entities/orm-subscription.entity';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
 
 export enum genderOptions {

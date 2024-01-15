@@ -1,22 +1,25 @@
 import { AlbumRepository } from 'src/album/infrastructure/repositories/album.repository';
 import { ArtistRepository } from 'src/artist/infrastructure/repositories/artist.repository';
 import { PlaylistRepository } from 'src/playlist/infrastructure/repositories/playlist.repository';
-import { PromotionRepository } from 'src/promotions/infrastructure/repositories/promotion.repository';
-import { OrmSongMapper } from 'src/song/infrastructure/mapper/orm-song.mapper';
-import { SongRepository } from 'src/song/infrastructure/repositories/song.repository';
-import { SubscriptionRepository } from 'src/subscription/infrastructure/repositories/subscription.repository';
-import { UserRepository } from 'src/user/infrastructure/repositories/user.repository';
+import { OrmPromotionRepository } from 'src/promotions/infrastructure/repositories/orm-repositories/orm-promotion.repository';
+import { OrmSongMapper } from 'src/song/infrastructure/mapper/orm-mapper/orm-song.mapper';
+import { OrmSongRepository } from 'src/song/infrastructure/repositories/orm-repositories/orm-song.repository';
+import { OrmSubscriptionRepository } from 'src/subscription/infrastructure/repositories/orm-repositories/orm-subscription.repository';
+import { OrmUserRepository } from 'src/user/infrastructure/repositories/orm-repositories/orm-user.repository';
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
 import { AuditingRepository } from '../../auditing/repositories/auditing.repository';
-import { OrmUserMapper } from 'src/user/infrastructure/mapper/orm-user.mapper';
-import { OrmSubscriptionMapper } from 'src/subscription/infrastructure/mapper/orm-subscription.mapper';
-import { OrmSubscriptionChanelMapper } from 'src/subscription/infrastructure/mapper/orm-subscription-chanel.mapper';
+import { OrmUserMapper } from 'src/user/infrastructure/mapper/orm-mapper/orm-user.mapper';
+import { OrmSubscriptionMapper } from 'src/subscription/infrastructure/mapper/orm-mapper/orm-subscription.mapper';
+import { OrmSubscriptionChanelMapper } from 'src/subscription/infrastructure/mapper/orm-mapper/orm-subscription-chanel.mapper';
 import { OrmAlbumMapper } from 'src/album/infrastructure/mapper/orm-album.mapper';
 import { OrmArtistMapper } from 'src/artist/infrastructure/mapper/orm-artist.mapper';
 import { OrmPlaylistMapper } from 'src/playlist/infrastructure/mapper/orm-playlist.mapper';
-import { OrmPromotionMapper } from 'src/promotions/infrastructure/mapper/orm-promotion.mapper';
+import { OrmPromotionMapper } from 'src/promotions/infrastructure/mapper/orm-mapper/orm-promotion.mapper';
 import mongoose, { Connection, connect } from 'mongoose';
-import { UserSchema } from 'src/user/infrastructure/odm-entities/user.entity';
+import { UserSchema } from 'src/user/infrastructure/persistence-entities/odm-entities/odm-user.entity';
+import { SubscriptionSchema } from 'src/subscription/infrastructure/persistence-entities/odm-entities/odm-subscription.entity';
+import { SubscriptionChanelSchema } from 'src/subscription/infrastructure/persistence-entities/odm-entities/odm-subscription-chanel.entity';
+import { SongSchema } from 'src/song/infrastructure/persistence-entities/odm-entities/odm-song.entity';
 
 export const databaseProviders = [
   {
@@ -53,21 +56,21 @@ export const databaseProviders = [
   {
     provide: 'UserRepository',
     useFactory: (dataSource: DataSource) => {
-      return new UserRepository(dataSource, new OrmUserMapper());
+      return new OrmUserRepository(dataSource, new OrmUserMapper());
     },
     inject: ['DataSource'],
   },
   {
     provide: 'SongRepository',
     useFactory: (dataSource: DataSource) => {
-      return new SongRepository(dataSource, new OrmSongMapper());
+      return new OrmSongRepository(dataSource, new OrmSongMapper());
     },
     inject: ['DataSource'],
   },
   {
     provide: 'SubscriptionRepository',
     useFactory: (dataSource: DataSource) => {
-      return new SubscriptionRepository(
+      return new OrmSubscriptionRepository(
         dataSource,
         new OrmSubscriptionMapper(dataSource),
         new OrmSubscriptionChanelMapper(),
@@ -99,7 +102,7 @@ export const databaseProviders = [
   {
     provide: 'PromotionRepository',
     useFactory: (dataSource: DataSource) => {
-      return new PromotionRepository(dataSource, new OrmPromotionMapper());
+      return new OrmPromotionRepository(dataSource, new OrmPromotionMapper());
     },
     inject: ['DataSource'],
   },
@@ -128,6 +131,27 @@ export const databaseProviders = [
     provide: 'UserModel',
     useFactory: (connection) => {
       return connection.model('User', UserSchema);
+    },
+    inject: ['MongoDataSource'],
+  },
+  {
+    provide: 'SubscriptionModel',
+    useFactory: (connection) => {
+      return connection.model('Subscription', SubscriptionSchema);
+    },
+    inject: ['MongoDataSource'],
+  },
+  {
+    provide: 'SubscriptionChanelModel',
+    useFactory: (connection) => {
+      return connection.model('SubscriptionChanel', SubscriptionChanelSchema);
+    },
+    inject: ['MongoDataSource'],
+  },
+  {
+    provide: 'SongModel',
+    useFactory: (connection) => {
+      return connection.model('Song', SongSchema);
     },
     inject: ['MongoDataSource'],
   },

@@ -1,6 +1,6 @@
 import { IMapper } from "src/common/application/mappers/mapper.interface";
 import { Promotion } from "src/promotions/domain/promotion";
-import { OrmPromotionEntity } from "../orm-entities/promotion.entity";
+import { OrmPromotionEntity } from "../../persistence-entities/orm-entities/promotion.entity";
 import { PromotionId } from "src/promotions/domain/value-objects/promotion-id";
 import { PromotionImageRef } from "src/promotions/domain/value-objects/promotion-image-ref";
 import { PromotionUrl } from "src/promotions/domain/value-objects/promotion-url";

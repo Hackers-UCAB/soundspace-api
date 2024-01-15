@@ -1,15 +1,15 @@
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
-import { OrmCancionEntity } from '../orm-entities/song.entity';
+import { OrmCancionEntity } from '../../persistence-entities/orm-entities/orm-song.entity';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 import { Song } from 'src/song/domain/song';
-import { OrmSongMapper } from '../mapper/orm-song.mapper';
+import { OrmSongMapper } from '../../mapper/orm-mapper/orm-song.mapper';
 import { SongUrl } from 'src/song/domain/value-objects/song-url';
 import { SongDuration } from 'src/song/domain/value-objects/song-duration';
 import { PartialSong } from 'src/song/domain/parameter-object/partial-song.parameter.object';
 
-export class SongRepository
+export class OrmSongRepository
   extends Repository<OrmCancionEntity>
   implements ISongRepository
 {

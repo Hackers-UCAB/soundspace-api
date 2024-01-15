@@ -21,7 +21,7 @@ import { UpdateUserInfoResponseApplicationDto } from 'src/user/application/dto/r
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { InjectModel } from '@nestjs/mongoose';
-import { OdmUserEntity } from '../odm-entities/user.entity';
+import { OdmUserEntity } from '../persistence-entities/odm-entities/odm-user.entity';
 import { Model } from 'mongoose';
 
 @ApiTags('User')
@@ -42,7 +42,8 @@ export class UserController {
       UpdateUserInfoResponseApplicationDto
     >,
 
-    @InjectModel(OdmUserEntity.name) private readonly userModel: Model<OdmUserEntity>
+    // @InjectModel(OdmUserEntity.name) private readonly userModel: Model<OdmUserEntity>
+    @Inject('UserModel') private readonly userModel: Model<OdmUserEntity>
   ) {}
 
   @Get()

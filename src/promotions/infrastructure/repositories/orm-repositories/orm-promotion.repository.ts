@@ -1,12 +1,11 @@
 import { IPromotionRepository } from 'src/promotions/domain/repositories/promotion.repository.interface';
-import { OrmPromotionEntity } from '../orm-entities/promotion.entity';
+import { OrmPromotionEntity } from '../../persistence-entities/orm-entities/promotion.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { Promotion } from 'src/promotions/domain/promotion';
-import { OrmPromotionMapper } from '../mapper/orm-promotion.mapper';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
-export class PromotionRepository
+export class OrmPromotionRepository
   extends Repository<OrmPromotionEntity>
   implements IPromotionRepository
 {

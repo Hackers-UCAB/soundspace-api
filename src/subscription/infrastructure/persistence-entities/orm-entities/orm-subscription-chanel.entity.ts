@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrmSubscripcionEntity } from "./subscription.entity";
+import { OrmSubscripcionEntity } from "./orm-subscription.entity";
 
 
 @Entity('subscripcion_chanel')
@@ -15,9 +15,6 @@ export class OrmSubscriptionChanelEntity {
 
     @Column()
     url: string;
-
-    // @OneToOne(() => OrmSubscripcionEntity, (subscripcion)=> subscripcion.canal)
-    // subscripcion: OrmSubscripcionEntity;
 
     @OneToMany(() => OrmSubscripcionEntity, (subscripcion)=> subscripcion.canal)
     subscripciones: OrmSubscripcionEntity[];

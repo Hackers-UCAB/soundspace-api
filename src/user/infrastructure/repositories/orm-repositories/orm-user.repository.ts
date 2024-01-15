@@ -1,13 +1,12 @@
 import { DataSource, Repository } from 'typeorm';
-import { OrmUserEntity } from '../orm-entities/user.entity';
+import { OrmUserEntity } from '../../persistence-entities/orm-entities/orm-user.entity';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
-import { OrmUserMapper } from '../mapper/orm-user.mapper';
 import { User } from 'src/user/domain/user';
 import { Result } from 'src/common/domain/result-handler/result';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
-export class UserRepository
+export class OrmUserRepository
   extends Repository<OrmUserEntity>
   implements IUserRepository
 {

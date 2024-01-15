@@ -1,9 +1,8 @@
-import { OrmUserEntity } from "src/user/infrastructure/orm-entities/user.entity";
+import { OrmUserEntity } from "src/user/infrastructure/persistence-entities/orm-entities/orm-user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrmSubscriptionChanelEntity } from "./subscription-chanel.entity";
-import { IUserRepository } from "src/user/domain/repositories/user.repository.interface";
-import { UserRepository } from "src/user/infrastructure/repositories/user.repository";
-import { SubscriptionRepository } from "../repositories/subscription.repository";
+import { OrmSubscriptionChanelEntity } from "./orm-subscription-chanel.entity";
+import { OrmUserRepository } from "src/user/infrastructure/repositories/orm-repositories/orm-user.repository";
+import { OrmSubscriptionRepository } from "../../repositories/orm-repositories/orm-subscription.repository";
 
 export enum SubscriptionStatusEnum {
     ACTIVE = "ACTIVE",
@@ -44,9 +43,9 @@ export class OrmSubscripcionEntity {
         subscriptionEndDate: Date,
         value: string,
         user: string,
-        userRepository: UserRepository,
+        userRepository: OrmUserRepository,
         chanel: string,
-        chanelRepository: SubscriptionRepository
+        chanelRepository: OrmSubscriptionRepository
     ): Promise<OrmSubscripcionEntity>{
         const subscription = new OrmSubscripcionEntity();
         subscription.codigo_subscripcion = subscriptionId;

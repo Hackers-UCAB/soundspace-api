@@ -1,5 +1,5 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-import { OrmUserEntity } from '../orm-entities/user.entity';
+import { OrmUserEntity } from '../../persistence-entities/orm-entities/orm-user.entity';
 import { User } from 'src/user/domain/user';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { UserRole } from 'src/user/domain/value-objects/user-role';

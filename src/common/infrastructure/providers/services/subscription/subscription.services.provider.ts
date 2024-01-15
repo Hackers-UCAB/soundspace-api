@@ -4,15 +4,12 @@ import { IAuditingRepository } from 'src/common/application/repositories/auditin
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infrastructure/events/event-bus';
-import { AuditingRepository } from 'src/common/infrastructure/auditing/repositories/auditing.repository';
 import { CancelSubscriptionApplicationService } from 'src/subscription/application/services/cancel-subscription.application.service';
 import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
-import { SubscriptionRepository } from 'src/subscription/infrastructure/repositories/subscription.repository';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
-import { UserRepository } from 'src/user/infrastructure/repositories/user.repository';
-import { DataSource } from 'typeorm';
+
 
 export const subscriptionServicesProviders: Provider[] = [
   {

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from 'typeorm';
 import { OrmArtistaEntity } from '../../../artist/infrastructure/orm-entities/artist.entity';
-import { OrmCancionEntity } from '../../../song/infrastructure/orm-entities/song.entity';
+import { OrmCancionEntity } from '../../../song/infrastructure/persistence-entities/orm-entities/orm-song.entity';
 import { OrmPlaylistEntity } from './playlist.entity';
 
 @Entity('genero')

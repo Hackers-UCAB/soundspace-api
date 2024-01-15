@@ -13,7 +13,6 @@ import { NotifySubscriptionExpiredEvent } from "src/subscription/application/eve
 import { DataSource } from "typeorm";
 import { UuidGenerator } from "../../../infrastructure/uuid-generator";
 import { NotifySubscriptionNearToExpiredEvent } from "src/subscription/application/events/notify-subscription-near-to-expired.event";
-import { SubscriptionRepository } from "src/subscription/infrastructure/repositories/subscription.repository";
 import { AzureBufferImageHelper } from "../../azure/helpers/azure-get-buffer-image.helper";
 import { ISubscriptionRepository } from "src/subscription/domain/repositories/subscription.repository.interface";
 

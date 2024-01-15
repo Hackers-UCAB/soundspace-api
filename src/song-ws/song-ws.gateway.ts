@@ -1,7 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorator';
 import { Result } from 'src/common/domain/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
@@ -12,10 +11,10 @@ import { PlaySongResponseApplicationDto } from 'src/song/application/dto/respons
 import { PlaySongService} from 'src/song/application/services/play-song.application.service';
 import { AzureBlobHelper } from 'src/song/infrastructure/helpers/get-blob-file.helper';
 import { SendSongHelper } from 'src/song/infrastructure/helpers/send-song-helper';
-import { SongRepository } from 'src/song/infrastructure/repositories/song.repository';
+import { OrmSongRepository } from 'src/song/infrastructure/repositories/orm-repositories/orm-song.repository';
 import { DataSource } from 'typeorm';
 import { JwtService } from "@nestjs/jwt";
-import { OrmSongMapper } from '../song/infrastructure/mapper/orm-song.mapper';
+import { OrmSongMapper } from '../song/infrastructure/mapper/orm-mapper/orm-song.mapper';
 import { SongReferenceImplementationHelper } from 'src/song/infrastructure/helpers/song-reference.implementation.helper';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 
@@ -69,7 +68,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           new AzureBlobHelper(), 
           new SendSongHelper(), 
           client,
-          new SongReferenceImplementationHelper(this.userRepository, new SongRepository(this.dataSource,this.ormSongMapper))),
+          new SongReferenceImplementationHelper(this.userRepository, new OrmSongRepository(this.dataSource,this.ormSongMapper))),
         new AuditingRepository(this.dataSource),
         'PlaySongService',
         new LoggerImpl()

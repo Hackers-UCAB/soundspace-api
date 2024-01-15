@@ -1,20 +1,17 @@
 import { DataSource, Repository } from 'typeorm';
-import { OrmSubscripcionEntity } from '../orm-entities/subscription.entity';
+import { OrmSubscripcionEntity } from '../../persistence-entities/orm-entities/orm-subscription.entity';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { Subscription } from 'src/subscription/domain/subscription';
-import { OrmSubscriptionMapper } from '../mapper/orm-subscription.mapper';
 import { SubscriptionId } from 'src/subscription/domain/value-objects/subscription-id';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
 import { Result } from 'src/common/domain/result-handler/result';
-import { OrmSubscriptionChanelMapper } from '../mapper/orm-subscription-chanel.mapper';
-import { InjectRepository } from '@nestjs/typeorm';
-import { OrmSubscriptionChanelEntity } from '../orm-entities/subscription-chanel.entity';
+import { OrmSubscriptionChanelEntity } from '../../persistence-entities/orm-entities/orm-subscription-chanel.entity';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionChanel } from 'src/subscription/domain/subscription-chanel/subscription-chanel';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
-export class SubscriptionRepository
+export class OrmSubscriptionRepository
   extends Repository<OrmSubscripcionEntity>
   implements ISubscriptionRepository
 {

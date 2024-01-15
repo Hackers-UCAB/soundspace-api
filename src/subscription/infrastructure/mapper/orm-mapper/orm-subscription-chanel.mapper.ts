@@ -1,6 +1,6 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 import { SubscriptionChanel } from 'src/subscription/domain/subscription-chanel/subscription-chanel';
-import { OrmSubscriptionChanelEntity } from '../orm-entities/subscription-chanel.entity';
+import { OrmSubscriptionChanelEntity } from '../../persistence-entities/orm-entities/orm-subscription-chanel.entity';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionChanelName } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-name';
 import { SubscriptionChanelType } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-type';
