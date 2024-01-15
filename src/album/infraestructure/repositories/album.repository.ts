@@ -7,14 +7,15 @@ import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/
 import { OrmAlbumMapper } from '../mapper/orm-album.mapper';
 import { AlbumId } from '../../domain/value-objects/album-id';
 import { ArtistId } from 'src/artist/domain/value-objects/artist-id';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 export class AlbumRepository
   extends Repository<OrmPlaylistEntity>
   implements IAlbumRepository
 {
-  private readonly OrmAlbumMapper: OrmAlbumMapper;
-  constructor(dataSource: DataSource) {
+  private readonly OrmAlbumMapper: IMapper<Album, OrmPlaylistEntity>;
+  constructor(dataSource: DataSource, ormAlbumMapper: IMapper<Album, OrmPlaylistEntity>) {
     super(OrmPlaylistEntity, dataSource.createEntityManager());
-    this.OrmAlbumMapper = new OrmAlbumMapper();
+    this.OrmAlbumMapper = ormAlbumMapper;
   }
 
   async findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {

@@ -6,15 +6,16 @@ import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/
 import { OrmPlaylistMapper } from '../mapper/orm-playlist.mapper';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
 import { throwError } from 'rxjs';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class PlaylistRepository
   extends Repository<OrmPlaylistEntity>
   implements IPlaylistRepository
 {
-  private readonly OrmPlaylistMapper: OrmPlaylistMapper;
-  constructor(dataSource: DataSource) {
+  private readonly OrmPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>;
+  constructor(dataSource: DataSource, ormPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>) {
     super(OrmPlaylistEntity, dataSource.createEntityManager());
-    this.OrmPlaylistMapper = new OrmPlaylistMapper();
+    this.OrmPlaylistMapper = ormPlaylistMapper;
   }
 
   async findPlaylistById(id: PlaylistId): Promise<Result<Playlist>> {

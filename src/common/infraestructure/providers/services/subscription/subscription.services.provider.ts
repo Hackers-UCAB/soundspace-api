@@ -1,5 +1,6 @@
 import { Provider } from '@nestjs/common';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
+import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infraestructure/events/event-bus';
@@ -7,6 +8,7 @@ import { AuditingRepository } from 'src/common/infraestructure/repositories/audi
 import { CancelSubscriptionApplicationService } from 'src/subscription/application/services/cancel-subscription.application.service';
 import { CheckCloseToExpireSubscriptionsApplicationService } from 'src/subscription/application/services/check-close-to-expire-subscriptions.application.service';
 import { CheckExpiredSubscriptionsApplicationService } from 'src/subscription/application/services/check-expired-subscriptions.application.service';
+import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { SubscriptionRepository } from 'src/subscription/infraestructure/repositories/subscription.repository';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { UserRepository } from 'src/user/infraestructure/repositories/user.repository';
@@ -16,19 +18,20 @@ export const subscriptionServicesProviders: Provider[] = [
   {
     provide: 'CheckExpiredSubscriptionsApplicationService',
     useFactory: (
-      dataSource: DataSource,
       userRepository: IUserRepository,
+      subscriptionRepository: ISubscriptionRepository,
+      auditingRepository: IAuditingRepository,
       logger: ILogger,
       eventBus: EventBus,
     ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new CheckExpiredSubscriptionsApplicationService(
-            new SubscriptionRepository(dataSource),
+            subscriptionRepository,
             userRepository,
             eventBus,
           ),
-          new AuditingRepository(dataSource),
+          auditingRepository,
           'Check Expired Subscriptions',
           logger,
         ),
@@ -36,22 +39,23 @@ export const subscriptionServicesProviders: Provider[] = [
         'Check Expired Subscriptions',
       );
     },
-    inject: ['DataSource','UserRepository', 'ILogger', 'EventBus'],
+    inject: ['UserRepository', 'SubscriptionRepository', 'AuditingRepository', 'ILogger', 'EventBus'],
   },
   {
     provide: 'CheckCloseToExpireSubscriptionsApplicationService',
     useFactory: (
-      dataSource: DataSource,
+      subscriptionRepository: ISubscriptionRepository,
+      auditingRepository: IAuditingRepository,
       logger: ILogger,
       eventBus: EventBus,
     ) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new CheckCloseToExpireSubscriptionsApplicationService(
-            new SubscriptionRepository(dataSource),
+           subscriptionRepository,
             eventBus,
           ),
-          new AuditingRepository(dataSource),
+          auditingRepository,
           'Check Close To Expire Subscriptions',
           logger,
         ),
@@ -59,18 +63,18 @@ export const subscriptionServicesProviders: Provider[] = [
         'Check Close To Expire Subscriptions',
       );
     },
-    inject: ['DataSource', 'ILogger', 'EventBus'],
+    inject: ['SubscriptionRepository', 'AuditingRepository', 'ILogger', 'EventBus'],
   },
   {
     provide: 'CancelSubscriptionService',
-    useFactory: (dataSource: DataSource, userRepository: IUserRepository, logger: ILogger) => {
+    useFactory: (userRepository: IUserRepository, subscriptionRepository: ISubscriptionRepository, auditingRepository: IAuditingRepository, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
         new AuditingCommandServiceDecorator(
           new CancelSubscriptionApplicationService(
-            new SubscriptionRepository(dataSource),
+            subscriptionRepository,
             userRepository,
           ),
-          new AuditingRepository(dataSource),
+          auditingRepository,
           'CancelSubscriptionService',
           logger,
         ),
@@ -78,6 +82,6 @@ export const subscriptionServicesProviders: Provider[] = [
         'CancelSubscriptionService',
       );
     },
-    inject: ['DataSource', 'UserRepository', 'ILogger'],
+    inject: ['UserRepository', 'SubscriptionRepository', 'AuditingRepository', 'ILogger'],
   },
 ];

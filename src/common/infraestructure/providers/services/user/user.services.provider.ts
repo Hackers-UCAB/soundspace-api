@@ -1,5 +1,6 @@
 import { Provider } from "@nestjs/common";
 import { ILogger } from "src/common/application/logging-handler/logger.interface";
+import { IAuditingRepository } from "src/common/application/repositories/auditing.repository.interface";
 import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
 import { SecurityApplicationServiceDecorator } from "src/common/application/services/decorators/security-decorator/security-application-service.service.decorator";
@@ -14,7 +15,7 @@ import { DataSource } from "typeorm";
 export const userServicesProviders: Provider[] = [
     {
         provide: 'GetUserInfoApplicationService',
-        useFactory: (dataSource: DataSource, userRepository: IUserRepository, logger: ILogger) => {
+        useFactory: (userRepository: IUserRepository, auditingRepository: IAuditingRepository, logger: ILogger) => {
           return new LoggerApplicationServiceDecorator(
             new AuditingCommandServiceDecorator(
               new SecurityApplicationServiceDecorator(
@@ -22,7 +23,7 @@ export const userServicesProviders: Provider[] = [
                 userRepository,
                 [UserRoleEnum.USER],
               ),
-              new AuditingRepository(dataSource),
+              auditingRepository,
               'Get User Info',
               logger,
             ),
@@ -30,11 +31,11 @@ export const userServicesProviders: Provider[] = [
             'Get User Info',
           );
         },
-        inject: ['DataSource', 'UserRepository', 'ILogger'],
+        inject: ['UserRepository', 'AuditingRepository', 'ILogger'],
       },
       {
         provide: 'UpdateUserInfoApplicationService',
-        useFactory: (dataSource: DataSource, userRepository: IUserRepository, logger: ILogger) => {
+        useFactory: (userRepository: IUserRepository, auditingRepository: IAuditingRepository, logger: ILogger) => {
           return new LoggerApplicationServiceDecorator(
             new AuditingCommandServiceDecorator(
               new SecurityApplicationServiceDecorator(
@@ -44,7 +45,7 @@ export const userServicesProviders: Provider[] = [
                 userRepository,
                 [UserRoleEnum.USER],
               ),
-              new AuditingRepository(dataSource),
+              auditingRepository,
               'Update User Info',
               logger,
             ),
@@ -52,6 +53,6 @@ export const userServicesProviders: Provider[] = [
             'Update User Info',
           );
         },
-        inject: ['DataSource', 'UserRepository', 'ILogger'],
+        inject: ['UserRepository', 'AuditingRepository', 'ILogger'],
       },
 ]

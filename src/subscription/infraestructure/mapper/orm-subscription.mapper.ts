@@ -16,11 +16,11 @@ import { UserRepository } from 'src/user/infraestructure/repositories/user.repos
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionRepository } from '../repositories/subscription.repository';
 import { OrmUserMapper } from 'src/user/infraestructure/mapper/orm-user.mapper';
+import { OrmSubscriptionChanelMapper } from './orm-subscription-chanel.mapper';
 
 export class OrmSubscriptionMapper
   implements IMapper<Subscription, OrmSubscripcionEntity>
 {
-  //@Inject('DataSource')
   private readonly dataSource: DataSource;
   constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
@@ -44,7 +44,7 @@ export class OrmSubscriptionMapper
 
   async toPersistence(domain: Subscription): Promise<OrmSubscripcionEntity> {
     if (domain) {
-      
+      //TODO: Ver como puedo arreglar esta vaina
       const subscription = await OrmSubscripcionEntity.create(
         domain.Id.Id,
         domain.Status.Status,
@@ -54,7 +54,7 @@ export class OrmSubscriptionMapper
         domain.User.Id,
         new UserRepository(this.dataSource, new OrmUserMapper()),
         domain.Chanel.Id,
-        new SubscriptionRepository(this.dataSource),
+        new SubscriptionRepository(this.dataSource, this, new OrmSubscriptionChanelMapper()),
       );
       return subscription;
     }

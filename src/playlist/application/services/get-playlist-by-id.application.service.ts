@@ -80,7 +80,7 @@ export class GetPlaylistByIdService
         artists: artist.Data,
       });
     }
-
+    
     const playlistResponseDto: GetPlaylistByIdResponseApplicationDto = {
       userId: param.userId,
       playlist: playlistResult.Data,

@@ -7,16 +7,20 @@ import { OrmArtistaEntity } from '../../../artist/infraestructure/orm-entities/a
 import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class ArtistRepository
   extends Repository<OrmArtistaEntity>
   implements IArtistRepository
 {
-  private readonly OrmArtistMapper: OrmArtistMapper;
+  private readonly ormArtistMapper: IMapper<Artist, OrmArtistaEntity>;
 
-  constructor(dataSource: DataSource) {
+  constructor(
+    dataSource: DataSource,
+    ormArtistMapper: IMapper<Artist, OrmArtistaEntity>,
+  ) {
     super(OrmArtistaEntity, dataSource.createEntityManager());
-    this.OrmArtistMapper = new OrmArtistMapper();
+    this.ormArtistMapper = ormArtistMapper;
   }
 
   async findArtistById(artistId: ArtistId): Promise<Result<Artist>> {
@@ -27,13 +31,12 @@ export class ArtistRepository
       const artist = await this.createQueryBuilder('artista')
         .innerJoinAndSelect('artista.genero', 'generoArtista')
         .leftJoinAndSelect('artista.canciones', 'cancion')
-        //.innerJoinAndSelect('cancion.generos', 'generoCancion')
         .leftJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
         .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.codigo_artista = :id', { id: artistId.Id })
         .getOne();
 
-      response = await this.OrmArtistMapper.toDomain(artist);
+      response = await this.ormArtistMapper.toDomain(artist);
     } catch (e) {
       error = e;
     } finally {
@@ -56,17 +59,16 @@ export class ArtistRepository
 
     try {
       const artists = await this.createQueryBuilder('artista')
-        .innerJoinAndSelect('artista.canciones', 'cancion')
-        .innerJoinAndSelect('cancion.generos', 'generoCancion')
-        .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
-        .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
         .innerJoinAndSelect('artista.genero', 'generoArtista')
+        .leftJoinAndSelect('artista.canciones', 'cancion')
+        .leftJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
+        .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('cancion.codigo_cancion = :id', { id: songId.Id })
         .getMany();
 
       response = await Promise.all(
         artists.map(
-          async (artist) => await this.OrmArtistMapper.toDomain(artist),
+          async (artist) => await this.ormArtistMapper.toDomain(artist),
         ),
       );
     } catch (e) {
@@ -91,11 +93,11 @@ export class ArtistRepository
 
     try {
       const artists = await this.createQueryBuilder('artista')
+        .innerJoinAndSelect('artista.genero', 'generoArtista')
         .innerJoinAndSelect('artista.canciones', 'cancion')
         .innerJoinAndSelect('cancion.generos', 'generoCancion')
         .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
         .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
-        .innerJoinAndSelect('artista.genero', 'generoArtista')
         .where('playlistCreador.playlistCodigoPlaylist = :id', {
           id: albumId.Id,
         })
@@ -103,7 +105,7 @@ export class ArtistRepository
 
       response = await Promise.all(
         artists.map(
-          async (artist) => await this.OrmArtistMapper.toDomain(artist),
+          async (artist) => await this.ormArtistMapper.toDomain(artist),
         ),
       );
     } catch (e) {
@@ -128,17 +130,17 @@ export class ArtistRepository
 
     try {
       const artists = await this.createQueryBuilder('artista')
-        .innerJoinAndSelect('artista.canciones', 'cancion')
-        .innerJoinAndSelect('cancion.generos', 'generoCancion')
-        .innerJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
-        .innerJoinAndSelect('playlistCreador.playlist', 'playlist')
         .innerJoinAndSelect('artista.genero', 'generoArtista')
+        .leftJoinAndSelect('artista.canciones', 'cancion')
+        .leftJoinAndSelect('cancion.generos', 'generoCancion')
+        .leftJoinAndSelect('artista.playlistCreadores', 'playlistCreador')
+        .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.trending = :trending', { trending: true })
         .getMany();
-
+      
       response = await Promise.all(
         artists.map(
-          async (artist) => await this.OrmArtistMapper.toDomain(artist),
+          async (artist) => await this.ormArtistMapper.toDomain(artist),
         ),
       );
     } catch (e) {
@@ -176,7 +178,7 @@ export class ArtistRepository
 
       response = await Promise.all(
         artists.map(
-          async (artist) => await this.OrmArtistMapper.toDomain(artist),
+          async (artist) => await this.ormArtistMapper.toDomain(artist),
         ),
       );
     } catch (err) {
