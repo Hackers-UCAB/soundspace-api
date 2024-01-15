@@ -22,15 +22,6 @@ export class AuditingRepository
         User: data.user,
         Success: data.success,
       });
-      // const generator = new UuidGenerator();
-      // const entry: OrmAuditingEntity = {
-      //   auditing_id: generator.generate(),
-      //   Time: new Date(),
-      //   Operation: data.operation,
-      //   Data: data.data,
-      //   User: data.user,
-      //   Success: data.success,
-      // };
       await this.save(entry);
     } catch (err) {
       error = err;

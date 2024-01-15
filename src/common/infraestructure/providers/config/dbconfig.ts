@@ -9,6 +9,12 @@ import { UserRepository } from 'src/user/infraestructure/repositories/user.repos
 import { DataSource, getMetadataArgsStorage } from 'typeorm';
 import { AuditingRepository } from '../../repositories/auditing.repository';
 import { OrmUserMapper } from 'src/user/infraestructure/mapper/orm-user.mapper';
+import { OrmSubscriptionMapper } from 'src/subscription/infraestructure/mapper/orm-subscription.mapper';
+import { OrmSubscriptionChanelMapper } from 'src/subscription/infraestructure/mapper/orm-subscription-chanel.mapper';
+import { OrmAlbumMapper } from 'src/album/infraestructure/mapper/orm-album.mapper';
+import { OrmArtistMapper } from 'src/artist/infraestructure/mapper/orm-artist.mapper';
+import { OrmPlaylistMapper } from 'src/playlist/infrastructure/mapper/orm-playlist.mapper';
+import { OrmPromotionMapper } from 'src/promotions/infraestructure/mapper/orm-promotion.mapper';
 
 export const databaseProviders = [
   {
@@ -59,54 +65,40 @@ export const databaseProviders = [
   {
     provide: 'SubscriptionRepository',
     useFactory: (dataSource: DataSource) => {
-      return new SubscriptionRepository(dataSource);
+      return new SubscriptionRepository(dataSource, new OrmSubscriptionMapper(dataSource), new OrmSubscriptionChanelMapper());
     },
     inject: ['DataSource'],
   },
   {
     provide: 'AlbumRepository',
     useFactory: (dataSource: DataSource) => {
-      return new AlbumRepository(dataSource);
-    },
-    inject: ['DataSource'],
-  },
-  {
-    provide: 'AlbumRepository',
-    useFactory: (dataSource: DataSource) => {
-      return new AlbumRepository(dataSource);
+      return new AlbumRepository(dataSource, new OrmAlbumMapper());
     },
     inject: ['DataSource'],
   },
   {
     provide: 'ArtistRepository',
     useFactory: (dataSource: DataSource) => {
-      return new ArtistRepository(dataSource);
-    },
-    inject: ['DataSource'],
-  },
-  {
-    provide: 'ArtistRepository',
-    useFactory: (dataSource: DataSource) => {
-      return new ArtistRepository(dataSource);
+      return new ArtistRepository(dataSource, new OrmArtistMapper());
     },
     inject: ['DataSource'],
   },
   {
     provide: 'PlaylistRepository',
     useFactory: (dataSource: DataSource) => {
-      return new PlaylistRepository(dataSource);
+      return new PlaylistRepository(dataSource, new OrmPlaylistMapper());
     },
     inject: ['DataSource'],
   },
   {
     provide: 'PromotionRepository',
     useFactory: (dataSource: DataSource) => {
-      return new PromotionRepository(dataSource);
+      return new PromotionRepository(dataSource, new OrmPromotionMapper());
     },
     inject: ['DataSource'],
   },
   {
-    provide: 'AuditintgRepository',
+    provide: 'AuditingRepository',
     useFactory: (dataSource: DataSource) => {
       return new AuditingRepository(dataSource);
     },

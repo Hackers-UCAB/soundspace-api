@@ -4,16 +4,17 @@ import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { Promotion } from 'src/promotions/domain/promotion';
 import { OrmPromotionMapper } from '../mapper/orm-promotion.mapper';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class PromotionRepository
   extends Repository<OrmPromotionEntity>
   implements IPromotionRepository
 {
-  private readonly ormPromotionMapper: OrmPromotionMapper;
+  private readonly ormPromotionMapper: IMapper<Promotion, OrmPromotionEntity>;
 
-  constructor(dataSource: DataSource) {
+  constructor(dataSource: DataSource, ormPromotionMapper: IMapper<Promotion, OrmPromotionEntity>) {
     super(OrmPromotionEntity, dataSource.createEntityManager());
-    this.ormPromotionMapper = new OrmPromotionMapper();
+    this.ormPromotionMapper = ormPromotionMapper;
   }
 
   saveAggregate(promotion: Promotion): Promise<Result<string>> {

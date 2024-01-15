@@ -15,6 +15,7 @@ import { UuidGenerator } from "../../uuid-generator";
 import { NotifySubscriptionNearToExpiredEvent } from "src/subscription/application/events/notify-subscription-near-to-expired.event";
 import { SubscriptionRepository } from "src/subscription/infraestructure/repositories/subscription.repository";
 import { AzureBufferImageHelper } from "../../azure/helpers/get-blob-image.helper";
+import { ISubscriptionRepository } from "src/subscription/domain/repositories/subscription.repository.interface";
 
 export const providersManager: Provider[] = [
     {
@@ -40,18 +41,18 @@ export const providersManager: Provider[] = [
     },
     {
         provide: 'EventBus',
-        useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, dataSource: DataSource) => {
+        useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, subscriptionRepository: ISubscriptionRepository, dataSource: DataSource) => {
             //TODO: Hacer el de Auditing?
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
             //aqui subscribimos a todos los que escuchan los eventos
-            eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier, new SubscriptionRepository(dataSource))]);
-            eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, new SubscriptionRepository(dataSource))]);
-            eventBus.subscribe('SubscriptionNearToExpired', [new NotifySubscriptionNearToExpiredEvent(notifier, new SubscriptionRepository(dataSource))]);
+            eventBus.subscribe('SubscriptionExpired', [new NotifySubscriptionExpiredEvent(notifier, subscriptionRepository)]);
+            eventBus.subscribe('SubscriptionCreated', [new NotifySubscriptionCreatedEvent(notifier, subscriptionRepository)]);
+            eventBus.subscribe('SubscriptionNearToExpired', [new NotifySubscriptionNearToExpiredEvent(notifier, subscriptionRepository)]);
 
             return eventBus;
     },
-        inject: ['IEventPublisher', 'INotifier', 'ILogger', 'DataSource'],
+        inject: ['IEventPublisher', 'INotifier', 'ILogger', 'SubscriptionRepository', 'DataSource'],
     },
     {
         provide: 'AzureBufferImageHelper',

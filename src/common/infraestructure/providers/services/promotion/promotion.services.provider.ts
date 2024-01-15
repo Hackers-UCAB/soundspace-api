@@ -4,6 +4,7 @@ import { AuditingCommandServiceDecorator } from "src/common/application/services
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
 import { AuditingRepository } from "src/common/infraestructure/repositories/auditing.repository";
 import { GetRandomPromotionApplicationService } from "src/promotions/application/services/get-random-promotion.application.service";
+import { IPromotionRepository } from "src/promotions/domain/repositories/promotion.repository.interface";
 import { PromotionRepository } from "src/promotions/infraestructure/repositories/promotion.repository";
 import { DataSource } from "typeorm";
 
@@ -11,11 +12,11 @@ import { DataSource } from "typeorm";
 export const promotionServicesProviders: Provider[] = [
     {
         provide: 'GetRandomPromotionApplicationService',
-        useFactory: (dataSource: DataSource, logger: ILogger) => {
+        useFactory: (dataSource: DataSource, promotionRepository: IPromotionRepository, logger: ILogger) => {
           return new LoggerApplicationServiceDecorator(
             new AuditingCommandServiceDecorator(
               new GetRandomPromotionApplicationService(
-                new PromotionRepository(dataSource)
+                promotionRepository
               ),
               new AuditingRepository(dataSource),
               'Get Random Promotion',
@@ -25,6 +26,6 @@ export const promotionServicesProviders: Provider[] = [
             'Get Random Promotion',
           );
         },
-        inject: ['DataSource', 'ILogger'],
+        inject: ['DataSource', 'PromotionRepository', 'ILogger'],
       },
 ]

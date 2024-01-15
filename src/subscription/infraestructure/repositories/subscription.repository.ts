@@ -12,20 +12,23 @@ import { OrmSubscriptionChanelEntity } from '../orm-entities/subscription-chanel
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SubscriptionChanel } from 'src/subscription/domain/subscription-chanel/subscription-chanel';
 import { UserId } from 'src/user/domain/value-objects/user-id';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class SubscriptionRepository
   extends Repository<OrmSubscripcionEntity>
   implements ISubscriptionRepository
 {
-  private readonly ormSubscriptionMapper: OrmSubscriptionMapper;
-  private readonly ormSubscriptionChanelMapper: OrmSubscriptionChanelMapper;
+  private readonly ormSubscriptionMapper: IMapper<Subscription, OrmSubscripcionEntity>;
+  private readonly ormSubscriptionChanelMapper: IMapper<SubscriptionChanel, OrmSubscriptionChanelEntity>;
   private readonly subscriptionChanelRepository: Repository<OrmSubscriptionChanelEntity>;
   constructor(
     dataSource: DataSource,
+    ormSubscriptionMapper: IMapper<Subscription, OrmSubscripcionEntity>,
+    ormSubscriptionChanelMapper: IMapper<SubscriptionChanel, OrmSubscriptionChanelEntity>,
   ) {
     super(OrmSubscripcionEntity, dataSource.createEntityManager());
-    this.ormSubscriptionMapper = new OrmSubscriptionMapper(dataSource);
-    this.ormSubscriptionChanelMapper = new OrmSubscriptionChanelMapper();
+    this.ormSubscriptionMapper = ormSubscriptionMapper
+    this.ormSubscriptionChanelMapper = ormSubscriptionChanelMapper;
     this.subscriptionChanelRepository = dataSource.getRepository(
       OrmSubscriptionChanelEntity,
     );
