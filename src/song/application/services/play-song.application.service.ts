@@ -4,8 +4,8 @@ import { ISongRepository } from 'src/song/domain/repositories/song.repository.in
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 import { IBlobHelper } from '../interfaces/blob-helper.interface';
 import { ISendSongHelper } from '../interfaces/send-song-helper.iterface';
-import { PlaySongEntryApplicationDto } from '../dto/entrys/play-song.entry.application.dto';
-import { PlaySongResponseApplicationDto } from '../dto/responses/play-song.response.application.dto';
+import { PlaySongEntryApplicationDto } from '../dto/entry/play-song.entry.application.dto';
+import { PlaySongResponseApplicationDto } from '../dto/response/play-song.response.application.dto';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { ISongReferenceDomainService, SongReferenceDomainServiceDto } from 'src/song/domain/services/song-reference.domain,service';
 import { UserId } from 'src/user/domain/value-objects/user-id';

@@ -4,8 +4,8 @@ import { IApplicationService } from '../../../common/application/services/interf
 import { ISongRepository } from '../../../song/domain/repositories/song.repository.interface';
 import { IPlaylistRepository } from '../../domain/repositories/playlist.repository.interface';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
-import { GetPlaylistByIdEntryApplicationDto } from '../dto/entrys/get-playlist-by-id-entry.application.dto';
-import { GetPlaylistByIdResponseApplicationDto } from '../dto/responses/get-playlist-by-id-response.application.dto';
+import { GetPlaylistByIdEntryApplicationDto } from '../dto/entry/get-playlist-by-id-entry.application.dto';
+import { GetPlaylistByIdResponseApplicationDto } from '../dto/response/get-playlist-by-id-response.application.dto';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { Artist } from 'src/artist/domain/artist';
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class GetUserInfoResponseInfraestructureDto {
+export class GetUserInfoResponseInfrastructureDto {
   @ApiProperty({
     example: '51fa551a-3f47-4ccb-9b88-71ed6eb5f51b',
   })
@@ -32,9 +32,9 @@ export class GetUserInfoResponseInfraestructureDto {
   
 }
 
-export class GetUserInfoSwaggerResponseInfraestructureDto{
+export class GetUserInfoSwaggerResponseInfrastructureDto{
   @ApiProperty()
-  data: GetUserInfoResponseInfraestructureDto
+  data: GetUserInfoResponseInfrastructureDto
   
   @ApiProperty({
     example: 200

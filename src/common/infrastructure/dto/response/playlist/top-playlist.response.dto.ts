@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class TopPlaylistInfraestructureResponseDto {
+export class TopPlaylistInfrastructureResponseDto {
     @ApiProperty({
         example: [
             {
@@ -50,9 +50,9 @@ export class TopPlaylistInfraestructureResponseDto {
     }[];
 }
 
-export class TopPlaylistSwaggerInfraestructureResponseDto {
+export class TopPlaylistSwaggerInfrastructureResponseDto {
     @ApiProperty()
-    data: TopPlaylistInfraestructureResponseDto
+    data: TopPlaylistInfrastructureResponseDto
     @ApiProperty({ default: 200, description: 'Status Code' })
     statusCode: number
 }

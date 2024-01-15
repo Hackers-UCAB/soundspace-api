@@ -3,7 +3,6 @@ import { ServiceEntry } from '../../dto/entry/service-entry.dto';
 import { ServiceResponse } from '../../dto/response/service-response.dto';
 import { IApplicationService } from '../../interfaces/application-service.interface';
 import { ApplicationServiceDecorator } from '../application-service.decorator';
-import { UserRole } from 'src/user/domain/value-objects/user-role';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { User } from 'src/user/domain/user';

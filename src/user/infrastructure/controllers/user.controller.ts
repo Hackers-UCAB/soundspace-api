@@ -10,13 +10,13 @@ import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorat
 import { Result } from 'src/common/domain/result-handler/result';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { HttpResponseHandler } from 'src/common/infrastructure/http-response-handler/http-response.handler';
-import { GetUserInfoResponseApplicationDto } from 'src/user/application/dto/responses/get-user-info-response.application.dto';
+import { GetUserInfoResponseApplicationDto } from 'src/user/application/dto/response/get-user-info-response.application.dto';
 
 import { UserId } from 'src/user/domain/value-objects/user-id';
-import { GetUserInfoResponseInfraestructureDto, GetUserInfoSwaggerResponseInfraestructureDto } from '../dto/responses/get-user-info-response.infraestructure.dto';
-import { UpdateUserInfoEntryInfraestructureDto } from '../dto/entrys/update-user-info.entry.infraestructure.dto';
-import { UpdateUserInfoEntryApplicationDto } from 'src/user/application/dto/entrys/update-user-info-entry.application.dto';
-import { UpdateUserInfoResponseApplicationDto } from 'src/user/application/dto/responses/update-user-info-response.application.dto';
+import { GetUserInfoResponseInfrastructureDto, GetUserInfoSwaggerResponseInfrastructureDto } from '../dto/response/get-user-info-response.infraestructure.dto';
+import { UpdateUserInfoEntryInfrastructureDto } from '../dto/entry/update-user-info.entry.infraestructure.dto';
+import { UpdateUserInfoEntryApplicationDto } from 'src/user/application/dto/entry/update-user-info-entry.application.dto';
+import { UpdateUserInfoResponseApplicationDto } from 'src/user/application/dto/response/update-user-info-response.application.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
@@ -41,7 +41,7 @@ export class UserController {
 
   @Get()
   @Auth()
-  @ApiResponse({ status: 200, description: 'Se recibio correctamente la info del usuario', type: GetUserInfoSwaggerResponseInfraestructureDto })
+  @ApiResponse({ status: 200, description: 'Se recibio correctamente la info del usuario', type: GetUserInfoSwaggerResponseInfrastructureDto })
   async getUser(@GetUser('id') userId: UserId) {
     const serviceResult: Result<GetUserInfoResponseApplicationDto> =
       await this.getUserInfoApplicationService.execute({userId: userId.Id});
@@ -52,7 +52,7 @@ export class UserController {
         serviceResult.error,
       );
     }
-    const response: GetUserInfoResponseInfraestructureDto = {
+    const response: GetUserInfoResponseInfrastructureDto = {
       id: serviceResult.Data.userId,
       name: serviceResult.Data.user?.Name?.Name,
       email: serviceResult.Data.user?.Email?.Email,
@@ -66,7 +66,7 @@ export class UserController {
   @Auth()
   @ApiOkResponse({ description: 'Se actualizo correctamente la info del usuario, devuelve true'})
   async updateUser(
-    @Body() updateUserDto: UpdateUserInfoEntryInfraestructureDto,
+    @Body() updateUserDto: UpdateUserInfoEntryInfrastructureDto,
     @GetUser('id') userId: UserId,
   ) {
     const dto: UpdateUserInfoEntryApplicationDto = {

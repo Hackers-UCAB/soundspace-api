@@ -5,8 +5,8 @@ import { IJwtGenerator } from '../interface/jwt-generator.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
 import { Subscription } from 'src/subscription/domain/subscription';
-import { LogInEntryApplicationDto } from '../dto/entrys/log-in-entry.application.dto';
-import { LogInResponseApplicationDto } from '../dto/responses/log-in-response.application.dto';
+import { LogInEntryApplicationDto } from '../dto/entry/log-in-entry.application.dto';
+import { LogInResponseApplicationDto } from '../dto/response/log-in-response.application.dto';
 
 export class LoginApplicationService
   implements IApplicationService<LogInEntryApplicationDto, LogInResponseApplicationDto>

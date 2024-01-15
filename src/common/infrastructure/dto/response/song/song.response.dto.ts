@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 
-export class SongInfraestructureResponseDto {
+export class SongInfrastructureResponseDto {
     @ApiProperty({
         example: '2d7ff672-acd2-4b86-901b-6d84383c3949',
     })
@@ -41,9 +41,9 @@ export class SongInfraestructureResponseDto {
     }[]
 }
 
-export class SongSwaggerInfraestructureResponseDto {
+export class SongSwaggerInfrastructureResponseDto {
     @ApiProperty()
-    data: SongInfraestructureResponseDto
+    data: SongInfrastructureResponseDto
     @ApiProperty({ default: 200, description: 'Status Code' })
     statusCode: number
 }

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class TrendingArtistsInfraestructureResponseDto {
+export class TrendingArtistsInfrastructureResponseDto {
 
     @ApiProperty({
         example: [
@@ -57,9 +57,9 @@ export class TrendingArtistsInfraestructureResponseDto {
 
 }
 
-export class TrendingArtistsSwaggerInfraestructureResponseDto {
+export class TrendingArtistsSwaggerInfrastructureResponseDto {
     @ApiProperty()
-    data: TrendingArtistsInfraestructureResponseDto
+    data: TrendingArtistsInfrastructureResponseDto
     @ApiProperty({ default: 200, description: 'Status Code' })
     statusCode: number
 }

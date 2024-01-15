@@ -1,17 +1,17 @@
 import { Controller, Post, Body, Inject, Get, Headers } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { SignUpEntryInfraestructureDto } from '../dto/entrys/sign-up-entry.infraestructure.dto';
+import { SignUpEntryInfrastructureDto } from '../dto/entry/sign-up-entry.infrastructure.dto';
 import { Result } from 'src/common/domain/result-handler/result';
-import { AuthHeaderInfraestructureDto } from '../dto/entrys/auth-header.infraestructure.dto';
-import { SignUpEntryApplicationDto } from 'src/auth/application/dto/entrys/sign-up-entry.application.dto';
+import { AuthHeaderInfrastructureDto } from '../dto/entry/auth-header.infrastructure.dto';
+import { SignUpEntryApplicationDto } from 'src/auth/application/dto/entry/sign-up-entry.application.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { LogInEntryInfraestructureDto } from '../dto/entrys/log-in-entry.infraestructure.dto';
-import { LogInEntryApplicationDto } from 'src/auth/application/dto/entrys/log-in-entry.application.dto';
-import { SignUpResponseApplicationDto } from 'src/auth/application/dto/responses/sign-up-response.application.dto';
-import { LogInResponseApplicationDto } from 'src/auth/application/dto/responses/log-in-response.application.dto';
-import { SignUpResponseInfraestructureDto, SignUpSwaggerResponseInfraestructureDto } from '../dto/responses/sign-up-response.infraestructure.dto';
+import { LogInEntryInfrastructureDto } from '../dto/entry/log-in-entry.infrastructure.dto';
+import { LogInEntryApplicationDto } from 'src/auth/application/dto/entry/log-in-entry.application.dto';
+import { SignUpResponseApplicationDto } from 'src/auth/application/dto/response/sign-up-response.application.dto';
+import { LogInResponseApplicationDto } from 'src/auth/application/dto/response/log-in-response.application.dto';
+import { SignUpResponseInfrastructureDto, SignUpSwaggerResponseInfrastructureDto } from '../dto/response/sign-up-response.infrastructure.dto';
 import { HttpResponseHandler } from 'src/common/infrastructure/http-response-handler/http-response.handler';
-import { LogInResponseInfraestructureDto, LogInSwaggerResponseInfraestructureDto } from '../dto/responses/log-in-response.infraestructure.dto';
+import { LogInResponseInfrastructureDto, LogInSwaggerResponseInfrastructureDto } from '../dto/response/log-in-response.infrastructure.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -48,10 +48,10 @@ export class AuthController {
   ) {}
 
   @Post('sign-up/movistar')
-  @ApiCreatedResponse({ description: 'Se creo correctamente el usuario Movistar', type: SignUpSwaggerResponseInfraestructureDto })
+  @ApiCreatedResponse({ description: 'Se creo correctamente el usuario Movistar', type: SignUpSwaggerResponseInfrastructureDto })
   async signUpMovistar(
-    @Body() signUpDto: SignUpEntryInfraestructureDto,
-    @Headers() headers: AuthHeaderInfraestructureDto,
+    @Body() signUpDto: SignUpEntryInfrastructureDto,
+    @Headers() headers: AuthHeaderInfrastructureDto,
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
@@ -77,17 +77,17 @@ export class AuthController {
       );
     }
 
-    const response: SignUpResponseInfraestructureDto = {
+    const response: SignUpResponseInfrastructureDto = {
       token: serviceResult.Data.token,
     };
     return HttpResponseHandler.Success(201, response);
   }
 
   @Post('sign-up/digitel')
-  @ApiCreatedResponse({ description: 'Se creo correctamente el usuario Digitel', type: SignUpSwaggerResponseInfraestructureDto })
+  @ApiCreatedResponse({ description: 'Se creo correctamente el usuario Digitel', type: SignUpSwaggerResponseInfrastructureDto })
   async signUpDigitel(
-    @Body() signUpDto: SignUpEntryInfraestructureDto,
-    @Headers() headers: AuthHeaderInfraestructureDto,
+    @Body() signUpDto: SignUpEntryInfrastructureDto,
+    @Headers() headers: AuthHeaderInfrastructureDto,
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
@@ -112,17 +112,17 @@ export class AuthController {
         serviceResult.error,
       );
     }
-    const response: SignUpResponseInfraestructureDto = {
+    const response: SignUpResponseInfrastructureDto = {
       token: serviceResult.Data.token,
     };
     return HttpResponseHandler.Success(201, response);
   }
 
   @Post('log-in')
-  @ApiOkResponse({ type: LogInSwaggerResponseInfraestructureDto })
+  @ApiOkResponse({ type: LogInSwaggerResponseInfrastructureDto })
   async login(
-    @Body() logIn: LogInEntryInfraestructureDto,
-    @Headers() headers: AuthHeaderInfraestructureDto,
+    @Body() logIn: LogInEntryInfrastructureDto,
+    @Headers() headers: AuthHeaderInfrastructureDto,
   ) {
     if (!headers.token) {
       HttpResponseHandler.HandleException(
@@ -147,14 +147,14 @@ export class AuthController {
         serviceResult.error,
       );
     }
-    const response: LogInResponseInfraestructureDto = {
+    const response: LogInResponseInfrastructureDto = {
       token: serviceResult.Data.token,
     };
     return HttpResponseHandler.Success(200, response);
   }
 
   @Post('log-in/guest')
-  @ApiOkResponse({ type: LogInSwaggerResponseInfraestructureDto, description: 'Se inicio correctamente el usuario invitado' })
+  @ApiOkResponse({ type: LogInSwaggerResponseInfrastructureDto, description: 'Se inicio correctamente el usuario invitado' })
   async loginGuest() {
     //Se pone que el usuario que esta realizando esta accion es Unkown porque en este punto no se sabe quien es
     const serviceResult: Result<LogInResponseApplicationDto> =
@@ -166,7 +166,7 @@ export class AuthController {
         serviceResult.error,
       );
     }
-    const response: LogInResponseInfraestructureDto = {
+    const response: LogInResponseInfrastructureDto = {
       token: serviceResult.Data.token,
     };
     return HttpResponseHandler.Success(200, response);

@@ -2,12 +2,12 @@ import { Controller, Get, Inject, Param, Res, Headers, StreamableFile, Body } fr
 
 import { DataSource } from 'typeorm';
 
-import { GetTopSongsResponseApplicationDto } from '../../application/dto/responses/get-top-songs.response.application.dto';
+import { GetTopSongsResponseApplicationDto } from '../../application/dto/response/get-top-songs.response.application.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { Result } from '../../../common/domain/result-handler/result';
 import { HttpResponseHandler } from '../../../common/infrastructure/http-response-handler/http-response.handler';
 import { IGetBufferImageInterface } from '../../../common/domain/interfaces/get-buffer-image.interface';
-import { SongInfraestructureResponseDto } from '../../../common/infrastructure/dto/responses/song/song.response.dto';
+import { SongInfrastructureResponseDto } from '../../../common/infrastructure/dto/response/song/song.response.dto';
 import { timeConverter } from '../../../common/domain/helpers/convert-duration';
 import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
@@ -44,7 +44,7 @@ export class SongController {
                 serviceResult.error,
             );
         }
-        let songs: SongInfraestructureResponseDto[] = [];
+        let songs: SongInfrastructureResponseDto[] = [];
 
         for (const song of serviceResult.Data.songs) {
             const songImage = await this.azureBufferImageHelper.getFile(
@@ -56,7 +56,7 @@ export class SongController {
                     name: artist.Name.Name,
                 };
             });
-            const returnSong: SongInfraestructureResponseDto = {
+            const returnSong: SongInfrastructureResponseDto = {
                 id: song.song.Id.Id,
                 name: song.song.Name.Name,
                 duration: timeConverter(song.song.Duration.Duration),

@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsEmail, IsIn, IsOptional, IsString, MinLength } from "class-validator";
 
 
-export class UpdateUserInfoEntryInfraestructureDto {
+export class UpdateUserInfoEntryInfrastructureDto {
     @ApiProperty({ required: false, minLength: 3, example: 'Daniel' })
     @IsString()
     @IsOptional()

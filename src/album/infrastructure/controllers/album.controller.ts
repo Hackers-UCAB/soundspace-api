@@ -1,25 +1,25 @@
 import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { GetAlbumByIdResponseApplicationDto } from '../../application/dto/responses/get-album-by-id-response.application.dto';
-import { GetAlbumByIdEntryApplicationDto } from '../../application/dto/entries/get-album-by-id-entry.application.dto';
-import { GetTopAlbumResponseApplicationDto } from '../../application/dto/responses/get-top-album-response.application.dto';
+import { GetAlbumByIdResponseApplicationDto } from '../../application/dto/response/get-album-by-id-response.application.dto';
+import { GetAlbumByIdEntryApplicationDto } from '../../application/dto/entry/get-album-by-id-entry.application.dto';
+import { GetTopAlbumResponseApplicationDto } from '../../application/dto/response/get-top-album-response.application.dto';
 import { UserId } from '../../../user/domain/value-objects/user-id';
 import { GetUser } from '../../../auth/infrastructure/jwt/decorators/get-user.decorator';
 import { Auth } from 'src/auth/infrastructure/jwt/decorators/auth.decorator';
 import { HttpResponseHandler } from 'src/common/infrastructure/http-response-handler/http-response.handler';
 import { Result } from '../../../common/domain/result-handler/result';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
-import { SongInfraestructureResponseDto } from 'src/common/infrastructure/dto/responses/song/song.response.dto';
+import { SongInfrastructureResponseDto } from 'src/common/infrastructure/dto/response/song/song.response.dto';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import {
-  PlaylistInfraestructureResponseDto,
-  PlaylistSwaggerInfraestructureResponseDto,
-} from 'src/common/infrastructure/dto/responses/playlist/playlist.response.dto';
+  PlaylistInfrastructureResponseDto,
+  PlaylistSwaggerInfrastructureResponseDto,
+} from 'src/common/infrastructure/dto/response/playlist/playlist.response.dto';
 import {
-  TopPlaylistInfraestructureResponseDto,
-  TopPlaylistSwaggerInfraestructureResponseDto,
-} from '../../../common/infrastructure/dto/responses/playlist/top-playlist.response.dto';
+  TopPlaylistInfrastructureResponseDto,
+  TopPlaylistSwaggerInfrastructureResponseDto,
+} from '../../../common/infrastructure/dto/response/playlist/top-playlist.response.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import {
   ApiBearerAuth,
@@ -57,7 +57,7 @@ export class AlbumController {
   @Get('top_albums')
   @ApiCreatedResponse({
     description: 'Se consulto correctamente la lista de albums trending',
-    type: TopPlaylistSwaggerInfraestructureResponseDto,
+    type: TopPlaylistSwaggerInfrastructureResponseDto,
   })
   @Auth()
   async getTopAlbum(@GetUser('id') userId: UserId) {
@@ -87,7 +87,7 @@ export class AlbumController {
       albums.push(returnAlbum);
     }
 
-    const response: TopPlaylistInfraestructureResponseDto = {
+    const response: TopPlaylistInfrastructureResponseDto = {
       playlists: albums,
     };
 
@@ -102,7 +102,7 @@ export class AlbumController {
   })
   @ApiCreatedResponse({
     description: 'Se consultó correctamente al album mediante su uuid',
-    type: PlaylistSwaggerInfraestructureResponseDto,
+    type: PlaylistSwaggerInfrastructureResponseDto,
   })
   @Auth()
   async getPlaylist(
@@ -130,7 +130,7 @@ export class AlbumController {
     );
 
     let duration: number = 0;
-    let songs: SongInfraestructureResponseDto[] = [];
+    let songs: SongInfrastructureResponseDto[] = [];
     const creators = serviceResult.Data.creators.map((artist) => {
       return {
         creatorId: artist.Id.Id,
@@ -149,7 +149,7 @@ export class AlbumController {
           name: artist.Name.Name,
         };
       });
-      const returnSong: SongInfraestructureResponseDto = {
+      const returnSong: SongInfrastructureResponseDto = {
         id: song.song.Id.Id,
         name: song.song.Name.Name,
         duration: timeConverter(song.song.Duration.Duration),
@@ -159,7 +159,7 @@ export class AlbumController {
       songs.push(returnSong);
     }
 
-    const response: PlaylistInfraestructureResponseDto = {
+    const response: PlaylistInfrastructureResponseDto = {
       id: serviceResult.Data.album.Id.Id,
       name: serviceResult.Data.album.Name.Name,
       duration: timeConverter(duration),

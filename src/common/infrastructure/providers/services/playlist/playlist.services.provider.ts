@@ -5,7 +5,7 @@ import { ILogger } from "src/common/application/logging-handler/logger.interface
 import { IAuditingRepository } from "src/common/application/repositories/auditing.repository.interface";
 import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
-import { AuditingRepository } from "src/common/infraestructure/auditing/repositories/auditing.repository";
+import { AuditingRepository } from "src/common/infrastructure/auditing/repositories/auditing.repository";
 import { GetPlaylistByIdService } from "src/playlist/application/services/get-playlist-by-id.application.service";
 import { GetTopPlaylistService } from "src/playlist/application/services/get-top-playlist.application.service";
 import { IPlaylistRepository } from "src/playlist/domain/repositories/playlist.repository.interface";

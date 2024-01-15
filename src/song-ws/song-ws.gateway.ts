@@ -7,8 +7,8 @@ import { AuditingCommandServiceDecorator } from 'src/common/application/services
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { LoggerImpl } from 'src/common/infrastructure/logger/logger';
 import { AuditingRepository } from 'src/common/infrastructure/auditing/repositories/auditing.repository';
-import { PlaySongEntryApplicationDto } from 'src/song/application/dto/entrys/play-song.entry.application.dto';
-import { PlaySongResponseApplicationDto } from 'src/song/application/dto/responses/play-song.response.application.dto';
+import { PlaySongEntryApplicationDto } from 'src/song/application/dto/entry/play-song.entry.application.dto';
+import { PlaySongResponseApplicationDto } from 'src/song/application/dto/response/play-song.response.application.dto';
 import { PlaySongService} from 'src/song/application/services/play-song.application.service';
 import { AzureBlobHelper } from 'src/song/infrastructure/helpers/get-blob-file.helper';
 import { SendSongHelper } from 'src/song/infrastructure/helpers/send-song-helper';

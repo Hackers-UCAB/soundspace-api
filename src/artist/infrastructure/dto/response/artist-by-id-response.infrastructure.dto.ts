@@ -1,7 +1,7 @@
-import { SongInfraestructureResponseDto } from "src/common/infrastructure/dto/responses/song/song.response.dto";
+import { SongInfrastructureResponseDto } from "src/common/infrastructure/dto/response/song/song.response.dto";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class ArtistByIdInfraestructureResponseDto {
+export class ArtistByIdInfrastructureResponseDto {
 
     @ApiProperty({
         example: '7bcbfd8a-e775-4149-83ee-9ba4c709e8a2',
@@ -79,13 +79,13 @@ export class ArtistByIdInfraestructureResponseDto {
             },
         ],
     })
-    songs: SongInfraestructureResponseDto[];
+    songs: SongInfrastructureResponseDto[];
 
 }
 
-export class ArtistByIdSwaggerInfraestructureResponseDto {
+export class ArtistByIdSwaggerInfrastructureResponseDto {
     @ApiProperty()
-    data: ArtistByIdInfraestructureResponseDto
+    data: ArtistByIdInfrastructureResponseDto
     @ApiProperty({ default: 200, description: 'Status Code' })
     statusCode: number
 }

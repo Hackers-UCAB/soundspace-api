@@ -5,8 +5,8 @@ import { Result } from 'src/common/domain/result-handler/result';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { HttpResponseHandler } from 'src/common/infrastructure/http-response-handler/http-response.handler';
-import { GetRandomPromotionResponseApplicationDto } from 'src/promotions/application/dto/responses/get-random-promotion-response.application.dto';
-import { GetRandomPromotionResponseInfraestructureDto } from '../dto/responses/get-random-promotion-response.infraestructure.dto';
+import { GetRandomPromotionResponseApplicationDto } from 'src/promotions/application/dto/response/get-random-promotion-response.application.dto';
+import { GetRandomPromotionResponseInfrastructureDto } from '../dto/response/get-random-promotion-response.infraestructure.dto';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 
@@ -44,7 +44,7 @@ export class PromotionController {
       serviceResult.Data.promotion.ImageRef.Path
     );
     
-    const response: GetRandomPromotionResponseInfraestructureDto = {
+    const response: GetRandomPromotionResponseInfrastructureDto = {
         id: serviceResult.Data.promotion.Id.Id,
         url: serviceResult.Data.promotion.Url.Path,
         image: promotionImage.IsSuccess ? promotionImage.Data : null,

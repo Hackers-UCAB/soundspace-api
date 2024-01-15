@@ -1,5 +1,5 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { SignUpEntryApplicationDto } from '../dto/entrys/sign-up-entry.application.dto';
+import { SignUpEntryApplicationDto } from '../dto/entry/sign-up-entry.application.dto';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
@@ -18,7 +18,7 @@ import { SubscriptionStatusEnum } from 'src/subscription/infrastructure/orm-enti
 import { Subscription } from 'src/subscription/domain/subscription';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { IDigitelSubscriptionValidation } from 'src/subscription/domain/validation/digitel-subscription-validation.interface';
-import { SignUpResponseApplicationDto } from '../dto/responses/sign-up-response.application.dto';
+import { SignUpResponseApplicationDto } from '../dto/response/sign-up-response.application.dto';
 
 export class SignUpDigitelApplicationService
   implements

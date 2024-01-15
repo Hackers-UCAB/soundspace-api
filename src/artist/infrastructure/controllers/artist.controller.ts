@@ -10,15 +10,15 @@ import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
 import { GetTrendingArtistsResponseApplicationDto } from 'src/artist/application/dto/response/get-trending-artists-response.application.dto';
 import {
-  TrendingArtistsInfraestructureResponseDto,
-  TrendingArtistsSwaggerInfraestructureResponseDto,
-} from '../dto/response/trending-artists-response.infraestructure.dto';
-import { SongInfraestructureResponseDto } from 'src/common/infrastructure/dto/responses/song/song.response.dto';
+  TrendingArtistsInfrastructureResponseDto,
+  TrendingArtistsSwaggerInfrastructureResponseDto,
+} from '../dto/response/trending-artists-response.infrastructure.dto';
+import { SongInfrastructureResponseDto } from 'src/common/infrastructure/dto/response/song/song.response.dto';
 import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import {
-  ArtistByIdInfraestructureResponseDto,
-  ArtistByIdSwaggerInfraestructureResponseDto,
-} from '../dto/response/artist-by-id-response.infraestructure.dto';
+  ArtistByIdInfrastructureResponseDto,
+  ArtistByIdSwaggerInfrastructureResponseDto,
+} from '../dto/response/artist-by-id-response.infrastructure.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
@@ -45,7 +45,7 @@ export class ArtistController {
   @Get('top_artists')
   @ApiCreatedResponse({
     description: 'Se consulto correctamente la lista de trending artists',
-    type: TrendingArtistsSwaggerInfraestructureResponseDto,
+    type: TrendingArtistsSwaggerInfrastructureResponseDto,
   })
   @Get('top_artists')
   @Auth()
@@ -79,7 +79,7 @@ export class ArtistController {
 
       artists.push(returnArtists);
     }
-    const response: TrendingArtistsInfraestructureResponseDto = {
+    const response: TrendingArtistsInfrastructureResponseDto = {
       artists: artists,
     };
 
@@ -95,7 +95,7 @@ export class ArtistController {
   @ApiCreatedResponse({
     description:
       'Se consulto correctamente la informacion de un artista por su id',
-    type: ArtistByIdSwaggerInfraestructureResponseDto,
+    type: ArtistByIdSwaggerInfrastructureResponseDto,
   })
   @Get(':id')
   @Auth()
@@ -139,7 +139,7 @@ export class ArtistController {
     }
 
     let duration: number = 0;
-    let songs: SongInfraestructureResponseDto[] = [];
+    let songs: SongInfrastructureResponseDto[] = [];
 
     for (const song of serviceResult.Data.songs) {
       duration += song.song.Duration.Duration;
@@ -155,7 +155,7 @@ export class ArtistController {
         };
       });
 
-      const returnSong: SongInfraestructureResponseDto = {
+      const returnSong: SongInfrastructureResponseDto = {
         id: song.song.Id.Id,
         name: song.song.Name.Name,
         duration: timeConverter(song.song.Duration.Duration),
@@ -166,7 +166,7 @@ export class ArtistController {
       songs.push(returnSong);
     }
 
-    const response: ArtistByIdInfraestructureResponseDto = {
+    const response: ArtistByIdInfrastructureResponseDto = {
       id: serviceResult.Data.artist.Id.Id,
       name: serviceResult.Data.artist.Name.Name,
       genre: serviceResult.Data.artist.Genre.Genre,
