@@ -5,8 +5,6 @@ import { ServiceEntry } from "src/common/application/services/dto/entry/service-
 import { GetRandomPromotionApplicationService } from "src/promotions/application/services/get-random-promotion.application.service";
 import { PromotionObjectMother } from "test/common/objects-mother/promotion.object-mother";
 import { UserObjectMother } from "test/common/objects-mother/user.object-mother";
-import { LoggerMock } from "test/common/others-mocks/logger.mock";
-import { AuditingRepositoryMock } from "test/common/repository-mocks/auditing.repository.mock";
 import { PromotionRepositoryMock } from "test/common/repository-mocks/promotion.repository.mock";
 import { UserRepositoryMock } from "test/common/repository-mocks/user.repository.mock";
 
