@@ -9,9 +9,14 @@ import { SubscriptionStatus } from "src/subscription/domain/value-objects/subscr
 import { SubscriptionValue } from "src/subscription/domain/value-objects/subscription-value";
 import { UserId } from "src/user/domain/value-objects/user-id";
 import { SubscriptionStatusEnum } from "../../persistence-entities/orm-entities/orm-subscription.entity";
+import { Model } from "mongoose";
 
 
 export class OdmSubscriptionMapper implements IMapper<Subscription, OdmSubscriptionEntity>{
+    private readonly subscriptionModel: Model<OdmSubscriptionEntity>;
+    constructor(subscriptionModel: Model<OdmSubscriptionEntity>){
+        this.subscriptionModel = subscriptionModel;
+    }
     async toDomain(persistence: OdmSubscriptionEntity): Promise<Subscription> {
         if (persistence){
             const subscription: Subscription = await Subscription.create(
@@ -27,8 +32,20 @@ export class OdmSubscriptionMapper implements IMapper<Subscription, OdmSubscript
         }
         return null;
     }
-    toPersistence(domain: Subscription): Promise<OdmSubscriptionEntity> {
-        throw new Error("Method not implemented.");
+    async toPersistence(domain: Subscription): Promise<OdmSubscriptionEntity> {
+        if (domain){
+            const odmSubscription = new this.subscriptionModel({
+                codigo_subscripcion: domain.Id.Id,
+                status: domain.Status.Status,
+                fecha_creacion: domain.CreatedOn.Date,
+                fecha_finalizacion: domain.Until.Date,
+                value: domain.SubscriptionValue.SubscriptionValue,
+                usuario: domain.User.Id,
+                canal: domain.Chanel.Id,
+            })
+            return odmSubscription;
+        }
+        return null;
     }
     
 }

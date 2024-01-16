@@ -217,7 +217,7 @@ export const odmDataBaseProviders = [
   {
     provide: 'UserRepository',
     useFactory: (userModel: Model<OdmUserEntity>) => {
-      return new OdmUserRepository(new OdmUserMapper(), userModel);
+      return new OdmUserRepository(new OdmUserMapper(userModel), userModel);
     },
     inject: ['UserModel'],
   },
@@ -234,7 +234,7 @@ export const odmDataBaseProviders = [
       return new OdmSubscriptionRepository(
         subscriptionModel,
         subscriptionChanelModel,
-        new OdmSubscriptionMapper(),
+        new OdmSubscriptionMapper(subscriptionModel),
         new OdmSubscriptionChanelMapper(),
       );
     },

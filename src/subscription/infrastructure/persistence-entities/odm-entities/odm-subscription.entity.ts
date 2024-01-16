@@ -24,19 +24,18 @@ export class OdmSubscriptionEntity extends Document {
   @Prop({ default: SubscriptionStatusEnum.ACTIVE })
   status: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'OdmUserEntity', required: true })
-  usuarioRef: Types.ObjectId;
+  // @Prop({ type: Types.ObjectId, ref: 'OdmUserEntity', required: true })
+  // usuarioRef: Types.ObjectId;
 
   @Prop({ required: true })
   usuario: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'OdmSubscriptionChanelEntity', required: true })
-  canalRef: Types.ObjectId;
+  // @Prop({ type: Types.ObjectId, ref: 'OdmSubscriptionChanelEntity', required: true })
+  // canalRef: Types.ObjectId;
 
   @Prop({ required: true })
   canal: string;
-  //TODO: El create, recibe un repo para buscar
-  // static async create
+
 }
 
 export const SubscriptionSchema = SchemaFactory.createForClass(

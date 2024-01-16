@@ -12,8 +12,39 @@ export class OdmAuditingRepository implements IAuditingRepository{
     ){
         this.auditingModel = auditingModel;
     }
-    saveAuditing(data: AuditingDto): Promise<Result<string>> {
-        throw new Error("Method not implemented.");
+    async saveAuditing(data: AuditingDto): Promise<Result<string>> {
+        let error: any;
+        try {
+            const entry = new this.auditingModel({
+                time: new Date(),
+                operation: data.operation,
+                data: data.data,
+                user: data.user,
+                success: data.success
+            })
+            await entry.save();
+            // const entry = await this.auditingModel.create({
+            //     time: new Date(),
+            //     operation: data.operation,
+            //     data: data.data,
+            //     user: data.user,
+            //     success: data.success
+            // });
+            
+        } catch (err) {
+            error = err;
+        }finally{
+            if (error){
+                return Result.fail(
+                    null,
+                    500,
+                    error.message ||
+                    'Ha ocurrido un error inesperado guardando la auditoria, hable con el administrador',
+                    error
+                )
+            }
+            return Result.success('saved', 200);
+        }
     }
     
 }

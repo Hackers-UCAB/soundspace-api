@@ -108,7 +108,7 @@ export class SignUpMovistarApplicationService
       newUser,
       [param.token],
     );
-    if (!userSaving.IsSuccess) {
+    if (!userSaving.IsSuccess) {      
       return Result.fail(
         null,
         userSaving.StatusCode,

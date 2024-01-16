@@ -2,14 +2,15 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class OdmAuditingEntity {
-  @Prop({ required: true, unique: true })
-  auditing_id: string;
+  // @Prop({ required: true, unique: true })
+  // auditing_id: string;
+  
 
   @Prop({ required: true })
   user: string;
 
   @Prop({ required: true })
-  uuccess: boolean;
+  success: boolean;
 
   @Prop({ required: true })
   time: Date;
