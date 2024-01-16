@@ -3,8 +3,6 @@ import { SubscriptionChanelId } from './value-objects/subscription-chanel-id';
 import { SubscriptionChanelName } from './value-objects/subscription-chanel-name';
 import { SubscriptionChanelType } from './value-objects/subscription-chanel-type';
 import { SubscriptionChanelUrlValidation } from './value-objects/subscription-chanel-url-validation';
-import { ISubscriptionValidation } from '../validation/subcscription-validaion.interface';
-import { Result } from 'src/common/application/result-handler/result';
 
 export class SubscriptionChanel extends Entity<SubscriptionChanelId> {
   private name: SubscriptionChanelName;
@@ -50,7 +48,4 @@ export class SubscriptionChanel extends Entity<SubscriptionChanelId> {
     return subscriptionChanel;
   }
 
-  static async validateSubscription(port: ISubscriptionValidation, chanel: string, value: string, url: string):Promise<Result<boolean>>{
-    return await port.validateSubscription(chanel, value, url);
-  }
 }

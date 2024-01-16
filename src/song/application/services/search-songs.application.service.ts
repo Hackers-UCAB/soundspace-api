@@ -1,5 +1,5 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { Song } from 'src/song/domain/song';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';

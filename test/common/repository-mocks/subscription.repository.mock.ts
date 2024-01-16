@@ -1,4 +1,5 @@
-import { Result } from "src/common/application/result-handler/result";
+
+import { Result } from "src/common/domain/result-handler/result";
 import { ISubscriptionRepository } from "src/subscription/domain/repositories/subscription.repository.interface";
 import { Subscription } from "src/subscription/domain/subscription";
 import { SubscriptionChanel } from "src/subscription/domain/subscription-chanel/subscription-chanel";
@@ -40,5 +41,8 @@ export class SubscriptionRepositoryMock implements ISubscriptionRepository {
         throw new Error("Method not implemented.");
     }
    
+    static create(){
+        return new SubscriptionRepositoryMock()
+    }
     
 }

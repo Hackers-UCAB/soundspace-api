@@ -1,11 +1,11 @@
 import { Song } from 'src/song/domain/song';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { ISongRepository } from '../../../song/domain/repositories/song.repository.interface';
 import { IPlaylistRepository } from '../../domain/repositories/playlist.repository.interface';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
-import { GetPlaylistByIdEntryApplicationDto } from '../dto/entrys/get-playlist-by-id-entry.application.dto';
-import { GetPlaylistByIdResponseApplicationDto } from '../dto/responses/get-playlist-by-id-response.application.dto';
+import { GetPlaylistByIdEntryApplicationDto } from '../dto/entry/get-playlist-by-id-entry.application.dto';
+import { GetPlaylistByIdResponseApplicationDto } from '../dto/response/get-playlist-by-id-response.application.dto';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { Artist } from 'src/artist/domain/artist';
 
@@ -80,7 +80,7 @@ export class GetPlaylistByIdService
         artists: artist.Data,
       });
     }
-
+    
     const playlistResponseDto: GetPlaylistByIdResponseApplicationDto = {
       userId: param.userId,
       playlist: playlistResult.Data,

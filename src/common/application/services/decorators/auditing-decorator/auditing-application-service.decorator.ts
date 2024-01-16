@@ -1,10 +1,10 @@
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { IApplicationService } from '../../interfaces/application-service.interface';
 import { ApplicationServiceDecorator } from '../application-service.decorator';
-import { Result } from 'src/common/application/result-handler/result';
-import { AuditingDto } from 'src/common/application/dto/auditing.dto';
+import { Result } from 'src/common/domain/result-handler/result';
+import { AuditingDto } from 'src/common/application/auditing/dto/auditing.dto';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
-import { LoggerDto } from 'src/common/application/dto/logger.dto';
+import { LoggerDto } from 'src/common/application/logger/dto/logger.dto';
 import { ServiceResponse } from '../../dto/response/service-response.dto';
 import { ServiceEntry } from '../../dto/entry/service-entry.dto';
 
@@ -35,11 +35,11 @@ export class AuditingCommandServiceDecorator<
     const decorateResult: Result<R> = await super.execute(param);
 
     if (decorateResult.IsSuccess) {
-      this.user = (this.user === 'Unkown' && decorateResult.Data?.userId) ? decorateResult.Data.userId : this.user;;
+      this.user = (this.user === 'Unkown' && decorateResult.Data?.userId) ? decorateResult.Data.userId : this.user;
     } else {
       succes = false;
     }
-
+    
     await this.Auditing(param, succes);
 
     return decorateResult;

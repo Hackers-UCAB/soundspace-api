@@ -1,23 +1,20 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { Result } from 'src/common/application/result-handler/result';
-import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
-import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
-import { IBlobHelper } from '../interfaces/blob-helper.interface';
+import { Result } from 'src/common/domain/result-handler/result';
+import { IGetSongHelper } from '../interfaces/blob-helper.interface';
 import { ISendSongHelper } from '../interfaces/send-song-helper.iterface';
-import { PlaySongEntryApplicationDto } from '../dto/entrys/play-song.entry.application.dto';
-import { PlaySongResponseApplicationDto } from '../dto/responses/play-song.response.application.dto';
-import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
+import { PlaySongEntryApplicationDto } from '../dto/entry/play-song.entry.application.dto';
+import { PlaySongResponseApplicationDto } from '../dto/response/play-song.response.application.dto';
 import { ISongReferenceDomainService, SongReferenceDomainServiceDto } from 'src/song/domain/services/song-reference.domain,service';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 
 export class PlaySongService implements IApplicationService<PlaySongEntryApplicationDto, PlaySongResponseApplicationDto>{
 
-    private readonly getSongHelper: IBlobHelper;
+    private readonly getSongHelper: IGetSongHelper;
     private readonly sendSongHelper: ISendSongHelper;
     private readonly client: any
     private readonly songReference: ISongReferenceDomainService
-    constructor(getSongHelper: IBlobHelper, sendSondHelper: ISendSongHelper, client: any, songReference: ISongReferenceDomainService) {
+    constructor(getSongHelper: IGetSongHelper, sendSondHelper: ISendSongHelper, client: any, songReference: ISongReferenceDomainService) {
         this.getSongHelper = getSongHelper;
         this.sendSongHelper = sendSondHelper;
         this.client = client
@@ -26,7 +23,7 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
 
     async execute(param: PlaySongEntryApplicationDto): Promise<Result<PlaySongResponseApplicationDto>> {
 
-        const {second, songId, userId, streaming} = param
+        const {second, songId, userId} = param
         
         const domainValues: SongReferenceDomainServiceDto = {
             user: UserId.create(userId),
@@ -39,7 +36,7 @@ export class PlaySongService implements IApplicationService<PlaySongEntryApplica
             return Result.fail(null, 500, data.message, new Error(data.message));
         }
             
-        const {blob} = await this.getSongHelper.getFile(data.Data.name.Path, 'cancion', second, data.Data.duration.Duration);
+        const {blob} = await this.getSongHelper.getFile(data.Data.name.Path, 'cancion', second);
         
         this.sendSongHelper.sendSong(this.client, blob);
        

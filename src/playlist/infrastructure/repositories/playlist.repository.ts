@@ -1,20 +1,19 @@
 import { DataSource, Repository } from 'typeorm';
-import { Result } from 'src/common/application/result-handler/result';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
 import { Playlist } from '../../domain/playlist';
-import { OrmPlaylistEntity } from '../../../common/infraestructure/orm-entities/playlist.entity';
-import { OrmPlaylistMapper } from '../mapper/orm-playlist.mapper';
+import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
-import { throwError } from 'rxjs';
+import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class PlaylistRepository
   extends Repository<OrmPlaylistEntity>
   implements IPlaylistRepository
 {
-  private readonly OrmPlaylistMapper: OrmPlaylistMapper;
-  constructor(dataSource: DataSource) {
+  private readonly OrmPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>;
+  constructor(dataSource: DataSource, ormPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>) {
     super(OrmPlaylistEntity, dataSource.createEntityManager());
-    this.OrmPlaylistMapper = new OrmPlaylistMapper();
+    this.OrmPlaylistMapper = ormPlaylistMapper;
   }
 
   async findPlaylistById(id: PlaylistId): Promise<Result<Playlist>> {
@@ -49,7 +48,14 @@ export class PlaylistRepository
             'Ha ocurrido un error inesperado obteniendo la playlist, hable con el administrador',
           error,
         );
-      }
+        } if (!response) {
+            return Result.fail(
+                null,
+                404,
+                'No existe la playlist solicitada',
+                new Error('No existe la playlist solicitada'),
+            );
+        }
       return Result.success<Playlist>(response, 200);
     }
   }
@@ -87,7 +93,18 @@ export class PlaylistRepository
             'Ha ocurrido un error inesperado obteniendo la playlist, hable con el administrador',
           error,
         );
-      }
+        }
+        // Filtrar los elementos nulos del array 'response'
+        response = response.filter((playlists) => playlists !== null);
+        // Verificar si el array 'response' es nulo
+        if (response === null || response.length === 0) {
+            return Result.fail(
+                null,
+                404,
+                'No se encontraron playlists top',
+                new Error('No se encontraron playlists top'),
+            );
+        }
       return Result.success<Playlist[]>(response, 200);
     }
   }
@@ -131,7 +148,15 @@ export class PlaylistRepository
             'Ha ocurrido un error inesperado buscnado la playlists, hable con el administrador',
           error,
         );
-      }
+        }
+        if (!response) {
+            return Result.fail(
+                null,
+                404,
+                'No se encontr� la playlist con el nombre solicitado',
+                new Error('No se encontr� la playlist con el nombre solicitado'),
+            );
+        }
       return Result.success<Playlist[]>(response, 200);
     }
   }

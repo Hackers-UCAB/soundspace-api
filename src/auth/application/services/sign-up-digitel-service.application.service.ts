@@ -1,6 +1,6 @@
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
-import { SignUpEntryApplicationDto } from '../dto/entrys/sign-up-entry.application.dto';
-import { Result } from 'src/common/application/result-handler/result';
+import { SignUpEntryApplicationDto } from '../dto/entry/sign-up-entry.application.dto';
+import { Result } from 'src/common/domain/result-handler/result';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
@@ -14,11 +14,11 @@ import { SubscriptionCreatedDate } from 'src/subscription/domain/value-objects/s
 import { SubscriptionId } from 'src/subscription/domain/value-objects/subscription-id';
 import { SubscriptionStatus } from 'src/subscription/domain/value-objects/subscription-status';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
-import { SubscriptionStatusEnum } from 'src/subscription/infraestructure/orm-entities/subscription.entity';
+import { SubscriptionStatusEnum } from 'src/subscription/infrastructure/orm-entities/subscription.entity';
 import { Subscription } from 'src/subscription/domain/subscription';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { IDigitelSubscriptionValidation } from 'src/subscription/domain/validation/digitel-subscription-validation.interface';
-import { SignUpResponseApplicationDto } from '../dto/responses/sign-up-response.application.dto';
+import { SignUpResponseApplicationDto } from '../dto/response/sign-up-response.application.dto';
 
 export class SignUpDigitelApplicationService
   implements
@@ -55,7 +55,7 @@ export class SignUpDigitelApplicationService
   async execute(
     param: SignUpEntryApplicationDto,
   ): Promise<Result<SignUpResponseApplicationDto>> {
-    //Se valida con el api externo
+    // Se valida con el api externo
     const valid: Result<boolean> =
       await this.digitelSubscriptionValidation.validateSubscription(
         param.phone,
@@ -128,7 +128,7 @@ export class SignUpDigitelApplicationService
       );
     }
 
-    // this.eventPublisher.publish(newSubscription.pullDomainEvents());
+    this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
     const response: SignUpResponseApplicationDto = {
       userId: userId,

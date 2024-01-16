@@ -1,8 +1,8 @@
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
-import { Result } from '../../../common/application/result-handler/result';
+import { Result } from '../../../common/domain/result-handler/result';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
 import { IAlbumRepository } from '../../domain/repositories/album.repository.interface';
-import { GetTopAlbumResponseApplicationDto } from '../dto/responses/get-top-album-response.application.dto';
+import { GetTopAlbumResponseApplicationDto } from '../dto/response/get-top-album-response.application.dto';
 import { Album } from 'src/album/domain/album';
 
 export class GetTopAlbumService

@@ -1,4 +1,5 @@
-import { UuidGenerator } from 'src/common/infraestructure/uuid-generator';
+import { UuidGenerator } from 'src/common/infrastructure/uuid-generator';
+import { UpdateUserInfoEntryApplicationDto } from 'src/user/application/dto/entry/update-user-info-entry.application.dto';
 import { User } from 'src/user/domain/user';
 import { UserGenderEnum } from 'src/user/domain/value-objects/enum/user-gender.enum';
 import { UserRoleEnum } from 'src/user/domain/value-objects/enum/user-role.enum';
@@ -8,7 +9,6 @@ import { UserGender } from 'src/user/domain/value-objects/user-gender';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { UserName } from 'src/user/domain/value-objects/user-name';
 import { UserRole } from 'src/user/domain/value-objects/user-role';
-
 export class UserObjectMother {
      
     static createNormalUser(){
@@ -35,5 +35,26 @@ export class UserObjectMother {
             UserRole.create(UserRoleEnum.GUEST),
         )
         return guestUser;
-    }    
+    }
+    
+    //!No se si esto es valido
+    static validPatchEntry(id: UserId): UpdateUserInfoEntryApplicationDto{
+        return {
+            userId: id.Id,
+            name: 'name',
+            email: 'bKQkZ@example.com',
+            birthdate: new Date('1990-01-01'),
+            gender: 'M',
+        }
+    }
+
+    static invalidPatchEmailEntry (id: UserId): UpdateUserInfoEntryApplicationDto{
+        return {
+            userId: id.Id,
+            name: 'name',
+            email: 'email',
+            birthdate: new Date('1990-01-01'),
+            gender: 'M',
+        }
+    }
 }

@@ -3,7 +3,7 @@ import { IEventPublisher } from "../../event-publisher.interface";
 import { IEventPublisherDecorator } from "../event-publisher-decorator.interface";
 import { ILogger } from "src/common/application/logging-handler/logger.interface";
 import { Injectable } from "@nestjs/common";
-import { Result } from "src/common/application/result-handler/result";
+import { Result } from "src/common/domain/result-handler/result";
 import { EventResponse } from "../../dto/response/event-response.dto";
 
 @Injectable()
