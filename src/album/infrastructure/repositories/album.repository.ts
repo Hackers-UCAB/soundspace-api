@@ -61,15 +61,7 @@ export class AlbumRepository
       }
       // Filtrar los elementos nulos del array 'response'
       response = response.filter((album) => album !== null);
-      // Verificar si el array 'response' es nulo
-      if (response === null || response.length === 0) {
-        return Result.fail(
-          null,
-          404,
-          'No se encontraron albums del artista solicitado',
-          new Error('No existe el album solicitado'),
-        );
-      }
+     
       return Result.success<Album[]>(response, 200);
     }
   }
@@ -200,9 +192,6 @@ export class AlbumRepository
           async (album) => await this.OrmAlbumMapper.toDomain(album),
         ),
       );
-      // response = await Promise.all(
-      //   albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
-      // );
     } catch (err) {
       error = err;
     } finally {

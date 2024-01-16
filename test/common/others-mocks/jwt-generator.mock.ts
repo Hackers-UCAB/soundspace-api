@@ -1,5 +1,5 @@
 import { IJwtGenerator } from "src/auth/application/interface/jwt-generator.interface";
-import { JwtPayload } from "src/auth/infraestructure/jwt/jwt-payload.interface";
+import { JwtPayload } from "src/auth/application/interface/jwt-payload.interface";
 
 
 export class JwtGeneratorMock implements IJwtGenerator {

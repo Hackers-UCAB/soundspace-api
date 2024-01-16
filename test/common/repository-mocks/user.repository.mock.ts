@@ -24,7 +24,7 @@ export class UserRepositoryMock implements IUserRepository {
         return  Result.success('Usuario eliminado correctamente', 20);
     }   
     async updateTokens(id: UserId, token: string): Promise<Result<string>> {
-        throw new Error("Method not implemented.");
+        return Result.success('Token actualizado correctamente', 200);
     }
 
     static create(){

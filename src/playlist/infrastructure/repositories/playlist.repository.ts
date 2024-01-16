@@ -3,9 +3,7 @@ import { Result } from 'src/common/domain/result-handler/result';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
 import { Playlist } from '../../domain/playlist';
 import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
-import { OrmPlaylistMapper } from '../mapper/orm-playlist.mapper';
 import { PlaylistId } from '../../domain/value-objects/playlist-id';
-import { throwError } from 'rxjs';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class PlaylistRepository
