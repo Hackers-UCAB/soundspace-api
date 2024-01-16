@@ -28,7 +28,7 @@ export class SearchController {
   ){
     const dto: SearchEntryApplicationDto = {
       userId: userId.Id,
-      types: querySearchDto.type ? querySearchDto.type : ['artists', 'albums', 'playlists', 'songs'],
+      types: querySearchDto.type ? [querySearchDto.type] : ['artists', 'albums', 'playlists', 'songs'],
       name: term,
       limit: querySearchDto.limit ? querySearchDto.limit : 20,
       offset: querySearchDto.offset ? querySearchDto.offset : 0
