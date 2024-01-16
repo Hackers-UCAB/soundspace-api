@@ -27,7 +27,7 @@ export class OrmSongMapper implements IMapper<Song, OrmCancionEntity> {
             );
             return song;
         }
-        throw InvalidToDomainMapper;
+        return null;
     }
 
     toPersistence(domain: Song): Promise<OrmCancionEntity> {

@@ -4,7 +4,6 @@ import { IArtistRepository } from 'src/artist/domain/repositories/artist.reposit
 import { Artist } from '../../../domain/artist';
 import { ArtistId } from '../../../domain/value-objects/artist-id';
 import { OrmArtistaEntity } from '../../persistence-entities/orm-entities/orm-artist.entity';
-import { OrmArtistMapper } from '../../mapper/orm-mapper/orm-artist.mapper';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
@@ -61,16 +60,9 @@ export class OrmArtistRepository
     }
   }
 
-  // In this version of the findArtistsBySongId method, if an error occurs
-  // during the database query or the mapping of the artists, a Result
-  // with a status code of 500 is returned.
-  // If no artists are found for the given song ID (i.e., artists.length is 0),
-  // an empty list is returned with a status code of 200.
-  // If the artists are found and mapped successfully, a Result with
-  // a status code of 200 is returned.
-  async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
+    async findArtistsBySongId(songId: SongId): Promise<Result<Artist[]>> {
     let response: Artist[] = [];
-    let error: Error;
+    let error: any;
 
     try {
       const artists = await this.createQueryBuilder('artista')
@@ -145,7 +137,7 @@ export class OrmArtistRepository
 
   async findTrendingArtists(): Promise<Result<Artist[]>> {
     let response: Artist[] = [];
-    let error: Error;
+    let error: any;
 
     try {
       const artists = await this.createQueryBuilder('artista')

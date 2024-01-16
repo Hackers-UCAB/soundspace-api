@@ -112,7 +112,7 @@ export class OrmSongRepository
 
   async findTopSongs(): Promise<Result<Song[]>> {
     let response: Song[];
-    let error: Error;
+    let error: any;
     try {
       const songs = await this.createQueryBuilder('cancion')
         .select([
@@ -140,6 +140,14 @@ export class OrmSongRepository
           error.message ||
             'Ha ocurrido un error inesperado, hable con el administrador',
           error,
+        );
+      }
+      if(!response){
+        return Result.fail(
+          null,
+          404,
+          'No se encontraron canciones trending',
+          new Error('No se encontraron canciones trending'),
         );
       }
       return Result.success<Song[]>(response, 200);
