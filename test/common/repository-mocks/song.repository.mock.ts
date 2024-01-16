@@ -8,7 +8,7 @@ import { SongName } from "src/song/domain/value-objects/song-name";
 
 
 export class SongRepositoryMock implements ISongRepository {
-    private songs: Song[] = []
+    private readonly songs: Song[] = []
 
     
     findSongById(id: SongId): Promise<Result<Song>> {
