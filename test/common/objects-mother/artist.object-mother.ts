@@ -34,4 +34,25 @@ export class ArtistObjectMother {
         return artist;
 
     }
+
+    // In this method, a for loop is used to create a specified number of artists.
+    // The name of each artist is the provided namePrefix followed by the current 
+    // iteration number, and the genre of each artist is the provided genrePrefix 
+    // followed by the current iteration number. All artists have the same number 
+    // of songs and albums. The created artists are then pushed into the artists 
+    // array, which is returned by the method.
+    static createValidArtistsArray(count: number, namePrefix: string,
+        genrePrefix: string, songCount: number, albumCount: number) {
+
+        const artists = [];
+        for (let i = 0; i < count; i++) {
+            const artist = this.createValidArtist(`${namePrefix} ${i}`,
+                `${genrePrefix} ${i}`, songCount, albumCount);
+            artists.push(artist);
+        }
+
+        return artists;
+
+    }
+
 }
