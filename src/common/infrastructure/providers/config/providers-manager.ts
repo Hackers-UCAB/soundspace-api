@@ -40,7 +40,7 @@ export const providersManager: Provider[] = [
     },
     {
         provide: 'EventBus',
-        useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, subscriptionRepository: ISubscriptionRepository, dataSource: DataSource) => {
+        useFactory: (eventPublisher: IEventPublisher, notifier: INotifier, logger: ILogger, subscriptionRepository: ISubscriptionRepository) => {
             //TODO: Hacer el de Auditing?
             const eventBus = new EventPublisherLoggerDecorator(eventPublisher, logger);
 
@@ -51,7 +51,7 @@ export const providersManager: Provider[] = [
 
             return eventBus;
     },
-        inject: ['IEventPublisher', 'INotifier', 'ILogger', 'SubscriptionRepository', 'DataSource'],
+        inject: ['IEventPublisher', 'INotifier', 'ILogger', 'SubscriptionRepository'],
     },
     {
         provide: 'AzureBufferImageHelper',

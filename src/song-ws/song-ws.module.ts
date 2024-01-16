@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { SongWsGateway } from "./song-ws.gateway";
-import { databaseProviders } from "src/common/infrastructure/providers/config/dbconfig";
+import { ormDatabaseProviders } from "src/common/infrastructure/providers/config/dbconfig";
 
 
 @Module({
-    providers: [SongWsGateway, ...databaseProviders]
+    providers: [SongWsGateway, ...ormDatabaseProviders]
 })
 
 export class SongWsModule{}

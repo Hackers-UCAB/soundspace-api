@@ -1,3 +1,4 @@
+import { Model } from "mongoose";
 import { Album } from "src/album/domain/album";
 import { IAlbumRepository } from "src/album/domain/repositories/album.repository.interface";
 import { AlbumId } from "src/album/domain/value-objects/album-id";
@@ -9,7 +10,9 @@ import { OdmPlaylistEntity } from "src/common/infrastructure/persistence-entitie
 
 export class OdmAlbumRepository implements IAlbumRepository{
     private readonly odmAlbumMapper: IMapper<Album, OdmPlaylistEntity>;
-    constructor(odmAlbumMapper: IMapper<Album, OdmPlaylistEntity>) {
+    private readonly albumModel: Model<OdmPlaylistEntity>;
+    constructor(odmAlbumMapper: IMapper<Album, OdmPlaylistEntity>, albumModel: Model<OdmPlaylistEntity>) {
+        this.albumModel = albumModel;
         this.odmAlbumMapper = odmAlbumMapper;
     }
     findAlbumById(albumId: AlbumId): Promise<Result<Album>> {

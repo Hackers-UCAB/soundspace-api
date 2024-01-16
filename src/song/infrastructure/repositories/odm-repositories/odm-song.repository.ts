@@ -5,16 +5,19 @@ import { ISongRepository } from "src/song/domain/repositories/song.repository.in
 import { Song } from "src/song/domain/song";
 import { SongId } from "src/song/domain/value-objects/song-id";
 import { OdmSongEntity } from "../../persistence-entities/odm-entities/odm-song.entity";
+import { Model } from "mongoose";
 
 
 export class OdmSongRepository implements ISongRepository{
 
     private readonly odmSongMapper: IMapper<Song, OdmSongEntity>;
-
+    private readonly songModel: Model<OdmSongEntity>
     constructor(
-        odmSongMapper: IMapper<Song, OdmSongEntity>
+        odmSongMapper: IMapper<Song, OdmSongEntity>,
+        songModel: Model<OdmSongEntity>
     ){
         this.odmSongMapper = odmSongMapper;
+        this.songModel = songModel;
     }
 
     findSongById(id: SongId): Promise<Result<Song>> {

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from 'mongoose';
 
 @Schema()
-export class OdmSubscriptionChanel extends Document {
+export class OdmSubscriptionChanelEntity extends Document {
   @Prop({ required: true, unique: true  })
   codigo_canal: string;
 
@@ -17,4 +17,4 @@ export class OdmSubscriptionChanel extends Document {
 
 }
 
-export const SubscriptionChanelSchema = SchemaFactory.createForClass(OdmSubscriptionChanel);
+export const SubscriptionChanelSchema = SchemaFactory.createForClass(OdmSubscriptionChanelEntity);

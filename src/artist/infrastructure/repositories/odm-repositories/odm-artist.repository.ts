@@ -6,15 +6,19 @@ import { IMapper } from "src/common/application/mappers/mapper.interface";
 import { Result } from "src/common/domain/result-handler/result";
 import { SongId } from "src/song/domain/value-objects/song-id";
 import { OdmArtistEntity } from "../../persistence-entities/odm-entities/odm-artist.entity";
+import { Model } from "mongoose";
 
 
 export class OdmArtistRepository implements IArtistRepository{
     private readonly odmArtistMapper: IMapper<Artist, OdmArtistEntity>;
+    private readonly artistModel: Model<OdmArtistEntity>;
 
     constructor(
         odmArtistMapper: IMapper<Artist, OdmArtistEntity>,
+        artistModel: Model<OdmArtistEntity>
     ){
         this.odmArtistMapper = odmArtistMapper;
+        this.artistModel = artistModel;
     }
     findArtistById(artistId: ArtistId): Promise<Result<Artist>> {
         throw new Error("Method not implemented.");

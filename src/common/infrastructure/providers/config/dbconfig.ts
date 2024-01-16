@@ -15,18 +15,34 @@ import { OrmAlbumMapper } from 'src/album/infrastructure/mapper/orm-mapper/orm-a
 import { OrmArtistMapper } from 'src/artist/infrastructure/mapper/orm-mapper/orm-artist.mapper';
 import { OrmPlaylistMapper } from 'src/playlist/infrastructure/mapper/orm-mapper/orm-playlist.mapper';
 import { OrmPromotionMapper } from 'src/promotions/infrastructure/mapper/orm-mapper/orm-promotion.mapper';
-import mongoose, { Connection, connect } from 'mongoose';
-import { UserSchema } from 'src/user/infrastructure/persistence-entities/odm-entities/odm-user.entity';
-import { SubscriptionSchema } from 'src/subscription/infrastructure/persistence-entities/odm-entities/odm-subscription.entity';
-import { SubscriptionChanelSchema } from 'src/subscription/infrastructure/persistence-entities/odm-entities/odm-subscription-chanel.entity';
-import { SongSchema } from 'src/song/infrastructure/persistence-entities/odm-entities/odm-song.entity';
-import { PromotionSchema } from 'src/promotions/infrastructure/persistence-entities/odm-entities/odm-promotion.entity';
-import { PlaylistSchema } from '../../persistence-entities/odm-entities/odm-playlist.entity';
-import { AuditingSchema } from '../../persistence-entities/odm-entities/odm-auditing.entity';
+import mongoose, { Connection, Model, connect } from 'mongoose';
+import { OdmUserEntity, UserSchema } from 'src/user/infrastructure/persistence-entities/odm-entities/odm-user.entity';
+import { OdmSubscriptionEntity, SubscriptionSchema } from 'src/subscription/infrastructure/persistence-entities/odm-entities/odm-subscription.entity';
+import { OdmSubscriptionChanelEntity, SubscriptionChanelSchema } from 'src/subscription/infrastructure/persistence-entities/odm-entities/odm-subscription-chanel.entity';
+import { OdmSongEntity, SongSchema } from 'src/song/infrastructure/persistence-entities/odm-entities/odm-song.entity';
+import { OdmPromotionEntity, PromotionSchema } from 'src/promotions/infrastructure/persistence-entities/odm-entities/odm-promotion.entity';
+import { OdmPlaylistEntity, PlaylistSchema } from '../../persistence-entities/odm-entities/odm-playlist.entity';
+import { AuditingSchema, OdmAuditingEntity } from '../../persistence-entities/odm-entities/odm-auditing.entity';
 import { GenreSchema } from '../../persistence-entities/odm-entities/odm-genre.entity';
-import { ArtistSchema } from 'src/artist/infrastructure/persistence-entities/odm-entities/odm-artist.entity';
+import { ArtistSchema, OdmArtistEntity } from 'src/artist/infrastructure/persistence-entities/odm-entities/odm-artist.entity';
+import { OdmUserRepository } from 'src/user/infrastructure/repositories/odm-repositories/odm-user.repository';
+import { OdmUserMapper } from 'src/user/infrastructure/mapper/odm-mapper/odm-user.mapper';
+import { OdmSongRepository } from 'src/song/infrastructure/repositories/odm-repositories/odm-song.repository';
+import { OdmSongMapper } from 'src/song/infrastructure/mapper/odm-mapper/odm-song.mapper';
+import { OdmSubscriptionRepository } from 'src/subscription/infrastructure/repositories/odm-repositories/odm-subscription.repository';
+import { OdmSubscriptionMapper } from 'src/subscription/infrastructure/mapper/odm-mapper/odm-subscription.mapper';
+import { OdmSubscriptionChanelMapper } from 'src/subscription/infrastructure/mapper/odm-mapper/odm-subscription-chanel.mapper';
+import { OdmAlbumRepository } from 'src/album/infrastructure/repositories/odm-repositories/odm-album.repository';
+import { OdmAlbumMapper } from 'src/album/infrastructure/mapper/odm-mapper/odm-album.mapper';
+import { OdmArtistRepository } from 'src/artist/infrastructure/repositories/odm-repositories/odm-artist.repository';
+import { OdmArtistMapper } from 'src/artist/infrastructure/mapper/odm-mapper/odm-artist.mapper';
+import { OdmPlaylistRepository } from 'src/playlist/infrastructure/repositories/odm-repositories/odm-playlist.repository';
+import { OdmPlaylistMapper } from 'src/playlist/infrastructure/mapper/odm-mapper/odm-playlist.mapper';
+import { OdmPromotionRepository } from 'src/promotions/infrastructure/repositories/odm-repositories/odm-promotion.repository';
+import { OdmPromotionMapper } from 'src/promotions/infrastructure/mapper/odm-mapper/odm-promotion.mapper';
+import { OdmAuditingRepository } from '../../auditing/repositories/odm-repositories/odm-auditing.repository';
 
-export const databaseProviders = [
+export const ormDatabaseProviders = [
   {
     provide: 'DataSource',
     useFactory: async () => {
@@ -118,6 +134,9 @@ export const databaseProviders = [
     },
     inject: ['DataSource'],
   },
+];
+
+export const odmDataBaseProviders = [
   {
     provide: 'MongoDataSource',
     useFactory: async () => {
@@ -194,5 +213,66 @@ export const databaseProviders = [
       return connection.model('Artist', ArtistSchema);
     },
     inject: ['MongoDataSource'],
+  },
+  {
+    provide: 'UserRepository',
+    useFactory: (userModel: Model<OdmUserEntity>) => {
+      return new OdmUserRepository(new OdmUserMapper(), userModel);
+    },
+    inject: ['UserModel'],
+  },
+  {
+    provide: 'SongRepository',
+    useFactory: (songModel: Model<OdmSongEntity>) => {
+      return new OdmSongRepository(new OdmSongMapper(), songModel);
+    },
+    inject: ['SongModel'],
+  },
+  {
+    provide: 'SubscriptionRepository',
+    useFactory: (subscriptionModel: Model<OdmSubscriptionEntity>, subscriptionChanelModel: Model<OdmSubscriptionChanelEntity>) => {
+      return new OdmSubscriptionRepository(
+        subscriptionModel,
+        subscriptionChanelModel,
+        new OdmSubscriptionMapper(),
+        new OdmSubscriptionChanelMapper(),
+      );
+    },
+    inject: ['SubscriptionModel', 'SubscriptionChanelModel'],
+  },
+  {
+    provide: 'AlbumRepository',
+    useFactory: (albumModel: Model<OdmPlaylistEntity>) => {
+      return new OdmAlbumRepository(new OdmAlbumMapper(), albumModel);
+    },
+    inject: ['PlaylistModel'],
+  },
+  {
+    provide: 'ArtistRepository',
+    useFactory: (artistModel: Model<OdmArtistEntity>) => {
+      return new OdmArtistRepository(new OdmArtistMapper(), artistModel);
+    },
+    inject: ['ArtistModel'],
+  },
+  {
+    provide: 'PlaylistRepository',
+    useFactory: (playlistModel: Model<OdmPlaylistEntity>) => {
+      return new OdmPlaylistRepository(new OdmPlaylistMapper(), playlistModel);
+    },
+    inject: ['PlaylistModel'],
+  },
+  {
+    provide: 'PromotionRepository',
+    useFactory: (promotionModel: Model<OdmPromotionEntity>) => {
+      return new OdmPromotionRepository(new OdmPromotionMapper(), promotionModel);
+    },
+    inject: ['PromotionModel'],
+  },
+  {
+    provide: 'AuditingRepository',
+    useFactory: (auditingModel: Model<OdmAuditingEntity>) => {
+      return new OdmAuditingRepository(auditingModel);
+    },
+    inject: ['AuditingModel'],
   },
 ];

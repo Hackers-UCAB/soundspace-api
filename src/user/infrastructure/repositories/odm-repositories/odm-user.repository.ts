@@ -4,15 +4,18 @@ import { IUserRepository } from "src/user/domain/repositories/user.repository.in
 import { User } from "src/user/domain/user";
 import { UserId } from "src/user/domain/value-objects/user-id";
 import { OdmUserEntity } from "../../persistence-entities/odm-entities/odm-user.entity";
+import { Model } from "mongoose";
 
 
 export class OdmUserRepository implements IUserRepository{
     private readonly odmUserMapper: IMapper<User, OdmUserEntity>
-
+    private readonly userModel: Model<OdmUserEntity>;
     constructor(
-        odmUserMapper: IMapper<User, OdmUserEntity>
+        odmUserMapper: IMapper<User, OdmUserEntity>,
+        userModel: Model<OdmUserEntity>
     ) {
         this.odmUserMapper = odmUserMapper;
+        this.userModel = userModel;
     }
     
     saveAggregate(user: User, tokens?: string[]): Promise<Result<string>> {

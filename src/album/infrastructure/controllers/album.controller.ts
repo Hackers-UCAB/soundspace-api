@@ -1,5 +1,4 @@
 import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { GetAlbumByIdResponseApplicationDto } from '../../application/dto/response/get-album-by-id-response.application.dto';
 import { GetAlbumByIdEntryApplicationDto } from '../../application/dto/entry/get-album-by-id-entry.application.dto';
@@ -35,9 +34,6 @@ import {
 @Controller('album')
 export class AlbumController {
   constructor(
-    @Inject('DataSource')
-    private readonly dataSource: DataSource,
-
     @Inject('AzureBufferImageHelper')
     private readonly azureBufferImageHelper: IGetBufferImageInterface,
 

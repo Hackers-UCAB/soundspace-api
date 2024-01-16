@@ -1,5 +1,4 @@
 import { Controller, Inject, Get, Param, ParseUUIDPipe } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { GetPlaylistByIdEntryApplicationDto } from '../../application/dto/entry/get-playlist-by-id-entry.application.dto';
 import { GetPlaylistByIdResponseApplicationDto } from '../../application/dto/response/get-playlist-by-id-response.application.dto';
@@ -21,9 +20,6 @@ import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 @Controller('playlist')
 export class PlaylistController {
     constructor(
-        @Inject('DataSource')
-        private readonly dataSource: DataSource,
-
         @Inject('AzureBufferImageHelper')
         private readonly azureBufferImageHelper: IGetBufferImageInterface,
 

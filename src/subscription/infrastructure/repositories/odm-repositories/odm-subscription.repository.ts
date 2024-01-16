@@ -8,22 +8,29 @@ import { SubscriptionId } from 'src/subscription/domain/value-objects/subscripti
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { OdmSubscriptionEntity } from '../../persistence-entities/odm-entities/odm-subscription.entity';
-import { OdmSubscriptionChanel } from '../../persistence-entities/odm-entities/odm-subscription-chanel.entity';
+import { OdmSubscriptionChanelEntity } from '../../persistence-entities/odm-entities/odm-subscription-chanel.entity';
+import { Model } from 'mongoose';
 
 export class OdmSubscriptionRepository implements ISubscriptionRepository {
+  private readonly subscriptionModel: Model<OdmSubscriptionEntity>;
+  private readonly subscriptionChanelModel: Model<OdmSubscriptionChanelEntity>;
   private readonly odmSubscriptionMapper: IMapper<
     Subscription,
     OdmSubscriptionEntity
   >;
   private readonly odmSubscriptionChanelMapper: IMapper<
     SubscriptionChanel,
-    OdmSubscriptionChanel
+    OdmSubscriptionChanelEntity
   >;
 
   constructor(
+    subscriptionModel: Model<OdmSubscriptionEntity>,
+    subscriptionChanelModel: Model<OdmSubscriptionChanelEntity>,
     odmSubscriptionMapper: IMapper<Subscription, OdmSubscriptionEntity>,
-    odmSubscriptionChanelMapper: IMapper<SubscriptionChanel, OdmSubscriptionChanel>,
+    odmSubscriptionChanelMapper: IMapper<SubscriptionChanel, OdmSubscriptionChanelEntity>,
   ){
+    this.subscriptionModel = subscriptionModel;
+    this.subscriptionChanelModel = subscriptionChanelModel;
     this.odmSubscriptionMapper = odmSubscriptionMapper;
     this.odmSubscriptionChanelMapper = odmSubscriptionChanelMapper;
   }
