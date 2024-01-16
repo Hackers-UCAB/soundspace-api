@@ -3,11 +3,9 @@ import { ArrayNotEmpty, IsArray, IsIn, IsOptional, IsPositive, IsString, Min } f
 
 export class QuerySearchDto {
   @IsOptional()
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
-  @IsIn(['albums', 'playlists', 'songs', 'artists'], { each: true })
-  type?: string[];
+  @Type(() => String)
+  @IsIn(['albums', 'playlists', 'songs', 'artists'])
+  type?: string;
 
   @IsOptional()
   @IsPositive()

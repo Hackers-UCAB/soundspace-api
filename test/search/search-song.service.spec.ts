@@ -29,7 +29,7 @@ describe('SearchSongService', () => {
         songRepository.save(song1);
         songRepository.save(song2);
         songRepository.save(song3);
-        const dto: SearchItemsEntryApplicationDto = { userId: 'XD', name: 'z' }
+        const dto: SearchItemsEntryApplicationDto = { userId: 'SomeId', name: 'z' }
         const searchSongService = new SearchSongsApplicationService(songRepository);
 
         const result = await searchSongService.execute(dto);

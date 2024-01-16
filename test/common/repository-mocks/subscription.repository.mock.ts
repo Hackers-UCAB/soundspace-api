@@ -29,13 +29,18 @@ export class SubscriptionRepositoryMock implements ISubscriptionRepository {
             const subscription = this.subscriptions[i];
             if (subscription.SubscriptionValue.equals(value)) { return Result.success(subscription, 200) ; }
         }
+        return Result.fail(null, 404, 'No se encontraron suscripciones', new Error('No se encontraron suscripciones'))
     }
 
     findSubscriptionsExpiringOnDate(endDate: Date): Promise<Result<Subscription[]>> {
         throw new Error("Method not implemented.");
     }
-    findSubscriptionByUser(id: UserId): Promise<Result<Subscription>> {
-        throw new Error("Method not implemented.");
+    async findSubscriptionByUser(id: UserId): Promise<Result<Subscription>> {
+        for (let i = 0; i < this.subscriptions.length; i++) {
+            const subscription = this.subscriptions[i];
+            if (subscription.User.equals(id)) { return Result.success(subscription, 200)}
+        }
+        return Result.fail(null, 404, 'No se encontraron suscripciones', new Error('No se encontraron suscripciones'))
     }
     findSubscriptionChanelById(id: SubscriptionChanelId): Promise<Result<SubscriptionChanel>> {
         throw new Error("Method not implemented.");

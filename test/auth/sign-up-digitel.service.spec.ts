@@ -12,7 +12,7 @@ import { SignUpEntryApplicationDto } from "src/auth/application/dto/entry/sign-u
 
 
 
-
+//TODO: Hay que darle un paseo a este otra vez para resolver el event bus
 describe('SignUpDigitelService', () => {
     it('Se registra correctamente', async () => {
       //arrange

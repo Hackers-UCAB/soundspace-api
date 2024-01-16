@@ -100,8 +100,6 @@ export class PlaylistController {
             serviceResult.Data.playlist.Cover.Path,
         );
 
-        //TODO: Ver si lo enviamos para el coño o que si falla la imagen
-
         let duration: number = 0;
         let songs: SongInfrastructureResponseDto[] = [];
 

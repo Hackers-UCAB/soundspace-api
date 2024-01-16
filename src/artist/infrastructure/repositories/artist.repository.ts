@@ -4,15 +4,13 @@ import { IArtistRepository } from 'src/artist/domain/repositories/artist.reposit
 import { Artist } from '../../domain/artist';
 import { ArtistId } from '../../domain/value-objects/artist-id';
 import { OrmArtistaEntity } from '../orm-entities/artist.entity';
-import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
 export class ArtistRepository
   extends Repository<OrmArtistaEntity>
-  implements IArtistRepository
-{
+  implements IArtistRepository {
   private readonly ormArtistMapper: IMapper<Artist, OrmArtistaEntity>;
 
   constructor(
@@ -35,7 +33,7 @@ export class ArtistRepository
         .leftJoinAndSelect('playlistCreador.playlist', 'playlist')
         .where('artista.codigo_artista = :id', { id: artistId.Id })
         .getOne();
-      
+
       response = await this.ormArtistMapper.toDomain(artist);
     } catch (e) {
       error = e;
@@ -45,7 +43,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
+          'Ha ocurrido un error inesperado obteniendo el artista, hable con el administrador',
           error,
         );
       }
@@ -96,7 +94,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
+          'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
           error,
         );
       }
@@ -135,7 +133,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
+          'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
           error,
         );
       }
@@ -144,7 +142,7 @@ export class ArtistRepository
   }
 
   async findTrendingArtists(): Promise<Result<Artist[]>> {
-    let response: Artist[] = [];
+    let response: Artist[];
     let error: Error;
 
     try {
@@ -172,8 +170,16 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
+          'Ha ocurrido un error inesperado obteniendo los artistas, hable con el administrador',
           error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe el artista solicitado',
+          new Error('No existe el artista solicitado'),
         );
       }
       return Result.success<Artist[]>(response, 200);
@@ -210,7 +216,7 @@ export class ArtistRepository
           null,
           500,
           error.message ||
-            'Ha ocurrido un error inesperado buscando los artistas, hable con el administrador',
+          'Ha ocurrido un error inesperado buscando los artistas, hable con el administrador',
           error,
         );
       }
