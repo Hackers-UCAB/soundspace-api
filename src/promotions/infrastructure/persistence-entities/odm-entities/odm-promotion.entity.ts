@@ -11,7 +11,6 @@ export class OdmPromotionEntity {
   @Prop({ required: true })
   referencia_imagen: string;
 
-  //Todo: el create
 }
 
 export const PromotionSchema = SchemaFactory.createForClass(OdmPromotionEntity);

@@ -12,8 +12,8 @@ export class OdmSongEntity extends Document {
   @Prop({ required: true })
   duracion: number;
 
-  @Prop({ required: true })
-  fecha_creacion: Date;
+  // @Prop({ required: true })
+  // fecha_creacion: Date;
 
   @Prop({ unique: true, required: true })
   referencia_cancion: string;
@@ -29,11 +29,6 @@ export class OdmSongEntity extends Document {
 
   @Prop({ type: [Types.ObjectId], ref: 'Genre', default: [] })
   generosRef: Types.ObjectId[];
-
-  @Prop({required: true})
-  generos: string []
-
-  //TODO: Hacer el create
 }
 
 export const SongSchema = SchemaFactory.createForClass(OdmSongEntity);

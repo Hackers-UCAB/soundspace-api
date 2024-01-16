@@ -15,14 +15,8 @@ export class OdmArtistEntity {
   @Prop({ default: false })
   trending: boolean;
 
-  @Prop({ type: [Types.ObjectId], ref: 'Song', default: [] })
-  cancionesRef: Types.ObjectId[];
-
   @Prop({default: [] })
   canciones: string[];
-
-  @Prop({ type: [Types.ObjectId], ref: 'Playlist', default: [] })
-  albumsRef: Types.ObjectId[];
 
   @Prop({ default: [] })
   albums: string[];
@@ -30,8 +24,8 @@ export class OdmArtistEntity {
   @Prop({ type: Types.ObjectId, ref: 'Genre' })
   generoRef: Types.ObjectId;
 
-  @Prop({required: true})
-  genero: string;
+  // @Prop({required: true})
+  // genero: string;
 }
 
 export const ArtistSchema = SchemaFactory.createForClass(OdmArtistEntity);

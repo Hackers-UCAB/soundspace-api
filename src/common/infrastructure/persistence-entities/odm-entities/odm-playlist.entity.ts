@@ -19,19 +19,16 @@ export class OdmPlaylistEntity {
     @Prop({ default: false })
     trending: boolean;
   
-    @Prop({ type: [Types.ObjectId], ref: 'PlaylistSong', default: [] })
-    cancionesRef: Types.ObjectId[];
-
     @Prop({ default: [] })
     canciones: string[];
   
     @Prop({ type: Types.ObjectId, ref: 'Genre' })
     generoRef: Types.ObjectId;
 
-    @Prop({required: true})
-    genero: string;
+    // @Prop({required: true})
+    // genero: string;
 
-    //Todo: El create
+    // //Todo: El create
 }
 
 export const PlaylistSchema = SchemaFactory.createForClass(OdmPlaylistEntity)

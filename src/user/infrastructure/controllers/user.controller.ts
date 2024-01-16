@@ -42,8 +42,7 @@ export class UserController {
       UpdateUserInfoResponseApplicationDto
     >,
 
-    // @InjectModel(OdmUserEntity.name) private readonly userModel: Model<OdmUserEntity>
-    @Inject('UserModel') private readonly userModel: Model<OdmUserEntity>
+    
   ) {}
 
   @Get()
@@ -94,13 +93,7 @@ export class UserController {
     return HttpResponseHandler.Success(200, serviceResult.Data.message);
   }
 
-  @Post('prueba')
-  async prueba() {
-    const user = await this.userModel.create({
-      name: 'prueba'
-    });
-    return HttpResponseHandler.Success(200, user);
-  }
+  
 
 }
 

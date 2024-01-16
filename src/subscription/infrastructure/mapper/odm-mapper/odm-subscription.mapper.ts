@@ -8,8 +8,8 @@ import { SubscriptionId } from "src/subscription/domain/value-objects/subscripti
 import { SubscriptionStatus } from "src/subscription/domain/value-objects/subscription-status";
 import { SubscriptionValue } from "src/subscription/domain/value-objects/subscription-value";
 import { UserId } from "src/user/domain/value-objects/user-id";
-import { SubscriptionStatusEnum } from "../../persistence-entities/orm-entities/orm-subscription.entity";
 import { Model } from "mongoose";
+import { SubscriptionStatusEnum } from "src/subscription/domain/enums/subscription-status.enum";
 
 
 export class OdmSubscriptionMapper implements IMapper<Subscription, OdmSubscriptionEntity>{
