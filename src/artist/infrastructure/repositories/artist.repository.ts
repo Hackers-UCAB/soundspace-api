@@ -4,7 +4,6 @@ import { IArtistRepository } from 'src/artist/domain/repositories/artist.reposit
 import { Artist } from '../../domain/artist';
 import { ArtistId } from '../../domain/value-objects/artist-id';
 import { OrmArtistaEntity } from '../orm-entities/artist.entity';
-import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
