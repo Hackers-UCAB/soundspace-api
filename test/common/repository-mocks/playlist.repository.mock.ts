@@ -7,12 +7,10 @@ export class PlaylistRepositoryMock implements IPlaylistRepository {
     private readonly playlists: Playlist[] = [];
 
     async findPlaylistById(id: PlaylistId): Promise<Result<Playlist>> {
-        let response: Playlist | undefined;
+        let response: Playlist;
         let error: Error | undefined;
         try {
-
-            const response = this.playlists.find((playlist) => playlist.Name.Name === id.Id);
-
+            response = this.playlists.find((playlist) => playlist.Id.Id === id.Id);
         } catch (e) {
             error = e;
         } finally {
@@ -24,7 +22,6 @@ export class PlaylistRepositoryMock implements IPlaylistRepository {
                     error,
                 );
             }
-
             if (!response) {
                 return Result.fail(
                     null,
@@ -33,7 +30,6 @@ export class PlaylistRepositoryMock implements IPlaylistRepository {
                     new Error('No existe la playlist solicitada'),
                 );
             }
-
             return Result.success<Playlist>(response, 200);
         }
     }
