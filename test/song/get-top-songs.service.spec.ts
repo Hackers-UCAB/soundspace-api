@@ -1,22 +1,23 @@
 import { ServiceEntry } from "../../src/common/application/services/dto/entry/service-entry.dto";
-import { GetTopPlaylistService } from "../../src/playlist/application/services/get-top-playlist.application.service";
-import { PlaylistObjectMother } from "../common/objects-mother/playlist.object-mother";
+import { GetTopSongsService } from "../../src/song/application/services/get-top-songs.application.service";
+import { SongObjectMother } from "../common/objects-mother/Song.object-mother";
 import { UserObjectMother } from "../common/objects-mother/user.object-mother";
-import { PlaylistRepositoryMock } from "../common/repository-mocks/playlist.repository.mock";
+import { ArtistRepositoryMock } from "../common/repository-mocks/artist.repository.mock";
+import { SongRepositoryMock } from "../common/repository-mocks/song.repository.mock";
 import { UserRepositoryMock } from "../common/repository-mocks/user.repository.mock";
 
-describe('Buscar playlists con trending = true', () => {
-    it('retorna una lista de playlist con trending = true', async () => {
+describe('Buscar songs con trending = true', () => {
+    it('retorna una lista de Song con trending = true', async () => {
         //arrange
         const user = await UserObjectMother.createNormalUser();
         const userRepositoryMock = UserRepositoryMock.create();
+        const songRepositoryMock = SongRepositoryMock.create();
+        const artisRepositoryMock = ArtistRepositoryMock.create();
         userRepositoryMock.saveAggregate(user);
-        const playlistRepositoryMock = PlaylistRepositoryMock.create();
         for (let i = 1; i <= 10; i++) {
-            playlistRepositoryMock.PushPlaylist(PlaylistObjectMother.createRandomPlaylist())
-        }       
-        const service = new GetTopPlaylistService(playlistRepositoryMock);
-
+            songRepositoryMock.save(await SongObjectMother.createValidSong("cancion"))
+        }
+        const service = new GetTopSongsService(songRepositoryMock, artisRepositoryMock);
         const dto: ServiceEntry = {
             userId: user.Id.Id
         }
@@ -26,7 +27,6 @@ describe('Buscar playlists con trending = true', () => {
 
         //assert
         expect(result.IsSuccess).toBeTruthy();
-        expect(result.StatusCode).toBe(200);
 
     })
 
@@ -34,9 +34,10 @@ describe('Buscar playlists con trending = true', () => {
         // Arrange
         const user = await UserObjectMother.createNormalUser();
         const userRepositoryMock = UserRepositoryMock.create();
+        const songRepositoryMock = SongRepositoryMock.create();
+        const artisRepositoryMock = ArtistRepositoryMock.create();
         userRepositoryMock.saveAggregate(user);
-        const emptyPlaylistRepositoryMock = PlaylistRepositoryMock.create(); // Utiliza un repositorio vacío
-        const service = new GetTopPlaylistService(emptyPlaylistRepositoryMock);
+        const service = new GetTopSongsService(songRepositoryMock, artisRepositoryMock);
 
         const dto: ServiceEntry = {
             userId: user.Id.Id

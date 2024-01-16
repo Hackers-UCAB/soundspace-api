@@ -10,16 +10,66 @@ import { SongName } from "src/song/domain/value-objects/song-name";
 export class SongRepositoryMock implements ISongRepository {
     private readonly songs: Song[] = []
 
-    
-    findSongById(id: SongId): Promise<Result<Song>> {
-        throw new Error("Method not implemented.");
+    async findSongById(id: SongId): Promise<Result<Song>> {
+        let response: Song | undefined;
+        let error: Error | undefined;
+        try {
+            const response = this.songs.find((song) => song.Id.Id === id.Id);
+        } catch (e) {
+            error = e;
+        } finally {
+            if (error) {
+                return Result.fail(
+                    null,
+                    500,
+                    error.message || 'Error simulado obteniendo la song',
+                    error,
+                );
+            }
+            if (!response) {
+                return Result.fail(
+                    null,
+                    404,
+                    'No existe la cancion solicitada',
+                    new Error('No existe la cancion solicitada'),
+                );
+            }
+            return Result.success<Song>(response, 200);
+        }
     }
+
     findSongUrlById(id: string): Promise<Result<SongId>> {
         throw new Error("Method not implemented.");
     }
-    findTopSongs(): Promise<Result<Song[]>> {
-        throw new Error("Method not implemented.");
+
+    async findTopSongs(): Promise<Result<Song[]>> {
+        try {
+            const songsCount = this.songs.length;
+            if (songsCount === 0) {
+                return Result.fail(
+                    null,
+                    404,
+                    'No se encontraron songs',
+                    new Error('No se encontraron songs')
+                );
+            }
+            const randomsongs: Song[] = [];
+            const numberOfRandomsongs = Math.floor(Math.random() * songsCount) + 1;
+            for (let i = 0; i < numberOfRandomsongs; i++) {
+                const randomIndex = Math.floor(Math.random() * songsCount);
+                randomsongs.push(this.songs[randomIndex]);
+            }
+            return Result.success(randomsongs, 200);
+        } catch (error) {
+            return Result.fail(
+                null,
+                500,
+                error.message || 'Error simulado al obtener las songs top',
+                error,
+            );
+        }
     }
+
     async findSongsByName(name: string, limit?: number, offset?: number): Promise<Result<Song[]>> {
         const songs: Song[] = [] 
         for (let i = 0; i < this.songs.length; i++) {
