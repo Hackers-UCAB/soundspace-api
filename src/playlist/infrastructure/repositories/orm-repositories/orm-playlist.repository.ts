@@ -1,19 +1,19 @@
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IPlaylistRepository } from 'src/playlist/domain/repositories/playlist.repository.interface';
-import { Playlist } from '../../domain/playlist';
-import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
-import { PlaylistId } from '../../domain/value-objects/playlist-id';
+import { Playlist } from '../../../domain/playlist';
+import { OrmPlaylistEntity } from '../../../../common/infrastructure/persistence-entities/orm-entities/orm-playlist.entity';
+import { PlaylistId } from '../../../domain/value-objects/playlist-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
-export class PlaylistRepository
+export class OrmPlaylistRepository
   extends Repository<OrmPlaylistEntity>
   implements IPlaylistRepository
 {
-  private readonly OrmPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>;
+  private readonly ormPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>;
   constructor(dataSource: DataSource, ormPlaylistMapper: IMapper<Playlist, OrmPlaylistEntity>) {
     super(OrmPlaylistEntity, dataSource.createEntityManager());
-    this.OrmPlaylistMapper = ormPlaylistMapper;
+    this.ormPlaylistMapper = ormPlaylistMapper;
   }
 
   async findPlaylistById(id: PlaylistId): Promise<Result<Playlist>> {
@@ -36,7 +36,7 @@ export class PlaylistRepository
         )
         .getOne();
       //la respuesta de la base de datos se mapea
-      response = await this.OrmPlaylistMapper.toDomain(playlist);
+      response = await this.ormPlaylistMapper.toDomain(playlist);
     } catch (e) {
       error = e;
     } finally {
@@ -79,7 +79,7 @@ export class PlaylistRepository
       //la respuesta de la base de datos se mapea
       response = await Promise.all(
         playlists.map(
-          async (playlist) => await this.OrmPlaylistMapper.toDomain(playlist),
+          async (playlist) => await this.ormPlaylistMapper.toDomain(playlist),
         ),
       );
     } catch (e) {
@@ -134,7 +134,7 @@ export class PlaylistRepository
       );
       response = await Promise.all(
         finalPlaylist.map(
-          async (playlist) => await this.OrmPlaylistMapper.toDomain(playlist),
+          async (playlist) => await this.ormPlaylistMapper.toDomain(playlist),
         ),
       );
     } catch (err) {

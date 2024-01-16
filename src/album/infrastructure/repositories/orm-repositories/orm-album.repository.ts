@@ -1,21 +1,19 @@
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IAlbumRepository } from 'src/album/domain/repositories/album.repository.interface';
-import { Album } from '../../domain/album';
-import { Artist } from 'src/artist/domain/artist';
-import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
-import { OrmAlbumMapper } from '../mapper/orm-album.mapper';
-import { AlbumId } from '../../domain/value-objects/album-id';
+import { Album } from '../../../domain/album';
+import { OrmPlaylistEntity } from '../../../../common/infrastructure/persistence-entities/orm-entities/orm-playlist.entity';
+import { AlbumId } from '../../../domain/value-objects/album-id';
 import { ArtistId } from 'src/artist/domain/value-objects/artist-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-export class AlbumRepository
+export class OrmAlbumRepository
   extends Repository<OrmPlaylistEntity>
   implements IAlbumRepository
 {
-  private readonly OrmAlbumMapper: IMapper<Album, OrmPlaylistEntity>;
+  private readonly ormAlbumMapper: IMapper<Album, OrmPlaylistEntity>;
   constructor(dataSource: DataSource, ormAlbumMapper: IMapper<Album, OrmPlaylistEntity>) {
     super(OrmPlaylistEntity, dataSource.createEntityManager());
-    this.OrmAlbumMapper = ormAlbumMapper;
+    this.ormAlbumMapper = ormAlbumMapper;
   }
 
   async findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
@@ -45,7 +43,7 @@ export class AlbumRepository
         .getMany();
 
       response = await Promise.all(
-        albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
+        albums.map(async (album) => await this.ormAlbumMapper.toDomain(album)),
       );
     } catch (e) {
       error = e;
@@ -86,7 +84,7 @@ export class AlbumRepository
         })
         .getOne();
 
-      response = await this.OrmAlbumMapper.toDomain(album);
+      response = await this.ormAlbumMapper.toDomain(album);
     } catch (e) {
       error = e;
     } finally {
@@ -135,7 +133,7 @@ export class AlbumRepository
         .getMany();
 
       response = await Promise.all(
-        albums.map(async (album) => await this.OrmAlbumMapper.toDomain(album)),
+        albums.map(async (album) => await this.ormAlbumMapper.toDomain(album)),
       );
     } catch (e) {
       error = e;
@@ -189,7 +187,7 @@ export class AlbumRepository
       );
       response = await Promise.all(
         finalAlbum.map(
-          async (album) => await this.OrmAlbumMapper.toDomain(album),
+          async (album) => await this.ormAlbumMapper.toDomain(album),
         ),
       );
     } catch (err) {

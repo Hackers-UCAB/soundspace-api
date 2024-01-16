@@ -5,7 +5,6 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth/infrastructure/controllers/auth.controller';
 import { databaseProviders } from 'src/common/infrastructure/providers/config/dbconfig';
 import { SubscriptionController } from './subscription/infrastructure/controllers/subscription.controller';
-import { servicesProvidersManager } from './common/infrastructure/providers/services/services.provider';
 import { providersManager } from 'src/common/infrastructure/providers/config/providers-manager';
 import { SongController } from './song/infrastructure/controllers/song.controller';
 import { SongWsModule } from './song-ws/song-ws.module';

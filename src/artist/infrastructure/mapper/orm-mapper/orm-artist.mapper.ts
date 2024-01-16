@@ -1,13 +1,13 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-import { OrmArtistaEntity } from '../orm-entities/artist.entity';
-import { Artist } from '../../domain/artist';
-import { ArtistId } from '../../domain/value-objects/artist-id';
-import { ArtistName } from '../../domain/value-objects/artist-name';
-import { ArtistGenre } from '../../domain/value-objects/artist-genre';
-import { ArtistPhoto } from '../../domain/value-objects/artist-photo';
-import { ArtistAlbums } from '../../domain/value-objects/artist-albums';
-import { ArtistSongs } from '../../domain/value-objects/artist-songs';
-import { SongId } from '../../../song/domain/value-objects/song-id';
+import { OrmArtistaEntity } from '../../persistence-entities/orm-entities/orm-artist.entity';
+import { Artist } from '../../../domain/artist';
+import { ArtistId } from '../../../domain/value-objects/artist-id';
+import { ArtistName } from '../../../domain/value-objects/artist-name';
+import { ArtistGenre } from '../../../domain/value-objects/artist-genre';
+import { ArtistPhoto } from '../../../domain/value-objects/artist-photo';
+import { ArtistAlbums } from '../../../domain/value-objects/artist-albums';
+import { ArtistSongs } from '../../../domain/value-objects/artist-songs';
+import { SongId } from '../../../../song/domain/value-objects/song-id';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
 import { InvalidToDomainMapper } from 'src/common/application/mappers/exceptions/invalid-to-domain-mapper.exception';
 

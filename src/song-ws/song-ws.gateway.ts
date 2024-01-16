@@ -5,7 +5,7 @@ import { Result } from 'src/common/domain/result-handler/result';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { LoggerImpl } from 'src/common/infrastructure/logger/logger';
-import { AuditingRepository } from 'src/common/infrastructure/auditing/repositories/auditing.repository';
+import { OrmAuditingRepository } from 'src/common/infrastructure/auditing/repositories/orm-repositories/orm-auditing.repository';
 import { PlaySongEntryApplicationDto } from 'src/song/application/dto/entry/play-song.entry.application.dto';
 import { PlaySongResponseApplicationDto } from 'src/song/application/dto/response/play-song.response.application.dto';
 import { PlaySongService} from 'src/song/application/services/play-song.application.service';
@@ -69,7 +69,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           new SendSongHelper(), 
           client,
           new SongReferenceImplementationHelper(this.userRepository, new OrmSongRepository(this.dataSource,this.ormSongMapper))),
-        new AuditingRepository(this.dataSource),
+        new OrmAuditingRepository(this.dataSource),
         'PlaySongService',
         new LoggerImpl()
       ),

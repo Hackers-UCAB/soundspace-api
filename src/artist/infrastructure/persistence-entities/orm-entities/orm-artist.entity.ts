@@ -1,7 +1,7 @@
-import { OrmCancionEntity } from "../../../song/infrastructure/persistence-entities/orm-entities/orm-song.entity";
-import { OrmPlaylistCreadorEntity } from "../../../common/infrastructure/orm-entities/playlist-creator.entity";
+import { OrmCancionEntity } from "../../../../song/infrastructure/persistence-entities/orm-entities/orm-song.entity";
+import { OrmPlaylistCreadorEntity } from "../../../../common/infrastructure/persistence-entities/orm-entities/orm-playlist-creator.entity";
 import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { OrmGeneroEntity } from "../../../common/infrastructure/orm-entities/genre.entity";
+import { OrmGeneroEntity } from "../../../../common/infrastructure/persistence-entities/orm-entities/orm-genre.entity";
 @Entity('artista')
 export class OrmArtistaEntity {
   @PrimaryGeneratedColumn('uuid')

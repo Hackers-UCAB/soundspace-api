@@ -1,12 +1,12 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
-import { Playlist } from '../../domain/playlist';
-import { PlaylistId } from '../../domain/value-objects/playlist-id';
-import { PlaylistName } from '../../domain/value-objects/playlist-name';
-import { PlaylistCover } from '../../domain/value-objects/playlist-cover';
-import { PlaylistSong } from '../../domain/value-objects/playlist-songs';
-import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../../../common/application/mappers/exceptions/invalid-to-domain-mapper.exception';
+import { OrmPlaylistEntity } from '../../../../common/infrastructure/persistence-entities/orm-entities/orm-playlist.entity';
+import { Playlist } from '../../../domain/playlist';
+import { PlaylistId } from '../../../domain/value-objects/playlist-id';
+import { PlaylistName } from '../../../domain/value-objects/playlist-name';
+import { PlaylistCover } from '../../../domain/value-objects/playlist-cover';
+import { PlaylistSong } from '../../../domain/value-objects/playlist-songs';
+import { SongId } from '../../../../song/domain/value-objects/song-id';
+import { InvalidToDomainMapper } from '../../../../common/application/mappers/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmPlaylistMapper implements IMapper<Playlist, OrmPlaylistEntity> {
 

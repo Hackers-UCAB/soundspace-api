@@ -1,5 +1,5 @@
 import { IPromotionRepository } from 'src/promotions/domain/repositories/promotion.repository.interface';
-import { OrmPromotionEntity } from '../../persistence-entities/orm-entities/promotion.entity';
+import { OrmPromotionEntity } from '../../persistence-entities/orm-entities/orm-promotion.entity';
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { Promotion } from 'src/promotions/domain/promotion';

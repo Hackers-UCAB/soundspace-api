@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
-import { OrmPlaylistCancionEntity } from './playlist-song.entity';
-import { OrmPlaylistCreadorEntity } from './playlist-creator.entity';
-import { OrmGeneroEntity } from './genre.entity';
+import { OrmPlaylistCancionEntity } from './orm-playlist-song.entity';
+import { OrmPlaylistCreadorEntity } from './orm-playlist-creator.entity';
+import { OrmGeneroEntity } from './orm-genre.entity';
 
 @Entity('playlist')
 export class OrmPlaylistEntity {

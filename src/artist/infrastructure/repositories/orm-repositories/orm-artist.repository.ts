@@ -1,15 +1,15 @@
 import { DataSource, Repository } from 'typeorm';
 import { Result } from 'src/common/domain/result-handler/result';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
-import { Artist } from '../../domain/artist';
-import { ArtistId } from '../../domain/value-objects/artist-id';
-import { OrmArtistaEntity } from '../orm-entities/artist.entity';
-import { OrmArtistMapper } from '../mapper/orm-artist.mapper';
+import { Artist } from '../../../domain/artist';
+import { ArtistId } from '../../../domain/value-objects/artist-id';
+import { OrmArtistaEntity } from '../../persistence-entities/orm-entities/orm-artist.entity';
+import { OrmArtistMapper } from '../../mapper/orm-mapper/orm-artist.mapper';
 import { SongId } from 'src/song/domain/value-objects/song-id';
 import { AlbumId } from 'src/album/domain/value-objects/album-id';
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
 
-export class ArtistRepository
+export class OrmArtistRepository
   extends Repository<OrmArtistaEntity>
   implements IArtistRepository
 {

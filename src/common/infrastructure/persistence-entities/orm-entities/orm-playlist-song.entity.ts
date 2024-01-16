@@ -1,6 +1,6 @@
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { OrmPlaylistEntity } from './playlist.entity';
-import { OrmCancionEntity } from '../../../song/infrastructure/persistence-entities/orm-entities/orm-song.entity';
+import { OrmPlaylistEntity } from './orm-playlist.entity';
+import { OrmCancionEntity } from '../../../../song/infrastructure/persistence-entities/orm-entities/orm-song.entity';
 
 @Entity('playlist_cancion')
 export class OrmPlaylistCancionEntity {

@@ -1,15 +1,15 @@
 import { IMapper } from 'src/common/application/mappers/mapper.interface';
-import { OrmPlaylistEntity } from '../../../common/infrastructure/orm-entities/playlist.entity';
-import { OrmGeneroEntity } from 'src/common/infrastructure/orm-entities/genre.entity';
-import { Album } from '../../domain/album';
-import { AlbumId } from '../../domain/value-objects/album-id';
-import { AlbumName } from '../../domain/value-objects/album-name';
-import { AlbumCover } from '../../domain/value-objects/album-cover';
-import { AlbumSongs } from '../../domain/value-objects/album-songs';
-import { AlbumDuration } from '../../domain/value-objects/album-duration';
-import { AlbumGenre } from '../../domain/value-objects/album-genre';
-import { SongId } from '../../../song/domain/value-objects/song-id';
-import { InvalidToDomainMapper } from '../../../common/application/mappers/exceptions/invalid-to-domain-mapper.exception';
+import { OrmPlaylistEntity } from '../../../../common/infrastructure/persistence-entities/orm-entities/orm-playlist.entity';
+import { OrmGeneroEntity } from 'src/common/infrastructure/persistence-entities/orm-entities/orm-genre.entity';
+import { Album } from '../../../domain/album';
+import { AlbumId } from '../../../domain/value-objects/album-id';
+import { AlbumName } from '../../../domain/value-objects/album-name';
+import { AlbumCover } from '../../../domain/value-objects/album-cover';
+import { AlbumSongs } from '../../../domain/value-objects/album-songs';
+import { AlbumDuration } from '../../../domain/value-objects/album-duration';
+import { AlbumGenre } from '../../../domain/value-objects/album-genre';
+import { SongId } from '../../../../song/domain/value-objects/song-id';
+import { InvalidToDomainMapper } from '../../../../common/application/mappers/exceptions/invalid-to-domain-mapper.exception';
 
 export class OrmAlbumMapper implements IMapper<Album, OrmPlaylistEntity> {
   async toDomain(persistence: OrmPlaylistEntity): Promise<Album> {
