@@ -5,6 +5,8 @@ import { ArtistId } from 'src/artist/domain/value-objects/artist-id';
 import { Result } from 'src/common/domain/result-handler/result';
 
 export class AlbumRepositoryMock implements IAlbumRepository {
+
+  private albumMap: Map<Album, ArtistId> = new Map();
   private readonly albums: Album[] = [];
 
   findAlbumById(albumId: AlbumId): Promise<Result<Album>> {
@@ -26,9 +28,17 @@ export class AlbumRepositoryMock implements IAlbumRepository {
   findTopAlbum(): Promise<Result<Album[]>> {
     throw new Error('Method not implemented.');
   }
+
   findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
-    throw new Error('Method not implemented.');
+    
+    const albums = Array.from(this.albumMap.entries())
+        .filter(([album, artist]) => artist.equals(artistId))
+        .map(([album, artist]) => album);
+
+      return Promise.resolve(Result.success(albums, 200));
+
   }
+
   async findAlbumsByName(
     name: string,
     limit?: number,
@@ -58,6 +68,11 @@ export class AlbumRepositoryMock implements IAlbumRepository {
     this.albums.push(album);
     return Result.success('Guardado correctamente', 200);
   }
+
+  saveMap(album: Album, artistId: ArtistId) {
+    this.albumMap.set(album, artistId);
+  }
+
   static create() {
     return new AlbumRepositoryMock();
   }
