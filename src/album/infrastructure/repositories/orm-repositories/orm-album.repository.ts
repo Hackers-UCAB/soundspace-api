@@ -59,7 +59,7 @@ export class OrmAlbumRepository
       }
       // Filtrar los elementos nulos del array 'response'
       response = response.filter((album) => album !== null);
-     
+
       return Result.success<Album[]>(response, 200);
     }
   }
