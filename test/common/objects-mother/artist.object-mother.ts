@@ -14,7 +14,7 @@ export class ArtistObjectMother {
     // This method expects a valid artist name, genre, 
     // desired song count and desired album count.
     // (i.e. createValidArtist('Maroon 5', 'Pop rock', 10, 2)
-    static createValidArtist(name: string, genre: string, songCount: number,
+    static async createValidArtist(name: string, genre: string, songCount: number,
         albumCount: number) {
 
         const idGenerator = new UuidGenerator();
@@ -41,7 +41,7 @@ export class ArtistObjectMother {
     // followed by the current iteration number. All artists have the same number 
     // of songs and albums. The created artists are then pushed into the artists 
     // array, which is returned by the method.
-    static createValidArtistsArray(count: number, namePrefix: string,
+    static async createValidArtistsArray(count: number, namePrefix: string,
         genrePrefix: string, songCount: number, albumCount: number) {
 
         const artists = [];
@@ -52,6 +52,22 @@ export class ArtistObjectMother {
         }
 
         return artists;
+
+    }
+
+    static async createValidArtistWithoutSongsAndAlbums(name: string, genre: string) {
+            
+            const idGenerator = new UuidGenerator();
+            const artist = Artist.create(
+                ArtistId.create(idGenerator.generate()),
+                ArtistName.create(name),
+                ArtistGenre.create(genre),
+                ArtistPhoto.create('photo.png'),
+                ArtistSongs.create([]),
+                ArtistAlbums.create([])
+            )
+    
+            return artist;
 
     }
 

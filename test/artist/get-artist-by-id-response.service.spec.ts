@@ -5,6 +5,9 @@ import { GetArtistByIdEntryApplicationDto } from 'src/artist/application/dto/ent
 import { SongRepositoryMock } from 'test/common/repository-mocks/song.repository.mock';
 import { AlbumRepositoryMock } from 'test/common/repository-mocks/album.repository.mock';
 import { UuidGenerator } from 'src/common/infrastructure/uuid-generator';
+import { SongObjectMother } from 'test/common/objects-mother/song.object-mother';
+import { AlbumObjectMother } from 'test/common/objects-mother/album.object-mother';
+import { Console } from 'console';
 
 // FALTA POR IMPLEMENTAR:
 // ~ findSongById() en SongRepositoryMock
@@ -25,8 +28,19 @@ describe('GetArtistByIdService', () => {
 
     it('should return the artist if it exists', async () => {
         // Arrange
-        const artist = ArtistObjectMother.createValidArtist('Bon Jovi', 'Rock', 20, 4);
+        const artist = await ArtistObjectMother.createValidArtistWithoutSongsAndAlbums(
+            'Bon Jovi', 'Rock');
         artistRepository.save(artist);
+        const song1 = await SongObjectMother.createValidSong('Livin on a prayer');
+        const song2 = await SongObjectMother.createValidSong('You give love a bad name');
+        const song3 = await SongObjectMother.createValidSong('Runaway');
+        songRepository.save(song1);
+        songRepository.save(song2);
+        songRepository.save(song3);
+        const album = await AlbumObjectMother.createRandomAlbum('Slippery when wet',
+            [song1, song2, song3]);
+        albumRepository.saveMap(album, artist.Id);
+        artistRepository.patchArtist(artist.Id, [song1.Id, song2.Id, song3.Id], [album.Id])
 
         const dto: GetArtistByIdEntryApplicationDto = {
             artistId: artist.Id.Id,
