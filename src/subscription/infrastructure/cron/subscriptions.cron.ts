@@ -15,7 +15,7 @@ export class CheckSubscriptionsCronService {
         ) {}
     
     //   @Cron(CronExpression.EVERY_DAY_AT_8AM)
-      @Cron('28 5 * * *', {
+      @Cron(CronExpression.EVERY_DAY_AT_8AM, {
         name: 'check-subscriptions',
         timeZone: 'America/Caracas',
       })
