@@ -242,10 +242,10 @@ export const odmDataBaseProviders = [
   },
   {
     provide: 'AlbumRepository',
-    useFactory: (albumModel: Model<OdmPlaylistEntity>) => {
-      return new OdmAlbumRepository(new OdmAlbumMapper(), albumModel);
+    useFactory: (albumModel: Model<OdmPlaylistEntity>, artistModel: Model<OdmArtistEntity>) => {
+      return new OdmAlbumRepository(new OdmAlbumMapper(), albumModel, artistModel);
     },
-    inject: ['PlaylistModel'],
+    inject: ['PlaylistModel', 'ArtistModel'],
   },
   {
     provide: 'ArtistRepository',

@@ -25,10 +25,6 @@ export class OdmPlaylistEntity {
     @Prop({ type: Types.ObjectId, ref: 'Genre' })
     generoRef: Types.ObjectId;
 
-    // @Prop({required: true})
-    // genero: string;
-
-    // //Todo: El create
 }
 
 export const PlaylistSchema = SchemaFactory.createForClass(OdmPlaylistEntity)

@@ -18,9 +18,36 @@ export class OdmSongRepository implements ISongRepository {
     this.songModel = songModel;
   }
 
-  findSongById(id: SongId): Promise<Result<Song>> {
-    throw new Error('Method not implemented.');
+  async findSongById(id: SongId): Promise<Result<Song>> {
+    let response: Song;
+    let error: any;
+    try {
+      const cancion = await this.songModel.findOne({
+        codigo_cancion: id.Id,
+      }).populate('generosRef');
+
+      let generos = [];
+      cancion.generosRef.forEach((element) => {
+        generos.push(element);
+      });
+      cancion.generosRef = generos;
+      response = await this.odmSongMapper.toDomain(cancion);
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+         error.message ||
+            'Ha ocurrido un error inesperado, hable con el administrador',
+            error,
+        );
+      }
+      return Result.success(response, 200);
+    }
   }
+
   findSongUrlById(id: string): Promise<Result<SongId>> {
     throw new Error('Method not implemented.');
   }
@@ -36,7 +63,7 @@ export class OdmSongRepository implements ISongRepository {
         },
         {
           $lookup: {
-            from: 'genres', // Asegúrate de que 'genres' es el nombre correcto de la colección de géneros
+            from: 'genres', 
             localField: 'generosRef',
             foreignField: '_id',
             as: 'genero',
@@ -56,12 +83,13 @@ export class OdmSongRepository implements ISongRepository {
       ]);
       response = await Promise.all(
         songs.map(async (song) => {
-            let generos = [];
-            song.genero.forEach(genero => {
-                generos.push(genero.nombre_genero[0]); 
-            });
-            song.generosRef = generos;
-            return await this.odmSongMapper.toDomain(song)}),
+          let generos = [];
+          song.genero.forEach((genero) => {
+            generos.push(genero.nombre_genero[0]);
+          });
+          song.generosRef = generos;
+          return await this.odmSongMapper.toDomain(song);
+        }),
       );
     } catch (err) {
       error = err;
@@ -86,6 +114,7 @@ export class OdmSongRepository implements ISongRepository {
       return Result.success(response, 200);
     }
   }
+  
   findSongsByName(
     name: string,
     limit?: number,

@@ -16,10 +16,36 @@ export class OdmPlaylistRepository implements IPlaylistRepository {
     this.odmPlaylistMapper = odmPlaylistMapper;
     this.playlistModel = playlistModel;
   }
-  findPlaylistById(
-    GetPlaylistByIdEntryApplicationDto: PlaylistId,
-  ): Promise<Result<Playlist>> {
-    throw new Error('Method not implemented.');
+  async findPlaylistById(playlistId: PlaylistId): Promise<Result<Playlist>> {
+    let response: Playlist;
+    let error: any;
+    try {
+      const playlist = await this.playlistModel.findOne({
+        codigo_playlist: playlistId.Id, tipo: 'Playlist',
+      });
+      response = await this.odmPlaylistMapper.toDomain(playlist);
+    } catch (err) {
+      error = err;
+    } finally {
+      if (error) {
+        return Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error inesperado obteniendo la playlist, hable con el administrador',
+          error,
+        );
+      }
+      if (!response) {
+        return Result.fail(
+          null,
+          404,
+          'No existe la playlist solicitada',
+          new Error('No existe la playlist solicitada'),
+        );
+      }
+      return Result.success<Playlist>(response, 200);
+    }
   }
   async findTopPlaylist(): Promise<Result<Playlist[]>> {
     let response: Playlist[];

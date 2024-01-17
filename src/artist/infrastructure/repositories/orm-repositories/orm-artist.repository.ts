@@ -24,7 +24,7 @@ export class OrmArtistRepository
 
   async findArtistById(artistId: ArtistId): Promise<Result<Artist>> {
     let response: Artist;
-    let error: Error;
+    let error: any;
 
     try {
       const artist = await this.createQueryBuilder('artista')
@@ -98,7 +98,7 @@ export class OrmArtistRepository
 
   async findArtistsByAlbumId(albumId: AlbumId): Promise<Result<Artist[]>> {
     let response: Artist[] = [];
-    let error: Error;
+    let error: any;
 
     try {
       const artists = await this.createQueryBuilder('artista')

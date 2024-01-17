@@ -21,7 +21,7 @@ export class OrmSongRepository
 
   async findSongById(id: SongId): Promise<Result<Song>> {
     let response: Song;
-    let error: Error;
+    let error: any;
     try {
       const song = await this.createQueryBuilder('cancion')
         .select([
