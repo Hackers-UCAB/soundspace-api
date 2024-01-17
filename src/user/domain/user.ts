@@ -4,13 +4,10 @@ import { UserName } from './value-objects/user-name';
 import { UserEmail } from './value-objects/user-email';
 import { UserGender } from './value-objects/user-gender';
 import { UserRole } from './value-objects/user-role';
-import { UserPhone } from './value-objects/user-phone';
 import { UserBirthday } from './value-objects/user-birthday';
 import { UserCreated } from './events/user-created.event';
 import { InvalidUserException } from './exceptions/invalid-user.exception';
 import { DomainEvent } from 'src/common/domain/domain-event';
-import { UserGenderEnum } from './value-objects/enum/user-gender.enum';
-import { UserUpdated } from './events/user-updated.event';
 import { UserChangedToGuest } from './events/user-changed-to-guest.event';
 import { UserRoleEnum } from './value-objects/enum/user-role.enum';
 import { UserNameModified } from './events/user-name-modified';
@@ -86,13 +83,6 @@ export class User extends AggregateRoot<UserId> {
       this.gender = event.gender;
     }
 
-    if (event instanceof UserUpdated) {
-      this.name = event.name ? event.name : this.name;
-      this.birthday = event.birthday ? event.birthday : this.birthday;
-      this.email = event.email ? event.email : this.email;
-      this.gender = event.gender ? event.gender : this.gender;
-    }
-
     if (event instanceof UserChangedToGuest) {
       this.role = event.userRole;
     }
@@ -123,15 +113,6 @@ export class User extends AggregateRoot<UserId> {
     this.apply(
       UserChangedToGuest.create(this.Id, UserRole.create(UserRoleEnum.GUEST)),
     );
-  }
-
-  public updateUser(
-    name?: UserName,
-    birthday?: UserBirthday,
-    email?: UserEmail,
-    gender?: UserGender,
-  ): void {
-    this.apply(UserUpdated.create(this.Id, name, birthday, email, gender));
   }
 
   static async create(
