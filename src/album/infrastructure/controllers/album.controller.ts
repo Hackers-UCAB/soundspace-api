@@ -168,7 +168,6 @@ export class AlbumController {
       songs: songs,
     };
 
-    console.log('resultado del controller: ', response);
     return HttpResponseHandler.Success(200, response);
   }
 }

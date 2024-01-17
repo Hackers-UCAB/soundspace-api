@@ -13,7 +13,10 @@ export class AlbumRepository
   implements IAlbumRepository
 {
   private readonly OrmAlbumMapper: IMapper<Album, OrmPlaylistEntity>;
-  constructor(dataSource: DataSource, ormAlbumMapper: IMapper<Album, OrmPlaylistEntity>) {
+  constructor(
+    dataSource: DataSource,
+    ormAlbumMapper: IMapper<Album, OrmPlaylistEntity>,
+  ) {
     super(OrmPlaylistEntity, dataSource.createEntityManager());
     this.OrmAlbumMapper = ormAlbumMapper;
   }
@@ -61,7 +64,7 @@ export class AlbumRepository
       }
       // Filtrar los elementos nulos del array 'response'
       response = response.filter((album) => album !== null);
-     
+
       return Result.success<Album[]>(response, 200);
     }
   }
@@ -87,7 +90,6 @@ export class AlbumRepository
         .getOne();
 
       response = await this.OrmAlbumMapper.toDomain(album);
-      console.log('resultado del repo: ', response);
     } catch (e) {
       error = e;
     } finally {
