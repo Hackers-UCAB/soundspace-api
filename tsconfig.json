@@ -19,5 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "node",
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }
