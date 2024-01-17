@@ -8,7 +8,11 @@ import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorat
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { HttpResponseHandler } from 'src/common/infrastructure/http-response-handler/http-response.handler';
 import { SearchResponseApplicationDto } from 'src/search/application/dto/response/search.response.application.dto';
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiTags('Search')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('search')
 export class SearchController {
   constructor(
@@ -20,6 +24,7 @@ export class SearchController {
   ) {}
 
   @Get(':term')
+  @ApiOkResponse({description: 'Resultado de la busqueda' , type: SearchResponseApplicationDto })
   @Auth()
   async search(
     @Param('term') term: string,
