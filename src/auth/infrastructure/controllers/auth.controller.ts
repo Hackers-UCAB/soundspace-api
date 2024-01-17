@@ -1,5 +1,4 @@
 import { Controller, Post, Body, Inject, Get, Headers } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { SignUpEntryInfrastructureDto } from '../dto/entry/sign-up-entry.infrastructure.dto';
 import { Result } from 'src/common/domain/result-handler/result';
 import { AuthHeaderInfrastructureDto } from '../dto/entry/auth-header.infrastructure.dto';
@@ -19,8 +18,6 @@ import { ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs
 @Controller('auth')
 export class AuthController {
   constructor(
-    @Inject('DataSource')
-    private readonly dataSource: DataSource,
 
     @Inject('MovistarSignUpApplicationService')
     private readonly signUpMovistarApplicationService: IApplicationService<

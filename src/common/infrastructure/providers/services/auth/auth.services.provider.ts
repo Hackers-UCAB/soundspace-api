@@ -11,13 +11,9 @@ import { AuditingCommandServiceDecorator } from 'src/common/application/services
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infrastructure/events/event-bus';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
-import { SubscriptionRepository } from 'src/subscription/infrastructure/repositories/subscription.repository';
 import { DigitelSubscriptionValidation } from 'src/subscription/infrastructure/validation/digitel-subscription-validation';
 import { MovistarSubscriptionValidation } from 'src/subscription/infrastructure/validation/movistar-subscription-validation';
 import { IUserRepository } from 'src/user/domain/repositories/user.repository.interface';
-import { OrmUserMapper } from 'src/user/infrastructure/mapper/orm-user.mapper';
-import { UserRepository } from 'src/user/infrastructure/repositories/user.repository';
-import { DataSource } from 'typeorm';
 
 export const authServicesProviders: Provider[] = [
   {

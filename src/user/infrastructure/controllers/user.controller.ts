@@ -4,6 +4,7 @@ import {
   Get,
   Inject,
   Patch,
+  Post,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/infrastructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorator';
@@ -19,6 +20,9 @@ import { UpdateUserInfoEntryApplicationDto } from 'src/user/application/dto/entr
 import { UpdateUserInfoResponseApplicationDto } from 'src/user/application/dto/response/update-user-info-response.application.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { InjectModel } from '@nestjs/mongoose';
+import { OdmUserEntity } from '../persistence-entities/odm-entities/odm-user.entity';
+import { Model } from 'mongoose';
 
 @ApiTags('User')
 @Controller('user')
@@ -37,6 +41,8 @@ export class UserController {
       UpdateUserInfoEntryApplicationDto,
       UpdateUserInfoResponseApplicationDto
     >,
+
+    
   ) {}
 
   @Get()
@@ -86,5 +92,8 @@ export class UserController {
     }
     return HttpResponseHandler.Success(200, serviceResult.Data.message);
   }
+
+  
+
 }
 

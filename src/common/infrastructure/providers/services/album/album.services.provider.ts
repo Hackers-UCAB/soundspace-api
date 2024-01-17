@@ -2,18 +2,12 @@ import { Provider } from '@nestjs/common';
 import { GetAlbumByIdService } from 'src/album/application/services/get-album-by-id.application.service';
 import { GetTopAlbumService } from 'src/album/application/services/get-top-album.application.service';
 import { IAlbumRepository } from 'src/album/domain/repositories/album.repository.interface';
-import { AlbumRepository } from 'src/album/infrastructure/repositories/album.repository';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
-import { ArtistRepository } from 'src/artist/infrastructure/repositories/artist.repository';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
-import { AuditingRepository } from 'src/common/infrastructure/auditing/repositories/auditing.repository';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
-import { OrmSongMapper } from 'src/song/infrastructure/mapper/orm-song.mapper';
-import { SongRepository } from 'src/song/infrastructure/repositories/song.repository';
-import { DataSource } from 'typeorm';
 
 export const albumServicesProviders: Provider[] = [
   {

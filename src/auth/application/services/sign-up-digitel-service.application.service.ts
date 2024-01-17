@@ -14,7 +14,7 @@ import { SubscriptionCreatedDate } from 'src/subscription/domain/value-objects/s
 import { SubscriptionId } from 'src/subscription/domain/value-objects/subscription-id';
 import { SubscriptionStatus } from 'src/subscription/domain/value-objects/subscription-status';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
-import { SubscriptionStatusEnum } from 'src/subscription/infrastructure/orm-entities/subscription.entity';
+import { SubscriptionStatusEnum } from 'src/subscription/infrastructure/persistence-entities/orm-entities/orm-subscription.entity';
 import { Subscription } from 'src/subscription/domain/subscription';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { IDigitelSubscriptionValidation } from 'src/subscription/domain/validation/digitel-subscription-validation.interface';
@@ -55,12 +55,11 @@ export class SignUpDigitelApplicationService
   async execute(
     param: SignUpEntryApplicationDto,
   ): Promise<Result<SignUpResponseApplicationDto>> {
-    //Se valida con el api externo
+    // Se valida con el api externo
     const valid: Result<boolean> =
       await this.digitelSubscriptionValidation.validateSubscription(
         param.phone,
       );
-
     if (!valid.IsSuccess) {
       return Result.fail(
         null,
@@ -80,9 +79,7 @@ export class SignUpDigitelApplicationService
         UserId.create(userId),
         UserRole.create(UserRoleEnum.USER),
       );
-
       const createdOn = SubscriptionCreatedDate.create(new Date());
-
       //Se crea la subscripcion
       newSubscription = await Subscription.create(
         SubscriptionId.create(this.idGenerator.generate()),
@@ -93,6 +90,7 @@ export class SignUpDigitelApplicationService
         UserId.create(userId),
         SubscriptionChanelId.create(process.env.MOVISTAR_SUBSCRIPTION_ID),
       );
+
     } catch (error: any) {
       return Result.fail(
         null,
@@ -129,6 +127,7 @@ export class SignUpDigitelApplicationService
         new Error(subscriptionSaving.message),
       );
     }
+
     this.eventPublisher.publish(newSubscription.pullDomainEvents());
 
     const response: SignUpResponseApplicationDto = {

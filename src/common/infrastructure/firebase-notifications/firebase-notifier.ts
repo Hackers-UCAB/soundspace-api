@@ -1,23 +1,24 @@
 import * as admin from 'firebase-admin';
 import { Inject, Injectable } from "@nestjs/common";
-import { UserRepository } from "src/user/infrastructure/repositories/user.repository";
+import { OrmUserRepository } from "src/user/infrastructure/repositories/orm-repositories/orm-user.repository";
 import { NotifierDto } from 'src/common/application/notifications-handler/dto/entry/notifier-entry.dto';
 import { NotifierResponse } from 'src/common/application/notifications-handler/dto/response/notifier-response.dto';
 import { INotifier } from 'src/common/application/notifications-handler/notifier.interface';
 import { Result } from 'src/common/domain/result-handler/result';
 import { MulticastMessage } from 'firebase-admin/lib/messaging/messaging-api';
+import { OdmUserRepository } from 'src/user/infrastructure/repositories/odm-repositories/odm-user.repository';
 
 @Injectable()
 export class FirebaseNotifier implements INotifier{
 
     constructor(
+        //TODO: Cambiar
         @Inject('UserRepository')
-        private readonly userRepository: UserRepository
+        private readonly userRepository: OrmUserRepository | OdmUserRepository
     ){}
 
     async notify(message: NotifierDto): Promise<Result<NotifierResponse>> {
         const user = await this.userRepository.findUserEntityById(message.userId.Id);
-
         if(!user){
             return;
         }

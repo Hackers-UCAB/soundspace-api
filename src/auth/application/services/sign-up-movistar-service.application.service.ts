@@ -15,7 +15,7 @@ import { SubscriptionCreatedDate } from 'src/subscription/domain/value-objects/s
 import { SubscriptionId } from 'src/subscription/domain/value-objects/subscription-id';
 import { SubscriptionStatus } from 'src/subscription/domain/value-objects/subscription-status';
 import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscription-value';
-import { SubscriptionStatusEnum } from 'src/subscription/infrastructure/orm-entities/subscription.entity';
+import { SubscriptionStatusEnum } from 'src/subscription/infrastructure/persistence-entities/orm-entities/orm-subscription.entity';
 import { Subscription } from 'src/subscription/domain/subscription';
 import { SubscriptionChanelId } from 'src/subscription/domain/subscription-chanel/value-objects/subscription-chanel-id';
 import { SignUpResponseApplicationDto } from '../dto/response/sign-up-response.application.dto';
@@ -108,7 +108,7 @@ export class SignUpMovistarApplicationService
       newUser,
       [param.token],
     );
-    if (!userSaving.IsSuccess) {
+    if (!userSaving.IsSuccess) {      
       return Result.fail(
         null,
         userSaving.StatusCode,

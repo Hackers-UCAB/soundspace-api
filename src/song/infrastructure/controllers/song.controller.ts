@@ -1,6 +1,5 @@
 import { Controller, Get, Inject, Param, Res, Headers, StreamableFile, Body } from '@nestjs/common';
 
-import { DataSource } from 'typeorm';
 
 import { GetTopSongsResponseApplicationDto } from '../../application/dto/response/get-top-songs.response.application.dto';
 import { IApplicationService } from '../../../common/application/services/interfaces/application-service.interface';
@@ -19,9 +18,6 @@ import { Auth } from 'src/auth/infrastructure/jwt/decorators/auth.decorator';
 export class SongController {
 
     constructor(
-        @Inject('DataSource')
-        private readonly dataSource: DataSource,
-
         @Inject('AzureBufferImageHelper')
         private readonly azureBufferImageHelper: IGetBufferImageInterface,
 

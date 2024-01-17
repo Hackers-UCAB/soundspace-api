@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { ArrayNotEmpty, IsArray, IsIn, IsOptional, IsPositive, IsString, Min } from 'class-validator';
+import { IsIn, IsOptional, IsPositive, Min } from 'class-validator';
 
 export class QuerySearchDto {
   @IsOptional()
