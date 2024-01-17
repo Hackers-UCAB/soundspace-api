@@ -1,4 +1,4 @@
-import { GetPlaylistByIdEntryApplicationDto } from "../../src/playlist/application/dto/entry/get-playlist-by-id-entry.application.dto";
+ï»¿import { GetPlaylistByIdEntryApplicationDto } from "../../src/playlist/application/dto/entry/get-playlist-by-id-entry.application.dto";
 import { GetPlaylistByIdService } from "../../src/playlist/application/services/get-playlist-by-id.application.service";
 import { PlaylistObjectMother } from "../common/objects-mother/playlist.object-mother";
 import { SongObjectMother } from "../common/objects-mother/song.object-mother";
@@ -41,7 +41,7 @@ describe('Buscar playlist mediante su ID', () => {
         expect(result.StatusCode).toBe(200);
     });
     
-    it('retorna un resultado de error con código 404 para una playlist inexistente', async () => {
+    it('retorna un resultado de error con cï¿½digo 404 para una playlist inexistente', async () => {
         // Arrange
         const user = await UserObjectMother.createNormalUser();
         const userRepositoryMock = UserRepositoryMock.create();
