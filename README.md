@@ -129,5 +129,5 @@ Se presentan los aportes por cada desarrollador en el backend
 
 ## Autores
 
-| <img src="https://avatars.githubusercontent.com/u/108999297?v=4" width=115><br><sub>Victor Blanco</sub> |  <img src="https://avatars.githubusercontent.com/u/71970858?v=4" width=115><br><sub>Guillermo de Abreu</sub> |  <img src="https://avatars.githubusercontent.com/u/91544872?v=4" width=115><br><sub>Jhonny Sojo</sub> |  <img src="https://avatars.githubusercontent.com/u/37356058?v=4" width=115><br><sub>Stratos Kakalanos</sub> |  <img src="https://avatars.githubusercontent.com/u/37356058?v=4" width=115><br><sub>Ricardo Andueza</sub> |
-| :---: | :---: | :---: | :---: | :---: |
+| <img src="https://avatars.githubusercontent.com/u/108999297?v=4" width=115><br><sub>Victor Blanco</sub> |  <img src="https://avatars.githubusercontent.com/u/150209205?v=4" width=115><br><sub>Guillermo de Abreu</sub> |  <img src="https://avatars.githubusercontent.com/u/85240492?v=4" width=115><br><sub>Jhonny Sojo</sub> |  <img src="https://avatars.githubusercontent.com/u/56518507?v=4" width=115><br><sub>Stratos Kakalanos</sub> |  <img src="https://avatars.githubusercontent.com/u/106932816?v=4" width=115><br><sub>Ricardo Andueza</sub> |  <img src="https://avatars.githubusercontent.com/u/143916109?v=4" width=115><br><sub>Francis Bompart</sub> |
+| :---: | :---: | :---: | :---: | :---: | :---: |
