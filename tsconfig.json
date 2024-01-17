@@ -20,5 +20,5 @@
     "moduleResolution": "node",
   },
   "include": ["src"],
-  "exclude": ["**/*.spec.ts"]
+  "exclude": ["test","**/*.spec.ts"]
 }
