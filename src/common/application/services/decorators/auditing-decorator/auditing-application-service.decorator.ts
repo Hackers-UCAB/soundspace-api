@@ -8,7 +8,7 @@ import { LoggerDto } from 'src/common/application/logger/dto/logger.dto';
 import { ServiceResponse } from '../../dto/response/service-response.dto';
 import { ServiceEntry } from '../../dto/entry/service-entry.dto';
 
-export class AuditingCommandServiceDecorator<
+export class AuditingServiceDecorator<
   D extends ServiceEntry,
   R extends ServiceResponse,
 > extends ApplicationServiceDecorator<D, R> {

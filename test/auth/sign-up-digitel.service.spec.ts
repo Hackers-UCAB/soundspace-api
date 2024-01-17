@@ -1,5 +1,5 @@
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
-import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { SignUpDigitelApplicationService } from "src/auth/application/services/sign-up-digitel-service.application.service";
 import { UserRepositoryMock } from "test/common/repository-mocks/user.repository.mock";
 import { SubscriptionRepositoryMock } from '../common/repository-mocks/subscription.repository.mock';

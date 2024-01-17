@@ -1,5 +1,5 @@
 import exp from "constants";
-import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
+import { AuditingServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
 import { ServiceEntry } from "src/common/application/services/dto/entry/service-entry.dto";
 import { GetRandomPromotionApplicationService } from "src/promotions/application/services/get-random-promotion.application.service";

@@ -7,7 +7,7 @@ import { SignUpMovistarApplicationService } from 'src/auth/application/services/
 import { IIdGenerator } from 'src/common/application/id-generator/id-generator.interface';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
-import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infrastructure/events/event-bus';
 import { ISubscriptionRepository } from 'src/subscription/domain/repositories/subscription.repository.interface';
@@ -28,7 +28,7 @@ export const authServicesProviders: Provider[] = [
       uuidGenerator: IIdGenerator<string>
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new SignUpMovistarApplicationService(
             userRepository,
             subscriptionRepository,
@@ -67,7 +67,7 @@ export const authServicesProviders: Provider[] = [
       uuidGenerator: IIdGenerator<string>,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new SignUpDigitelApplicationService(
             userRepository,
             subscriptionRepository,
@@ -104,7 +104,7 @@ export const authServicesProviders: Provider[] = [
       logger: ILogger,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new LoginApplicationService(
             subscriptionRepository,
             userRepository,
@@ -130,7 +130,7 @@ export const authServicesProviders: Provider[] = [
       uuidGenerator: IIdGenerator<string>,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new LoginGuestApplicationService(
             userRepository,
             jwtGenerator,

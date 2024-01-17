@@ -7,7 +7,7 @@ import { ILogger } from 'src/common/application/logging-handler/logger.interface
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
 import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
-import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { IApplicationService } from 'src/common/application/services/interfaces/application-service.interface';
 import { SearchPlaylistsApplicationService } from 'src/playlist/application/services/search-playlists.application.service';
@@ -44,7 +44,7 @@ export const searchServicesProviders: Provider[] = [
         artists: new SearchArtistsApplicationService(artistRepository),
       };
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator<
+        new AuditingServiceDecorator<
           SearchEntryApplicationDto,
           SearchResponseApplicationDto
         >(

@@ -2,7 +2,7 @@ import { Provider } from "@nestjs/common";
 import { IArtistRepository } from "src/artist/domain/repositories/artist.repository.interface";
 import { ILogger } from "src/common/application/logging-handler/logger.interface";
 import { IAuditingRepository } from "src/common/application/repositories/auditing.repository.interface";
-import { AuditingCommandServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
+import { AuditingServiceDecorator } from "src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator";
 import { LoggerApplicationServiceDecorator } from "src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator";
 import { SecurityApplicationServiceDecorator } from "src/common/application/services/decorators/security-decorator/security-application-service.service.decorator";
 import { GetPlaylistByIdService } from "src/playlist/application/services/get-playlist-by-id.application.service";
@@ -19,7 +19,7 @@ export const playlistServicesProviders: Provider[] = [
         provide: 'GetPlaylistByIdService',
         useFactory: (userRepository: IUserRepository,playlistRepository: IPlaylistRepository, artistRepository: IArtistRepository, songRepository: ISongRepository, auditingRepository: IAuditingRepository, logger: ILogger) => {
           return new LoggerApplicationServiceDecorator(
-            new AuditingCommandServiceDecorator(
+            new AuditingServiceDecorator(
               new SecurityApplicationServiceDecorator(
                 new GetPlaylistByIdService(
                   playlistRepository,
@@ -43,7 +43,7 @@ export const playlistServicesProviders: Provider[] = [
         provide: 'GetTopPlaylistService',
         useFactory: (playlistRepository: IPlaylistRepository, auditingRepository: IAuditingRepository, logger: ILogger) => {
           return new LoggerApplicationServiceDecorator(
-            new AuditingCommandServiceDecorator(
+            new AuditingServiceDecorator(
               new GetTopPlaylistService(playlistRepository),
               auditingRepository,
               'GetTopPlaylistService',

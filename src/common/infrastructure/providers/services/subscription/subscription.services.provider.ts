@@ -1,7 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
-import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infrastructure/events/event-bus';
 import { CancelSubscriptionApplicationService } from 'src/subscription/application/services/cancel-subscription.application.service';
@@ -22,7 +22,7 @@ export const subscriptionServicesProviders: Provider[] = [
       eventBus: EventBus,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new CheckExpiredSubscriptionsApplicationService(
             subscriptionRepository,
             userRepository,
@@ -47,7 +47,7 @@ export const subscriptionServicesProviders: Provider[] = [
       eventBus: EventBus,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new CheckCloseToExpireSubscriptionsApplicationService(
            subscriptionRepository,
             eventBus,
@@ -66,7 +66,7 @@ export const subscriptionServicesProviders: Provider[] = [
     provide: 'CancelSubscriptionService',
     useFactory: (userRepository: IUserRepository, subscriptionRepository: ISubscriptionRepository, auditingRepository: IAuditingRepository, logger: ILogger) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new CancelSubscriptionApplicationService(
             subscriptionRepository,
             userRepository,

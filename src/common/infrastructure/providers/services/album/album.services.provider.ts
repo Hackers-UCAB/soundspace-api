@@ -5,7 +5,7 @@ import { IAlbumRepository } from 'src/album/domain/repositories/album.repository
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
 import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
-import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { SecurityApplicationServiceDecorator } from 'src/common/application/services/decorators/security-decorator/security-application-service.service.decorator';
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
@@ -24,7 +24,7 @@ export const albumServicesProviders: Provider[] = [
       logger: ILogger,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new SecurityApplicationServiceDecorator(
             new GetAlbumByIdService(
               albumRepository,
@@ -52,7 +52,7 @@ export const albumServicesProviders: Provider[] = [
       logger: ILogger,
     ) => {
       return new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new GetTopAlbumService(albumRepository),
           auditingRepository,
           'GetTopAlbumService',

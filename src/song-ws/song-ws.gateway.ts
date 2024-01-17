@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Result } from 'src/common/domain/result-handler/result';
-import { AuditingCommandServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
+import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { LoggerImpl } from 'src/common/infrastructure/logger/logger';
 import { OrmAuditingRepository } from 'src/common/infrastructure/auditing/repositories/orm-repositories/orm-auditing.repository';
@@ -66,7 +66,7 @@ export class SongWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const service = 
     new LoggerApplicationServiceDecorator(
-        new AuditingCommandServiceDecorator(
+        new AuditingServiceDecorator(
           new PlaySongService( 
           new GetSongFromAzureHelper(), 
           new SendSongHelper(), 
