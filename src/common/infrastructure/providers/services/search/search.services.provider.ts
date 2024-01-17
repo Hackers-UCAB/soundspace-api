@@ -4,7 +4,7 @@ import { IAlbumRepository } from 'src/album/domain/repositories/album.repository
 import { SearchArtistsApplicationService } from 'src/artist/application/services/search-artists.application.service';
 import { IArtistRepository } from 'src/artist/domain/repositories/artist.repository.interface';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
-import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
+import { IAuditingRepository } from 'src/common/application/auditing/repositories/auditing.repository.interface';
 import { SearchItemsEntryApplicationDto } from 'src/common/application/search/dto/entry/search.entry.dto';
 import { SearchItemsResponseApplicationDto } from 'src/common/application/search/dto/response/search.response.dto';
 import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';

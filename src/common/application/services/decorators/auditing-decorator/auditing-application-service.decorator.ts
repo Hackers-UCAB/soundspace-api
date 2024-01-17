@@ -1,4 +1,4 @@
-import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
+import { IAuditingRepository } from 'src/common/application/auditing/repositories/auditing.repository.interface';
 import { IApplicationService } from '../../interfaces/application-service.interface';
 import { ApplicationServiceDecorator } from '../application-service.decorator';
 import { Result } from 'src/common/domain/result-handler/result';

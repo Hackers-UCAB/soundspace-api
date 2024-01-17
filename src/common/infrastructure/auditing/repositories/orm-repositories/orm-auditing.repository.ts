@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { OrmAuditingEntity } from '../../../persistence-entities/orm-entities/orm-auditing.entity';
-import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
+import { IAuditingRepository } from 'src/common/application/auditing/repositories/auditing.repository.interface';
 import { Result } from 'src/common/domain/result-handler/result';
 import { UuidGenerator } from '../../../uuid-generator';
 import { AuditingDto } from 'src/common/application/auditing/dto/auditing.dto';

@@ -5,7 +5,6 @@ import { SubscriptionId } from './value-objects/subscription-id';
 import { SubscriptionCreated } from './events/subscription-created.event';
 import { SubscriptionEndDate } from './value-objects/subscription-end-date';
 import { SubscriptionCreatedDate } from './value-objects/subscription-created-date';
-import { SubscriptionUpdated } from './events/subscription-updated-event';
 import { InvalidSubscriptionException } from './exceptions/invalid-subscription.exception';
 import { SubscriptionStatus } from './value-objects/subscription-status';
 import { SubscriptionValue } from './value-objects/subscription-value';
@@ -78,12 +77,6 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
       this.chanel = event.chanel;
     }
 
-    if (event instanceof SubscriptionUpdated) {
-      this.status = event.status;
-      this.createdOn = event.createdOn ? event.createdOn : this.createdOn;
-      this.until = event.until ? event.until : this.until;
-    }
-
     if (event instanceof SubscriptionExpired) {
       this.status = event.status;
     }
@@ -109,14 +102,6 @@ export class Subscription extends AggregateRoot<SubscriptionId> {
     ) {
       throw new InvalidSubscriptionException('Subscripcion no valida');
     }
-  }
-
-  public updateStatus(
-    status: SubscriptionStatus,
-    createdOn?: SubscriptionCreatedDate,
-    until?: SubscriptionEndDate,
-  ): void {
-    this.apply(SubscriptionUpdated.create(this.Id, status, createdOn, until));
   }
 
   public expireSubscription() {

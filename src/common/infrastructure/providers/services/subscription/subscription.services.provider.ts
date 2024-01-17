@@ -1,6 +1,6 @@
 import { Provider } from '@nestjs/common';
 import { ILogger } from 'src/common/application/logging-handler/logger.interface';
-import { IAuditingRepository } from 'src/common/application/repositories/auditing.repository.interface';
+import { IAuditingRepository } from 'src/common/application/auditing/repositories/auditing.repository.interface';
 import { AuditingServiceDecorator } from 'src/common/application/services/decorators/auditing-decorator/auditing-application-service.decorator';
 import { LoggerApplicationServiceDecorator } from 'src/common/application/services/decorators/logger-decorator/logger-application-service.service.decorator';
 import { EventBus } from 'src/common/infrastructure/events/event-bus';
