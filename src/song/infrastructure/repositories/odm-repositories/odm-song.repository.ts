@@ -51,6 +51,7 @@ export class OdmSongRepository implements ISongRepository {
   findSongUrlById(id: string): Promise<Result<SongId>> {
     throw new Error('Method not implemented.');
   }
+
   async findTopSongs(): Promise<Result<Song[]>> {
     let response: Song[];
     let error: any;
@@ -122,6 +123,7 @@ export class OdmSongRepository implements ISongRepository {
   ): Promise<Result<Song[]>> {
     throw new Error('Method not implemented.');
   }
+  
   findUrl(id: SongId): Promise<Result<PartialSong>> {
     throw new Error('Method not implemented.');
   }
