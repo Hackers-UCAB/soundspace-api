@@ -3,7 +3,6 @@ import { PartialSong } from 'src/song/domain/parameter-object/partial-song.param
 import { ISongRepository } from 'src/song/domain/repositories/song.repository.interface';
 import { Song } from 'src/song/domain/song';
 import { SongId } from 'src/song/domain/value-objects/song-id';
-import { SongName } from 'src/song/domain/value-objects/song-name';
 
 export class SongRepositoryMock implements ISongRepository {
   private readonly songs: Song[] = [];

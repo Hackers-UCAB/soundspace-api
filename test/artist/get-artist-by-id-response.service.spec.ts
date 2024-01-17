@@ -7,11 +7,6 @@ import { AlbumRepositoryMock } from 'test/common/repository-mocks/album.reposito
 import { UuidGenerator } from 'src/common/infrastructure/uuid-generator';
 import { SongObjectMother } from 'test/common/objects-mother/song.object-mother';
 import { AlbumObjectMother } from 'test/common/objects-mother/album.object-mother';
-import { Console } from 'console';
-
-// FALTA POR IMPLEMENTAR:
-// ~ findSongById() en SongRepositoryMock
-// ~ findAlbumByArtist() en AlbumRepositoryMock
 
 describe('GetArtistByIdService', () => {
     let service: GetArtistByIdService;
