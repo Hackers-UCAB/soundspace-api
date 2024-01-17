@@ -1,4 +1,4 @@
-import { ServiceEntry } from "../../src/common/application/services/dto/entry/service-entry.dto";
+ï»¿import { ServiceEntry } from "../../src/common/application/services/dto/entry/service-entry.dto";
 import { GetTopPlaylistService } from "../../src/playlist/application/services/get-top-playlist.application.service";
 import { PlaylistObjectMother } from "../common/objects-mother/playlist.object-mother";
 import { UserObjectMother } from "../common/objects-mother/user.object-mother";
@@ -35,7 +35,7 @@ describe('Buscar playlists con trending = true', () => {
         const user = await UserObjectMother.createNormalUser();
         const userRepositoryMock = UserRepositoryMock.create();
         userRepositoryMock.saveAggregate(user);
-        const emptyPlaylistRepositoryMock = PlaylistRepositoryMock.create(); // Utiliza un repositorio vacío
+        const emptyPlaylistRepositoryMock = PlaylistRepositoryMock.create(); // Utiliza un repositorio vacï¿½o
         const service = new GetTopPlaylistService(emptyPlaylistRepositoryMock);
 
         const dto: ServiceEntry = {
