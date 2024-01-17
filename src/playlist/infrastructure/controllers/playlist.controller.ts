@@ -14,9 +14,11 @@ import { timeConverter } from 'src/common/domain/helpers/convert-duration';
 import { SongInfrastructureResponseDto } from 'src/common/infrastructure/dto/response/song/song.response.dto';
 import { TopPlaylistInfrastructureResponseDto, TopPlaylistSwaggerInfrastructureResponseDto } from '../../../common/infrastructure/dto/response/playlist/top-playlist.response.dto';
 import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
-import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiParam, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('playlist')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('playlist')
 export class PlaylistController {
     constructor(

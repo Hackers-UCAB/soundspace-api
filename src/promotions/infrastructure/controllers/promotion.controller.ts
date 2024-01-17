@@ -9,7 +9,11 @@ import { GetRandomPromotionResponseApplicationDto } from 'src/promotions/applica
 import { GetRandomPromotionResponseInfrastructureDto } from '../dto/response/get-random-promotion-response.infraestructure.dto';
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { IGetBufferImageInterface } from 'src/common/domain/interfaces/get-buffer-image.interface';
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiTags('Promotion')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('promotion')
 export class PromotionController {
   constructor(
@@ -24,6 +28,7 @@ export class PromotionController {
   ) {}
 
   @Get()
+  @ApiOkResponse({ description: 'Devuelve una promocion',type: GetRandomPromotionResponseInfrastructureDto })
   @Auth()
   async getRandomPromotion(@GetUser('id') userId: UserId) {
     const dto: ServiceEntry = {

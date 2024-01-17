@@ -12,8 +12,11 @@ import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorat
 import { UserId } from 'src/user/domain/value-objects/user-id';
 import { ServiceEntry } from '../../../common/application/services/dto/entry/service-entry.dto';
 import { Auth } from 'src/auth/infrastructure/jwt/decorators/auth.decorator';
+import { ApiBearerAuth, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-
+@ApiTags('Song')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('song')
 export class SongController {
 
@@ -29,6 +32,7 @@ export class SongController {
     ){ }
 
     @Get('top_songs')
+    @ApiOkResponse({ description: 'Devuelve las canciones top',type: GetTopSongsResponseApplicationDto })
     @Auth()
     async getTopPlaylist(@GetUser('id') userId: UserId) {
         const serviceResult: Result<GetTopSongsResponseApplicationDto> =

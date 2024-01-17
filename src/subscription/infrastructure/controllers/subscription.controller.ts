@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, Post } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { IEventPublisher } from 'src/common/application/events/event-publisher.interface';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Auth } from 'src/auth/infrastructure/jwt/decorators/auth.decorator';
 import { GetUser } from 'src/auth/infrastructure/jwt/decorators/get-user.decorator';
 import { UserId } from 'src/user/domain/value-objects/user-id';
@@ -12,6 +12,8 @@ import { Result } from 'src/common/domain/result-handler/result';
 import { HttpResponseHandler } from 'src/common/infrastructure/http-response-handler/http-response.handler';
 
 @ApiTags('Subscription')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('subscription')
 export class SubscriptionController {
   constructor(
