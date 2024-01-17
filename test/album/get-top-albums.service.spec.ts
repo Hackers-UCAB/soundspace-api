@@ -46,7 +46,7 @@ describe('Buscar albums trending', () => {
     const user = await UserObjectMother.createNormalUser();
     const userRepositoryMock = UserRepositoryMock.create();
     userRepositoryMock.saveAggregate(user);
-    const albumRepositoryMock = AlbumRepositoryMock.create(); // Utiliza un repositorio vac�o
+    const albumRepositoryMock = AlbumRepositoryMock.create();
     const service = new GetTopAlbumService(albumRepositoryMock);
 
     const dto: ServiceEntry = {
