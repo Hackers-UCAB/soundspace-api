@@ -23,6 +23,7 @@ export class OdmPlaylistRepository implements IPlaylistRepository {
       const playlist = await this.playlistModel.findOne({
         codigo_playlist: playlistId.Id, tipo: 'Playlist',
       });
+      
       response = await this.odmPlaylistMapper.toDomain(playlist);
     } catch (err) {
       error = err;

@@ -28,7 +28,7 @@ export class OdmArtistRepository implements IArtistRepository {
         { $match: { codigo_artista: artistId.Id } },
         {
           $lookup: {
-            from: 'genres', 
+            from: 'genres',
             localField: 'generoRef',
             foreignField: '_id',
             as: 'genero',
@@ -48,8 +48,10 @@ export class OdmArtistRepository implements IArtistRepository {
           },
         },
       ]);
-      artist[0].generoRef = [artist[0].genero.nombre_genero];
-      response = await this.odmArtistMapper.toDomain(artist[0]);
+      if (artist.length > 0) {
+        artist[0].generoRef = [artist[0].genero.nombre_genero];
+        response = await this.odmArtistMapper.toDomain(artist[0]);
+      }
     } catch (err) {
       error = err;
     } finally {
@@ -86,7 +88,7 @@ export class OdmArtistRepository implements IArtistRepository {
         },
         {
           $lookup: {
-            from: 'genres', 
+            from: 'genres',
             localField: 'generoRef',
             foreignField: '_id',
             as: 'genero',
@@ -140,7 +142,7 @@ export class OdmArtistRepository implements IArtistRepository {
         },
         {
           $lookup: {
-            from: 'genres', 
+            from: 'genres',
             localField: 'generoRef',
             foreignField: '_id',
             as: 'genero',
@@ -194,7 +196,7 @@ export class OdmArtistRepository implements IArtistRepository {
         },
         {
           $lookup: {
-            from: 'genres', 
+            from: 'genres',
             localField: 'generoRef',
             foreignField: '_id',
             as: 'genero',

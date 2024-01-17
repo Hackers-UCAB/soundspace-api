@@ -36,7 +36,7 @@ export class OdmAlbumRepository implements IAlbumRepository {
         },
         {
           $lookup: {
-            from: 'genres', 
+            from: 'genres',
             localField: 'generoRef',
             foreignField: '_id',
             as: 'genero',
@@ -55,8 +55,10 @@ export class OdmAlbumRepository implements IAlbumRepository {
           },
         },
       ]);
-      album[0].generoRef = [album[0].genero.nombre_genero];
-      response = await this.odmAlbumMapper.toDomain(album[0]);
+      if (album.length > 0) {
+        album[0].generoRef = [album[0].genero.nombre_genero];
+        response = await this.odmAlbumMapper.toDomain(album[0]);
+      }
     } catch (err) {
       error = err;
     } finally {
@@ -160,16 +162,15 @@ export class OdmAlbumRepository implements IAlbumRepository {
             { $match: { codigo_playlist: album } },
             {
               $lookup: {
-                from: 'genres', 
+                from: 'genres',
                 localField: 'generoRef',
                 foreignField: '_id',
                 as: 'genero',
               },
             },
-            { $unwind: '$genero' }, 
+            { $unwind: '$genero' },
             {
               $project: {
-                
                 _id: 0,
                 codigo_playlist: 1,
                 nombre: 1,
