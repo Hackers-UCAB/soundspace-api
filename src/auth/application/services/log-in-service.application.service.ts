@@ -51,8 +51,7 @@ export class LoginApplicationService
       param.token
       );
       
-      //TODO: Manejamos la excepcion?
-
+     
     const token = this.tokenGenerator.create({ id: subscription.Data.User.Id });
     
     const response: LogInResponseApplicationDto = {
