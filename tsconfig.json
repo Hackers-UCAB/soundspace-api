@@ -18,7 +18,5 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "node",
-  },
-  "include": ["src"],
-  "exclude": ["test","**/*.spec.ts"]
+  }
 }
