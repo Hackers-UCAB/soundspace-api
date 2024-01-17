@@ -7,9 +7,11 @@ import { SubscriptionValue } from 'src/subscription/domain/value-objects/subscri
 import { Subscription } from 'src/subscription/domain/subscription';
 import { LogInEntryApplicationDto } from '../dto/entry/log-in-entry.application.dto';
 import { LogInResponseApplicationDto } from '../dto/response/log-in-response.application.dto';
+import { SubscriptionStatusEnum } from 'src/subscription/domain/enums/subscription-status.enum';
 
 export class LoginApplicationService
-  implements IApplicationService<LogInEntryApplicationDto, LogInResponseApplicationDto>
+  implements
+    IApplicationService<LogInEntryApplicationDto, LogInResponseApplicationDto>
 {
   private readonly subscriptionRepository: ISubscriptionRepository;
   private readonly userRepository: IUserRepository;
@@ -24,7 +26,9 @@ export class LoginApplicationService
     this.tokenGenerator = tokenGenerator;
   }
 
-  async execute(param: LogInEntryApplicationDto): Promise<Result<LogInResponseApplicationDto>> {
+  async execute(
+    param: LogInEntryApplicationDto,
+  ): Promise<Result<LogInResponseApplicationDto>> {
     const subscription: Result<Subscription> =
       await this.subscriptionRepository.findSubscriptionByValue(
         SubscriptionValue.create(param.phone),
@@ -33,8 +37,12 @@ export class LoginApplicationService
       return Result.fail(
         null,
         subscription.statusCode || 500,
-        subscription.message || 'Ha ocurrido un error inesperado, hable con un administrador',
-        subscription.error || new Error('Ha ocurrido un error inesperado, hable con un administrador')
+        subscription.message ||
+          'Ha ocurrido un error inesperado, hable con un administrador',
+        subscription.error ||
+          new Error(
+            'Ha ocurrido un error inesperado, hable con un administrador',
+          ),
       );
     }
     if (!subscription.Data) {
@@ -45,16 +53,28 @@ export class LoginApplicationService
         new Error('No existe una subscripción con ese valor'),
       );
     }
-    
+    if (
+      SubscriptionStatusEnum[subscription.Data.Status.Status] !==
+        SubscriptionStatusEnum.ACTIVE &&
+      SubscriptionStatusEnum[subscription.Data.Status.Status] !==
+        SubscriptionStatusEnum.NEAR_EXPIRATION
+    ) {
+      return Result.fail(
+        null,
+        400,
+        'La subscripción no se encuentra activa',
+        new Error('La subscripción no se encuentra activa'),
+      );
+    }
     const updateTokens = await this.userRepository.updateTokens(
       subscription.Data.User,
-      param.token
-      );
-      
-      //TODO: Manejamos la excepcion?
+      param.token,
+    );
+
+    //TODO: Manejamos la excepcion?
 
     const token = this.tokenGenerator.create({ id: subscription.Data.User.Id });
-    
+
     const response: LogInResponseApplicationDto = {
       userId: subscription.Data.User.Id,
       token,
