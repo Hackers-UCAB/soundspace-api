@@ -3,56 +3,75 @@ import { LoggerApplicationServiceDecorator } from 'src/common/application/servic
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
 import { GetAlbumByIdService } from 'src/album/application/services/get-album-by-id.application.service';
 import { AlbumObjectMother } from 'test/common/objects-mother/album.object-mother';
-import { LoggerMock } from 'test/common/others-mocks/logger.mock';
-import { AuditingRepositoryMock } from 'test/common/repository-mocks/auditing.repository.mock';
 import { AlbumRepositoryMock } from 'test/common/repository-mocks/album.repository.mock';
-import { GetAlbumByIdEntryApplicationDto } from 'src/album/application/dto/entries/get-album-by-id-entry.application.dto';
+import { UserObjectMother } from '../common/objects-mother/user.object-mother';
+import { UserRepositoryMock } from '../common/repository-mocks/user.repository.mock';
+import { GetAlbumByIdEntryApplicationDto } from 'src/album/application/dto/entry/get-album-by-id-entry.application.dto';
 import { ArtistRepositoryMock } from 'test/common/repository-mocks/artist.repository.mock';
 import { SongRepositoryMock } from 'test/common/repository-mocks/song.repository.mock';
+import { Song } from 'src/song/domain/song';
+import { SongObjectMother } from 'test/common/objects-mother/song.object-mother';
+import { ArtistObjectMother } from 'test/common/objects-mother/artist.object-mother';
 
 describe('Obtener un album por id', () => {
   it('Devuelve los detalles de un album si este existe', async () => {
-    //arrange
-    const albumRepositoryMock = new AlbumRepositoryMock();
+    //Arrange
 
-    const albumDetails = AlbumObjectMother.createAlbumWithDetails(
-      '5e97538a-77a6-43ae-92bc-70556b6cca99',
-      'Happier Than Ever',
-      'billieeilish_happierthanever.jpg',
-      ['songId1', 'songId2'],
-      300,
-      'Música pop',
+    const user = await UserObjectMother.createNormalUser();
+    const userRepositoryMock = UserRepositoryMock.create();
+    userRepositoryMock.saveAggregate(user);
+
+    const albumRepositoryMock = AlbumRepositoryMock.create();
+    const songRepositoryMock = SongRepositoryMock.create();
+    const artistRepositoryMock = ArtistRepositoryMock.create();
+    const song1 = await SongObjectMother.createValidSong('Cancion1');
+    const song2 = await SongObjectMother.createValidSong('Cancion2');
+    const song3 = await SongObjectMother.createValidSong('Cancion3');
+    const songs: Song[] = [song1, song2, song3];
+
+    const albumDetails = AlbumObjectMother.createRandomAlbum(
+      'AlbumRandom',
+      songs,
     );
 
-    albumRepositoryMock.setAlbums([albumDetails]);
+    albumRepositoryMock.save(albumDetails);
 
-    const auditingRepositoryMock = new AuditingRepositoryMock();
-    const loggerMock = new LoggerMock();
+    const artistDetails = ArtistObjectMother.createValidArtist(
+      'Juan',
+      'rock',
+      1,
+      1,
+    );
+    artistRepositoryMock.save(artistDetails);
+
+    songRepositoryMock.save(song1);
+    songRepositoryMock.save(song2);
+    songRepositoryMock.save(song3);
+
     const dto: GetAlbumByIdEntryApplicationDto = {
-      userId: '1ade3d45-90c9-4bc7-a9e8-d13a67865784',
-      albumId: '5e97538a-77a6-43ae-92bc-70556b6cca99',
+      userId: user.Id.Id,
+      albumId: albumDetails.Id.Id,
     };
 
-    const service = new LoggerApplicationServiceDecorator(
-      new AuditingCommandServiceDecorator(
-        new GetAlbumByIdService(
-          albumRepositoryMock,
-          new ArtistRepositoryMock(),
-          new SongRepositoryMock(),
-        ),
-        auditingRepositoryMock,
-        'GetAlbumByIdService',
-        loggerMock,
-      ),
-      loggerMock,
-      'GetAlbumByIdService',
+    const service = new GetAlbumByIdService(
+      albumRepositoryMock,
+      artistRepositoryMock,
+      songRepositoryMock,
     );
 
-    //act
+    // Act
     const result = await service.execute(dto);
 
-    //assert
+    // Assert
     console.log('Result:', result);
     expect(result.IsSuccess).toBeTruthy();
+    expect(result.StatusCode).toBe(200);
+
+    //act
+    //const result = await service.execute(dto);
+
+    //assert
+    //console.log('Result:', result);
+    //expect(result.IsSuccess).toBeTruthy();
   });
 });
