@@ -63,15 +63,80 @@ describe('Obtener un album por id', () => {
     const result = await service.execute(dto);
 
     // Assert
-    console.log('Result:', result);
     expect(result.IsSuccess).toBeTruthy();
     expect(result.StatusCode).toBe(200);
+  });
 
-    //act
-    //const result = await service.execute(dto);
+  /*it('Error 404 cuando no se encuentra un album', async () => {
+    // Arrange
+    const user = await UserObjectMother.createNormalUser();
+    const userRepositoryMock = UserRepositoryMock.create();
+    userRepositoryMock.saveAggregate(user);
 
-    //assert
-    //console.log('Result:', result);
-    //expect(result.IsSuccess).toBeTruthy();
+    const song1 = await SongObjectMother.createValidSong('Cancion1');
+    const song2 = await SongObjectMother.createValidSong('Cancion2');
+    const song3 = await SongObjectMother.createValidSong('Cancion3');
+    const songs: Song[] = [song1, song2, song3];
+
+    const albumDetails = AlbumObjectMother.createRandomAlbum(
+      'AlbumRandom',
+      songs,
+    );
+
+    const albumRepositoryMock = AlbumRepositoryMock.create();
+    playlistRepositoryMock.PushPlaylist(PlaylistObjectMother.createRandomPlaylist());
+
+    const songRepositoryMock = SongRepositoryMock.create();
+    const artistRepositoryMock = ArtistRepositoryMock.create();
+
+    const service = new GetPlaylistByIdService(
+        playlistRepositoryMock,
+        songRepositoryMock,
+        artistRepositoryMock
+    );
+
+    const dto: GetPlaylistByIdEntryApplicationDto = {
+        userId: user.Id.Id,
+        playlistId: playlist.Id.Id,
+    };
+
+    // Act
+    const result = await service.execute(dto);
+
+    // Assert
+    expect(result.IsSuccess).toBeFalsy();
+    expect(result.StatusCode).toBe(404);
+});*/
+
+  it('Devuelve un error 404 si el album no existe', async () => {
+    // Arrange
+    const user = await UserObjectMother.createNormalUser();
+    const userRepositoryMock = UserRepositoryMock.create();
+    userRepositoryMock.saveAggregate(user);
+
+    const albumRepositoryMock = AlbumRepositoryMock.create();
+    const songRepositoryMock = SongRepositoryMock.create();
+    const artistRepositoryMock = ArtistRepositoryMock.create();
+
+    // No se guarda ningún álbum en el repositorio
+
+    const dto: GetAlbumByIdEntryApplicationDto = {
+      userId: user.Id.Id,
+      albumId: 'albumNoExistente', // Id no existente
+    };
+
+    const service = new GetAlbumByIdService(
+      albumRepositoryMock,
+      artistRepositoryMock,
+      songRepositoryMock,
+    );
+
+    // Act
+    const result = await service.execute(dto);
+
+    // Assert
+    expect(result.IsSuccess).toBeFalsy(); // Esperamos que sea falso ya que debería ser un error
+    expect(result.StatusCode).toBe(404); // Esperamos un código de estado 404
+    // Puedes agregar más aserciones según sea necesario para tu lógica específica de error 404
   });
 });

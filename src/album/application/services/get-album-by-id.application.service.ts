@@ -101,7 +101,6 @@ export class GetAlbumByIdService
       songs: songs,
     };
 
-    console.log('resultado del service: ', albumResponseDto);
     return Result.success(albumResponseDto, 200);
   }
 }

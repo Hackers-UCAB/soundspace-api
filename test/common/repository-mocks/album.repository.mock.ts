@@ -24,8 +24,38 @@ export class AlbumRepositoryMock implements IAlbumRepository {
   }
 
   findTopAlbum(): Promise<Result<Album[]>> {
-    throw new Error('Method not implemented.');
+    try {
+      const albumsCount = this.albums.length;
+      if (albumsCount === 0) {
+        return Promise.resolve(
+          Result.fail(
+            null,
+            404,
+            'No se encontraron albums trending',
+            new Error('No se encontraron albums trending'),
+          ),
+        );
+      }
+      const randomAlbums: Album[] = [];
+      const numberOfRandomAlbums = Math.floor(Math.random() * albumsCount) + 1;
+      for (let i = 0; i < numberOfRandomAlbums; i++) {
+        const randomIndex = Math.floor(Math.random() * albumsCount);
+        randomAlbums.push(this.albums[randomIndex]);
+      }
+      return Promise.resolve(Result.success(randomAlbums, 200));
+    } catch (error) {
+      return Promise.resolve(
+        Result.fail(
+          null,
+          500,
+          error.message ||
+            'Ha ocurrido un error obteniendo la lista de albums trending, hable con el administrador',
+          error,
+        ),
+      );
+    }
   }
+
   findAlbumsByArtist(artistId: ArtistId): Promise<Result<Album[]>> {
     throw new Error('Method not implemented.');
   }
