@@ -23,6 +23,7 @@ export class GetSongFromAzureHelper implements IGetSongHelper {
   async getFile(fileName: string, container: string, startPointInSeconds: number) {
     try {
       const blobClient = await this.getBlobClient(fileName, container);
+      console.log('blobClient: ', blobClient);
       const rate = 16.25;
       const startPointInBytes = startPointInSeconds * rate * 1000;
       const blobDownloaded = await blobClient.download( Math.round(startPointInBytes));

@@ -20,7 +20,7 @@ describe('GetTrendingArtistsService', () => {
     // using the AAA pattern to structure the test.
     it('should return trending artists', async () => {
         // Arrange
-        const trendingArtists = ArtistObjectMother.createValidArtistsArray(7, 'Artist',
+        const trendingArtists = await ArtistObjectMother.createValidArtistsArray(7, 'Artist',
             'Genre', 15, 3);
         trendingArtists.forEach(artist => artistRepository.saveMap(artist, true));
         const serviceEntry: ServiceEntry = { userId: new UuidGenerator().generate() };
@@ -36,7 +36,7 @@ describe('GetTrendingArtistsService', () => {
 
     it('should return a not found error because there are no trending artists', async () => {
         // Arrange
-        const trendingArtists = ArtistObjectMother.createValidArtistsArray(5, 'Artist',
+        const trendingArtists = await ArtistObjectMother.createValidArtistsArray(5, 'Artist',
             'Genre', 10, 2);
         trendingArtists.forEach(artist => artistRepository.saveMap(artist));
         const serviceEntry: ServiceEntry = { userId: new UuidGenerator().generate() };

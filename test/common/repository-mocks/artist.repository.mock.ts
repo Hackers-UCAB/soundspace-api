@@ -92,7 +92,7 @@ export class ArtistRepositoryMock implements IArtistRepository {
         }
 
         return Result.success<Artist[]>(artists, 200);
-        
+
     }
 
     async save(artist: Artist): Promise<Result<string>> {
@@ -103,6 +103,28 @@ export class ArtistRepositoryMock implements IArtistRepository {
     async saveMap(artist: Artist, trending: boolean = false): Promise<Result<string>> {
         this.artistMap.set(artist, trending);
         return Result.success('Artista guardado correctamente', 200);
+    }
+
+    async patchArtist(artistId: ArtistId, songs: SongId[], albums: AlbumId[]):
+        Promise<Result<string>> {
+
+        const artist = this.artists.find(artist => artist.Id.Id === artistId.Id);
+
+        if (!artist) {
+            return Result.fail<string>(
+                'Artist not found',
+                404,
+                'Artist not found',
+                new Error('Artist not found')
+            );
+        }
+
+        // Add the songs and albums to the artist
+        songs.forEach(songId => artist.Songs.Songs.push(songId));
+        albums.forEach(albumId => artist.Albums.Albums.push(albumId));
+
+        return Result.success('Artist updated successfully', 200);
+
     }
 
     static create() {

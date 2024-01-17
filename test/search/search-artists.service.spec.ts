@@ -8,7 +8,7 @@ describe('SearchArtistsService', () => {
 
     it('Pasa bien el servicio y devuelve una lista de artistas', async () => {
         const artistRepository = ArtistRepositoryMock.create();
-        const artist1 =  ArtistObjectMother.createValidArtist('Natalia', 'Pop', 10, 2)
+        const artist1 =  await ArtistObjectMother.createValidArtist('Natalia', 'Pop', 10, 2)
         artistRepository.save(artist1);
         const dto: SearchItemsEntryApplicationDto = { userId: 'XD', name: 'a' }
         const service = new SearchArtistsApplicationService(artistRepository);
