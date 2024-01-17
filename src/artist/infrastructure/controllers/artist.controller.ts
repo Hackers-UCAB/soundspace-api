@@ -20,9 +20,11 @@ import {
   ArtistByIdSwaggerInfrastructureResponseDto,
 } from '../dto/response/artist-by-id-response.infrastructure.dto';
 import { ServiceEntry } from 'src/common/application/services/dto/entry/service-entry.dto';
-import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiParam, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @ApiTags('artist')
+@ApiBearerAuth('token')
+@ApiUnauthorizedResponse({ description: 'No se encontro el token' })
 @Controller('artist')
 export class ArtistController {
   constructor(
