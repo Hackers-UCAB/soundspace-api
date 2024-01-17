@@ -14,7 +14,7 @@ export class SongRepositoryMock implements ISongRepository {
         let response: Song | undefined;
         let error: Error | undefined;
         try {
-            const response = this.songs.find((song) => song.Id.Id === id.Id);
+            response = this.songs.find((song) => song.Id.Id === id.Id);
         } catch (e) {
             error = e;
         } finally {
