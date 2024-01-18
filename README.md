@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <img src="./docs/1.jpg" width="200" alt="Descripción de la imagen" />
 </p>
 
 # SoundSpace API
@@ -24,15 +24,21 @@ Ejecutar el siguiente comando despues de haber realizado la instalacion previa
 yarn test
 ```
 
+## Sobre MongoDB
+
+El proyecto esta realizado originalmente usando una base de datos postgreSQL y posteriormente se agrego la implementacion para el uso de una base no relacional con mongoDB. Sin embargo para tener el uso completo de la aplicacion es necesario usar la base
+
 ## Documentacion
 
 Modelo de dominio.
 
-```Insertar aqui```
+![App Screenshot](./docs/Modelo%20de%20dominio.svg)
+
+<br/>
 
 Arquitectura Hexagonal
 
-```Insertar aqui```
+![App Screenshot](./docs/Diagrama%20hexagonal.svg)
 
 ## Aportes por desarrollador
 
@@ -40,11 +46,59 @@ Se presentan los aportes por cada desarrollador en el backend
 
 ### Victor Blanco
 
-```Por Agregar```
+- Capa de dominio:
+
+	Se colaboró en el diseño del modelo de dominio y se implementaron abstracciones genéricas. Se diseñó e implementó la lógica central del dominio para User, Subscription, SubscriptionChanel y Promotion. Se crearon eventos de dominio y excepciones para cada uno, y se diseñaron los contratos de los repositorios. También se refactorizó parte de la lógica en el dominio de Artist.
+
+- Capa de aplicación:
+
+	En la **capa de aplicación**, se diseñaron e implementaron abstracciones genéricas, decoradores de auditoría y logs, y un decorador de seguridad. Se crearon DTOs base para todos los servicios de aplicación y una abstracción del id-generator.
+    
+	- Para **User**, se diseñaron e implementaron servicios de aplicación para buscar y actualizar la información del usuario. Así como también los DTOs de entrada y salida respectivos.
+    
+	- Para **Auth**, se diseñaron e implementaron servicios de aplicación para el log-in (tanto para invitados como para usuarios con suscripción) y el sign-up (mediante las operadoras Movistar y Digitel). Así como también los DTOs de entrada y salida respectivos.
+    
+	- Para **Subscription**, se diseñaron e implementaron servicios de aplicación para la cancelación de la suscripción, para chequear las suscripciones que están por expirar y para chequear las expiradas (estas dos ultimas corren como un CRON).
+    
+	- Para **Promotions**, se diseñó e implementó un servicio de aplicación para obtener una promoción aleatoria. Así como también los DTOs de entrada y salida respectivos.
+    
+	- Para **Search**, se diseñaron e implementaron DTOs y un servicio de aplicación que orquesta los servicios de búsqueda a utilizar, que se encuentran en cada módulo.
+    
+	- Para **Playlist**, se refactorizó el servicio de aplicación para obtener playlist por id y se creó un servicio de aplicación que busca playlists por nombre.
+    
+	- Para **Album** , **Song** y **Artist**, se crearon servicios de aplicación que buscan álbumes y artistas por nombre, respectivamente.
+
+- Capa de infraestructura:
+
+	- En la **capa de infraestructura**, se implementaron el repositorio ORM y ODM para la auditoria, las entidades del ODM, una clase para solicitar imágenes de Azure y convertirlas en Buffers, y una clase para centralizar las respuestas HTTP. También se colaboró en la creación de las entidades del ORM y se implementó un generador de UUID.
+    
+	- Para **User**, **Auth**, **Subscription**, **Promotions**, **Search**, se diseñaron e implementaron controladores para las peticiones, DTOs de entrada y salida, mappers para las entidades ORM y ODM, y repositorios ORM y ODM. 
+	
+	- Para Auth, se configuraron los JWT y el strategy que los verifica. Para Subscription, se implementaron clases para hacer peticiones a APIs externas para validar con las operadoras Movistar y Digitel, y se configuraron CRONs para chequear las suscripciones expiradas y las cerca de expirar.
+
+	- Para **Playlist**, **Album**, **Artist** y **Song**, se implementaron mappers para las entidades ODM, y repositorios ODM. 
+    
+- En otras cosas, se colaboró en el diseño de la base de datos principal, se configuró una base de datos PostgreSQL en Microsoft Azure, se configuraron contenedores de archivos blob en Microsoft Azure, se diseñó y configuró una base de datos MongoDB en Atlas, y se realizó el despliegue del servidor en Railway. Se implementaron los providers necesarios para la aplicación, mediante el uso del factory de Nest. Se crearon los providers de cada servicio, de cada repository, y de ciertas implementaciones como el Helper para obtener las imágenes de Azure.
 
 ### Guillermo de Abreu
 
-```Por Agregar```
+- Capa de Dominio: 
+
+	Se colaboró en el diseño del modelo de dominio y se implementaron abstracciones genéricas. Se diseñó e implementó la lógica central del dominio para Subscription, User y Song. Se crearon eventos de dominio y excepciones para cada uno, y se diseñaron los contratos de los repositorios. Se crea un servicio de dominio que maneja la regla de negocio correspondiente a cual cancion reproducir segun el rol del usuario.
+
+- Capa de Aplicacion
+
+	Se colaboro con el diseño de los decoradores para el logger y la auditoria. Tambien se empieza la implementacion del login manejando JWT. Se crea el servicio de aplicacion correspondiente al envio de la cancion, el mismo hace uso de interfaces que son implementadas en infraestructura las cuales se encargan de obtener la cancion para ser enviada posteriomente
+
+- Capa de infraestructura:
+
+	Se realiza la implementacion del streaming de la cancion el cual consiste en el envio de la misma desde un contenedor de azure en este caso. La misma es enviado por pedazos para que pueda ser recibida por partes y que la reproduccion pueda empezar antes de que se tenga acceso a toda la cancion. Se implementa el repositorio para Song. Se implementa la conexion con Azure para obtener la cancion. Se implementan los controladores pertinentes. Se hace la configuracion para poder validar al usuario conectado al socket a traves de su jwt. Se realiza la Configuracion base del swagger de la aplicacion. Se implementan los mappers necesarios igualmente. 
+
+- Testing:
+
+	Configuracion inicial del modulo de testing e implementacion de tests para usuarios, suscripciones, busquedas, autenticacion asi como seguimiento al resto de los tests
+
+Ademas de esto se hizo aportes en trabajos como el diseño de la base de datos en postgreSQL, se poblo los contenedores con canciones en formato 128 kbps para facilitar el proceso de comunicacion. Se colaboro con el despliegue en Azure. 
 
 ### Ricardo Andueza
 
@@ -119,6 +173,28 @@ Se presentan los aportes por cada desarrollador en el backend
 - Testing:
     - Suite de getalbumbyid
     - Suite de topalbums
+
+### Francis Bompart
+
+- Capa de dominio
+
+	Se participó en la elaboración del modelo de dominio mediante la aplicación de Domain Driven Design, haciendo énfasis en los eventos relacionados a cada aggregate junto a los posibles servicios de dominio
+
+- Capa de aplicacion
+
+	En base a las arquitecturas orientadas a eventos se aplicó el patrón Publisher Subscriber para la publicación aquellos generados por el dominio, creando clases genéricas para definir el core de las posibles implementaciones.
+
+	Para el *Publisher y *Subscriber, además de los respectivos puertos, se creó una salida estándar para cualquier publicador mediante la interfaz EventResponse, facilitando así la aplicación de AOP.
+	El *Event Publisher Decorator, al igual que lo anterior, se diseñó con la finalidad de resolver los aspectos alrededor del proyecto
+	Para el *Notifier se diseñó un puerto en conjunto de los DTOs de entrada y salida, estableciendo así un estándar en cuanto a la data necesaria para el envío de las notificaciones y a su vez para facilitar el logueo de sus resultados.
+
+- Capa de infraestructura
+
+	El *EventBus, implementación con manejo en memoria para la publicación de los eventos.
+	Para los diferentes *Subscribers, estos se enfocaron en la escucha de los eventos de creación, cancelación y demás relacionados al cambio de estado de la suscripción de un usuario
+	La implementación del *Notifier en este caso se realizó mediante Firebase 
+
+Entre otras cosas, se planteó la aplicación de Dependency Injection para el proyecto mediante los métodos de fábrica de Nest. Lo anterior facilitó instanciar los suscriptores de los diferentes eventos al EventBus, procurando así mantener una sola instancia de dichas clases.
 
 ## Tecnologias Utilizadas
 
