@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./images/c1.jpg" width="200" alt="Descripción de la imagen" />
+  <img src="./docs/1.jpg" width="200" alt="Descripción de la imagen" />
 </p>
 
 # 🎵 SoundSpace API - Bienvenido a nuestro repositorio de Streaming de Música 🎵
