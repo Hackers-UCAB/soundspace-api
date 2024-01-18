@@ -147,24 +147,33 @@ Ademas de esto se hizo aportes en trabajos como el diseño de la base de datos e
 
 ### Stratos Kakalanos
 
-- Aporte en implementación para creación de base de datos mediante ORM.
-- Implementación de value objects de playlist.
-- Implementación de excepciones personalizadas en dominio perteneciente a cada VO de playlist.
-- Implementación de aggregate Root de playlist.
-- Implementación de método conversor de tiempo de segundos a minutos u horas.
-- Implementación de servicio de "find playlist by id".
-- Implementación de servicio de "find top playlists".
-- Creación de interfaz de repositorio de playlist.
-- Implementación de repositorio de playlist con métodos "get playlist by id" y "get top playlists".
-- Implementación del playlist controller.
-- Implementación de DTOs en capa de aplicación e infraestructura de entrada y salida en playlist.
-- Implementación de mapper de playlist.
-- Implementación de servicio "get top songs".
-- Decoración de servicios implementados con Logger y Auditing.
-- Aporte en implementación de repositorio de "song" para método "get top song".
-- Aporte en implementación de DTOs en capa de aplicación e infraestructura de entrada y salida en song.
-- Aporte en implementación del song controller con "get top songs".
+- Capa de dominio:
 
+    Aporte en implementación de base de datos mediante ORM
+    Implementación de value objects de playlist
+    Excepciones personalizadas a cada VO de playlist
+    Implementación de aggregate Root de playlist
+    Creación de interfaz de repositorio de playlist
+    Creación de método conversor de tiempo de segundos a minutos u horas
+
+- Capa de aplicación:
+
+    DTOs de playlist (Entries y Responses)
+    Aporte en DTOs de Song
+    Servicios: "findPlaylistById", "findTopPlaylists", "getTopSongs"
+
+- Capa de infraestructura:
+
+    Implementación de repositorio de playlist
+    Implementación del playlist controller
+    Implementación de mapper de playlist
+    implementación de "getTopSong" en repositorio de Song
+    aporte en implementación del song controller
+
+- Testing:
+    Suite de findPlaylistById
+    Suite de findTopPlaylists
+    Suite de getTopSongs
 
 ### Jhonny Sojo
 
