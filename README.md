@@ -2,19 +2,33 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-# SoundSpace API
+# 🎵 SoundSpace API - Bienvenido a nuestro repositorio de Streaming de Música 🎵
 
-Aplicacion backend para una aplicacion de streaming de musica aplicando DDD y Arquitectura Hexagonal
+Este repositorio alberga una aplicación de streaming de música construida con NestJS.
 
-## Instalacion
+## 🏗️ Arquitectura 🏗️
 
-Pasos para clonar el mejor back de todos los tiempo :O
+Nuestra aplicación utiliza varios patrones de diseño y arquitecturas para garantizar un código limpio, mantenible y eficiente:
 
-1. ```yarn install```
-2. Si no lo has hecho, creas tu BD local en PgAdmin para las credenciales
-3. Clonar las variables de entorno ```.env.template``` y renombrarlo a ```.env```
-4. Llenar las variables de entorno 
-5. Correr
+- **Arquitectura Hexagonal**: Esta arquitectura nos permite separar la lógica de negocio de los detalles técnicos, lo que facilita el mantenimiento y las pruebas de la aplicación.
+
+- **Arquitectura Orientada a Eventos**: Utilizamos esta arquitectura para manejar acciones asíncronas y operaciones en tiempo real, lo que es esencial para una aplicación de streaming de música.
+
+- **Programación Orientada a Aspectos (AOP) con Decoradores**: Los decoradores nos permiten añadir funcionalidades adicionales a nuestras clases y métodos de una manera limpia y reutilizable.
+
+- **Diseño Guiado por el Dominio (DDD)**: Este enfoque nos ayuda a modelar la lógica de negocio de nuestra aplicación de una manera que refleja el dominio del problema.
+
+## 🧰 Instalación 🧰
+
+Pasos para clonar:
+
+1. Ejecutar el comando ```yarn install```
+2. El repositorio puede trabajar con PostgreSQL o con MongoDB, te recomendamos usar PostgreSQL ya que MongoDB se utilizó para una demostración de la buena aplicación de la arquitectura hexagonal. Asi que como segundo paso, crea tu base de datos PostgreSQL y no olvides las credenciales.
+3. Crear los *Blob Containers* de Azure para las imagenes y las canciones.
+4. Crear configuracion de proyecto de *Firebase Messaging*, y nuevamente no olvides las credenciales.
+5. Clonar las variables de entorno ```.env.template``` y renombrarlo a ```.env```.
+6. Llenar las variables de entorno.
+7. Correrlo.
 ```yarn start:dev```
 
 ## Corriendo los Tests
