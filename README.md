@@ -40,7 +40,7 @@ yarn test
 
 ## Sobre MongoDB
 
-El proyecto esta realizado originalmente usando una base de datos postgreSQL y posteriormente se agrego la implementacion para el uso de una base no relacional con mongoDB. Sin embargo para tener el uso completo de la aplicacion es necesario usar la base
+El proyecto esta realizado originalmente usando una base de datos postgreSQL y posteriormente se agrego la implementacion para el uso de una base no relacional con mongoDB. Sin embargo para tener el uso completo de la aplicacion es necesario usar la base postgreSQL
 
 ## Documentacion
 
@@ -52,7 +52,7 @@ Modelo de dominio.
 
 Arquitectura Hexagonal
 
-![App Screenshot](./docs/Diagrama%20hexagonal.svg)
+![App Screenshot](./docs/HexagonalCorregido.svg)
 
 ## Aportes por desarrollador
 
@@ -112,7 +112,7 @@ Se presentan los aportes por cada desarrollador en el backend
 
 	Configuracion inicial del modulo de testing e implementacion de tests para usuarios, suscripciones, busquedas, autenticacion asi como seguimiento al resto de los tests
 
-Ademas de esto se hizo aportes en trabajos como el diseño de la base de datos en postgreSQL, se poblo los contenedores con canciones en formato 128 kbps para facilitar el proceso de comunicacion. Se colaboro con el despliegue en Azure. 
+Ademas de esto se hizo aportes en trabajos como el diseño de la base de datos en postgreSQL, se poblo los contenedores con canciones en formato 128 kbps para facilitar el proceso de comunicacion. Se colaboro con el despliegue en Railway. 
 
 ### Ricardo Andueza
 
