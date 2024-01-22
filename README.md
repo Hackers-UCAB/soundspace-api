@@ -18,6 +18,10 @@ Nuestra aplicación utiliza varios patrones de diseño y arquitecturas para gara
 
 - **Diseño Guiado por el Dominio (DDD)**: Este enfoque nos ayuda a modelar la lógica de negocio de nuestra aplicación de una manera que refleja el dominio del problema.
 
+## Sobre MongoDB
+
+El proyecto esta realizado originalmente usando una base de datos postgreSQL y posteriormente se agrego la implementacion para el uso de una base no relacional con mongoDB. Esto se realizó por fines académicos, para demostrar la buena aplicación de la Arquitectura Hexagonal. Por ende te recomendamos usar la base postgreSQL.
+
 ## 🧰 Instalación 🧰
 
 Pasos para clonar:
@@ -37,10 +41,6 @@ Ejecutar el siguiente comando despues de haber realizado la instalacion previa
 ```
 yarn test
 ```
-
-## Sobre MongoDB
-
-El proyecto esta realizado originalmente usando una base de datos postgreSQL y posteriormente se agrego la implementacion para el uso de una base no relacional con mongoDB. Sin embargo para tener el uso completo de la aplicacion es necesario usar la base postgreSQL
 
 ## Documentacion
 
